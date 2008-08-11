@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<article lang="en">
+  <articleinfo>
+    <author>
+      <firstname>Petr</firstname>
+      <surname>Pajas</surname>
+    </author>
+    <title>PML Tree Query</title>
+  </articleinfo>
+  <section>
+    <title>Introduction</title>
+    <para>
+      Purpose, features, comparison with other query engines
+      (NetGraph, TGrep2)
+    </para>
+  </section>
+  <section>
+    <title>Tutorial</title>
+    <para>
+      Step by step tutorial (TrEd based).
+    </para>
+  </section>
+  <section>
+    <title>Query Language</title>
+    <para>
+      Basic examples, syntax reference.
+    </para>
+  </section>
+  <section>
+    <title>Graphical representation in TrEd</title>
+    <para>
+    </para>
+  </section>
+  <section>
+    <title>TrEd search interface</title>
+    <para></para>
+  </section>
+  <section>
+    <title>Command-line interface</title>
+    <para></para>
+  </section>
+  <section>
+    <title>Web interface</title>
+    <para></para>
+  </section>
+  <section>
+    <title>BTrEd interface</title>
+    <para></para>
+  </section>
+  <section>
+    <title>Installing SQL Server and HTTP Proxy</title>
+    <para></para>
+  </section>
+  <section>
+    <title>Tools</title>
+    <para></para>
+  </section>
+  <section>
+    <title>Examples</title>
+    <para></para>
+  </section>
+</article>
