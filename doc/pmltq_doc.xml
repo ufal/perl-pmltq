@@ -13,6 +13,16 @@
       Purpose, features, comparison with other query engines
       (NetGraph, TGrep2)
     </para>
+    <orderedlist>
+      <listitem>
+	<para>search over all layers of annotation (including annotation dictionaries)</para>
+	<para>graphical query view with relations between nodes represented by arrows</para>
+	<para>interface with TrEd</para>
+	<para>operates on original data (no conversion, no information loss)</para>
+	<para>arbitrary logical conditions</para>
+	<para>output filters: multi-column text output (attribute values, statistical analysis, ...)</para>
+      </listitem>
+    </orderedlist>
   </section>
   <section>
     <title>Tutorial</title>
