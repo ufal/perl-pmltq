@@ -35,6 +35,291 @@
     <para>
       Basic examples, syntax reference.
     </para>
+    <section>
+      <title>Brief PML-TQ syntax reference</title>
+      <variablelist>
+	<varlistentry>
+	  <term>node</term>
+	  <listitem>
+	    <synopsis>node :: ( '?' )? <replaceable>relation</replaceable>? <replaceable>type</replaceable> ($<replaceable>name</replaceable> ':=' )? '[' <replaceable>conditions</replaceable>?  ']'</synopsis>
+	      <para>Defines a query node 
+	      matching any node of type <replaceable>type</replaceable>
+	      whose relation to 
+	      its parent query node is <replaceable>relation</replaceable>
+	      (<replaceable>relation</replaceable> is <literal>child</literal> if not specified)
+	      and (optionally) named $<replaceable>name</replaceable> for reference 
+	      from other nodes.
+	      If the query node is preceded by a question mark,
+	      this query node is optional. This means, that if no node
+	      matches this node, the node is assumed to match the same node
+	      as its parent node in the query. All child nodes or subqueries of the optional
+	      node must then be in the corresponding relation to this parent node.
+	      For example, <literal>a-node $a := [ afun='Sb', ? a-node $b:= [ afun='AuxC', $c := [ afun='Obj']  ]  ]</literal>
+	      with $b optional,
+	      matches either a descending chain of three a-nodes 
+	      'Sb-&gt;AuxC-&gt;Obj' 
+	      (the optional node $b matching the middle node)
+	      or just the pair
+	      'Sb-&gt;Obj', in which case both $a and $b are identified with the 'Sb'
+	      (the condition <literal>afun='AuxC'</literal>) on $b is disregarded),
+	      but it does <emphasis>not</emphasis>, for instance, match a descending chain 'Sb-&gt;ExD-&gt;Obj'.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>subquery</term>
+	    <listitem>
+	      <para>
+	      <synopsis>subquery :: <replaceable>occurrences</replaceable> 'x' <replaceable>node</replaceable>
+occurrences :: ( <replaceable>n</replaceable> | <replaceable>n</replaceable> '+' | <replaceable>n-</replaceable> '-' | <replaceable>n</replaceable> '..' <replaceable>m</replaceable> ) ('|' <replaceable>occurrences</replaceable>)*</synopsis>
+	      </para>
+	      <para>Subquery is a subtree in the query tree that
+	      specifies number of occurrences. For example,
+	      <literal>3x</literal> specifies that the subtree must
+	      match <emphasis>exactly</emphasis> three times,
+	      <literal>3+x</literal> specifies that the subtree must
+	      match <emphasis>at least</emphasis> three times,
+	      <literal>3-x</literal> specifies that the subtree must
+	      match <emphasis>at most</emphasis> three times and
+	      <literal>3-10x</literal> specifies that the subtree must
+	      match <emphasis>at least</emphasis> three times but at
+	      most ten times.
+	      </para>
+	      <note><para>Nodes beloning to a subquery cannot be
+	      referred to by name from outside the subquery.</para></note>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>conditions</term>
+	    
+	    <listitem><synopsis>conditions :: <replaceable>condition</replaceable> (',' condition)*</synopsis>
+	    <para>One or more conditions.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>condition</term>
+	    
+	    <listitem><synopsis>condition :: 
+	      <replaceable>atomic_predicate</replaceable> | 
+	      <replaceable>set_predicate</replaceable> | 
+	      <replaceable>node</replaceable> | 
+	      <replaceable>subquery</replaceable> |
+	      <replaceable>relation</replaceable> $<replaceable>name</replaceable> |
+	      <replaceable>logical</replaceable>
+	    </synopsis><para>
+	      A condition is either a 
+	    binary test predicate
+	    (<literal>=</literal>, 
+	    <literal>~</literal>, 
+	    <literal>&lt;</literal>
+	    <literal>&lt;=</literal>
+	    <literal>&gt;</literal> etc.) on
+	    expressions computed from atomic values,
+	    or a node or subquery,
+	    or a reference to a named node
+	    (indicating that the referred query
+	    node is in the corresponding relation to the current node)
+	    or a logical combination of any of these except for 
+	    nodes (a query node used in a logical expressoin is
+	    treated as a subquery with at least on occurrence).
+	      </para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>atomic_predicate</term>
+	    
+	    <listitem><synopsis>atomic_predicate :: ( <replaceable>expression</replaceable> ('=' | '~' | '~*' | '&lt;' | '&gt;' | '&lt;=' | '&gt;=') <replaceable>expression</replaceable>  </synopsis>
+	      <para>
+		The atomic predicate consists of two expressions 
+		and a binary relation. 
+	      </para>
+	      <para>
+		The relations <literal>~</literal> and
+		<literal>~*</literal> perform 
+		case-sensitive and case-insensitive
+		regular expression
+		matching, respectivelly. The
+		expression on the right must evaluate
+		to a regular expression. For example
+		<literal>afun ~ '^(Sb|Aux.*)$'</literal>
+		is true if the value of the attribute
+		<literal>afun</literal> of the current query node
+		either equals to the string <literal>Sb</literal> or
+		starts with the string <literal>Aux</literal>.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>set_predicate</term>
+	    <listitem><synopsis>set_predicate :: <replaceable>expression</replaceable> 'in' '{' <replaceable>expression</replaceable> ( ',' <replaceable>expression</replaceable> )* '}' )</synopsis>
+	      <para>
+		This predicate is true
+		if the value computed from the expression on the left
+		equals some of the values computed from the expressions
+		listed in curly brackets on the right.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>expression</term>
+	    
+	    <listitem><synopsis>expression :: <replaceable>literal</replaceable> 
+  	    | <replaceable>function</replaceable> 
+	    | <replaceable>expression</replaceable> (('+' | '-' | '*' | 'div' | 'mod' | '&amp;') <replaceable>expression</replaceable> )+ 
+	    | '(' <replaceable>expression</replaceable> ')' </synopsis>
+	      <para>
+		Expressions are either literals (strings, integer of
+		floating point numbers), or functions, or any
+		combination of these obtain by application of the
+		binary string-concatenation operator ('&amp;') or the
+		usual arithmetical operations for addition ('+'),
+		subtraction ('-'), multiplication ('*'), division
+		('div') and modulo ('mod'). Brackets can be used in the usual manner
+		for grouping sub-expressions.
+	      </para>
+	      <para>For example, <literal>afun &amp; "." &amp; substr(m/tag,0,2)</literal>
+	      is an expression returning a concatenation of the value of the attribute <literal>afun</literal>,
+	      a dot and the first two characters from the value of the attribute <literal>m/tag</literal>.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>literal</term>
+	    
+	    <listitem><synopsis>literal :: NUMBER | '"' STRING '"' | ''' STRING '''</synopsis>
+	      <para>A literal is either a number in the decimal
+	      notation (integer or floating point,
+	      e.g. <literal>231</literal> or
+	      <literal>-1.0032</literal>) or a string of characters
+	      enclosed in either <literal>"</literal> or
+	      <literal>'</literal>.  Backslash character
+	      <literal>\</literal> can be used as an escape character,
+	      for example to insert a quote or apostroph.
+	      </para>
+	      <para>
+		For example: both <literal>"Peter's"</literal> and
+	      <literal>'Peter\'s'</literal> both represent the literal
+	      string <literal>Peter's</literal> and
+	      both
+	      <literal>'\\\"\'\n\r'</literal> and
+	      <literal>"\\\"\'\n\r"</literal> represent
+	      the literal five-character string <literal>\"'nr</literal>.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>function</term>
+	    
+	    <listitem><synopsis>literal :: FUNCTION_NAME '(' (expression (',' expression)*)?   ')'</synopsis>
+	    <para>
+	      Functions are written as function name followed by a comma-separated list of its arguments in brackets.
+	      PMLTQ currently supports the following functions:
+	    </para>
+	      <variablelist>
+		<varlistentry>
+		  <term>descendants($node?)</term>
+		  <listitem><para>Returns the number of given node's descendants. If no node is given, the current node is assumed.</para></listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>lbrothers($node?)</term>
+		  <listitem><para>Returns the number of given node's left brothers. If no node is given, the current node is assumed.</para></listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>rbrothers($node?)</term>
+		  <listitem><para>Returns the number of given node's right brothers. If no node is given, the current node is assumed.</para></listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>sons($node?)</term>
+		  <listitem><para>Returns the number of given node's sons. If no node is given, the current node is assumed.</para></listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>depth_first_order($node?)</term>
+		  <listitem><para>Returns the depth-first order of a given node in the tree (counting from 0). If no node is given, the current node is assumed.</para></listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>depth($node?)</term>
+		  <listitem><para>Returns the depth of a given node in the tree (counting from 0). If no node is given, the current node is assumed.</para></listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>name($node?)</term>
+		  <listitem><para>Return the name of a given node (assume current node if used without an argument).
+		  This function only makes sense if the node is an element of a PML sequence
+		  (of trees or child nodes).</para></listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>file($node?)</term>
+		  <listitem><para>Returns the filename of a document in which a given node occurrs.</para></listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>tree_no($node?)</term>
+		  <listitem><para>Returns index of a tree in which a given node occurs,
+		  i.e. the position of the tree in its document.</para></listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>position($node?)</term>
+		  <listitem><para>Returns an URL uniquely determining the given node.
+		  The same value can be also computed using the following expression:
+		  <literal>file($node) &amp; '##' &amp; tree_no($node) &amp; '.' &amp; depth_first_order($node)</literal>.</para></listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>lower(string)</term>
+		  <listitem><para>Returns lowercase version of a given expression.</para></listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>upper(string)</term>
+		  <listitem><para>Returns uppercase version of a given expression.</para></listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>length(string)</term>
+		  <listitem><para>Returns the string length of a given expression.</para></listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>substr(string,offset,length?)</term>
+		  <listitem><para>Returns a substring of a given string starting at at a given offset (first character
+		  in the string has offset 0) and spanning for a given length or to the end of the string, 
+		  if length is omitted or if the original string has less than offset+length characters.</para></listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>tr(string,characterss_to_replace,replacement)</term>
+		  <listitem><para>Replaces all occurences of given characters in a string with corresponding characters in the replacement set,
+		  that is, replaces all occurrences of the Nth character from <replaceable>characters_to_replace</replaceable> with the Nth character
+		  in the <replaceable>replacement</replaceable>. For example, <literal>tr('122-34','24','ab')</literal> returns the string 
+		  <literal>1aa-b4</literal>.</para></listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>replace(string,substr,replacement)</term>
+		  <listitem><para>Substitutes a given replacement for all (non-overlapping) occurrences of a given
+		  substring in a given string and returns the result. For example, <literal>replace('banana ananas','ana','ANA')</literal>
+		  returns <literal>bANAna ANAnas</literal>.</para></listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>ceil(number)</term>
+		  <listitem><para>Return the smallest integer value greater than or equal to a given numerical argument.</para></listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>floor(number)</term>
+		  <listitem><para>Return the largest integer value less than or equal to the numerical argument.</para></listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>round(number,places?)</term>
+		  <listitem><para>Returns a given number rounded to a specified number of decimal places (0 if the second argument is not specified).</para></listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>trunc(number,places?)</term>
+		  <listitem><para>Returns a number truncated to a certain number of decimal places (0 if second argument is not specified).</para></listitem>
+		</varlistentry>
+		<!--
+		<varlistentry>
+		  <term>percnt(number,places?)</term>
+		  <listitem><para>This is a convenience function, which returns
+		  the same value as <literal>round(100*number,places)</literal>.</para></listitem>
+		</varlistentry>
+		-->
+	      </variablelist>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+
+    </section>
   </section>
   <section>
     <title>Graphical representation in TrEd</title>
