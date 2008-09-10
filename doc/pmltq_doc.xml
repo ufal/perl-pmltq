@@ -16,10 +16,20 @@
     <orderedlist>
       <listitem>
 	<para>search over all layers of annotation (including annotation dictionaries)</para>
+      </listitem>
+      <listitem>
 	<para>graphical query view with relations between nodes represented by arrows</para>
+      </listitem>
+      <listitem>
 	<para>interface with TrEd</para>
+      </listitem>
+      <listitem>
 	<para>operates on original data (no conversion, no information loss)</para>
+      </listitem>
+      <listitem>
 	<para>arbitrary logical conditions</para>
+      </listitem>
+      <listitem>
 	<para>output filters: multi-column text output (attribute values, statistical analysis, ...)</para>
       </listitem>
     </orderedlist>
@@ -41,7 +51,7 @@
 	<varlistentry>
 	  <term>node</term>
 	  <listitem>
-	    <synopsis>node :: ( '?' )? <replaceable>relation</replaceable>? <replaceable>type</replaceable> ($<replaceable>name</replaceable> ':=' )? '[' <replaceable>conditions</replaceable>?  ']'</synopsis>
+	    <synopsis>node :: <replaceable>relation</replaceable>? <replaceable>type</replaceable> ($<replaceable>name</replaceable> ':=' )? '[' <replaceable>conditions</replaceable>?  ']'</synopsis>
 	      <para>Defines a query node 
 	      matching any node of type <replaceable>type</replaceable>
 	      whose relation to 
@@ -49,20 +59,35 @@
 	      (<replaceable>relation</replaceable> is <literal>child</literal> if not specified)
 	      and (optionally) named $<replaceable>name</replaceable> for reference 
 	      from other nodes.
-	      If the query node is preceded by a question mark,
-	      this query node is optional. This means, that if no node
-	      matches this node, the node is assumed to match the same node
-	      as its parent node in the query. All child nodes or subqueries of the optional
-	      node must then be in the corresponding relation to this parent node.
-	      For example, <literal>a-node $a := [ afun='Sb', ? a-node $b:= [ afun='AuxC', $c := [ afun='Obj']  ]  ]</literal>
-	      with $b optional,
-	      matches either a descending chain of three a-nodes 
-	      'Sb-&gt;AuxC-&gt;Obj' 
-	      (the optional node $b matching the middle node)
-	      or just the pair
-	      'Sb-&gt;Obj', in which case both $a and $b are identified with the 'Sb'
-	      (the condition <literal>afun='AuxC'</literal>) on $b is disregarded),
-	      but it does <emphasis>not</emphasis>, for instance, match a descending chain 'Sb-&gt;ExD-&gt;Obj'.
+	      </para>
+	      <para>
+		For example, the query <literal>a-node $a := [ descendant a-node [ afun=$a.afun ]  ]  ]</literal>
+		over PDT 2.0 data selects analytical
+		nodes whose subtree contains an analytical node with the same value
+		of the attribute <literal>afun</literal> (the query returns 
+		pairs of nodes in the described relation).
+	      </para>
+	  </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>optional node</term>
+	  <listitem>
+	    <synopsis>optional_node :: '?' <replaceable>node</replaceable></synopsis>
+	      <para>
+		If the query node is preceded by a question mark,
+		this query node is optional. This means, that if no node
+		matches this node, the node is assumed to match the same node
+		as its parent node in the query. All child nodes or subqueries of the optional
+		node must then be in the corresponding relation to this parent node.
+		For example, <literal>a-node $a := [ afun='Sb', ? a-node $b:= [ afun='AuxC', $c := [ afun='Obj']  ]  ]</literal>
+		with $b optional,
+		matches either a descending chain of three a-nodes 
+		'Sb-&gt;AuxC-&gt;Obj' 
+		(the optional node $b matching the middle node)
+		or just the pair
+		'Sb-&gt;Obj', in which case both $a and $b are identified with the 'Sb'
+		(the condition <literal>afun='AuxC'</literal>) on $b is disregarded),
+		but it does <emphasis>not</emphasis>, for instance, match a descending chain 'Sb-&gt;ExD-&gt;Obj'.
 	      </para>
 	    </listitem>
 	  </varlistentry>
@@ -71,7 +96,7 @@
 	    <listitem>
 	      <para>
 	      <synopsis>subquery :: <replaceable>occurrences</replaceable> 'x' <replaceable>node</replaceable>
-occurrences :: ( <replaceable>n</replaceable> | <replaceable>n</replaceable> '+' | <replaceable>n-</replaceable> '-' | <replaceable>n</replaceable> '..' <replaceable>m</replaceable> ) ('|' <replaceable>occurrences</replaceable>)*</synopsis>
+occurrences :: ( <replaceable>n</replaceable> | <replaceable>n</replaceable> '+' | <replaceable>n</replaceable> '-' | <replaceable>n</replaceable> '..' <replaceable>m</replaceable> ) ('|' <replaceable>occurrences</replaceable>)*</synopsis>
 	      </para>
 	      <para>Subquery is a subtree in the query tree that
 	      specifies number of occurrences. For example,
@@ -105,8 +130,7 @@ occurrences :: ( <replaceable>n</replaceable> | <replaceable>n</replaceable> '+'
 	      <replaceable>node</replaceable> | 
 	      <replaceable>subquery</replaceable> |
 	      <replaceable>relation</replaceable> $<replaceable>name</replaceable> |
-	      <replaceable>logical</replaceable>
-	    </synopsis><para>
+	      <replaceable>logical</replaceable></synopsis><para>
 	      A condition is either a 
 	    binary test predicate
 	    (<literal>=</literal>, 
@@ -208,118 +232,234 @@ occurrences :: ( <replaceable>n</replaceable> | <replaceable>n</replaceable> '+'
 	  </varlistentry>
 	  <varlistentry>
 	    <term>function</term>
-	    
-	    <listitem><synopsis>literal :: FUNCTION_NAME '(' (expression (',' expression)*)?   ')'</synopsis>
+	    <listitem><synopsis>function :: FUNCTION_NAME '(' (expression (',' expression)*)?   ')'</synopsis>
 	    <para>
 	      Functions are written as function name followed by a comma-separated list of its arguments in brackets.
-	      PMLTQ currently supports the following functions:
+	      The functions currently supported by PMLTQ are listed in 
+	      Section <xref linkend="functions"/>
+	      :
 	    </para>
-	      <variablelist>
-		<varlistentry>
-		  <term>descendants($node?)</term>
-		  <listitem><para>Returns the number of given node's descendants. If no node is given, the current node is assumed.</para></listitem>
-		</varlistentry>
-		<varlistentry>
-		  <term>lbrothers($node?)</term>
-		  <listitem><para>Returns the number of given node's left brothers. If no node is given, the current node is assumed.</para></listitem>
-		</varlistentry>
-		<varlistentry>
-		  <term>rbrothers($node?)</term>
-		  <listitem><para>Returns the number of given node's right brothers. If no node is given, the current node is assumed.</para></listitem>
-		</varlistentry>
-		<varlistentry>
-		  <term>sons($node?)</term>
-		  <listitem><para>Returns the number of given node's sons. If no node is given, the current node is assumed.</para></listitem>
-		</varlistentry>
-		<varlistentry>
-		  <term>depth_first_order($node?)</term>
-		  <listitem><para>Returns the depth-first order of a given node in the tree (counting from 0). If no node is given, the current node is assumed.</para></listitem>
-		</varlistentry>
-		<varlistentry>
-		  <term>depth($node?)</term>
-		  <listitem><para>Returns the depth of a given node in the tree (counting from 0). If no node is given, the current node is assumed.</para></listitem>
-		</varlistentry>
-		<varlistentry>
-		  <term>name($node?)</term>
-		  <listitem><para>Return the name of a given node (assume current node if used without an argument).
-		  This function only makes sense if the node is an element of a PML sequence
-		  (of trees or child nodes).</para></listitem>
-		</varlistentry>
-		<varlistentry>
-		  <term>file($node?)</term>
-		  <listitem><para>Returns the filename of a document in which a given node occurrs.</para></listitem>
-		</varlistentry>
-		<varlistentry>
-		  <term>tree_no($node?)</term>
-		  <listitem><para>Returns index of a tree in which a given node occurs,
-		  i.e. the position of the tree in its document.</para></listitem>
-		</varlistentry>
-		<varlistentry>
-		  <term>position($node?)</term>
-		  <listitem><para>Returns an URL uniquely determining the given node.
-		  The same value can be also computed using the following expression:
-		  <literal>file($node) &amp; '##' &amp; tree_no($node) &amp; '.' &amp; depth_first_order($node)</literal>.</para></listitem>
-		</varlistentry>
-		<varlistentry>
-		  <term>lower(string)</term>
-		  <listitem><para>Returns lowercase version of a given expression.</para></listitem>
-		</varlistentry>
-		<varlistentry>
-		  <term>upper(string)</term>
-		  <listitem><para>Returns uppercase version of a given expression.</para></listitem>
-		</varlistentry>
-		<varlistentry>
-		  <term>length(string)</term>
-		  <listitem><para>Returns the string length of a given expression.</para></listitem>
-		</varlistentry>
-		<varlistentry>
-		  <term>substr(string,offset,length?)</term>
-		  <listitem><para>Returns a substring of a given string starting at at a given offset (first character
-		  in the string has offset 0) and spanning for a given length or to the end of the string, 
-		  if length is omitted or if the original string has less than offset+length characters.</para></listitem>
-		</varlistentry>
-		<varlistentry>
-		  <term>tr(string,characterss_to_replace,replacement)</term>
-		  <listitem><para>Replaces all occurences of given characters in a string with corresponding characters in the replacement set,
-		  that is, replaces all occurrences of the Nth character from <replaceable>characters_to_replace</replaceable> with the Nth character
-		  in the <replaceable>replacement</replaceable>. For example, <literal>tr('122-34','24','ab')</literal> returns the string 
-		  <literal>1aa-b4</literal>.</para></listitem>
-		</varlistentry>
-		<varlistentry>
-		  <term>replace(string,substr,replacement)</term>
-		  <listitem><para>Substitutes a given replacement for all (non-overlapping) occurrences of a given
-		  substring in a given string and returns the result. For example, <literal>replace('banana ananas','ana','ANA')</literal>
-		  returns <literal>bANAna ANAnas</literal>.</para></listitem>
-		</varlistentry>
-		<varlistentry>
-		  <term>ceil(number)</term>
-		  <listitem><para>Return the smallest integer value greater than or equal to a given numerical argument.</para></listitem>
-		</varlistentry>
-		<varlistentry>
-		  <term>floor(number)</term>
-		  <listitem><para>Return the largest integer value less than or equal to the numerical argument.</para></listitem>
-		</varlistentry>
-		<varlistentry>
-		  <term>round(number,places?)</term>
-		  <listitem><para>Returns a given number rounded to a specified number of decimal places (0 if the second argument is not specified).</para></listitem>
-		</varlistentry>
-		<varlistentry>
-		  <term>trunc(number,places?)</term>
-		  <listitem><para>Returns a number truncated to a certain number of decimal places (0 if second argument is not specified).</para></listitem>
-		</varlistentry>
-		<!--
-		<varlistentry>
-		  <term>percnt(number,places?)</term>
-		  <listitem><para>This is a convenience function, which returns
-		  the same value as <literal>round(100*number,places)</literal>.</para></listitem>
-		</varlistentry>
-		-->
-	      </variablelist>
 	    </listitem>
 	  </varlistentry>
 	</variablelist>
-
     </section>
+  </section>
+  <section id="functions">
+      <title>Functions</title>
+      <section>
+	<title>Functions related to the tree structure</title>
+      <variablelist>
+	<varlistentry>
+	  <term>name($node?)</term>
+	  <listitem><para>Return the name of a given node (assume current node if used without an argument).
+	  This function only makes sense if the node is an element of a PML sequence
+	  (of trees or child nodes).</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>depth($node?)</term>
+	  <listitem><para>Returns the depth of a given node in the tree (counting from 0). If no node is given, the current node is assumed.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>descendants($node?)</term>
+	  <listitem><para>Returns the number of given node's descendants. If no node is given, the current node is assumed.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>lbrothers($node?)</term>
+	  <listitem><para>Returns the number of given node's left brothers. If no node is given, the current node is assumed.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>rbrothers($node?)</term>
+	  <listitem><para>Returns the number of given node's right brothers. If no node is given, the current node is assumed.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>sons($node?)</term>
+	  <listitem><para>Returns the number of given node's sons. If no node is given, the current node is assumed.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>depth_first_order($node?)</term>
+	  <listitem><para>Returns the depth-first order of a given node in the tree (counting from 0). If no node is given, the current node is assumed.</para></listitem>
+	</varlistentry>
+      </variablelist>	
+      </section>
+      <section>
+	<title>Functions related to corpus</title>
+      <variablelist>
+	<varlistentry>
+	  <term>file($node?)</term>
+	  <listitem><para>Returns the filename of a document in which a given node occurrs.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>tree_no($node?)</term>
+	  <listitem><para>Returns index of a tree in which a given node occurs,
+	  i.e. the position of the tree in its document.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>address($node?)</term>
+	  <listitem><para>Returns an URL uniquely determining the given node.
+	  The same value can be also computed using the following expression:
+	  <literal>file($node) &amp; '##' &amp; tree_no($node) &amp; '.' &amp; depth_first_order($node)</literal>.</para></listitem>
+	</varlistentry>
+      </variablelist>
+      </section>
+      <section>
+	<title>String functions</title>
+      <variablelist>
+	<varlistentry>
+	  <term>length(string)</term>
+	  <listitem><para>Returns the string length of a given expression.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>substr(string,offset,length?)</term>
+	  <listitem><para>Returns a substring of a given string starting at at a given offset (first character
+	  in the string has offset 0) and spanning for a given length or to the end of the string, 
+	  if length is omitted or if the original string has less than offset+length characters.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>match(string,regexp,flags?)</term>
+	  <listitem><para>Returns the first substring of a given string 
+	  matching a given regular expression.
+	  The optional third argument can be a string of flags modifying the behavior of the regular
+	  expression matching procedure. The following flags are supported:
+	</para>
+	  <variablelist>
+	    <varlistentry>
+	      <term>i</term>
+	      <listitem>
+		<para>case insensitive match</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term>c</term>
+	      <listitem>
+		<para>????</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term>n</term>
+	      <listitem>
+		<para>????</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term>m</term>
+	      <listitem>
+		<para>??? Treat string as multiple lines.
+		That is, change "^" and "$" from matching the start or end of the string to matching the
+		start or end of any line anywhere within the string.
+		</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term>x</term>
+	      <listitem>
+		<para>??? Ignore whitespace that is neither backslashed nor within a character class.</para>
+	      </listitem>
+	    </varlistentry>
+	  </variablelist>
+	  </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>replace(string,substr,replacement)</term>
+	  <listitem><para>Substitutes a given replacement for all (non-overlapping) occurrences of a given
+	  substring in a given string and returns the result. For example, <literal>replace('banana ananas','ana','ANA')</literal>
+	  returns <literal>bANAna ANAnas</literal>.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>substitute(string,regexp,replacement,flags?)</term>
+	  <listitem><para>Substitutes a given replacement for the first or all (non-overlapping) substrings
+	  matching a given regular expression in a given string and returns the result. 
+	</para>
+	<para>
+	  The default behavior is to replace just the first matching substring. 
+	  To replace all occurrences, use the flag 'g'. 
+	</para>
+	<para>
+	  The replacement string may contain references to subexpressions 
+	  of the matching regular expression (subexpressions are parts of the expressions 
+	  enclosed in brackets). The string \N, where N is a digit from 1 to 9, is a reference
+	  to the N-th subexpression (counting opening brackets from the left),
+	  and is substitued in the result by the substring matched by that subexpression.
+	  For example, if the regular expression was
+	  <literal>a(b(c))(d)</literal>, then 
+	  <literal>\1</literal>, <literal>\2</literal>,
+	  and <literal>\3</literal> refer
+	  to the subexpressions <literal>(b(c))</literal>,
+	  <literal>(c)</literal>,
+	  and <literal>(d)</literal>, respectivelly.
+	</para>
+	<para>Since backslash (<literal>\</literal>) is used
+	to introduce subexpression references in the replacement string,
+	literal backslash has to be written as <literal>\\</literal>.
+	</para>
+	<para>
+	  The optional third argument is a string of flags modifying the behavior of the regular
+	  expression matching procedure. Any of the flags described above for the
+	  function <literal>match()</literal> can be used here, and additionally
+	  <literal>substitue()</literal> supports the following flag:
+	</para>
+	  <variablelist>
+	    <varlistentry>
+	      <term>g</term>
+	      <listitem>
+		<para>global replace: replace all non-overlapping matches of a given regular expression</para>
+	      </listitem>
+	    </varlistentry>
+	  </variablelist>
+	  <para>
+	    For example, <literal>substitue('banana ananas','([^n])a','\1@','g')</literal>
+	    returns the string <literal>b@nana @nanas</literal>.
+	  </para>
+	  </listitem>
+	</varlistentry>	
+	<varlistentry>
+	  <term>lower(string)</term>
+	  <listitem><para>Returns lowercase version of a given expression.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>upper(string)</term>
+	  <listitem><para>Returns uppercase version of a given expression.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>tr(string,characterss_to_replace,replacement)</term>
+	  <listitem><para>Replaces all occurences of given characters in a string with corresponding characters in the replacement set,
+	  that is, replaces all occurrences of the Nth character from <replaceable>characters_to_replace</replaceable> with the Nth character
+	  in the <replaceable>replacement</replaceable>. For example, <literal>tr('122-34','24','ab')</literal> returns the string 
+	  <literal>1aa-b4</literal>.</para></listitem>
+	</varlistentry>
+      </variablelist>
+      </section>
+      <section>
+	<title>Numeric functions</title>
+      <variablelist>
+	<varlistentry>
+	  <term>ceil(number)</term>
+	  <listitem><para>Return the smallest integer value greater than or equal to a given numerical argument.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>floor(number)</term>
+	  <listitem><para>Return the largest integer value less than or equal to the numerical argument.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>round(number,places?)</term>
+	  <listitem><para>Returns a given number rounded to a specified number of decimal places (0 if the second argument is not specified).</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>trunc(number,places?)</term>
+	  <listitem><para>Returns a number truncated to a certain number of decimal places (0 if second argument is not specified).</para></listitem>
+	</varlistentry>
+	<!--
+	    <varlistentry>
+	    <term>percnt(number,places?)</term>
+	    <listitem><para>This is a convenience function, which returns
+	    the same value as <literal>round(100*number,places)</literal>.</para></listitem>
+	    </varlistentry>
+	-->
+      </variablelist>
+      </section>
+  </section>
+  <section>
+    <title>Examples</title>
+    <para></para>
   </section>
   <section>
     <title>Graphical representation in TrEd</title>
@@ -328,15 +468,21 @@ occurrences :: ( <replaceable>n</replaceable> | <replaceable>n</replaceable> '+'
   </section>
   <section>
     <title>TrEd search interface</title>
-    <para></para>
-  </section>
-  <section>
-    <title>Command-line interface</title>
-    <para></para>
+    <para>
+    </para>
   </section>
   <section>
     <title>Web interface</title>
     <para></para>
+  </section>
+  <section>
+    <title>Command-line interface</title>
+    <para>
+      <!--
+      describe 'pmltq' command-line utility,
+      describe usage from btred command line
+      -->
+    </para>
   </section>
   <section>
     <title>BTrEd interface</title>
@@ -344,14 +490,11 @@ occurrences :: ( <replaceable>n</replaceable> | <replaceable>n</replaceable> '+'
   </section>
   <section>
     <title>Installing SQL Server and HTTP Proxy</title>
-    <para></para>
+    <para>
+    </para>
   </section>
   <section>
     <title>Tools</title>
-    <para></para>
-  </section>
-  <section>
-    <title>Examples</title>
     <para></para>
   </section>
 </article>
