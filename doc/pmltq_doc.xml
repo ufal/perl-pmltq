@@ -331,28 +331,22 @@ occurrences :: ( <replaceable>n</replaceable> | <replaceable>n</replaceable> '+'
 	    <varlistentry>
 	      <term>c</term>
 	      <listitem>
-		<para>????</para>
+		<para>case sensitive match (default)</para>
 	      </listitem>
 	    </varlistentry>
 	    <varlistentry>
 	      <term>n</term>
 	      <listitem>
-		<para>????</para>
+		<para>allows the period (.) to match the newline character</para>
 	      </listitem>
 	    </varlistentry>
 	    <varlistentry>
 	      <term>m</term>
 	      <listitem>
-		<para>??? Treat string as multiple lines.
+		<para>Treat string as multiple lines.
 		That is, change "^" and "$" from matching the start or end of the string to matching the
 		start or end of any line anywhere within the string.
 		</para>
-	      </listitem>
-	    </varlistentry>
-	    <varlistentry>
-	      <term>x</term>
-	      <listitem>
-		<para>??? Ignore whitespace that is neither backslashed nor within a character class.</para>
 	      </listitem>
 	    </varlistentry>
 	  </variablelist>
