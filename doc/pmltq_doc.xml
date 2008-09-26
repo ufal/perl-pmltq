@@ -173,6 +173,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      </para>
 	      <note><para>Nodes beloning to a subquery cannot be
 	      referred to by name from outside the subquery.</para></note>
+	    </listitem>
 	  </varlistentry>
 	  <varlistentry>
 	    <term>conditions</term>
