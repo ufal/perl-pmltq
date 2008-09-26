@@ -52,6 +52,19 @@
 	  <term>node</term>
 	  <listitem>
 	    <synopsis>node :: <replaceable>relation</replaceable>? <replaceable>type</replaceable> ($<replaceable>name</replaceable> ':=' )? '[' <replaceable>conditions</replaceable>?  ']'</synopsis>
+	    <mediaobject id="rail_node">
+	      <textobject role="syntax_diagram">
+		<simpara><![CDATA[ node : TYPE (variable ':=' )? \\ '[' conditions?  ']' ;
+ ]]></simpara>
+	      </textobject>
+	      <imageobject>
+		<imagedata format="linespecific" fileref="rail_node.pdf"/>
+	      </imageobject>
+	      <imageobject>
+		<imagedata format="PNG" fileref="rail_node.png"/>
+	      </imageobject>
+	    </mediaobject>
+
 	      <para>Defines a query node 
 	      matching any node of type <replaceable>type</replaceable>
 	      whose relation to 
@@ -70,9 +83,46 @@
 	  </listitem>
 	</varlistentry>
 	<varlistentry>
-	  <term>optional node</term>
+	  <term>variable</term>
+	  <listitem>
+	    <synopsis>variable :: '$' <replaceable>NAME</replaceable></synopsis>
+	    <mediaobject id="rail_variable">
+	      <textobject role="syntax_diagram">
+		<simpara><![CDATA[ variable : DOLLAR NAME ]]></simpara>
+	      </textobject>
+	      <imageobject>
+		<imagedata format="linespecific" fileref="rail_variable.pdf"/>
+	      </imageobject>
+	      <imageobject>
+		<imagedata format="PNG" fileref="rail_variable.png"/>
+	      </imageobject>
+	    </mediaobject>
+	    <para>Variables are used to name query nodes and refer to them
+	    from other parts of the query. Variable starts
+	    with a '$' (dollar) character and is followed by 
+	    a NAME consisting of alphabetical character or underscore
+	    and zero or more alphanumerical characters or underscores.
+	    For example, <literal>$foo_02</literal> or <literal>$x</literal> are
+	    valid variable names, while <literal>$23</literal> is not.
+	    </para>
+	  </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>optionalNode</term>
 	  <listitem>
 	    <synopsis>optional_node :: '?' <replaceable>node</replaceable></synopsis>
+	    <mediaobject id="rail_optionalNode">
+	      <textobject role="syntax_diagram">
+		<simpara><![CDATA[ optionalNode : '?' node; ]]></simpara>
+	      </textobject>
+	      <imageobject>
+		<imagedata format="linespecific" fileref="rail_optionalNode.pdf"/>
+	      </imageobject>
+	      <imageobject>
+		<imagedata format="PNG" fileref="rail_optionalNode.png"/>
+	      </imageobject>
+	    </mediaobject>
+
 	      <para>
 		If the query node is preceded by a question mark,
 		this query node is optional. This means, that if no node
@@ -94,10 +144,21 @@
 	  <varlistentry>
 	    <term>subquery</term>
 	    <listitem>
-	      <para>
 	      <synopsis>subquery :: <replaceable>occurrences</replaceable> 'x' <replaceable>node</replaceable>
 occurrences :: ( <replaceable>n</replaceable> | <replaceable>n</replaceable> '+' | <replaceable>n</replaceable> '-' | <replaceable>n</replaceable> '..' <replaceable>m</replaceable> ) ('|' <replaceable>occurrences</replaceable>)*</synopsis>
-	      </para>
+	    <mediaobject id="subquery">
+	      <textobject role="syntax_diagram">
+		<simpara><![CDATA[ subquery : occurrences 'x' RELATION? node;
+occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
+ ]]></simpara>
+	      </textobject>
+	      <imageobject>
+		<imagedata format="linespecific" fileref="rail_subquery.pdf"/>
+	      </imageobject>
+	      <imageobject>
+		<imagedata format="PNG" fileref="rail_subquery.png"/>
+	      </imageobject>
+	    </mediaobject>
 	      <para>Subquery is a subtree in the query tree that
 	      specifies number of occurrences. For example,
 	      <literal>3x</literal> specifies that the subtree must
@@ -112,12 +173,23 @@ occurrences :: ( <replaceable>n</replaceable> | <replaceable>n</replaceable> '+'
 	      </para>
 	      <note><para>Nodes beloning to a subquery cannot be
 	      referred to by name from outside the subquery.</para></note>
-	    </listitem>
 	  </varlistentry>
 	  <varlistentry>
 	    <term>conditions</term>
 	    
 	    <listitem><synopsis>conditions :: <replaceable>condition</replaceable> (',' condition)*</synopsis>
+	    <mediaobject id="rail_conditions">
+	      <textobject role="syntax_diagram">
+		<simpara><![CDATA[ conditions : condition + ',';]]></simpara>
+	      </textobject>
+	      <imageobject>
+		<imagedata format="linespecific" fileref="rail_conditions.pdf"/>
+	      </imageobject>
+	      <imageobject>
+		<imagedata format="PNG" fileref="rail_conditions.png"/>
+	      </imageobject>
+	    </mediaobject>
+
 	    <para>One or more conditions.</para>
 	    </listitem>
 	  </varlistentry>
@@ -130,7 +202,20 @@ occurrences :: ( <replaceable>n</replaceable> | <replaceable>n</replaceable> '+'
 	      <replaceable>node</replaceable> | 
 	      <replaceable>subquery</replaceable> |
 	      <replaceable>relation</replaceable> $<replaceable>name</replaceable> |
-	      <replaceable>logical</replaceable></synopsis><para>
+	      <replaceable>logical</replaceable></synopsis>
+	    <mediaobject id="rail_condition">
+	      <textobject role="syntax_diagram">
+		<simpara><![CDATA[ condition : ((atomicPredicate | setPredicate | RELATION? node | RELATION variable | subquery |  '(' condition ')' | '!' condition ) + ('and' | 'or' )) ;
+ ]]></simpara>
+	      </textobject>
+	      <imageobject>
+		<imagedata format="linespecific" fileref="rail_condition.pdf"/>
+	      </imageobject>
+	      <imageobject>
+		<imagedata format="PNG" fileref="rail_condition.png"/>
+	      </imageobject>
+	    </mediaobject>
+<para>
 	      A condition is either a 
 	    binary test predicate
 	    (<literal>=</literal>, 
@@ -152,6 +237,19 @@ occurrences :: ( <replaceable>n</replaceable> | <replaceable>n</replaceable> '+'
 	    <term>atomic_predicate</term>
 	    
 	    <listitem><synopsis>atomic_predicate :: ( <replaceable>expression</replaceable> ('=' | '~' | '~*' | '&lt;' | '&gt;' | '&lt;=' | '&gt;=') <replaceable>expression</replaceable>  </synopsis>
+	    <mediaobject id="rail_atomic_predicate">
+	      <textobject role="syntax_diagram">
+		<simpara><![CDATA[ atomicPredicate : expression ('=' | TILDA | TILDASTAR | '<' | '>' | '<=' | '>=') expression  ;
+ ]]></simpara>
+	      </textobject>
+	      <imageobject>
+		<imagedata format="linespecific" fileref="rail_atomicPredicate.pdf"/>
+	      </imageobject>
+	      <imageobject>
+		<imagedata format="PNG" fileref="rail_atomicPredicate.png"/>
+	      </imageobject>
+	    </mediaobject>
+
 	      <para>
 		The atomic predicate consists of two expressions 
 		and a binary relation. 
@@ -175,6 +273,18 @@ occurrences :: ( <replaceable>n</replaceable> | <replaceable>n</replaceable> '+'
 	  <varlistentry>
 	    <term>set_predicate</term>
 	    <listitem><synopsis>set_predicate :: <replaceable>expression</replaceable> 'in' '{' <replaceable>expression</replaceable> ( ',' <replaceable>expression</replaceable> )* '}' )</synopsis>
+	    <mediaobject id="rail_set_predicate">
+	      <textobject role="syntax_diagram">
+		<simpara><![CDATA[ setPredicate : (expression 'in' LEFTBRACE (expression +',') RIGHTBRACE) ; ]]></simpara>
+	      </textobject>
+	      <imageobject>
+		<imagedata format="linespecific" fileref="rail_setPredicate.pdf"/>
+	      </imageobject>
+	      <imageobject>
+		<imagedata format="PNG" fileref="rail_setPredicate.png"/>
+	      </imageobject>
+	    </mediaobject>
+
 	      <para>
 		This predicate is true
 		if the value computed from the expression on the left
@@ -190,6 +300,18 @@ occurrences :: ( <replaceable>n</replaceable> | <replaceable>n</replaceable> '+'
   	    | <replaceable>function</replaceable> 
 	    | <replaceable>expression</replaceable> (('+' | '-' | '*' | 'div' | 'mod' | '&amp;') <replaceable>expression</replaceable> )+ 
 	    | '(' <replaceable>expression</replaceable> ')' </synopsis>
+	    <mediaobject id="rail_expression">
+	      <textobject role="syntax_diagram">
+		<simpara><![CDATA[ expression : (literal | attributePath | function | '(' expression ')') + ('+' | '-' | '*' | 'div' | 'mod' | AMP)  ; ]]></simpara>
+	      </textobject>
+	      <imageobject>
+		<imagedata format="linespecific" fileref="rail_expression.pdf"/>
+	      </imageobject>
+	      <imageobject>
+		<imagedata format="PNG" fileref="rail_expression.png"/>
+	      </imageobject>
+	    </mediaobject>
+
 	      <para>
 		Expressions are either literals (strings, integer of
 		floating point numbers), or functions, or any
@@ -210,6 +332,18 @@ occurrences :: ( <replaceable>n</replaceable> | <replaceable>n</replaceable> '+'
 	    <term>literal</term>
 	    
 	    <listitem><synopsis>literal :: NUMBER | '"' STRING '"' | ''' STRING '''</synopsis>
+	    <mediaobject id="rail_literal">
+	      <textobject role="syntax_diagram">
+		<simpara><![CDATA[ literal : NUMBER | '"' STRING '"' | "'" STRING "'" ; ]]></simpara>
+	      </textobject>
+	      <imageobject>
+		<imagedata format="linespecific" fileref="rail_literal.pdf"/>
+	      </imageobject>
+	      <imageobject>
+		<imagedata format="PNG" fileref="rail_literal.png"/>
+	      </imageobject>
+	    </mediaobject>
+
 	      <para>A literal is either a number in the decimal
 	      notation (integer or floating point,
 	      e.g. <literal>231</literal> or
@@ -231,8 +365,71 @@ occurrences :: ( <replaceable>n</replaceable> | <replaceable>n</replaceable> '+'
 	    </listitem>
 	  </varlistentry>
 	  <varlistentry>
+	    <term>attributePath</term>
+	    <listitem><synopsis>attributePath :: (variable '.')? XMLNAME ('/' XMLNAME)*</synopsis>
+	    <mediaobject id="rail_attributePath">
+	      <textobject role="syntax_diagram">
+		<simpara><![CDATA[ attributePath : (variable '.' )? XMLNAME + '/' ; ]]></simpara>
+	      </textobject>
+	      <imageobject>
+		<imagedata format="linespecific" fileref="rail_attributePath.pdf"/>
+	      </imageobject>
+	      <imageobject>
+		<imagedata format="PNG" fileref="rail_attributePath.png"/>
+	      </imageobject>
+	    </mediaobject>
+	    <para>
+	      An attribute path refers to
+	      a value of an attribute of a treebank node
+	      matched by certain query node.
+	      If the path starts with a variable followed by
+	      a '.' (dot) character, then the it refers
+	      to an attribute of the node matched by the
+	      query node named by the variable.
+	      Otherwise it refers to the node matched
+	      by the current query node (i.e.
+	      the node within whose constraints
+	      it occurs).
+	    </para>
+	    <para>
+	      In the simplest form,
+	      attribute path is just a name of an attribute,
+	      e.g. <literal>functor</literal>.
+	      However, some node attributes may have complex
+	      values, i.e. structures with attributes of their own.
+	      In such case one forms a slash-delimited attribute
+	      path leading from the node
+	      to some nested atomic value. For example
+	      <literal>gram/sempos</literal> selects
+	      the attribtue <literal>sempos</literal>
+	      of a structure stored in the attribute
+	      <literal>gram</literal> of the current node.
+	    </para>
+	    <para>
+	      Example:
+	      <programlisting>a-node $p:= [ child a-node [ afun=$p.afun, afun~'^Aux' ] ]</programlisting>
+	      The above query selects
+	      a node its child node (both of type <literal>a-node</literal>)
+	      that have the same value of the attribute
+	      <literal>afun</literal>
+	      and the value starts with the substring <literal>Aux</literal>.
+	    </para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
 	    <term>function</term>
 	    <listitem><synopsis>function :: FUNCTION_NAME '(' (expression (',' expression)*)?   ')'</synopsis>
+	    <mediaobject id="rail_function">
+	      <textobject role="syntax_diagram">
+		<simpara><![CDATA[ function : FUNCNAME '(' (expression + ',' ) ')' ; ]]></simpara>
+	      </textobject>
+	      <imageobject>
+		<imagedata format="linespecific" fileref="rail_function.pdf"/>
+	      </imageobject>
+	      <imageobject>
+		<imagedata format="PNG" fileref="rail_function.png"/>
+	      </imageobject>
+	    </mediaobject>
 	    <para>
 	      Functions are written as function name followed by a comma-separated list of its arguments in brackets.
 	      The functions currently supported by PMLTQ are listed in 
