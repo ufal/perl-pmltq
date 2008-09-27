@@ -1,0 +1,53 @@
+#!/bin/bash
+
+name="$1"
+shift;
+
+file="$2"
+shift;
+
+if [ -z "$name" ]; then
+  echo "Usage: $0 <base_name>"
+  exit 1;
+fi
+if [ -z "$file" ]; then
+  file=-
+fi
+
+cat <<'EOF' > "${name}.tex"
+\documentclass{article}
+\pdfoutput=1
+\usepackage{bold-extra}
+\usepackage{color}
+\usepackage{rail}
+\usepackage{pict2e}
+\usepackage[scaled]{helvet}
+\renewcommand*\familydefault{\sfdefault}
+\railoptions{-h}
+\def\~{\char'176}
+\railtoken{DOLLAR}{\$}
+\railtoken{TILDA}{\lower 3pt\hbox{\large\~}}
+\railtoken{TILDASTAR}{\lower 3pt\hbox{\large\~{}}*}
+\railtoken{LEFTBRACE}{\{}
+\railtoken{RIGHTBRACE}{\}}
+\railtoken{AMP}{\&}
+\railtermfont{\ttfamily\upshape\bfseries}
+\railnontermfont{\sffamily\upshape} 
+\railannotatefont{\rmfamily\itshape}
+\railnamefont{\sffamily\itshape} 
+\railindexfont{\sffamily\itshape}
+\begin{document}
+\thispagestyle{empty}
+\begin{rail}
+EOF
+
+cat "$file" >> "${name}.tex"
+echo '\end{rail}' >> "${name}.tex"
+echo '\end{document}' >> "${name}.tex"
+
+pdflatex "${name}" && \
+rail "${name}" && \
+pdflatex "${name}" && \
+pdfcrop "${name}.pdf" "${name}_crop.pdf" && \
+mv "${name}_crop.pdf" "${name}.pdf" &&
+convert -density 120 "${name}.pdf" "${name}.png"

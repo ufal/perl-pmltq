@@ -1,0 +1,69 @@
+@import "main.css";
+
+body, th, td { 
+	color: #0E0E61; /* 1-1 */
+}
+
+h1.title, h2.title, h3.title, h4.title {
+	color: #020293; /* 1-4 */
+}
+
+h5.title, h6.title {
+	color: #121244; /* 1-2 */
+}
+
+code, .programlisting, .literallayout, .literal, .synopsis {
+	color: #050530;
+}
+
+.programlisting, .literallayout, .synopsis {
+	background: #d5dee6;
+        padding: 6pt 6pt 6pt 6pt;
+}
+
+/* navigace */
+
+div.navfooter a, div.navheader a {
+	color: #610E61; /* 2-1 */
+}
+
+div.navfooter a:hover, div.navheader a:hover {
+	background: #FFC8FF; /* 2-3 */
+}
+
+div.navheader th
+{
+	color: #1A1A61; /* 1-2 */
+}
+
+/* odkazy */
+
+a {
+	color: #0E6161; /* 3-1 *//* vyjimka-blizsi */
+}
+
+a:hover {
+	background: #C8FFE8; /* 3-3 */
+}
+
+div.added    {  background-color: #ddffdd; } 
+div.deleted  { text-decoration: line-through;
+               background-color: #FF9F9F; }
+div.changed  { 
+               background-color: #ffffdd;
+             }
+div.off      {  }
+
+span.added   { background-color: #ffffcc; }
+span.deleted { text-decoration: line-through;
+               background-color: #FF7F7F; }
+span.changed { background-color: #ccffcc; }
+span.off     {  }
+
+dt { font-weight: bold }
+
+.framed, .note { 
+   background-color: #ffffcc;
+   border: dashed 1pt;
+   padding: 0 12pt 0 12pt;
+}
