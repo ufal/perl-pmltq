@@ -6,12 +6,30 @@
       <surname>Pajas</surname>
     </author>
     <title>PML Tree Query</title>
+    <subtitle>Version 0.5 (beta)</subtitle>
   </articleinfo>
   <section>
     <title>Introduction</title>
     <para>
-      Purpose, features, comparison with other query engines
-      (NetGraph, TGrep2)
+      PML Tree Query (PML-TQ) is a query language and search engine
+      targetted for querying over multi-layer annotated treebanks
+      stored in the PML data format. As such, it can be used to
+      perform queries over dependency or constituency treebanks,
+      parallel treebanks, or other kinds of richly structured and/or
+      multi-layered types of annotation.
+    </para>
+    <para>
+      The query language is declarative and offers both textual and
+      graphical representation of queries.  Currently, there are two
+      implementations of the query engine, one is based on relational
+      database (Oracle) and the other is Perl-based (using the TrEd
+      toolkit), and three user interfaces: a full-featured graphical
+      user interface built in TrEd, and text-only web and command-line
+      interfaces.
+    </para>
+    <para>
+      TODO: Purpose, features, and comparison with other query languages and engines
+      (XPath, NetGraph, TGrep2, Nite, LPath+)
     </para>
     <orderedlist>
       <listitem>
@@ -27,12 +45,149 @@
 	<para>operates on original data (no conversion, no information loss)</para>
       </listitem>
       <listitem>
-	<para>arbitrary logical conditions</para>
+	<para>arbitrary logical constraints</para>
       </listitem>
       <listitem>
 	<para>output filters: multi-column text output (attribute values, statistical analysis, ...)</para>
       </listitem>
     </orderedlist>
+  </section>
+  <section>
+    <title>Basic concepts</title>
+    <para>
+      The body of a <firstterm>PML-TQ query</firstterm> is a declaration of
+      restrictions on properties
+      of one or more nodes in a treebank
+      and their mutual relationships
+      (e.g. the topological configuration in
+      the tree structure).
+      An ordered tuple of nodes in the treebank <firstterm>matches</firstterm>
+      the query if each of them
+      satisfies the corresponding constraints
+      on its properties and
+      the relationships between the nodes 
+      are as declared in the query.
+      Such a tuple of nodes from the treebank is called
+      a <firstterm>match</firstterm>
+      and there can be zero, one, or more
+      distinct matches of the query in the treebank
+      (two matches are distinct if they differ in
+      at least one node).
+    </para>
+    <para>
+      A PML-TQ query can 
+      optionally define a list of <firstterm>output filters</firstterm> that
+      can extract data from the matching nodes,
+      compute statistics, and further format and post-process the results
+      of a query.
+    </para>
+    <para>
+      The body of a PML-TQ query is formed by one or more <firstterm>query-node declarations</firstterm>,
+      which can nest further query-node declarations.
+      A query-node declaration represents a 
+      node the treebank and two different declarations represent
+      two different nodes (except for subqueries as described later).
+      It specifies the type of the node (the nodes in the treebank annotation can be typed
+      or the query can refer to several annotation layers with different types of nodes),
+      a symbolic name for the query node (variable),
+      and a set of constraints on the node.
+      There are several types
+      of constraints:
+      <itemizedlist>
+	<listitem><para>predicates</para></listitem>
+	<listitem>
+	  <para>nested query-node declarations</para>
+	</listitem>
+	<listitem>
+	  <para>references</para>
+	</listitem>
+	<listitem>
+	  <para>subqueries
+	  </para>
+	  <para>boolean combinations of predicates, references, and subqueries</para>
+	</listitem>
+      </itemizedlist>
+    </para>
+    <para>
+      <firstterm>Predicate constraints</firstterm> assert equality, inequality, or regular expression match
+      between values computed from constants (integers, floats, or strings)
+      and values of attributes of either the matching node
+      or some other node in the query referred to using a variable.
+    </para>
+    <para>
+      A <firstterm>nested query-node declaration</firstterm>
+      represents a node and
+      specifies the relationship between
+      this node and the
+      node among whose constraints it is declared.
+      The relationship specification can be omitted
+      in which case it defaults to <literal>child</literal>,
+      meaning that the nested query node matches a child
+      of the node matched by the containing query node.
+      Thus, nesting of declarations can naturally follow
+      the topology of the matched tree.
+      Nested declarations can be named
+      using a variable and referred to from other query-node declarations.
+    </para>
+    <para>
+      A <firstterm>reference</firstterm> is a declaration of relationship
+      between the current node and some
+      other named node.
+    </para>
+    <para>
+      Finally, a <firstterm>subquery</firstterm> is a nested 
+      query node declaration
+      with specification of restrictions on number of occurrences.
+      The nodes declared within a subquery
+      are not part of the resulting match,
+      and nodes outside the subquery cannot
+      refer to nodes within the subquery;
+      however, nodes in the suquery may refer
+      to the nodes in its outer scope (except, of course,
+      to nodes within another subquery).
+      A subquery constraint is verified as follows:
+      for each match of the query node 
+      in whose declaration the subquery occurs
+      all matches of the subquery are located
+      (these may coincide with nodes
+      matched by the outside query).
+      The number of distinct nodes matching the top node of the subquery
+      are counted and this number is compared with the restrictions
+      on number of occurences.
+      The constraint is satisfied if and only if
+      these restrictions are met.
+    </para>
+    <para>A constraint can also be a boolean combination of other constraints,
+    but if a node declaration occurs in a boolean combination
+    it is considered to be a subquery with at least one occurrence.
+    </para>
+    <para>
+      A PML-TQ query can be represented graphically as a directed graph whose vertices
+      are node declarations and whose edges represent nesting relations between the matching nodes.
+      More specifically, the query forms one or more trees 
+      representing nesting of node and subquery declarations.
+      Relationships between nodes specified as reference constraints
+      can be represented by additional edges in the graph
+      (arbitrarily crossing the basic nesting-based tree structure). 
+    </para>
+    <glossary>
+      <glossentry>
+	<glossterm>
+	  query node
+	  matching node
+	  attribute
+	  node type
+	  relation
+	  variable
+	  subquery
+	  reference
+	  output filter
+	</glossterm>
+	<glossdef>
+	  <para></para>
+	</glossdef>
+      </glossentry>
+    </glossary>
   </section>
   <section>
     <title>Tutorial</title>
@@ -49,20 +204,37 @@
       <title>Brief PML-TQ syntax reference</title>
       <variablelist>
 	<varlistentry>
+	  <term>query</term>
+	  <listitem>
+	    <mediaobject id="rail_query">
+	      <imageobject role="html">
+		<imagedata format="PNG" fileref="rail_query.png"/>
+	      </imageobject><imageobject>
+		<imagedata format="linespecific" fileref="rail_query.pdf"/>
+	      </imageobject>
+	      <textobject role="syntax_diagram">
+		<phrase><![CDATA[ query : (node + ';') ( ';' (outputFilter*) )? ; ]]></phrase>
+	      </textobject>
+	    </mediaobject>
+	    <para>PML-TQ query consists of one or more query node 
+	    declarations separated by semicolon followed, optionally,
+	    by a list of output filters.
+	    </para>
+	  </listitem>
+	</varlistentry>
+	<varlistentry>
 	  <term>node</term>
 	  <listitem>
-	    <synopsis>node :: <replaceable>relation</replaceable>? <replaceable>type</replaceable> ($<replaceable>name</replaceable> ':=' )? '[' <replaceable>conditions</replaceable>?  ']'</synopsis>
 	    <mediaobject id="rail_node">
-	      <textobject role="syntax_diagram">
-		<simpara><![CDATA[ node : TYPE (variable ':=' )? \\ '[' conditions?  ']' ;
- ]]></simpara>
-	      </textobject>
-	      <imageobject>
+	      <imageobject role="html">
+		<imagedata format="PNG" fileref="rail_node.png"/>
+	      </imageobject><imageobject>
 		<imagedata format="linespecific" fileref="rail_node.pdf"/>
 	      </imageobject>
-	      <imageobject>
-		<imagedata format="PNG" fileref="rail_node.png"/>
-	      </imageobject>
+	      <textobject role="syntax_diagram">
+		<phrase><![CDATA[ node : TYPE (variable ':=' )? \\ '[' constraints?  ']' ;
+ ]]></phrase>
+	      </textobject>
 	    </mediaobject>
 
 	      <para>Defines a query node 
@@ -85,17 +257,16 @@
 	<varlistentry>
 	  <term>variable</term>
 	  <listitem>
-	    <synopsis>variable :: '$' <replaceable>NAME</replaceable></synopsis>
 	    <mediaobject id="rail_variable">
-	      <textobject role="syntax_diagram">
-		<simpara><![CDATA[ variable : DOLLAR NAME ]]></simpara>
-	      </textobject>
-	      <imageobject>
-		<imagedata format="linespecific" fileref="rail_variable.pdf"/>
-	      </imageobject>
-	      <imageobject>
+	      
+	      
+	      <imageobject role="html">
 		<imagedata format="PNG" fileref="rail_variable.png"/>
-	      </imageobject>
+	      </imageobject><imageobject>
+		<imagedata format="linespecific" fileref="rail_variable.pdf"/>
+	      </imageobject><textobject role="syntax_diagram">
+		<phrase><![CDATA[ variable : DOLLAR NAME ]]></phrase>
+	      </textobject>
 	    </mediaobject>
 	    <para>Variables are used to name query nodes and refer to them
 	    from other parts of the query. Variable starts
@@ -110,17 +281,16 @@
 	<varlistentry>
 	  <term>optionalNode</term>
 	  <listitem>
-	    <synopsis>optional_node :: '?' <replaceable>node</replaceable></synopsis>
 	    <mediaobject id="rail_optionalNode">
-	      <textobject role="syntax_diagram">
-		<simpara><![CDATA[ optionalNode : '?' node; ]]></simpara>
-	      </textobject>
-	      <imageobject>
-		<imagedata format="linespecific" fileref="rail_optionalNode.pdf"/>
-	      </imageobject>
-	      <imageobject>
+	      
+	      
+	      <imageobject role="html">
 		<imagedata format="PNG" fileref="rail_optionalNode.png"/>
-	      </imageobject>
+	      </imageobject><imageobject>
+		<imagedata format="linespecific" fileref="rail_optionalNode.pdf"/>
+	      </imageobject><textobject role="syntax_diagram">
+		<phrase><![CDATA[ optionalNode : '?' node; ]]></phrase>
+	      </textobject>
 	    </mediaobject>
 
 	      <para>
@@ -136,7 +306,7 @@
 		(the optional node $b matching the middle node)
 		or just the pair
 		'Sb-&gt;Obj', in which case both $a and $b are identified with the 'Sb'
-		(the condition <literal>afun='AuxC'</literal>) on $b is disregarded),
+		(the constraint <literal>afun='AuxC'</literal>) on $b is disregarded),
 		but it does <emphasis>not</emphasis>, for instance, match a descending chain 'Sb-&gt;ExD-&gt;Obj'.
 	      </para>
 	    </listitem>
@@ -144,20 +314,16 @@
 	  <varlistentry>
 	    <term>subquery</term>
 	    <listitem>
-	      <synopsis>subquery :: <replaceable>occurrences</replaceable> 'x' <replaceable>node</replaceable>
-occurrences :: ( <replaceable>n</replaceable> | <replaceable>n</replaceable> '+' | <replaceable>n</replaceable> '-' | <replaceable>n</replaceable> '..' <replaceable>m</replaceable> ) ('|' <replaceable>occurrences</replaceable>)*</synopsis>
-	    <mediaobject id="subquery">
-	      <textobject role="syntax_diagram">
-		<simpara><![CDATA[ subquery : occurrences 'x' RELATION? node;
-occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
- ]]></simpara>
-	      </textobject>
-	      <imageobject>
-		<imagedata format="linespecific" fileref="rail_subquery.pdf"/>
-	      </imageobject>
-	      <imageobject>
+	      <mediaobject id="rail_subquery">
+	      <imageobject role="html">
 		<imagedata format="PNG" fileref="rail_subquery.png"/>
-	      </imageobject>
+	      </imageobject><imageobject>
+		<imagedata format="linespecific" fileref="rail_subquery.pdf"/>
+	      </imageobject><textobject role="syntax_diagram">
+		<phrase><![CDATA[ subquery : occurrences 'x' RELATION? node;
+occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
+ ]]></phrase>
+	      </textobject>
 	    </mediaobject>
 	      <para>Subquery is a subtree in the query tree that
 	      specifies number of occurrences. For example,
@@ -176,48 +342,38 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    </listitem>
 	  </varlistentry>
 	  <varlistentry>
-	    <term>conditions</term>
+	    <term>constraints</term>
 	    
-	    <listitem><synopsis>conditions :: <replaceable>condition</replaceable> (',' condition)*</synopsis>
-	    <mediaobject id="rail_conditions">
-	      <textobject role="syntax_diagram">
-		<simpara><![CDATA[ conditions : condition + ',';]]></simpara>
+	    <listitem><mediaobject id="rail_constraints">
+	      
+	      
+	      <imageobject role="html">
+		<imagedata format="PNG" fileref="rail_constraints.png"/>
+	      </imageobject><imageobject>
+		<imagedata format="linespecific" fileref="rail_constraints.pdf"/>
+	      </imageobject><textobject role="syntax_diagram">
+		<phrase><![CDATA[ constraints : constraint + ',';]]></phrase>
 	      </textobject>
-	      <imageobject>
-		<imagedata format="linespecific" fileref="rail_conditions.pdf"/>
-	      </imageobject>
-	      <imageobject>
-		<imagedata format="PNG" fileref="rail_conditions.png"/>
-	      </imageobject>
 	    </mediaobject>
 
-	    <para>One or more conditions.</para>
+	    <para>One or more constraints.</para>
 	    </listitem>
 	  </varlistentry>
 	  <varlistentry>
-	    <term>condition</term>
+	    <term>constraint</term>
 	    
-	    <listitem><synopsis>condition :: 
-	      <replaceable>atomic_predicate</replaceable> | 
-	      <replaceable>set_predicate</replaceable> | 
-	      <replaceable>node</replaceable> | 
-	      <replaceable>subquery</replaceable> |
-	      <replaceable>relation</replaceable> $<replaceable>name</replaceable> |
-	      <replaceable>logical</replaceable></synopsis>
-	    <mediaobject id="rail_condition">
-	      <textobject role="syntax_diagram">
-		<simpara><![CDATA[ condition : ((atomicPredicate | setPredicate | RELATION? node | RELATION variable | subquery |  '(' condition ')' | '!' condition ) + ('and' | 'or' )) ;
- ]]></simpara>
+	    <listitem><mediaobject id="rail_constraint">
+	      <imageobject role="html">
+		<imagedata format="PNG" fileref="rail_constraint.png"/>
+	      </imageobject><imageobject>
+		<imagedata format="linespecific" fileref="rail_constraint.pdf"/>
+	      </imageobject><textobject role="syntax_diagram">
+		<phrase><![CDATA[ constraint : ((predicate | RELATION? node | RELATION variable | subquery |  '(' constraint ')' | '!' constraint ) + ('and' | 'or' )) ;
+ ]]></phrase>
 	      </textobject>
-	      <imageobject>
-		<imagedata format="linespecific" fileref="rail_condition.pdf"/>
-	      </imageobject>
-	      <imageobject>
-		<imagedata format="PNG" fileref="rail_condition.png"/>
-	      </imageobject>
 	    </mediaobject>
 <para>
-	      A condition is either a 
+	      A constraint is either a 
 	    binary test predicate
 	    (<literal>=</literal>, 
 	    <literal>~</literal>, 
@@ -235,27 +391,27 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      </para></listitem>
 	  </varlistentry>
 	  <varlistentry>
-	    <term>atomic_predicate</term>
+	    <term>predicate</term>
 	    
-	    <listitem><synopsis>atomic_predicate :: ( <replaceable>expression</replaceable> ('=' | '~' | '~*' | '&lt;' | '&gt;' | '&lt;=' | '&gt;=') <replaceable>expression</replaceable>  </synopsis>
-	    <mediaobject id="rail_atomic_predicate">
-	      <textobject role="syntax_diagram">
-		<simpara><![CDATA[ atomicPredicate : expression ('=' | TILDA | TILDASTAR | '<' | '>' | '<=' | '>=') expression  ;
- ]]></simpara>
+	    <listitem><mediaobject id="rail_predicate">
+	      
+	      
+	      <imageobject role="html">
+		<imagedata format="PNG" fileref="rail_predicate.png"/>
+	      </imageobject><imageobject>
+		<imagedata format="linespecific" fileref="rail_predicate.pdf"/>
+	      </imageobject><textobject role="syntax_diagram">
+		<phrase><![CDATA[ predicate : binaryComparison | setPredicate;
+		binaryComparison : expression ('=' | TILDA | TILDASTAR | '<' | '>' | '<=' | '>=') expression  ;
+		setPredicate : (expression 'in' LEFTBRACE (expression +',') RIGHTBRACE) ; ]]></phrase>
 	      </textobject>
-	      <imageobject>
-		<imagedata format="linespecific" fileref="rail_atomicPredicate.pdf"/>
-	      </imageobject>
-	      <imageobject>
-		<imagedata format="PNG" fileref="rail_atomicPredicate.png"/>
-	      </imageobject>
 	    </mediaobject>
-
 	      <para>
-		The atomic predicate consists of two expressions 
-		and a binary relation. 
+		A predicate is either a binary comparison or a set predicate.
 	      </para>
 	      <para>
+		The binary comparison consists of two expressions 
+		and a binary relation. 
 		The relations <literal>~</literal> and
 		<literal>~*</literal> perform 
 		case-sensitive and case-insensitive
@@ -269,48 +425,32 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 		either equals to the string <literal>Sb</literal> or
 		starts with the string <literal>Aux</literal>.
 	      </para>
-	    </listitem>
-	  </varlistentry>
-	  <varlistentry>
-	    <term>set_predicate</term>
-	    <listitem><synopsis>set_predicate :: <replaceable>expression</replaceable> 'in' '{' <replaceable>expression</replaceable> ( ',' <replaceable>expression</replaceable> )* '}' )</synopsis>
-	    <mediaobject id="rail_set_predicate">
-	      <textobject role="syntax_diagram">
-		<simpara><![CDATA[ setPredicate : (expression 'in' LEFTBRACE (expression +',') RIGHTBRACE) ; ]]></simpara>
-	      </textobject>
-	      <imageobject>
-		<imagedata format="linespecific" fileref="rail_setPredicate.pdf"/>
-	      </imageobject>
-	      <imageobject>
-		<imagedata format="PNG" fileref="rail_setPredicate.png"/>
-	      </imageobject>
-	    </mediaobject>
-
 	      <para>
-		This predicate is true
+		Set predicate 
+		consists of a expression,
+		the operator <literal>in</literal>
+		and a comma-separated list of expressions
+		enclosed in braces. It
+		is true
 		if the value computed from the expression on the left
 		equals some of the values computed from the expressions
-		listed in curly brackets on the right.
+		on the right of the operator.
 	      </para>
 	    </listitem>
 	  </varlistentry>
 	  <varlistentry>
 	    <term>expression</term>
 	    
-	    <listitem><synopsis>expression :: <replaceable>literal</replaceable> 
-  	    | <replaceable>function</replaceable> 
-	    | <replaceable>expression</replaceable> (('+' | '-' | '*' | 'div' | 'mod' | '&amp;') <replaceable>expression</replaceable> )+ 
-	    | '(' <replaceable>expression</replaceable> ')' </synopsis>
-	    <mediaobject id="rail_expression">
-	      <textobject role="syntax_diagram">
-		<simpara><![CDATA[ expression : (literal | attributePath | function | '(' expression ')') + ('+' | '-' | '*' | 'div' | 'mod' | AMP)  ; ]]></simpara>
-	      </textobject>
-	      <imageobject>
-		<imagedata format="linespecific" fileref="rail_expression.pdf"/>
-	      </imageobject>
-	      <imageobject>
+	    <listitem><mediaobject id="rail_expression">
+	      
+	      
+	      <imageobject role="html">
 		<imagedata format="PNG" fileref="rail_expression.png"/>
-	      </imageobject>
+	      </imageobject><imageobject>
+		<imagedata format="linespecific" fileref="rail_expression.pdf"/>
+	      </imageobject><textobject role="syntax_diagram">
+		<phrase><![CDATA[ expression : (literal | attributePath | function | '(' expression ')') + ('+' | '-' | '*' | 'div' | 'mod' | AMP)  ; ]]></phrase>
+	      </textobject>
 	    </mediaobject>
 
 	      <para>
@@ -332,17 +472,16 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	  <varlistentry>
 	    <term>literal</term>
 	    
-	    <listitem><synopsis>literal :: NUMBER | '"' STRING '"' | ''' STRING '''</synopsis>
-	    <mediaobject id="rail_literal">
-	      <textobject role="syntax_diagram">
-		<simpara><![CDATA[ literal : NUMBER | '"' STRING '"' | "'" STRING "'" ; ]]></simpara>
-	      </textobject>
-	      <imageobject>
-		<imagedata format="linespecific" fileref="rail_literal.pdf"/>
-	      </imageobject>
-	      <imageobject>
+	    <listitem><mediaobject id="rail_literal">
+	      
+	      
+	      <imageobject role="html">
 		<imagedata format="PNG" fileref="rail_literal.png"/>
-	      </imageobject>
+	      </imageobject><imageobject>
+		<imagedata format="linespecific" fileref="rail_literal.pdf"/>
+	      </imageobject><textobject role="syntax_diagram">
+		<phrase><![CDATA[ literal : NUMBER | '"' STRING '"' | "'" STRING "'" ; ]]></phrase>
+	      </textobject>
 	    </mediaobject>
 
 	      <para>A literal is either a number in the decimal
@@ -367,17 +506,16 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	  </varlistentry>
 	  <varlistentry>
 	    <term>attributePath</term>
-	    <listitem><synopsis>attributePath :: (variable '.')? XMLNAME ('/' XMLNAME)*</synopsis>
-	    <mediaobject id="rail_attributePath">
-	      <textobject role="syntax_diagram">
-		<simpara><![CDATA[ attributePath : (variable '.' )? XMLNAME + '/' ; ]]></simpara>
-	      </textobject>
-	      <imageobject>
-		<imagedata format="linespecific" fileref="rail_attributePath.pdf"/>
-	      </imageobject>
-	      <imageobject>
+	    <listitem><mediaobject id="rail_attributePath">
+	      
+	      
+	      <imageobject role="html">
 		<imagedata format="PNG" fileref="rail_attributePath.png"/>
-	      </imageobject>
+	      </imageobject><imageobject>
+		<imagedata format="linespecific" fileref="rail_attributePath.pdf"/>
+	      </imageobject><textobject role="syntax_diagram">
+		<phrase><![CDATA[ attributePath : (variable '.' )? XMLNAME + '/' ; ]]></phrase>
+	      </textobject>
 	    </mediaobject>
 	    <para>
 	      An attribute path refers to
@@ -419,17 +557,14 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	  </varlistentry>
 	  <varlistentry>
 	    <term>function</term>
-	    <listitem><synopsis>function :: FUNCTION_NAME '(' (expression (',' expression)*)?   ')'</synopsis>
-	    <mediaobject id="rail_function">
-	      <textobject role="syntax_diagram">
-		<simpara><![CDATA[ function : FUNCNAME '(' (expression + ',' ) ')' ; ]]></simpara>
-	      </textobject>
-	      <imageobject>
-		<imagedata format="linespecific" fileref="rail_function.pdf"/>
-	      </imageobject>
-	      <imageobject>
+	    <listitem><mediaobject id="rail_function">
+	      <imageobject role="html">
 		<imagedata format="PNG" fileref="rail_function.png"/>
-	      </imageobject>
+	      </imageobject><imageobject>
+		<imagedata format="linespecific" fileref="rail_function.pdf"/>
+	      </imageobject><textobject role="syntax_diagram">
+		<phrase><![CDATA[ function : FUNC '(' (expression + ',' ) ')' ; ]]></phrase>
+	      </textobject>
 	    </mediaobject>
 	    <para>
 	      Functions are written as function name followed by a comma-separated list of its arguments in brackets.
@@ -439,6 +574,160 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    </para>
 	    </listitem>
 	  </varlistentry>
+	  <varlistentry>
+	    <term>outputFilter</term>
+	    <listitem><mediaobject id="rail_outputFilter">
+	      
+	      
+	      <imageobject role="html">
+		<imagedata format="PNG" fileref="rail_outputFilter.png"/>
+	      </imageobject><imageobject>
+		<imagedata format="linespecific" fileref="rail_outputFilter.pdf"/>
+	      </imageobject><textobject role="syntax_diagram">
+	      <phrase><![CDATA[ outputFilter : '>>' 
+	                                     ('for' (columnExp + ','))? \\
+					     ('give')? ('distinct')?
+	                                     (columnExp + ',') \\
+					     ('sort by'
+					      (columnExp + ','))?; ]]></phrase>
+	      </textobject>
+	    </mediaobject>
+	    <para>
+	      An output filter transforms its input
+	      (the result of the query
+	      or the previous filter) into a table of values
+	      whose columns are computed according to the filter specification.
+	    </para>
+	    <para>
+	      The simplest form of a filter consists of a comma-separated list of
+	      expressions that are used to compute values of the ouptut columns from
+	      the output of the body of the query or preceding filters.
+	      For example:
+	      <programlisting>>> $x.m/tag, depth($y)
+>> 'found ' &amp; $1 &amp; ' at depth ' &amp; $2</programlisting>
+	      defines two output filters: the first returns
+	      a table whose rows correspond directly to
+	      the matches of the query body. Its first column
+	      contains the value of the attribute <literal>m/tag</literal>
+	      of the node matched by the query node <literal>$x</literal>
+	      and the second column is the depth of the node
+	      matched by the query node <literal>$y</literal>.
+	      The second output filter produces a table with just one
+	      column 
+	      with values of the form
+	      <literal>found <replaceable>X</replaceable> at depth <replaceable>Y</replaceable></literal>,
+	      where <replaceable>X</replaceable>
+	      and <replaceable>Y</replaceable>
+	      represent the two columns from the preceding filter.
+	    </para>
+	    <para>
+	      In this case aggregation functions
+	      that do not specify aggregation window
+	      (using an <literal>over</literal> clause)
+	      range over the whole input table.
+	      For example,
+	      <programlisting>>>min($1), max($1), avg($1)</programlisting>
+	      is an output filter
+	      that computes the minimum, maximum and
+	      average form the values in the first column 
+	      of the preceding filter
+	      (and returns a table with three columns and a single row).
+	    </para>
+	    <para>
+	    </para>
+	    <para>
+	      Each filter may be followed by
+	      a <literal>sort by</literal> clause
+	      which specifies the order of rows in the resulting table.
+	      The clause is followed by a list of column expressions
+	      that should refer to the columns of the table produced by this filter
+	      and are used to compute the primary, secondary, tertiary,… etc.
+	      sorting key.
+	    </para>
+	    <para>
+	      The filter may optionally be preceded
+	      by a <literal>for</literal> clause
+	      that performs aggregation
+	      of the input before computing
+	      the output.
+	      The <literal>for</literal> clause consists
+	      of a set of column expressions
+	      used to compute a vector of values from each input
+	      row and aggregates all input rows
+	      resulting in the same vector.
+	      These vectors are used instead
+	      of the original rows as input
+	      for the rest of the filter,
+	      but all aggregation functions
+	      in the rest of the query
+	      that do not specify aggregation window
+	      (using an <literal>over</literal> clause)
+	      range over the original input rows
+	      aggregated by this particular vector.
+	      For example:
+	      <programlisting>a-node $a:= [ child a-node $b [] ];
+>> for $a.afun, $b.afun
+   give $1, $2, count()
+   sort by $3
+  
+	      </programlisting>
+	      is a query whose body
+	      returns paris of a-nodes in the parent-child relation.
+	      The output filter first computes 
+	      a pair of values of the attribute <literal>afun</literal>
+	      and then groups the results according
+	      to this pair. The
+	      <literal>$1, $2, count()</literal>
+	      part of the filter returns
+	      a table lists all distinct
+	      pairs of <literal>afun</literal> values
+	      and for each pair adds the number of
+	      matches with this particular pair of <literal>afun</literal> values
+	      computed using the aggregatin function <literal>count()</literal>
+	      that ranges over the group of aggregated matches.
+	      The result is further sorted by the third column,
+	      i.e. by the number of matches.
+	    </para>
+	    <para>
+	      TODO: detail rules on using column references and aggregation functions
+	    </para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>columnExp</term>
+	    <listitem><mediaobject id="rail_columnExp">
+	      
+	      
+	      <imageobject role="html">
+		<imagedata format="PNG" fileref="rail_columnExp.png"/>
+	      </imageobject><imageobject>
+		<imagedata format="linespecific" fileref="rail_columnExp.pdf"/>
+	      </imageobject><textobject role="syntax_diagram">
+	      <phrase><![CDATA[ columnExp : ((literal 
+                                             | attributePath
+	                                     | DOLLAR NUMBER
+					     | FUNC '(' (columnExp + ',' ) ')' 
+					     | AGGRFUNC '(' (columnExp + ',' ) 
+					          ('over' (columnExp + ',' ))?  ')' 
+					     | '(' columnExp ')') + ('+' | '-' | '*' | 'div' | 'mod' | AMP))  ; ]]></phrase>
+	      </textobject>
+	    </mediaobject>
+	    <para>
+	      Column expressions are expressions that
+	      further allow use of column references of the
+	      form <literal>$<replaceable>N</replaceable></literal> where
+	      <literal><replaceable>N</replaceable></literal>
+	      is a positive integer 
+	      and the use of aggregation functions
+	      apart from normal functions.
+	    </para>
+	    <para>
+	      The exact rules on usage of aggregation functions
+	      and column references in column expressions
+	      are detailed in the description of output filters above.
+	    </para>
+	    </listitem>
+	  </varlistentry>	  
 	</variablelist>
     </section>
   </section>
@@ -651,7 +940,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
   </section>
   <section>
     <title>Examples</title>
-    <para></para>
+    <para/>
   </section>
   <section>
     <title>Graphical representation in TrEd</title>
@@ -665,7 +954,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
   </section>
   <section>
     <title>Web interface</title>
-    <para></para>
+    <para/>
   </section>
   <section>
     <title>Command-line interface</title>
@@ -678,7 +967,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
   </section>
   <section>
     <title>BTrEd interface</title>
-    <para></para>
+    <para/>
   </section>
   <section>
     <title>Installing SQL Server and HTTP Proxy</title>
@@ -687,6 +976,6 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
   </section>
   <section>
     <title>Tools</title>
-    <para></para>
+    <para/>
   </section>
 </article>
