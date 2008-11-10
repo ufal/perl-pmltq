@@ -1,0 +1,110 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>PML-TQ - Query Engine and Query Language for TreeBanks</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="author" content="Petr Pajas" />
+    <link href="blue.css" rel="stylesheet" />
+  </head>
+  <body bgcolor="#FFFFFF">
+    <h1>PML-TQ - Query Engine and Query Language for TreeBanks</h1>
+    <p>
+      This distribution contains an implementation of a PML-TQ search
+      system for linguistic TreeBanks.
+    </p>
+    <p>
+      The system requires the treebank to be encoded in (or convertible to)
+      the <a href="http://ufal.mff.cuni.cz/jazz/PML/index_en.html">PML format</a>.
+    </p>
+    <p>The system uses a client server architecture
+      (CGI + small custom HTTP server + SQL database backend) 
+      and provides a command-line and a simple web-based search client.
+      <a href="pmltq_tred.png"><img hspace="5pt" vspace="5pt" src="pmltq_tred_small.png" align="right"/></a>
+      A graphical client for PML-TQ is part of the tree
+      editor <a href="http://ufal.mff.cuni.cz/pajas/~tred">TrEd</a>,
+      which is a GPL-licensed software available separatelly.
+    </p>
+    <p>
+      TrEd also contains client-side PML-TQ search engine,
+      allowing the users to use PML-TQ queries on their local data.
+    </p>
+    <h2>Version</h2>
+    <p>Current version is 0.5 (alpha)</p>
+    <p>This realease is ready for testing, but some parts of the documentation
+    and are still missing.</p>
+    <h2>Download</h2>
+    <p><a href="pmltq-0.5.tar.gz">pmltq.tar.gz</a> - PML-TQ distribution package</p>
+
+    <h2>Documentation</h2>
+    <ul>
+	<li><a href="doc/pmltq_doc.html">PML-TQ Manual and Query Language Reference</a> (incomplete)</li>
+    </ul>
+
+    <h2>License</h2>
+    <p>This software is published under 
+    <a href="http://www.gnu.org/copyleft/gpl.html">GPL (General Public License)</a>.
+    </p>
+    <h2>Directory structure</h2>
+    <pre class="literallayout">
+      Subdirectories:
+	config    - sample configuration files (must edit first!)
+	contrib   - sample conversion scripts (e.g. for PDT 2.0)
+	doc       - documentation
+	libs      - perl modules used by pmltq
+	resources - PML schemas used by pmltq
+	sql       - SQL scripts to init the database
+      Scripts:
+	install_deps.sh - install modules required by the search server
+	pmltq_http  - small HTTP server providing PML-TQ services
+	pml2base.pl - PML to SQL database conversion script
+	pmltq	    - command-line client for SQL or HTTP engine</pre>
+    <h2>Quick start</h2>
+    <dl>
+      <dt>Install an SQL database server.</dt>
+      <dd>Supported are Oracle XE and PostgreSQL,
+      but complete aggregation functionality is only supported for
+      Oracle XE. Also, some queries may be much slower on PostgreSQL.</dd>
+      <dt>Init the database:</dt>
+      <dd>For Oracle:
+      <pre class="literallayout">
+	sqlplus @ sql/init_oracle.sql
+      	sqlplus @ sql/pml2base_init.sql</pre>
+      For PostgreSQL:
+      <pre class="literallayout">
+      	sqlplus @ sql/pml2base_init-pg.sql</pre>
+      </dd>
+      <dt>Load data into the database</dt>
+      <dd>Use <tt>pml2base.pl</tt> or <tt>contrib/pml2base.btred</tt>
+        (see example usage for 
+	<a href="http://ufal.mff.cuni.cz/pdt2.0">PDT 2.0</a> in <tt>contrib/pdt2base.sh</tt>).
+      </dd>
+      <dt>Configure PML-TQ</dt>
+      <dd>Copy <tt>config/pmltq_cgi.conf.sample</tt> to <tt>config/pmltq_cgi.conf</tt>
+      and edit the file (specify SQL server name, port, driver - Oracle or Pg, paths to original treebank data, etc.)
+      </dd>
+      <dt>Start the server</dt>
+      <dd>
+      <pre class="literallayout">
+      	./pmltq_http</pre>
+      </dd>
+      <dt>Test some queries</dt>
+      <dd>
+	<ul>
+	  <li>open <tt>http://localhost:8082/query</tt> in your browser, or</li>
+	  <li>use <tt>./pmltq</tt> client, or</li>
+	  <li>TrEd, press Shift+F3, configure HTTP using
+	  <tt>http://localhost:8082</tt> as URL, create a query and
+	  press Space</li>
+	</ul>
+	<p>
+	  Of course, if the client runs on a different computer than
+	  the <tt>pmltq_http</tt> server, replace <tt>localhost</tt> with hostname or
+	  IP of the server running <tt>pmltq_http</tt>.
+	</p>
+      </dd>
+    </dl>
+    <h2>Copyright</h2>
+    <p>Copyright (c) 2008 by Petr Pajas and Jan Štěpánek</p>
+    <h2>Acknowledgement</h2>
+    <p>The development of PML-TQ is a part of the project <a href="http://ufal.mff.cuni.cz/jazz/">"Integration of language resources for information extraction from natural texts"</a>, Information Society of Grant Agency of Academy of Sciences of the Czech Republic: 1ET101120503</p>
+  </body>
+</html>
