@@ -50,4 +50,4 @@ rail "${name}" && \
 pdflatex "${name}" && \
 pdfcrop "${name}.pdf" "${name}_crop.pdf" && \
 mv "${name}_crop.pdf" "${name}.pdf" &&
-convert -density 120 "${name}.pdf" "${name}.png"
+convert -density 100 "${name}.pdf" "${name}.png"

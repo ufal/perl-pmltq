@@ -24,31 +24,32 @@
       implementations of the query engine, one is based on relational
       database (Oracle) and the other is Perl-based (using the TrEd
       toolkit), and three user interfaces: a full-featured graphical
-      user interface built in TrEd, and text-only web and command-line
-      interfaces.
+      user interface built in TrEd, a very raw WEB-based interface
+      with text-only output, and command-line interface.
     </para>
     <para>
       TODO: Purpose, features, and comparison with other query languages and engines
       (XPath, NetGraph, TGrep2, Nite, LPath+)
     </para>
+    <para>Main features:</para>
     <orderedlist>
       <listitem>
-	<para>search over all layers of annotation (including annotation dictionaries)</para>
+	<para>queries can span over all layers of annotation (including annotation dictionaries)</para>
       </listitem>
       <listitem>
-	<para>graphical query view with relations between nodes represented by arrows</para>
+	<para>offers graphical query representation with relations between nodes depicted as arrows</para>
       </listitem>
       <listitem>
-	<para>interface with TrEd</para>
+	<para>GUI interface built into TrEd</para>
       </listitem>
       <listitem>
-	<para>operates on original data (no conversion, no information loss)</para>
+	<para>understands PML data model (no conversion, no information loss)</para>
       </listitem>
       <listitem>
-	<para>arbitrary logical constraints</para>
+	<para>allows arbitrary logical constraints</para>
       </listitem>
       <listitem>
-	<para>output filters: multi-column text output (attribute values, statistical analysis, ...)</para>
+	<para>supports output filters (generate custom text output, compute statistics, ...)</para>
       </listitem>
     </orderedlist>
   </section>
@@ -82,21 +83,21 @@
       of a query.
     </para>
     <para>
-      The body of a PML-TQ query is formed by one or more <firstterm>query-node declarations</firstterm>,
-      which can nest further query-node declarations.
-      A query-node declaration represents a 
-      node the treebank and two different declarations represent
+      The body of a PML-TQ query is formed by one or more <firstterm>node selectors</firstterm>,
+      which can nest further node selectors.
+      A node selector represents a 
+      node the treebank and two different selectors represent
       two different nodes (except for subqueries as described later).
       It specifies the type of the node (the nodes in the treebank annotation can be typed
       or the query can refer to several annotation layers with different types of nodes),
-      a symbolic name for the query node (variable),
+      a symbolic name for the selector (variable),
       and a set of constraints on the node.
       There are several types
       of constraints:
       <itemizedlist>
 	<listitem><para>predicates</para></listitem>
 	<listitem>
-	  <para>nested query-node declarations</para>
+	  <para>nested node selectors</para>
 	</listitem>
 	<listitem>
 	  <para>references</para>
@@ -115,28 +116,28 @@
       or some other node in the query referred to using a variable.
     </para>
     <para>
-      A <firstterm>nested query-node declaration</firstterm>
+      A <firstterm>nested node selector</firstterm>
       represents a node and
       specifies the relationship between
       this node and the
       node among whose constraints it is declared.
       The relationship specification can be omitted
       in which case it defaults to <literal>child</literal>,
-      meaning that the nested query node matches a child
-      of the node matched by the containing query node.
-      Thus, nesting of declarations can naturally follow
+      meaning that the nested selector matches a child
+      of the node matched by the containing selector.
+      Thus, nesting of selectors can naturally follow
       the topology of the matched tree.
-      Nested declarations can be named
-      using a variable and referred to from other query-node declarations.
+      Nested selectors can be named
+      using a variable and referred to from other node selectors.
     </para>
     <para>
-      A <firstterm>reference</firstterm> is a declaration of relationship
-      between the current node and some
-      other named node.
+      A <firstterm>reference</firstterm> is a declaration of the relationship
+      between the nodes corresponding to the current selector and 
+      some other named selector.
     </para>
     <para>
-      Finally, a <firstterm>subquery</firstterm> is a nested 
-      query node declaration
+      Finally, a <firstterm>subquery</firstterm> is a 
+      selector
       with specification of restrictions on number of occurrences.
       The nodes declared within a subquery
       are not part of the resulting match,
@@ -146,8 +147,8 @@
       to the nodes in its outer scope (except, of course,
       to nodes within another subquery).
       A subquery constraint is verified as follows:
-      for each match of the query node 
-      in whose declaration the subquery occurs
+      for each match of the selector
+      among whose constraints the subquery occurs,
       all matches of the subquery are located
       (these may coincide with nodes
       matched by the outside query).
@@ -158,22 +159,30 @@
       these restrictions are met.
     </para>
     <para>A constraint can also be a boolean combination of other constraints,
-    but if a node declaration occurs in a boolean combination
+    but if a node selector occurs in a boolean combination
     it is considered to be a subquery with at least one occurrence.
     </para>
     <para>
-      A PML-TQ query can be represented graphically as a directed graph whose vertices
-      are node declarations and whose edges represent nesting relations between the matching nodes.
-      More specifically, the query forms one or more trees 
-      representing nesting of node and subquery declarations.
-      Relationships between nodes specified as reference constraints
-      can be represented by additional edges in the graph
-      (arbitrarily crossing the basic nesting-based tree structure). 
+      A PML-TQ query can be represented graphically as 
+      one or more trees whose nodes
+      represent the node selectors
+      and whose edges represent declaration and subquery nesting.
+      In this sense we may sometimes refer to selectors
+      as <firstterm>query nodes</firstterm>
+      and to the query as <firstterm>query graph</firstterm>
+      or <firstterm>query tree</firstterm> (a technical root
+      can be added above all the trees so that the forest becomes a single tree).
+      The edges can be typed (colored) to represent
+      the relationship between the corresponding nodes.
+      Additionally, relationships between non-nested nodes 
+      can be represented by additional layer of edges in the graph
+      that may arbitrarily cross the basic tree structure of the query.
     </para>
+<!--
     <glossary>
       <glossentry>
 	<glossterm>
-	  query node
+	  node selector (query node)
 	  matching node
 	  attribute
 	  node type
@@ -188,12 +197,124 @@
 	</glossdef>
       </glossentry>
     </glossary>
+-->
   </section>
   <section>
     <title>Tutorial</title>
     <para>
       Step by step tutorial (TrEd based).
     </para>
+    <para>
+      The purpose of this tutorial is to show how to create and run
+      queries. It gradually passes from very simple to complex
+      queries. The examples are queries over the Prague Dependency
+      Treebank 2.0 and we always show both how to write the query in
+      textual form as well as how to build and run the query graphically in
+      the tree editor TrEd.
+    </para>
+    <para>
+      To start experimenting with the toolkit,
+      start TrEd and press <keycombo><keysym>Ctrl</keysym><keysym>F3</keysym></keycombo>
+      or select <menuchoice>
+      <guimenu>Macros</guimenu>
+      <guisubmenu>TredMacro</guisubmenu>
+      <guimenuitem>New Tree Query</guimenuitem>
+    </menuchoice>.
+    Choose <guilabel>Treebank (server)</guilabel>
+    and then select <guilabel>CREATE NEW CONNECTION</guilabel>.
+    Fill the connection form as follows:
+    for <literal>id</literal> use any ID you like to name this connection configuration
+    with, e.g. PDT-server (the name must start with a letter, must not contain spaces nor any special characters).
+    As an URL, fill the search engine URL (e.g. <literal>http://mysearchserver.org:8082</literal>
+    where <replaceable>mysearchserver.org</replaceable> is the hostname or IP address of your
+    PML-TQ search server and <replaceable>8082</replaceable> is the port the search service listens on.
+    Fill in <literal>username</literal> and <literal>password</literal> for the search service
+    that you have received from the service administrator. When done, confirm with <literal>OK</literal>.
+    </para>
+    <para>
+      A window with an empty query tree is displayed by TrEd:
+      <mediaobject>
+	<imageobject><imagedata fileref="tred_empty_query.jpg" format="JPG" width="75%"/></imageobject>
+      </mediaobject>
+    </para>
+    <programlisting>
+      # Simple queries
+      # 1.
+
+      t-node [ functor='DPHR' ]
+
+      # 2.
+
+      t-node [ functor='DPHR', t-node [ ] ]
+      t-node [ functor='DPHR', child t-node [ ] ]
+
+      # or
+      t-node $a := [ functor='DPHR', child $b ];
+      t-node $b := [ ];
+
+      # or 
+      t-node $a := [ functor='DPHR' ];
+      t-node $b := [ parent $a ];
+
+      ## Regular expression predicates
+
+      ## Set predicate
+
+      ## Types of relations
+
+      ## relations based on PML references
+
+      t-node [ a/lex.rf $a1, 
+      t-node [ a/lex.rf $a0 ] ];
+      a-node $a0 := [  a-node $a1 := [  ] ];
+
+
+      ## PDT 2.0 specific relations: echild, eparent
+   
+      # 7.
+      t-node [ echild t-node [ functor='DPHR' ], echild t-node [ functor='DPHR' ] ]
+
+
+      #
+      t-node $a := [ gram/sempos='v', 
+                     ! echild t-node [ functor in { 'ACT','PAT','ADDR','ORIG','EFF' } ] 
+		   ]
+
+      #
+       t-node [ 0x eparent t-node [ ] ]
+
+      #
+       t-node [ 0x eparent t-node [  ], gram/sempos ~ '^n', functor !~ '^(PAR|DENOM)$' ];
+
+      ## Subqueries
+
+      # 3.
+      t-node [ functor='DPHR', 2+x child t-node [ ] ]
+
+      # 4.
+      t-node [ functor='DPHR', 2+x descendant t-node [ ] ]
+
+      # 5.
+      t-node [ 2+x child t-node [ functor='DPHR' ] ]
+
+      # 6.
+      t-node [ 2+x echild t-node [ functor='DPHR' ] ]
+
+      ## Functions
+
+
+      ## Output filter
+
+      ## Simple output filters 
+
+      ## Ordering results
+
+      ## Global aggregation with 'for' clause
+      
+      ## Local aggregation with 'over'
+
+
+    </programlisting>
   </section>
   <section>
     <title>Query Language</title>
@@ -213,44 +334,65 @@
 		<imagedata format="linespecific" fileref="rail_query.pdf"/>
 	      </imageobject>
 	      <textobject role="syntax_diagram">
-		<phrase><![CDATA[ query : (node + ';') ( ';' (outputFilter*) )? ; ]]></phrase>
+		<phrase><![CDATA[ query : (nodeSelector + ';') ( ';' (outputFilter*) )? ; ]]></phrase>
 	      </textobject>
 	    </mediaobject>
-	    <para>PML-TQ query consists of one or more query node 
-	    declarations separated by semicolon followed, optionally,
+	    <para>PML-TQ query consists of one or more node selectors
+	    separated by semicolon followed, optionally,
 	    by a list of output filters.
 	    </para>
 	  </listitem>
 	</varlistentry>
 	<varlistentry>
-	  <term>node</term>
+	  <term>nodeSelector</term>
 	  <listitem>
-	    <mediaobject id="rail_node">
+	    <mediaobject id="rail_nodeSelector">
 	      <imageobject role="html">
-		<imagedata format="PNG" fileref="rail_node.png"/>
+		<imagedata format="PNG" fileref="rail_nodeSelector.png"/>
 	      </imageobject><imageobject>
-		<imagedata format="linespecific" fileref="rail_node.pdf"/>
+		<imagedata format="linespecific" fileref="rail_nodeSelector.pdf"/>
 	      </imageobject>
 	      <textobject role="syntax_diagram">
-		<phrase><![CDATA[ node : TYPE (variable ':=' )? \\ '[' constraints?  ']' ;
+		<phrase><![CDATA[ nodeSelector : TYPE (variable ':=' )? \\ '[' constraints?  ']' ;
  ]]></phrase>
 	      </textobject>
 	    </mediaobject>
 
-	      <para>Defines a query node 
-	      matching any node of type <replaceable>type</replaceable>
-	      whose relation to 
-	      its parent query node is <replaceable>relation</replaceable>
-	      (<replaceable>relation</replaceable> is <literal>child</literal> if not specified)
-	      and (optionally) named $<replaceable>name</replaceable> for reference 
+	      <para>Defines a node selector
+	      that selects all nodes of type <replaceable>type</replaceable>
+	      that satisfy given constraints. The selector
+	      can optionally be associated with a variable for reference 
 	      from other nodes.
 	      </para>
+	      <para>The intended way to translate the selector syntax
+	      to English is to read 
+	      <quote>node of type <replaceable>TYPE</replaceable> that has <replaceable>constraint1</replaceable>,
+	        has <replaceable>constraint2</replaceable>, ... and has <replaceable>constraintN</replaceable></quote>
+	      </para>
 	      <para>
-		For example, the query <literal>a-node $a := [ descendant a-node [ afun=$a.afun ]  ]  ]</literal>
-		over PDT 2.0 data selects analytical
+		A selector can be used as a constraint 
+		of some other selector (i.e. it can be nested).
+		If not preceded by a name of a relation,
+		it selects among child nodes of the node matched
+		by the containing selector;
+		if preceded by a name of a relation, it selects
+		among nodes that are in the particular relation
+		to the node matched by the containing selector.
+	      </para>
+	      <para>
+		For example, the query <literal>a-node $x := [ descendant a-node [ afun=$x.afun ]  ]  ]</literal>
+		reads in English as
+		<quote>
+		  Find 
+		  a node <literal>$x</literal> of type a-node
+		  that has a descendant node
+		  of type a-node that has <literal>afun</literal> equal to 
+		  <literal>afun</literal> of <literal>$x</literal>.
+		</quote>
+		Over PDT 2.0 data it selects all analytical
 		nodes whose subtree contains an analytical node with the same value
 		of the attribute <literal>afun</literal> (the query returns 
-		pairs of nodes in the described relation).
+		pairs of nodes with the described relationship).
 	      </para>
 	  </listitem>
 	</varlistentry>
@@ -268,7 +410,7 @@
 		<phrase><![CDATA[ variable : DOLLAR NAME ]]></phrase>
 	      </textobject>
 	    </mediaobject>
-	    <para>Variables are used to name query nodes and refer to them
+	    <para>Variables are used to name node selectors and refer to them
 	    from other parts of the query. Variable starts
 	    with a '$' (dollar) character and is followed by 
 	    a NAME consisting of alphabetical character or underscore
@@ -279,31 +421,32 @@
 	  </listitem>
 	</varlistentry>
 	<varlistentry>
-	  <term>optionalNode</term>
+	  <term>optionalSelector</term>
 	  <listitem>
-	    <mediaobject id="rail_optionalNode">
+	    <mediaobject id="rail_optionalSelector">
 	      
 	      
 	      <imageobject role="html">
-		<imagedata format="PNG" fileref="rail_optionalNode.png"/>
+		<imagedata format="PNG" fileref="rail_optionalSelector.png"/>
 	      </imageobject><imageobject>
-		<imagedata format="linespecific" fileref="rail_optionalNode.pdf"/>
+		<imagedata format="linespecific" fileref="rail_optionalSelector.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
-		<phrase><![CDATA[ optionalNode : '?' node; ]]></phrase>
+		<phrase><![CDATA[ optionalSelector : '?' nodeSelector; ]]></phrase>
 	      </textobject>
 	    </mediaobject>
 
 	      <para>
-		If the query node is preceded by a question mark,
-		this query node is optional. This means, that if no node
-		matches this node, the node is assumed to match the same node
-		as its parent node in the query. All child nodes or subqueries of the optional
-		node must then be in the corresponding relation to this parent node.
+		If a nested node selector is preceded by a question mark,
+		it is <firstterm>optional</firstterm>. This means, that if no node
+		matches this selector, the selector is assumed to match the same node
+		as its containing selector and all selectors or subqueries directly nested
+		in the optional selector are then evaluated as
+		if they were nested in the containing selector.
 		For example, <literal>a-node $a := [ afun='Sb', ? a-node $b:= [ afun='AuxC', $c := [ afun='Obj']  ]  ]</literal>
 		with $b optional,
 		matches either a descending chain of three a-nodes 
 		'Sb-&gt;AuxC-&gt;Obj' 
-		(the optional node $b matching the middle node)
+		(the optional selector $b matching the middle node)
 		or just the pair
 		'Sb-&gt;Obj', in which case both $a and $b are identified with the 'Sb'
 		(the constraint <literal>afun='AuxC'</literal>) on $b is disregarded),
@@ -320,7 +463,7 @@
 	      </imageobject><imageobject>
 		<imagedata format="linespecific" fileref="rail_subquery.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
-		<phrase><![CDATA[ subquery : occurrences 'x' RELATION? node;
+		<phrase><![CDATA[ subquery : occurrences 'x' RELATION? nodeSelector;
 occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
  ]]></phrase>
 	      </textobject>
@@ -337,7 +480,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      match <emphasis>at least</emphasis> three times but at
 	      most ten times.
 	      </para>
-	      <note><para>Nodes beloning to a subquery cannot be
+	      <note><para>Node selectors beloning to a subquery cannot be
 	      referred to by name from outside the subquery.</para></note>
 	    </listitem>
 	  </varlistentry>
@@ -368,7 +511,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      </imageobject><imageobject>
 		<imagedata format="linespecific" fileref="rail_constraint.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
-		<phrase><![CDATA[ constraint : ((predicate | RELATION? node | RELATION variable | subquery |  '(' constraint ')' | '!' constraint ) + ('and' | 'or' )) ;
+		<phrase><![CDATA[ constraint : ((predicate | RELATION? nodeSelector | RELATION variable | subquery |  '(' constraint ')' | '!' constraint ) + ('and' | 'or' )) ;
  ]]></phrase>
 	      </textobject>
 	    </mediaobject>
@@ -381,14 +524,20 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    <literal>&lt;=</literal>
 	    <literal>&gt;</literal> etc.) on
 	    expressions computed from atomic values,
-	    or a node or subquery,
-	    or a reference to a named node
-	    (indicating that the referred query
-	    node is in the corresponding relation to the current node)
-	    or a logical combination of any of these except for 
-	    nodes (a query node used in a logical expressoin is
-	    treated as a subquery with at least on occurrence).
-	      </para></listitem>
+	    or a node selector or subquery,
+	    or a reference to a named node selector
+	    (indicating that a node matched by referred 
+	    selector must be in the corresponding relation to the
+	    node matched by the current selector)
+	    or a logical combination of any of these.
+	    However, a node selector used in a complex logical expression is
+	    treated as a subquery with at least one occurrence.
+	    </para>
+	    <para>The intended way of reading a constraint aloud in English
+	    in the context of a node selector is to precede it with
+	    the word <quote>has</quote>.
+	    </para>
+	    </listitem>
 	  </varlistentry>
 	  <varlistentry>
 	    <term>predicate</term>
@@ -421,7 +570,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 		to a regular expression. For example
 		<literal>afun ~ '^(Sb|Aux.*)$'</literal>
 		is true if the value of the attribute
-		<literal>afun</literal> of the current query node
+		<literal>afun</literal> of the current node selector
 		either equals to the string <literal>Sb</literal> or
 		starts with the string <literal>Aux</literal>.
 	      </para>
@@ -520,14 +669,14 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    <para>
 	      An attribute path refers to
 	      a value of an attribute of a treebank node
-	      matched by certain query node.
+	      matched by a certain selector.
 	      If the path starts with a variable followed by
 	      a '.' (dot) character, then the it refers
 	      to an attribute of the node matched by the
-	      query node named by the variable.
+	      selector associated with the variable.
 	      Otherwise it refers to the node matched
-	      by the current query node (i.e.
-	      the node within whose constraints
+	      by the current selector (i.e.
+	      the one within whose constraints
 	      it occurs).
 	    </para>
 	    <para>
@@ -542,7 +691,8 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      <literal>gram/sempos</literal> selects
 	      the attribtue <literal>sempos</literal>
 	      of a structure stored in the attribute
-	      <literal>gram</literal> of the current node.
+	      <literal>gram</literal> of the node
+	      matched by the current selector.
 	    </para>
 	    <para>
 	      Example:
@@ -609,9 +759,9 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      a table whose rows correspond directly to
 	      the matches of the query body. Its first column
 	      contains the value of the attribute <literal>m/tag</literal>
-	      of the node matched by the query node <literal>$x</literal>
+	      of the node matched by the node selector <literal>$x</literal>
 	      and the second column is the depth of the node
-	      matched by the query node <literal>$y</literal>.
+	      matched by the node selector <literal>$y</literal>.
 	      The second output filter produces a table with just one
 	      column 
 	      with values of the form
@@ -737,34 +887,41 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	<title>Functions related to the tree structure</title>
       <variablelist>
 	<varlistentry>
-	  <term>name($node?)</term>
-	  <listitem><para>Return the name of a given node (assume current node if used without an argument).
+	  <term>name($var?)</term>
+	  <listitem><para>Return the name of a node matched by the given selector
+	  (assume current selector if used without an argument).
 	  This function only makes sense if the node is an element of a PML sequence
 	  (of trees or child nodes).</para></listitem>
 	</varlistentry>
 	<varlistentry>
-	  <term>depth($node?)</term>
-	  <listitem><para>Returns the depth of a given node in the tree (counting from 0). If no node is given, the current node is assumed.</para></listitem>
+	  <term>depth($var?)</term>
+	  <listitem><para>Returns the depth in the tree (counting from 0)
+	  of a node matched by a given selector. If no argument is given, the current selector is assumed.</para></listitem>
 	</varlistentry>
 	<varlistentry>
-	  <term>descendants($node?)</term>
-	  <listitem><para>Returns the number of given node's descendants. If no node is given, the current node is assumed.</para></listitem>
+	  <term>descendants($var?)</term>
+	  <listitem><para>Returns the number of descendants
+	  of the node matched by a given selector. If no argument is given, the current selector is assumed.</para></listitem>
 	</varlistentry>
 	<varlistentry>
-	  <term>lbrothers($node?)</term>
-	  <listitem><para>Returns the number of given node's left brothers. If no node is given, the current node is assumed.</para></listitem>
+	  <term>lbrothers($var?)</term>
+	  <listitem><para>Returns the number of left siblings
+	  of the node matched by a given selector. If no argument is given, the current selector is assumed.</para></listitem>
 	</varlistentry>
 	<varlistentry>
-	  <term>rbrothers($node?)</term>
-	  <listitem><para>Returns the number of given node's right brothers. If no node is given, the current node is assumed.</para></listitem>
+	  <term>rbrothers($var?)</term>
+	  <listitem><para>Returns the number of right siblings
+	  of the node matched by a given selector. If no argument is given, the current selector is assumed.</para></listitem>
 	</varlistentry>
 	<varlistentry>
-	  <term>sons($node?)</term>
-	  <listitem><para>Returns the number of given node's sons. If no node is given, the current node is assumed.</para></listitem>
+	  <term>sons($var?)</term>
+	  <listitem><para>Returns the number of child nodes
+	  of the node matched by a given selector. If no argument is given, the current selector is assumed.</para></listitem>
 	</varlistentry>
 	<varlistentry>
-	  <term>depth_first_order($node?)</term>
-	  <listitem><para>Returns the depth-first order of a given node in the tree (counting from 0). If no node is given, the current node is assumed.</para></listitem>
+	  <term>depth_first_order($var?)</term>
+	  <listitem><para>Returns the depth-first order of the
+	  node matched by the given selector (counting from 0). If no argument is given, the current selector is assumed.</para></listitem>
 	</varlistentry>
       </variablelist>	
       </section>
@@ -772,19 +929,22 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	<title>Functions related to corpus</title>
       <variablelist>
 	<varlistentry>
-	  <term>file($node?)</term>
-	  <listitem><para>Returns the filename of a document in which a given node occurrs.</para></listitem>
+	  <term>file($var?)</term>
+	  <listitem><para>Returns the filename of a document in which the node matched by a given
+	  (or current) selector occurrs.</para></listitem>
 	</varlistentry>
 	<varlistentry>
-	  <term>tree_no($node?)</term>
-	  <listitem><para>Returns index of a tree in which a given node occurs,
+	  <term>tree_no($var?)</term>
+	  <listitem><para>Returns index of a tree in which a the node
+	  matched by a given (or current) selector occurs,
 	  i.e. the position of the tree in its document.</para></listitem>
 	</varlistentry>
 	<varlistentry>
-	  <term>address($node?)</term>
-	  <listitem><para>Returns an URL uniquely determining the given node.
+	  <term>address($var?)</term>
+	  <listitem><para>Returns an URL uniquely determining the node
+	  matched by a given (or current) selector.
 	  The same value can be also computed using the following expression:
-	  <literal>file($node) &amp; '##' &amp; tree_no($node) &amp; '.' &amp; depth_first_order($node)</literal>.</para></listitem>
+	  <literal>file($var) &amp; '##' &amp; tree_no($var) &amp; '.' &amp; depth_first_order($var)</literal>.</para></listitem>
 	</varlistentry>
       </variablelist>
       </section>

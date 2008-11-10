@@ -5,14 +5,20 @@
 ## Keywords: 
 ## X-URL: 
 
-.PHONY: clean
+.PHONY: clean rails all
 
-pmltq_doc.html: pmltq_doc.xml mk_rail.sh mk_rails.xsh
+all: rails html
+
+html: pmltq_doc.html
+
+rails: pmltq_doc.xml mk_rail.sh mk_rails.xsh
 	./mk_rails.xsh pmltq_doc.xml
+
+pmltq_doc.html: pmltq_doc.xml
 	xsltproc --xinclude --stringparam use.role.for.mediaobject 1 --stringparam preferred.mediaobjectrole html --stringparam html.stylesheet blue.css -o pmltq_doc.html http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl pmltq_doc.xml 
 
 clean:
 	rm pmltq_doc.html
-	rm rail_*.*
+	rm -f rail_*.log  rail_*.aux rail_*.tex rail_*.rao rail_*.rai rail_*.pdf
 
 ### Makefile ends here
