@@ -12,18 +12,13 @@ h5.title, h6.title {
 	color: #121244; /* 1-2 */
 }
 
-code, .programlisting, .literallayout, .literal {
+code, .programlisting, .literallayout, .literal, .synopsis {
 	color: #050530;
 }
 
-.programlisting, .literallayout {
-  background: #d5dee6;
-  padding: 4pt 4pt 4pt 4pt;
-}
-
-.programlisting > p, .literallayout > p {
-  padding: 0 0 0 0;
-  margin: 0 0 0 0;
+.programlisting, .literallayout, .synopsis {
+	background: #d5dee6;
+        padding: 6pt 6pt 6pt 6pt;
 }
 
 /* navigace */
@@ -67,20 +62,8 @@ span.off     {  }
 
 dt { font-weight: bold }
 
-.framed, .note, .warning, .tip  { 
-   border: dashed 1pt;
-   padding: 6pt 12pt 6pt 12pt;
-   margin: 0 0 0 0;
-}
-
-.framed, .note, .tip  { 
+.framed, .note { 
    background-color: #ffffcc;
-}
-
-.warning {
-   background-color: #ffdede;
-}
-
-.framed > h3, .note > h3, .warning > h3, .tip > h3 {
-  margin: 0 0 0 0;
+   border: dashed 1pt;
+   padding: 0 12pt 0 12pt;
 }
