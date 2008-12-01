@@ -222,6 +222,7 @@
       textual form as well as how to build and run the query graphically in
       the tree editor TrEd.
     </para>
+    <bridgehead>Getting started</bridgehead>
     <para>
       To start experimenting with the toolkit,
       start TrEd and press <keycombo><keysym>Ctrl</keysym><keysym>F3</keysym></keycombo>
@@ -230,6 +231,9 @@
       <guisubmenu>TredMacro</guisubmenu>
       <guimenuitem>New Tree Query</guimenuitem>
     </menuchoice>.
+    <mediaobject>
+      <imageobject><imagedata align="center" fileref="tred_select_search.png" format="PNG" /></imageobject>
+    </mediaobject>
     Choose <guilabel>Treebank (server)</guilabel>
     and then select <guilabel>CREATE NEW CONNECTION</guilabel>.
     Fill the connection form as follows:
@@ -244,9 +248,221 @@
     <para>
       A window with an empty query tree is displayed by TrEd:
       <mediaobject>
-	<imageobject><imagedata fileref="tred_empty_query.jpg" format="JPG" width="75%"/></imageobject>
+	<imageobject><imagedata align="center" fileref="tred_empty_query.png" format="PNG" width="75%"/></imageobject>
       </mediaobject>
     </para>
+    <bridgehead>A simple query</bridgehead>
+    <para>
+      Now we may create our first simple query.
+      We shall search for all nodes of the type <literal>t-node</literal>
+      (tectogrammatical nodes in PDT~2.0) that
+      whose attribute <literal>functor</literal>
+      equals to <literal>DPHR</literal>.
+      The query can be created in several ways:
+    </para>
+    <itemizedlist>
+      <listitem>
+	<para>Method 1: Press
+	<keysym>Insert</keysym> or 
+	<guibutton>
+	  <inlinemediaobject>
+	    <imageobject><imagedata fileref="icons/add_node.png"/></imageobject>
+	    <textobject><phrase>Add node</phrase></textobject>
+	  </inlinemediaobject>
+	</guibutton>
+	on the toolbar to create a new selector,
+	choose <literal>t-node</literal> from
+	the offered list of node types and confirm
+	with <guibutton>OK</guibutton>.
+	</para>
+	<para>
+	  Then press <keysym>=</keysym>
+	  or 
+	<guibutton>
+	  <inlinemediaobject>
+	    <imageobject><imagedata fileref="icons/test_equality.png"/></imageobject>
+	    <textobject><phrase>Equality</phrase></textobject>
+	  </inlinemediaobject>
+	</guibutton>
+	to create a new atomic constraint,
+	and fill <literal>functor</literal>
+	as <literal>a</literal>
+	and <literal>"DPHR"</literal>
+	as <literal>b</literal> in the form
+	(both the attribute name and its value can be
+	selected from a list).
+      <mediaobject>
+	<imageobject><imagedata align="center" fileref="new_equality_test.png" format="PNG"/></imageobject>
+      </mediaobject>
+	</para>
+      </listitem>
+      <listitem>
+	<para>Method 2: Press <keysym>e</keysym> 
+	or
+	<guibutton>
+	  <inlinemediaobject>
+	    <imageobject><imagedata fileref="icons/edit_file.png"/></imageobject>
+	    <textobject><phrase>Edit query</phrase></textobject>
+	  </inlinemediaobject>
+	</guibutton>
+	to open the query text editor and type
+	<programlisting>t-node [ functor='DPHR' ]</programlisting>
+	into the text field.
+	</para>
+      </listitem>
+      <listitem>
+	<para>Method 1: Open the query text editor
+	as above, but use helper buttons below the
+	text field to build the text of the query:
+	Press <guibutton>Type</guibutton>
+	and select <literal>t-node</literal>,
+	Press <guibutton>[ ]</guibutton>,
+	put the cursor between the brackets by clicking
+	there or by pressing the <keysym>left arrow</keysym> two times,
+	press <guibutton>Attribute</guibutton> and select
+	<literal>functor</literal>
+	and finally press <guibutton>=</guibutton>
+	and select <literal>"DPHR"</literal>.
+	</para>
+      </listitem>
+    </itemizedlist>
+    <para>The result in TrEd will look like this:</para>
+    <mediaobject>
+      <imageobject><imagedata align="center" fileref="tutorial_queries_1.png" format="PNG"/></imageobject>
+    </mediaobject>
+    <para>
+      To start the search now,
+      press <keysym>Space</keysym> 
+	or
+	<guibutton>
+	  <inlinemediaobject>
+	    <imageobject><imagedata fileref="icons/search_filter.png"/></imageobject>
+	    <textobject><phrase>Query</phrase></textobject>
+	  </inlinemediaobject>
+	</guibutton>
+	or
+	<guibutton>
+	  <inlinemediaobject>
+	    <imageobject><imagedata fileref="icons/search.png"/></imageobject>
+	    <textobject><phrase>Search</phrase></textobject>
+	  </inlinemediaobject>
+	</guibutton>.
+	After a while, a window will pop up indicating
+	whether some results have been found,
+	and pressing <literal>Display</literal> will
+	show the first result in a new view:
+    <mediaobject>
+      <imageobject><imagedata align="center" fileref="tred_first_result.png" format="PNG"/></imageobject>
+    </mediaobject>
+    To see the full sentence in the text field above the trees , click
+    on the result view on the right.
+    Next result can be displayed
+    by pressing the key
+    <keysym>n</keysym>
+    or
+    <guibutton>
+      <inlinemediaobject>
+	<imageobject><imagedata fileref="icons/search_next.png"/></imageobject>
+	<textobject><phrase>Next match</phrase></textobject>
+      </inlinemediaobject>
+    </guibutton>.
+    </para>
+    <note>
+      <para>By default, the search engine returns
+      up to 100 matches (in no particular order),
+      which should be more than sufficient for viewing
+      a few matching examples.
+      This limit can be changed in the search engine configuration
+      (displayed by pressing
+    <keysym>C</keysym>
+    or
+    <guibutton>
+      <inlinemediaobject>
+	<imageobject><imagedata fileref="icons/configure.png"/></imageobject>
+	<textobject><phrase>Configure</phrase></textobject>
+      </inlinemediaobject>
+    </guibutton>,
+    but raising this limit may slow the search.
+    We shall later see how to compute the number of all matches,
+    using output filters.
+      </para>
+    </note>
+    <para>Press
+    <keysym>p</keysym>
+    or
+    <guibutton>
+      <inlinemediaobject>
+	<imageobject><imagedata fileref="icons/search_previous.png"/></imageobject>
+	<textobject><phrase>Previous match</phrase></textobject>
+      </inlinemediaobject>
+    </guibutton> 
+    to go back to the previous match
+    and press
+    <guibutton>
+      <inlinemediaobject>
+	<imageobject><imagedata fileref="icons/apply.png"/></imageobject>
+	<textobject><phrase>This match</phrase></textobject>
+      </inlinemediaobject>
+    </guibutton> 
+    to return the current match to view.
+    </para>
+    <para>Note that the result view contains not only the matching
+    tree but the complete document, so it is possible to see the tree
+    preceding or following the currently matching tree
+    by pressing
+    <keysym>PageUp</keysym>/<guibutton>
+    <inlinemediaobject>
+	<imageobject><imagedata fileref="icons/1leftarrow.png"/></imageobject>
+	<textobject><phrase>Previous Tree</phrase></textobject>
+      </inlinemediaobject>
+    </guibutton>
+    or 
+    <keysym>PageDown</keysym>/<guibutton>
+      <inlinemediaobject>
+	<imageobject><imagedata fileref="icons/1rightarrow.png"/></imageobject>
+	<textobject><phrase>Next Tree</phrase></textobject>
+      </inlinemediaobject>
+    </guibutton>,
+    respectivelly.
+    </para>
+
+    <bridgehead>A query with two nodes</bridgehead>
+    <para>We shall now make the query more complex
+    by adding another node to it.
+    We shall ask for a t-node with
+    functor "DPHR" that has a child
+    (since DPHR t-nodes are often leaves,
+    it may be interesting to see what children we get).
+    </para>
+    <para>
+      To add a new child,
+      select the only node in our query tree
+      and press 
+      <keysym>Insert</keysym> or 
+      <guibutton>
+	<inlinemediaobject>
+	  <imageobject><imagedata fileref="icons/add_node.png"/></imageobject>
+	  <textobject><phrase>Add node</phrase></textobject>
+	</inlinemediaobject>
+      </guibutton>
+      on the toolbar.
+      Now a popup window shows
+      asking for a type of relation
+      the new node to the existing node.
+      The default value is <literal>child</literal>.
+      Since this is what we want, click
+      <guibutton>OK</guibutton>.
+      TrEd automatically assumes
+      the new query node to be a selector
+      for nodes of the type <literal>t-node</literal>,
+      since, according to the
+      PML schema of the tectogrammatical layer,
+      a <literal>t-node</literal> can only have
+      a <literal>t-node</literal> for its child;
+      otherwise it would offer a list of nodes types
+      to choose from.
+    </para>
+    
     <programlisting>
       # Simple queries
       # 1.
