@@ -56,10 +56,20 @@
   <section>
     <title>Basic concepts</title>
     <para>
-      The body of a <firstterm>PML-TQ query</firstterm> is a declaration of
-      restrictions on properties
-      of one or more nodes in a treebank
-      and their mutual relationships
+      A <firstterm>PML-TQ query</firstterm>
+      consists of a <firstterm>body</firstterm> that selects
+      nodes from the treebank and an optional
+      list of <firstterm>output filters</firstterm> that
+      are used to
+      extract data from the matching nodes,
+      compute statistics, and/or format and post-process the results
+      of a query.
+    </para>
+    <para>
+      The body of a PML-TQ query defines of
+      restrictions on properties 
+      of one or more nodes from the treebank
+      and describes their mutual relationships
       (e.g. the topological configuration in
       the tree structure).
       An ordered tuple of nodes in the treebank <firstterm>matches</firstterm>
@@ -551,7 +561,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 		<imagedata format="linespecific" fileref="rail_predicate.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
 		<phrase><![CDATA[ predicate : binaryComparison | setPredicate;
-		binaryComparison : expression ('=' | TILDA | TILDASTAR | '<' | '>' | '<=' | '>=') expression  ;
+		binaryComparison : expression ( ('!'? ('=' | TILDA | TILDASTAR)) | '<' | '>' | '<=' | '>=') expression  ;
 		setPredicate : (expression 'in' LEFTBRACE (expression +',') RIGHTBRACE) ; ]]></phrase>
 	      </textobject>
 	    </mediaobject>
