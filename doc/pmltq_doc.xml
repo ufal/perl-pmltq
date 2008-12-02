@@ -12,7 +12,7 @@
     <title>Introduction</title>
     <para>
       PML Tree Query (PML-TQ) is a query language and search engine
-      targetted for querying over multi-layer annotated treebanks
+      targeted for querying over multi-layer annotated treebanks
       stored in the PML data format. As such, it can be used to
       perform queries over dependency or constituency treebanks,
       parallel treebanks, or other kinds of richly structured and/or
@@ -153,7 +153,7 @@
       are not part of the resulting match,
       and nodes outside the subquery cannot
       refer to nodes within the subquery;
-      however, nodes in the suquery may refer
+      however, nodes in the subquery may refer
       to the nodes in its outer scope (except, of course,
       to nodes within another subquery).
       A subquery constraint is verified as follows:
@@ -164,7 +164,7 @@
       matched by the outside query).
       The number of distinct nodes matching the top node of the subquery
       are counted and this number is compared with the restrictions
-      on number of occurences.
+      on number of occurrences.
       The constraint is satisfied if and only if
       these restrictions are met.
     </para>
@@ -232,7 +232,7 @@
       <guimenuitem>New Tree Query</guimenuitem>
     </menuchoice>.
     <mediaobject>
-      <imageobject><imagedata align="center" fileref="tred_select_search.png" format="PNG" /></imageobject>
+      <imageobject><imagedata align="center" fileref="tred_select_search_s.png" format="PNG" /></imageobject>
     </mediaobject>
     Choose <guilabel>Treebank (server)</guilabel>
     and then select <guilabel>CREATE NEW CONNECTION</guilabel>.
@@ -248,7 +248,7 @@
     <para>
       A window with an empty query tree is displayed by TrEd:
       <mediaobject>
-	<imageobject><imagedata align="center" fileref="tred_empty_query.png" format="PNG" width="75%"/></imageobject>
+	<imageobject><imagedata align="center" fileref="tred_empty_query_s.png" format="PNG"/></imageobject>
       </mediaobject>
     </para>
     <bridgehead>A simple query</bridgehead>
@@ -266,7 +266,7 @@
 	<keysym>Insert</keysym> or 
 	<guibutton>
 	  <inlinemediaobject>
-	    <imageobject><imagedata fileref="icons/add_node.png"/></imageobject>
+	    <imageobject><imagedata fileref="icons/add_node.png" valign="middle"/></imageobject>
 	    <textobject><phrase>Add node</phrase></textobject>
 	  </inlinemediaobject>
 	</guibutton>
@@ -280,7 +280,7 @@
 	  or 
 	<guibutton>
 	  <inlinemediaobject>
-	    <imageobject><imagedata fileref="icons/test_equality.png"/></imageobject>
+	    <imageobject><imagedata fileref="icons/test_equality.png" valign="middle"/></imageobject>
 	    <textobject><phrase>Equality</phrase></textobject>
 	  </inlinemediaobject>
 	</guibutton>
@@ -292,7 +292,7 @@
 	(both the attribute name and its value can be
 	selected from a list).
       <mediaobject>
-	<imageobject><imagedata align="center" fileref="new_equality_test.png" format="PNG"/></imageobject>
+	<imageobject><imagedata align="center" fileref="tred_new_equality_test_s.png" format="PNG"/></imageobject>
       </mediaobject>
 	</para>
       </listitem>
@@ -301,7 +301,7 @@
 	or
 	<guibutton>
 	  <inlinemediaobject>
-	    <imageobject><imagedata fileref="icons/edit_file.png"/></imageobject>
+	    <imageobject><imagedata fileref="icons/edit_file.png" valign="middle"/></imageobject>
 	    <textobject><phrase>Edit query</phrase></textobject>
 	  </inlinemediaobject>
 	</guibutton>
@@ -336,14 +336,14 @@
 	or
 	<guibutton>
 	  <inlinemediaobject>
-	    <imageobject><imagedata fileref="icons/search_filter.png"/></imageobject>
+	    <imageobject><imagedata fileref="icons/search_filter.png" valign="middle"/></imageobject>
 	    <textobject><phrase>Query</phrase></textobject>
 	  </inlinemediaobject>
 	</guibutton>
 	or
 	<guibutton>
 	  <inlinemediaobject>
-	    <imageobject><imagedata fileref="icons/search.png"/></imageobject>
+	    <imageobject><imagedata fileref="icons/search.png" valign="middle"/></imageobject>
 	    <textobject><phrase>Search</phrase></textobject>
 	  </inlinemediaobject>
 	</guibutton>.
@@ -352,7 +352,7 @@
 	and pressing <literal>Display</literal> will
 	show the first result in a new view:
     <mediaobject>
-      <imageobject><imagedata align="center" fileref="tred_first_result.png" format="PNG"/></imageobject>
+      <imageobject><imagedata align="center" fileref="tred_first_result_s.png" format="PNG"/></imageobject>
     </mediaobject>
     To see the full sentence in the text field above the trees , click
     on the result view on the right.
@@ -362,7 +362,7 @@
     or
     <guibutton>
       <inlinemediaobject>
-	<imageobject><imagedata fileref="icons/search_next.png"/></imageobject>
+	<imageobject><imagedata fileref="icons/search_next.png" valign="middle"/></imageobject>
 	<textobject><phrase>Next match</phrase></textobject>
       </inlinemediaobject>
     </guibutton>.
@@ -378,7 +378,7 @@
     or
     <guibutton>
       <inlinemediaobject>
-	<imageobject><imagedata fileref="icons/configure.png"/></imageobject>
+	<imageobject><imagedata fileref="icons/configure.png" valign="middle"/></imageobject>
 	<textobject><phrase>Configure</phrase></textobject>
       </inlinemediaobject>
     </guibutton>,
@@ -392,7 +392,7 @@
     or
     <guibutton>
       <inlinemediaobject>
-	<imageobject><imagedata fileref="icons/search_previous.png"/></imageobject>
+	<imageobject><imagedata fileref="icons/search_previous.png" valign="middle"/></imageobject>
 	<textobject><phrase>Previous match</phrase></textobject>
       </inlinemediaobject>
     </guibutton> 
@@ -400,7 +400,7 @@
     and press
     <guibutton>
       <inlinemediaobject>
-	<imageobject><imagedata fileref="icons/apply.png"/></imageobject>
+	<imageobject><imagedata fileref="icons/apply.png" valign="middle"/></imageobject>
 	<textobject><phrase>This match</phrase></textobject>
       </inlinemediaobject>
     </guibutton> 
@@ -412,18 +412,18 @@
     by pressing
     <keysym>PageUp</keysym>/<guibutton>
     <inlinemediaobject>
-	<imageobject><imagedata fileref="icons/1leftarrow.png"/></imageobject>
+	<imageobject><imagedata fileref="icons/1leftarrow.png" valign="middle"/></imageobject>
 	<textobject><phrase>Previous Tree</phrase></textobject>
       </inlinemediaobject>
     </guibutton>
     or 
     <keysym>PageDown</keysym>/<guibutton>
       <inlinemediaobject>
-	<imageobject><imagedata fileref="icons/1rightarrow.png"/></imageobject>
+	<imageobject><imagedata fileref="icons/1rightarrow.png" valign="middle"/></imageobject>
 	<textobject><phrase>Next Tree</phrase></textobject>
       </inlinemediaobject>
     </guibutton>,
-    respectivelly.
+    respectively.
     </para>
 
     <bridgehead>A query with two nodes</bridgehead>
@@ -441,12 +441,12 @@
       <keysym>Insert</keysym> or 
       <guibutton>
 	<inlinemediaobject>
-	  <imageobject><imagedata fileref="icons/add_node.png"/></imageobject>
+	  <imageobject><imagedata fileref="icons/add_node.png" valign="middle"/></imageobject>
 	  <textobject><phrase>Add node</phrase></textobject>
 	</inlinemediaobject>
       </guibutton>
       on the toolbar.
-      Now a popup window shows
+      Now a pop-up window shows
       asking for a type of relation
       the new node to the existing node.
       The default value is <literal>child</literal>.
@@ -462,7 +462,119 @@
       otherwise it would offer a list of nodes types
       to choose from.
     </para>
-    
+    <para>In text form, the query can be equivalently expressed as
+    <programlisting>t-node [ functor='DPHR', t-node [ ] ]</programlisting>
+    or
+    <programlisting>t-node [ functor='DPHR', child t-node [ ] ]</programlisting>
+    These forms use nesting of node selectors, the first form
+    makes use of the fact that the default relation of a nested selector
+    to the selector in which it is nested is <literal>child</literal>.
+    </para>
+    <para>
+    The query can also be expressed without nesting, using names, either as
+    <programlisting>t-node $a := [ functor='DPHR', child $b ];
+t-node $b := [ ];</programlisting>
+    or
+    <programlisting>t-node $a := [ functor='DPHR' ];
+t-node $b := [ parent $a ];</programlisting>
+    naming the
+    two nodes <literal>$a</literal> and <literal>$b</literal> and
+    either indicating that <literal>$a</literal> has a child $b or
+    that <literal>$b</literal> has a parent $a.
+    </para>
+    <bridgehead>Disjunctions, regular expressions and set enumerations</bridgehead>
+    <para>We now extend our query expression
+    to cover also t-nodes with functor <literal>CPHR</literal>.
+    This can be done in three different ways:
+    </para>
+    <para>Using a disjunction:
+    <programlisting>t-node [ functor='DPHR' or functor='CPHR', t-node [ ] ]</programlisting>
+    Apart from editing the query, this can be created using the GUI e.g. in the following steps:
+    <orderedlist>
+      <listitem><para>Select the top query node (the one with the <literal>functor="DPHR"</literal> constraint</para></listitem>
+      <listitem><para>Press 
+      <keysym>h</keysym> or 
+      <guibutton>
+	<inlinemediaobject>
+	  <imageobject><imagedata fileref="icons/toggle_hide_subtree.png" valign="middle"/></imageobject>
+	  <textobject><phrase>(Un)Expand</phrase></textobject>
+	</inlinemediaobject>
+      </guibutton>
+      to expand the constraints to auxiliary nodes in the query tree.
+      The result will look like this:
+    </para>
+    <mediaobject>
+      <imageobject><imagedata align="center" fileref="tutorial_queries_1.png" format="PNG"/></imageobject>
+    </mediaobject>
+      </listitem>
+      <listitem>
+    <para>Select the auxiliary node representing the constraint <literal>functor="DPHR"</literal> and press
+      <keysym>o</keysym> or 
+      <guibutton>
+	<inlinemediaobject>
+	  <imageobject><imagedata fileref="icons/or.png" valign="middle"/></imageobject>
+	  <textobject><phrase>OR</phrase></textobject>
+	</inlinemediaobject>
+      </guibutton>
+      to create an auxiliary <literal>OR</literal> node above it.
+      </para></listitem>
+      <listitem>
+	<para>Select the <literal>OR</literal> node and press
+      <keysym>=</keysym> or 
+      <guibutton>
+	<inlinemediaobject>
+	  <imageobject><imagedata fileref="icons/test_equality.png" valign="middle"/></imageobject>
+	  <textobject><phrase>Equality</phrase></textobject>
+	</inlinemediaobject>
+      </guibutton>
+      to create a new equality constraint
+      and as above, fill <literal>functor</literal> as <literal>a</literal>
+      and <literal>"CPHR"</literal> as <literal>b</literal> in the form.
+      Alternatively, you can select the node
+      <literal>functor="DPHR"</literal>, press
+      <keysym>Ctrl+Insert</keysym> or 
+      <guibutton>
+	<inlinemediaobject>
+	  <imageobject><imagedata fileref="icons/editcopy.png" valign="middle"/></imageobject>
+	  <textobject><phrase>Copy</phrase></textobject>
+	</inlinemediaobject>
+      </guibutton>
+      to copy it into the clipboard,
+      then select the <literal>OR</literal> node
+      and press <keysym>Shift+Insert</keysym> or 
+      <guibutton>
+	<inlinemediaobject>
+	  <imageobject><imagedata fileref="icons/editpaste.png" valign="middle"/></imageobject>
+	  <textobject><phrase>Paste</phrase></textobject>
+	</inlinemediaobject>
+      </guibutton>
+      to paste it. The press <keysym>Enter</keysym> or double-click the node
+      or just the word <literal>"DPHR"</literal> on one of the two nodes
+      and change <literal>"DPHR"</literal> to <literal>"CPHR"</literal>.
+	</para>
+      </listitem>
+      <listitem>
+	<para>The result will look like this: 
+    <mediaobject>
+      <imageobject><imagedata align="center" fileref="tutorial_queries_2b.png" format="PNG"/></imageobject>
+    </mediaobject>
+    Selecting the top t-node and pressing <literal>h</literal>
+    <guibutton>
+      <inlinemediaobject>
+	<imageobject><imagedata fileref="icons/toggle_hide_subtree.png" valign="middle"/></imageobject>
+	<textobject><phrase>(Un)Expand</phrase></textobject>
+      </inlinemediaobject>
+    </guibutton>
+    hides the auxiliary nodes, and gives this:
+    <mediaobject>
+      <imageobject><imagedata align="center" fileref="tutorial_queries_2c.png" format="PNG"/></imageobject>
+    </mediaobject>
+	</para>
+      </listitem>
+    </orderedlist>
+    </para>
+
+    <bridgehead>TODO</bridgehead>
     <programlisting>
       # Simple queries
       # 1.
@@ -706,7 +818,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      match <emphasis>at least</emphasis> three times but at
 	      most ten times.
 	      </para>
-	      <note><para>Node selectors beloning to a subquery cannot be
+	      <note><para>Node selectors belonging to a subquery cannot be
 	      referred to by name from outside the subquery.</para></note>
 	    </listitem>
 	  </varlistentry>
@@ -791,7 +903,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 		<literal>~*</literal> perform 
 		case-sensitive and case-insensitive
 		regular expression
-		matching, respectivelly. The
+		matching, respectively. The
 		expression on the right must evaluate
 		to a regular expression. For example
 		<literal>afun ~ '^(Sb|Aux.*)$'</literal>
@@ -866,7 +978,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      enclosed in either <literal>"</literal> or
 	      <literal>'</literal>.  Backslash character
 	      <literal>\</literal> can be used as an escape character,
-	      for example to insert a quote or apostroph.
+	      for example to insert a quote or apostrophe.
 	      </para>
 	      <para>
 		For example: both <literal>"Peter's"</literal> and
@@ -915,7 +1027,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      path leading from the node
 	      to some nested atomic value. For example
 	      <literal>gram/sempos</literal> selects
-	      the attribtue <literal>sempos</literal>
+	      the attribute <literal>sempos</literal>
 	      of a structure stored in the attribute
 	      <literal>gram</literal> of the node
 	      matched by the current selector.
@@ -944,7 +1056,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    </mediaobject>
 	    <para>
 	      Functions are written as function name followed by a comma-separated list of its arguments in brackets.
-	      The functions currently supported by PMLTQ are listed in 
+	      The functions currently supported by PML-TQ are listed in 
 	      Section <xref linkend="functions"/>
 	      :
 	    </para>
@@ -976,7 +1088,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    </para>
 	    <para>
 	      The simplest form of a filter consists of a comma-separated list of
-	      expressions that are used to compute values of the ouptut columns from
+	      expressions that are used to compute values of the output columns from
 	      the output of the body of the query or preceding filters.
 	      For example:
 	      <programlisting>>> $x.m/tag, depth($y)
@@ -1048,7 +1160,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
   
 	      </programlisting>
 	      is a query whose body
-	      returns paris of a-nodes in the parent-child relation.
+	      returns pairs of a-nodes in the parent-child relation.
 	      The output filter first computes 
 	      a pair of values of the attribute <literal>afun</literal>
 	      and then groups the results according
@@ -1059,7 +1171,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      pairs of <literal>afun</literal> values
 	      and for each pair adds the number of
 	      matches with this particular pair of <literal>afun</literal> values
-	      computed using the aggregatin function <literal>count()</literal>
+	      computed using the aggregation function <literal>count()</literal>
 	      that ranges over the group of aggregated matches.
 	      The result is further sorted by the third column,
 	      i.e. by the number of matches.
@@ -1156,7 +1268,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
       <variablelist>
 	<varlistentry>
 	  <term>file($var?)</term>
-	  <listitem><para>Returns the filename of a document in which the node matched by a given
+	  <listitem><para>Returns the file name of a document in which the node matched by a given
 	  (or current) selector occurrs.</para></listitem>
 	</varlistentry>
 	<varlistentry>
@@ -1245,14 +1357,14 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	  of the matching regular expression (subexpressions are parts of the expressions 
 	  enclosed in brackets). The string \N, where N is a digit from 1 to 9, is a reference
 	  to the N-th subexpression (counting opening brackets from the left),
-	  and is substitued in the result by the substring matched by that subexpression.
+	  and is substituted in the result by the substring matched by that subexpression.
 	  For example, if the regular expression was
 	  <literal>a(b(c))(d)</literal>, then 
 	  <literal>\1</literal>, <literal>\2</literal>,
 	  and <literal>\3</literal> refer
 	  to the subexpressions <literal>(b(c))</literal>,
 	  <literal>(c)</literal>,
-	  and <literal>(d)</literal>, respectivelly.
+	  and <literal>(d)</literal>, respectively.
 	</para>
 	<para>Since backslash (<literal>\</literal>) is used
 	to introduce subexpression references in the replacement string,
@@ -1262,7 +1374,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	  The optional third argument is a string of flags modifying the behavior of the regular
 	  expression matching procedure. Any of the flags described above for the
 	  function <literal>match()</literal> can be used here, and additionally
-	  <literal>substitue()</literal> supports the following flag:
+	  <literal>substitute()</literal> supports the following flag:
 	</para>
 	  <variablelist>
 	    <varlistentry>
@@ -1273,7 +1385,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    </varlistentry>
 	  </variablelist>
 	  <para>
-	    For example, <literal>substitue('banana ananas','([^n])a','\1@','g')</literal>
+	    For example, <literal>substitute('banana ananas','([^n])a','\1@','g')</literal>
 	    returns the string <literal>b@nana @nanas</literal>.
 	  </para>
 	  </listitem>
