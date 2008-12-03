@@ -67,3 +67,26 @@ dt { font-weight: bold }
    border: dashed 1pt;
    padding: 0 12pt 0 12pt;
 }
+/*
+.guibutton {
+   background-color: #ddd;
+   border: dashed 1px;
+   padding: 1pt 3pt 1pt 3pt;
+}*/
+.keysym, .guibutton{
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 90%;
+    font-family: sans-serif;
+    padding: 4px;
+    white-space: nowrap;
+    color:#000;
+    background:#eee;
+    border-width:1px 2px 2px 1px;
+    border-style: solid;
+    border-color: #ccc #aaa #888 #bbb;
+}
+
+.inlinemediaobject img {
+    vertical-align: middle;
+}

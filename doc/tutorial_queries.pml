@@ -17,6 +17,18 @@
      </q-children>
     </node>
    </q-nodes>
+   <output-filters>
+    <LM>
+     <distinct>0</distinct>
+     <return>
+      <LM>$1</LM>
+      <LM>count()</LM>
+     </return>
+     <group-by>
+      <LM>$n.functor</LM>
+     </group-by>
+    </LM>
+   </output-filters>
   </LM>
   <LM id="q-08-12-02_145647">
    <q-nodes>
@@ -58,6 +70,42 @@
         <b>"CPHR"</b>
        </test>
       </or>
+     </q-children>
+    </node>
+   </q-nodes>
+  </LM>
+  <LM id="q-08-12-02_220540">
+   <q-nodes>
+    <node>
+     <node-type>t-node</node-type>
+     <q-children>
+      <node>
+       <node-type>t-node</node-type>
+       <relation>
+        <child />
+       </relation>
+      </node>
+      <test operator="=">
+       <a>functor</a>
+       <b>"DPHR"</b>
+      </test>
+     </q-children>
+    </node>
+   </q-nodes>
+  </LM>
+  <LM id="q-08-12-02_222220">
+   <q-nodes>
+    <node>
+     <node-type>t-node</node-type>
+     <q-children>
+      <test operator="=">
+       <a>functor</a>
+       <b>'DPHR'</b>
+      </test>
+      <test operator="&gt;">
+       <a>sons()</a>
+       <b>1</b>
+      </test>
      </q-children>
     </node>
    </q-nodes>

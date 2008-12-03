@@ -266,7 +266,7 @@
 	<keysym>Insert</keysym> or 
 	<guibutton>
 	  <inlinemediaobject>
-	    <imageobject><imagedata fileref="icons/add_node.png" valign="middle"/></imageobject>
+	    <imageobject><imagedata fileref="icons/add_node.png" valign="top"/></imageobject>
 	    <textobject><phrase>Add node</phrase></textobject>
 	  </inlinemediaobject>
 	</guibutton>
@@ -280,7 +280,7 @@
 	  or 
 	<guibutton>
 	  <inlinemediaobject>
-	    <imageobject><imagedata fileref="icons/test_equality.png" valign="middle"/></imageobject>
+	    <imageobject><imagedata fileref="icons/test_equality.png" valign="top"/></imageobject>
 	    <textobject><phrase>Equality</phrase></textobject>
 	  </inlinemediaobject>
 	</guibutton>
@@ -301,7 +301,7 @@
 	or
 	<guibutton>
 	  <inlinemediaobject>
-	    <imageobject><imagedata fileref="icons/edit_file.png" valign="middle"/></imageobject>
+	    <imageobject><imagedata fileref="icons/edit_file.png" valign="top"/></imageobject>
 	    <textobject><phrase>Edit query</phrase></textobject>
 	  </inlinemediaobject>
 	</guibutton>
@@ -311,7 +311,7 @@
 	</para>
       </listitem>
       <listitem>
-	<para>Method 1: Open the query text editor
+	<para>Method 3: Open the query text editor
 	as above, but use helper buttons below the
 	text field to build the text of the query:
 	Press <guibutton>Type</guibutton>
@@ -336,14 +336,14 @@
 	or
 	<guibutton>
 	  <inlinemediaobject>
-	    <imageobject><imagedata fileref="icons/search_filter.png" valign="middle"/></imageobject>
+	    <imageobject><imagedata fileref="icons/search_filter.png" valign="top"/></imageobject>
 	    <textobject><phrase>Query</phrase></textobject>
 	  </inlinemediaobject>
 	</guibutton>
 	or
 	<guibutton>
 	  <inlinemediaobject>
-	    <imageobject><imagedata fileref="icons/search.png" valign="middle"/></imageobject>
+	    <imageobject><imagedata fileref="icons/search.png" valign="top"/></imageobject>
 	    <textobject><phrase>Search</phrase></textobject>
 	  </inlinemediaobject>
 	</guibutton>.
@@ -362,7 +362,7 @@
     or
     <guibutton>
       <inlinemediaobject>
-	<imageobject><imagedata fileref="icons/search_next.png" valign="middle"/></imageobject>
+	<imageobject><imagedata fileref="icons/search_next.png" valign="top"/></imageobject>
 	<textobject><phrase>Next match</phrase></textobject>
       </inlinemediaobject>
     </guibutton>.
@@ -378,7 +378,7 @@
     or
     <guibutton>
       <inlinemediaobject>
-	<imageobject><imagedata fileref="icons/configure.png" valign="middle"/></imageobject>
+	<imageobject><imagedata fileref="icons/configure.png" valign="top"/></imageobject>
 	<textobject><phrase>Configure</phrase></textobject>
       </inlinemediaobject>
     </guibutton>,
@@ -392,7 +392,7 @@
     or
     <guibutton>
       <inlinemediaobject>
-	<imageobject><imagedata fileref="icons/search_previous.png" valign="middle"/></imageobject>
+	<imageobject><imagedata fileref="icons/search_previous.png" valign="top"/></imageobject>
 	<textobject><phrase>Previous match</phrase></textobject>
       </inlinemediaobject>
     </guibutton> 
@@ -400,7 +400,7 @@
     and press
     <guibutton>
       <inlinemediaobject>
-	<imageobject><imagedata fileref="icons/apply.png" valign="middle"/></imageobject>
+	<imageobject><imagedata fileref="icons/apply.png" valign="top"/></imageobject>
 	<textobject><phrase>This match</phrase></textobject>
       </inlinemediaobject>
     </guibutton> 
@@ -412,14 +412,14 @@
     by pressing
     <keysym>PageUp</keysym>/<guibutton>
     <inlinemediaobject>
-	<imageobject><imagedata fileref="icons/1leftarrow.png" valign="middle"/></imageobject>
+	<imageobject><imagedata fileref="icons/1leftarrow.png" valign="top"/></imageobject>
 	<textobject><phrase>Previous Tree</phrase></textobject>
       </inlinemediaobject>
     </guibutton>
     or 
     <keysym>PageDown</keysym>/<guibutton>
       <inlinemediaobject>
-	<imageobject><imagedata fileref="icons/1rightarrow.png" valign="middle"/></imageobject>
+	<imageobject><imagedata fileref="icons/1rightarrow.png" valign="top"/></imageobject>
 	<textobject><phrase>Next Tree</phrase></textobject>
       </inlinemediaobject>
     </guibutton>,
@@ -441,7 +441,7 @@
       <keysym>Insert</keysym> or 
       <guibutton>
 	<inlinemediaobject>
-	  <imageobject><imagedata fileref="icons/add_node.png" valign="middle"/></imageobject>
+	  <imageobject><imagedata fileref="icons/add_node.png" valign="top"/></imageobject>
 	  <textobject><phrase>Add node</phrase></textobject>
 	</inlinemediaobject>
       </guibutton>
@@ -496,7 +496,7 @@ t-node $b := [ parent $a ];</programlisting>
       <keysym>h</keysym> or 
       <guibutton>
 	<inlinemediaobject>
-	  <imageobject><imagedata fileref="icons/toggle_hide_subtree.png" valign="middle"/></imageobject>
+	  <imageobject><imagedata fileref="icons/toggle_hide_subtree.png" valign="top"/></imageobject>
 	  <textobject><phrase>(Un)Expand</phrase></textobject>
 	</inlinemediaobject>
       </guibutton>
@@ -512,7 +512,7 @@ t-node $b := [ parent $a ];</programlisting>
       <keysym>o</keysym> or 
       <guibutton>
 	<inlinemediaobject>
-	  <imageobject><imagedata fileref="icons/or.png" valign="middle"/></imageobject>
+	  <imageobject><imagedata fileref="icons/or.png" valign="top"/></imageobject>
 	  <textobject><phrase>OR</phrase></textobject>
 	</inlinemediaobject>
       </guibutton>
@@ -523,7 +523,7 @@ t-node $b := [ parent $a ];</programlisting>
       <keysym>=</keysym> or 
       <guibutton>
 	<inlinemediaobject>
-	  <imageobject><imagedata fileref="icons/test_equality.png" valign="middle"/></imageobject>
+	  <imageobject><imagedata fileref="icons/test_equality.png" valign="top"/></imageobject>
 	  <textobject><phrase>Equality</phrase></textobject>
 	</inlinemediaobject>
       </guibutton>
@@ -535,7 +535,7 @@ t-node $b := [ parent $a ];</programlisting>
       <keysym>Ctrl+Insert</keysym> or 
       <guibutton>
 	<inlinemediaobject>
-	  <imageobject><imagedata fileref="icons/editcopy.png" valign="middle"/></imageobject>
+	  <imageobject><imagedata fileref="icons/editcopy.png" valign="top"/></imageobject>
 	  <textobject><phrase>Copy</phrase></textobject>
 	</inlinemediaobject>
       </guibutton>
@@ -544,7 +544,7 @@ t-node $b := [ parent $a ];</programlisting>
       and press <keysym>Shift+Insert</keysym> or 
       <guibutton>
 	<inlinemediaobject>
-	  <imageobject><imagedata fileref="icons/editpaste.png" valign="middle"/></imageobject>
+	  <imageobject><imagedata fileref="icons/editpaste.png" valign="top"/></imageobject>
 	  <textobject><phrase>Paste</phrase></textobject>
 	</inlinemediaobject>
       </guibutton>
@@ -558,10 +558,10 @@ t-node $b := [ parent $a ];</programlisting>
     <mediaobject>
       <imageobject><imagedata align="center" fileref="tutorial_queries_2b.png" format="PNG"/></imageobject>
     </mediaobject>
-    Selecting the top t-node and pressing <literal>h</literal>
+    Selecting the top t-node and pressing <keysym>h</keysym> or
     <guibutton>
       <inlinemediaobject>
-	<imageobject><imagedata fileref="icons/toggle_hide_subtree.png" valign="middle"/></imageobject>
+	<imageobject><imagedata fileref="icons/toggle_hide_subtree.png" valign="top"/></imageobject>
 	<textobject><phrase>(Un)Expand</phrase></textobject>
       </inlinemediaobject>
     </guibutton>
@@ -573,7 +573,28 @@ t-node $b := [ parent $a ];</programlisting>
       </listitem>
     </orderedlist>
     </para>
-
+    <para>Using a regular expression, the query can be formulated as
+    this:
+    <programlisting>t-node [ functor ~ '^[CD]PHR$', t-node [ ] ]</programlisting>
+    or
+    <programlisting>t-node [ functor ~ '^(DPHR|CPHR)$', t-node [ ] ]</programlisting>
+    Regular expression constraints can be created by pressing
+    <keysym>~</keysym> or
+    <guibutton>
+      <inlinemediaobject>
+	<imageobject><imagedata fileref="icons/text_regex.png" valign="top"/></imageobject>
+	<textobject><phrase>Regexp</phrase></textobject>
+      </inlinemediaobject>
+    </guibutton>.
+    </para>
+    <para>Finally, we can rewrite the query as
+    <programlisting>t-node [ functor in {"CPHR", "DPHR"} , t-node [ ] ]</programlisting>
+    The query text editor provides a button
+    <guibutton>in { ... }</guibutton> that,
+    for attributes with a fixed set of possible values,
+    allows the enumeration to be created 
+    by selecting the desired values from a list.
+    </para>
     <bridgehead>TODO</bridgehead>
     <programlisting>
       # Simple queries
@@ -602,10 +623,14 @@ t-node $b := [ parent $a ];</programlisting>
 
       ## relations based on PML references
 
-      t-node [ a/lex.rf $a1, 
-      t-node [ a/lex.rf $a0 ] ];
+      #### reverted relations
+      t-node [ t-node [ a/lex.rf $a0 ]
+               a/lex.rf $a1 ];
       a-node $a0 := [  a-node $a1 := [  ] ];
 
+      #### Rcp without a grammatical coreference
+      t-node 
+      [ t_lemma = '#Rcp', !1x coref_gram t-node [  ] ];
 
       ## PDT 2.0 specific relations: echild, eparent
    
@@ -624,6 +649,20 @@ t-node $b := [ parent $a ];</programlisting>
       #
        t-node [ 0x eparent t-node [  ], gram/sempos ~ '^n', functor !~ '^(PAR|DENOM)$' ];
 
+
+      #### reverted e-dependency, exclude numbers
+      a-node $ref0 := [ 
+        m/tag !~ '^C' ,
+        echild a-node $ref1 := [
+	  m/tag !~ '^C' 
+        ]
+      ];
+      t-node [ 
+        a/lex.rf $ref1, 
+        echild t-node [ a/lex.rf $ref0 ] 
+      ];
+
+
       ## Subqueries
 
       # 3.
@@ -640,16 +679,56 @@ t-node $b := [ parent $a ];</programlisting>
 
       ## Functions
 
+      t-node [ functor='DPHR', sons()>1 ]
 
       ## Output filter
 
+      t-node [ functor='DPHR' ]
+      >> count()
+
       ## Simple output filters 
+
+      t-node $n := [ functor='DPHR' ]
+      >> max(sons($n))
+
+      t-root $n := [ ]
+      >> descendants($n)
+      >> max(), min(), avg()
+
+      ## Global aggregation with 'for' clause
+
+      t-node $n := [ ]
+      >> for $n.functor
+         give $1, count()
+
+      #### how many coref arrows can xstart in one t-node
+      t-node $t := 
+        [ coref_gram t-node $c := [  ] ];
+      >>  for $t give count()
+      >> max()
 
       ## Ordering results
 
-      ## Global aggregation with 'for' clause
+      t-node $n := [ ]
+      >> for $n.functor
+         give $1, count()
+         sort by $2         
       
       ## Local aggregation with 'over'
+      t-node $p := 
+      [ echild t-node $c := [  ] ];
+      >> $p.functor,$c.functor
+      >> distinct $1,$2, count(over $1,$2), count(over $1)
+      >> $1, $2, percnt($3 div $4,2)
+         sort by $1,0-$3
+      >> $1, $2, $3 &amp; '%'
+
+
+      t-node $p := [ echild t-node $c :=  [  ] ];
+      >>  for $p.functor,$c.functor
+          give $1,$2,ratio(count() over $1)
+          sort by $1,0-$3
+      >> $1, $2, percnt($3,2)
 
 
     </programlisting>
@@ -1408,35 +1487,117 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
       </variablelist>
       </section>
       <section>
-	<title>Numeric functions</title>
-      <variablelist>
-	<varlistentry>
-	  <term>ceil(number)</term>
-	  <listitem><para>Return the smallest integer value greater than or equal to a given numerical argument.</para></listitem>
-	</varlistentry>
-	<varlistentry>
-	  <term>floor(number)</term>
-	  <listitem><para>Return the largest integer value less than or equal to the numerical argument.</para></listitem>
-	</varlistentry>
-	<varlistentry>
-	  <term>round(number,places?)</term>
-	  <listitem><para>Returns a given number rounded to a specified number of decimal places (0 if the second argument is not specified).</para></listitem>
-	</varlistentry>
-	<varlistentry>
-	  <term>trunc(number,places?)</term>
-	  <listitem><para>Returns a number truncated to a certain number of decimal places (0 if second argument is not specified).</para></listitem>
-	</varlistentry>
-	<!--
-	    <varlistentry>
-	    <term>percnt(number,places?)</term>
-	    <listitem><para>This is a convenience function, which returns
-	    the same value as <literal>round(100*number,places)</literal>.</para></listitem>
-	    </varlistentry>
-	-->
-      </variablelist>
+	<title>Numerical functions</title>
+	<variablelist>
+	  <varlistentry>
+	    <term>ceil(number)</term>
+	    <listitem><para>Return the smallest integer value greater than or equal to a given numerical argument.</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>floor(number)</term>
+	    <listitem><para>Return the largest integer value less than or equal to the numerical argument.</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>round(number,places?)</term>
+	    <listitem><para>Returns a given number rounded to a specified number of decimal places (0 if the second argument is not specified).</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>trunc(number,places?)</term>
+	    <listitem><para>Returns a number truncated to a certain number of decimal places (0 if second argument is not specified).</para></listitem>
+	  </varlistentry>
+	  <!--
+	      <varlistentry>
+	      <term>percnt(number,places?)</term>
+	      <listitem><para>This is a convenience function, which returns
+	      the same value as <literal>round(100*number,places)</literal>.</para></listitem>
+	      </varlistentry>
+	  -->
+	</variablelist>
       </section>
-  </section>
-  <section>
+      <section>
+	<title>Aggregation functions</title>
+	<para>
+	  Aggregation functions can only be
+	  used in output filters.
+	  There are two ways
+	  of using these functions:
+	</para>
+	<orderedlist>
+	  <listitem>
+	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable>)</literal>.
+	    If this form is used in the
+	    <literal>give</literal> part of a
+	    <literal>for ... give ...</literal>
+	    clause, the function
+	    computes its value by considering
+	    only those input rows that
+	    belong to the current aggregation
+	    group.
+	    If used outside a
+	    <literal>for ... give ...</literal>
+	    clause, the function
+	    computes its value by considering
+	    all input rows (i.e.
+	    the rows returned by the preceding filter
+	    or the body of the query).
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable> over <replaceable>colspec, ...</replaceable>)</literal>.
+	    This form creates a temporary aggregation
+	    of the current input according to given column
+	    specifications following the <literal>over</literal> keyword
+	    and computes the value by considering
+	    input rows of the aggregation group
+	    to which the current input row belongs.
+	    Unlike <literal>for ... give ...</literal>,
+	    this type of aggregation does not
+	    propagate to the output, so the
+	    filter still returns one output row for each input row,
+	    rather than a row for each aggregation group.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable> over all)</literal>
+	    computes the value by considering
+	    all input rows, not just those in the current
+	    aggregation group.
+	    </para>
+	  </listitem>
+	</orderedlist>
+	<variablelist>
+	  <varlistentry>
+	    <term>count([ over ... ])</term>
+	    <listitem><para>Returns the number of input rows considered.</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>sum(<replaceable>expression</replaceable> [ over ... ])</term>
+	    <listitem><para>For each row considered, computes the expression and returns a sum of the results. The expression must evaluate to a number.</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>concat(<replaceable>expression</replaceable> [ over ... ])</term>
+	    <listitem><para>For each row considered, computes the expression and returns a string that is a concatenation of the results in no particular order(!).</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>min(<replaceable>expression</replaceable> [ over ... ])</term>
+	    <listitem><para>For each row considered, computes the expression and returns the minimum of the resulting values. The expression must evaluate to a number.</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>max(<replaceable>expression</replaceable> [ over ... ])</term>
+	    <listitem><para>For each row considered, computes the expression and returns the maximum of the resulting values. The expression must evaluate to a number.</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>avg(<replaceable>expression</replaceable> [ over ... ])</term>
+	    <listitem><para>For each row considered, computes the expression and returns the average of the resulting values. The expression must evaluate to a number.</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>ratio(<replaceable>expression</replaceable> [ over ... ])</term>
+	    <listitem><para>Returns the ratio of the value computed using the expression to the sum of all values computed using this expression over all rows considered.</para></listitem>
+	  </varlistentry>
+	</variablelist>
+      </section>
+    </section>
+    <section>
     <title>Examples</title>
     <para/>
   </section>
