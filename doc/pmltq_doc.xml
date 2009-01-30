@@ -622,12 +622,14 @@ t-node $b := [ parent $a ];</programlisting>
     </para>
     <bridgehead>TODO</bridgehead>
     <programlisting>
+      t-node [ functor in {"CPHR", "DPHR"} , t-node [ ] ]
+
       ## Types of relations
 
       ## relations based on PML references
-
-      #### reverted relations
-      t-node [ t-node [ a/lex.rf $a0 ]
+      
+      #### reverted dependency
+      t-node [ t-node [ a/lex.rf $a0 ],
                a/lex.rf $a1 ];
       a-node $a0 := [  a-node $a1 := [  ] ];
 
@@ -650,7 +652,9 @@ t-node $b := [ parent $a ];</programlisting>
        t-node [ 0x eparent t-node [ ] ]
 
       #
-       t-node [ 0x eparent t-node [  ], gram/sempos ~ '^n', functor !~ '^(PAR|DENOM)$' ];
+       t-node [ 0x eparent t-node [  ], 
+                gram/sempos ~ '^n',
+		functor !~ '^(PAR|DENOM)$' ];
 
 
       #### reverted e-dependency, exclude numbers
