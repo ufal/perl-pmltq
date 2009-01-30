@@ -133,10 +133,10 @@
       node among whose constraints it is declared.
       The relationship specification can be omitted
       in which case it defaults to <literal>child</literal>,
-      meaning that the nested selector matches a child
-      of the node matched by the containing selector.
+      meaning that the nested selector is matched by a child
+      of the node matching the containing selector.
       Thus, nesting of selectors can naturally follow
-      the topology of the matched tree.
+      the topology of the matching tree.
       Nested selectors can be named
       using a variable and referred to from other node selectors.
     </para>
@@ -161,7 +161,7 @@
       among whose constraints the subquery occurs,
       all matches of the subquery are located
       (these may coincide with nodes
-      matched by the outside query).
+      matching the outside query).
       The number of distinct nodes matching the top node of the subquery
       are counted and this number is compared with the restrictions
       on number of occurrences.
@@ -266,7 +266,7 @@
 	<keysym>Insert</keysym> or 
 	<guibutton>
 	  <inlinemediaobject>
-	    <imageobject><imagedata fileref="icons/add_node.png" valign="top"/></imageobject>
+	    <imageobject><imagedata fileref="pmltq_icons/add_node.png" valign="top"/></imageobject>
 	    <textobject><phrase>Add node</phrase></textobject>
 	  </inlinemediaobject>
 	</guibutton>
@@ -280,7 +280,7 @@
 	  or 
 	<guibutton>
 	  <inlinemediaobject>
-	    <imageobject><imagedata fileref="icons/test_equality.png" valign="top"/></imageobject>
+	    <imageobject><imagedata fileref="pmltq_icons/test_equality.png" valign="top"/></imageobject>
 	    <textobject><phrase>Equality</phrase></textobject>
 	  </inlinemediaobject>
 	</guibutton>
@@ -336,14 +336,14 @@
 	or
 	<guibutton>
 	  <inlinemediaobject>
-	    <imageobject><imagedata fileref="icons/search_filter.png" valign="top"/></imageobject>
+	    <imageobject><imagedata fileref="pmltq_icons/search_filter.png" valign="top"/></imageobject>
 	    <textobject><phrase>Query</phrase></textobject>
 	  </inlinemediaobject>
 	</guibutton>
 	or
 	<guibutton>
 	  <inlinemediaobject>
-	    <imageobject><imagedata fileref="icons/search.png" valign="top"/></imageobject>
+	    <imageobject><imagedata fileref="pmltq_icons/search.png" valign="top"/></imageobject>
 	    <textobject><phrase>Search</phrase></textobject>
 	  </inlinemediaobject>
 	</guibutton>.
@@ -362,7 +362,7 @@
     or
     <guibutton>
       <inlinemediaobject>
-	<imageobject><imagedata fileref="icons/search_next.png" valign="top"/></imageobject>
+	<imageobject><imagedata fileref="pmltq_icons/search_next.png" valign="top"/></imageobject>
 	<textobject><phrase>Next match</phrase></textobject>
       </inlinemediaobject>
     </guibutton>.
@@ -392,7 +392,7 @@
     or
     <guibutton>
       <inlinemediaobject>
-	<imageobject><imagedata fileref="icons/search_previous.png" valign="top"/></imageobject>
+	<imageobject><imagedata fileref="pmltq_icons/search_previous.png" valign="top"/></imageobject>
 	<textobject><phrase>Previous match</phrase></textobject>
       </inlinemediaobject>
     </guibutton> 
@@ -441,7 +441,7 @@
       <keysym>Insert</keysym> or 
       <guibutton>
 	<inlinemediaobject>
-	  <imageobject><imagedata fileref="icons/add_node.png" valign="top"/></imageobject>
+	  <imageobject><imagedata fileref="pmltq_icons/add_node.png" valign="top"/></imageobject>
 	  <textobject><phrase>Add node</phrase></textobject>
 	</inlinemediaobject>
       </guibutton>
@@ -488,7 +488,7 @@ t-node $b := [ parent $a ];</programlisting>
     This can be done in three different ways:
     </para>
     <para>Using a disjunction:
-    <programlisting>t-node [ functor='DPHR' or functor='CPHR', t-node [ ] ]</programlisting>
+    <programlisting>t-node [ (functor='DPHR' or functor='CPHR'), t-node [ ] ]</programlisting>
     Apart from editing the query, this can be created using the GUI e.g. in the following steps:
     <orderedlist>
       <listitem><para>Select the top query node (the one with the <literal>functor="DPHR"</literal> constraint</para></listitem>
@@ -496,7 +496,7 @@ t-node $b := [ parent $a ];</programlisting>
       <keysym>h</keysym> or 
       <guibutton>
 	<inlinemediaobject>
-	  <imageobject><imagedata fileref="icons/toggle_hide_subtree.png" valign="top"/></imageobject>
+	  <imageobject><imagedata fileref="pmltq_icons/toggle_hide_subtree.png" valign="top"/></imageobject>
 	  <textobject><phrase>(Un)Expand</phrase></textobject>
 	</inlinemediaobject>
       </guibutton>
@@ -512,7 +512,7 @@ t-node $b := [ parent $a ];</programlisting>
       <keysym>o</keysym> or 
       <guibutton>
 	<inlinemediaobject>
-	  <imageobject><imagedata fileref="icons/or.png" valign="top"/></imageobject>
+	  <imageobject><imagedata fileref="pmltq_icons/or.png" valign="top"/></imageobject>
 	  <textobject><phrase>OR</phrase></textobject>
 	</inlinemediaobject>
       </guibutton>
@@ -523,7 +523,7 @@ t-node $b := [ parent $a ];</programlisting>
       <keysym>=</keysym> or 
       <guibutton>
 	<inlinemediaobject>
-	  <imageobject><imagedata fileref="icons/test_equality.png" valign="top"/></imageobject>
+	  <imageobject><imagedata fileref="pmltq_icons/test_equality.png" valign="top"/></imageobject>
 	  <textobject><phrase>Equality</phrase></textobject>
 	</inlinemediaobject>
       </guibutton>
@@ -561,7 +561,7 @@ t-node $b := [ parent $a ];</programlisting>
     Selecting the top t-node and pressing <keysym>h</keysym> or
     <guibutton>
       <inlinemediaobject>
-	<imageobject><imagedata fileref="icons/toggle_hide_subtree.png" valign="top"/></imageobject>
+	<imageobject><imagedata fileref="pmltq_icons/toggle_hide_subtree.png" valign="top"/></imageobject>
 	<textobject><phrase>(Un)Expand</phrase></textobject>
       </inlinemediaobject>
     </guibutton>
@@ -573,52 +573,55 @@ t-node $b := [ parent $a ];</programlisting>
       </listitem>
     </orderedlist>
     </para>
-    <para>Using a regular expression, the query can be formulated as
-    this:
-    <programlisting>t-node [ functor ~ '^[CD]PHR$', t-node [ ] ]</programlisting>
-    or
-    <programlisting>t-node [ functor ~ '^(DPHR|CPHR)$', t-node [ ] ]</programlisting>
-    Regular expression constraints can be created by pressing
-    <keysym>~</keysym> or
-    <guibutton>
-      <inlinemediaobject>
-	<imageobject><imagedata fileref="icons/text_regex.png" valign="top"/></imageobject>
-	<textobject><phrase>Regexp</phrase></textobject>
-      </inlinemediaobject>
-    </guibutton>.
+    <para>Using a regular expression:
+    <programlisting>t-node [ functor ~ '[CD]PHR', t-node [ ] ]</programlisting>
+    Symbol <literal>~</literal> (tilda) denotes a binary relation
+    between two values that is true if and only if the value on the
+    left interpreted as string matches the value on the right interpreted 
+    as regular expression. The regular expression <literal>[CD]PHR</literal>
+    is matched by any string containing either <literal>CPHR</literal> or <literal>DPHR</literal>
+    as a substring. If, for example, <literal>XDPHR</literal> were a possible
+    functor value, we would have to be more precise and rewrite the expression
+    as
+    <programlisting>t-node [ functor ~ "^[CD]PHR$", t-node [ ] ]</programlisting>
+    Since <literal>^</literal> and <literal>$</literal>
+    meta-characters are only matched by the start and end of a string,
+    the value of <literal>functor</literal> now must be exactly <literal>CPHR</literal> or
+    <literal>DPHR</literal>.
     </para>
-    <para>Finally, we can rewrite the query as
-    <programlisting>t-node [ functor in {"CPHR", "DPHR"} , t-node [ ] ]</programlisting>
-    The query text editor provides a button
-    <guibutton>in { ... }</guibutton> that,
-    for attributes with a fixed set of possible values,
-    allows the enumeration to be created 
-    by selecting the desired values from a list.
+    <para>
+      Creating a regular expression test graphically in TrEd
+      is similar to creating an equality test:
+      either press <keysym>~</keysym> key or the
+      <guibutton>
+	<inlinemediaobject>
+	  <imageobject><imagedata fileref="pmltq_icons/test_regexp.png" valign="middle"/></imageobject>
+	  <textobject><phrase>RegExp</phrase></textobject>
+	</inlinemediaobject>
+      </guibutton> toolbar button.
+      Do not forget to enclose the regular expression 
+      (field labeled <literal>b</literal> in the dialog)
+      into apostrophes or quotes
+      since in the PML-TQ syntax it is just a literal string.
+    </para>
+    <para>Using a set enumeration:
+    <programlisting>t-node [ functor in { "CPHR", "DPHR" }, t-node [ ] ]</programlisting>
+    </para>
+    <para>
+      The relation <literal>in</literal>
+      asserts that the value computed from the expression on the left
+      equals to a value of some of the expressions 
+      listed in the set enumeration on the right.
+    </para>
+    <para>
+      The query text editor provides a button
+      <guibutton>in { ... }</guibutton> that,
+      for attributes with a fixed set of possible values,
+      allows the enumeration to be created 
+      by selecting the desired values from a list.
     </para>
     <bridgehead>TODO</bridgehead>
     <programlisting>
-      # Simple queries
-      # 1.
-
-      t-node [ functor='DPHR' ]
-
-      # 2.
-
-      t-node [ functor='DPHR', t-node [ ] ]
-      t-node [ functor='DPHR', child t-node [ ] ]
-
-      # or
-      t-node $a := [ functor='DPHR', child $b ];
-      t-node $b := [ ];
-
-      # or 
-      t-node $a := [ functor='DPHR' ];
-      t-node $b := [ parent $a ];
-
-      ## Regular expression predicates
-
-      ## Set predicate
-
       ## Types of relations
 
       ## relations based on PML references
