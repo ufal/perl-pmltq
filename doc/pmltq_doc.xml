@@ -1485,7 +1485,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	  <listitem><para>Returns uppercase version of a given expression.</para></listitem>
 	</varlistentry>
 	<varlistentry>
-	  <term>tr(string,characterss_to_replace,replacement)</term>
+	  <term>tr(string,characters_to_replace,replacement)</term>
 	  <listitem><para>Replaces all occurences of given characters in a string with corresponding characters in the replacement set,
 	  that is, replaces all occurrences of the Nth character from <replaceable>characters_to_replace</replaceable> with the Nth character
 	  in the <replaceable>replacement</replaceable>. For example, <literal>tr('122-34','24','ab')</literal> returns the string 
