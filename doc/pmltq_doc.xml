@@ -6,7 +6,7 @@
       <surname>Pajas</surname>
     </author>
     <title>PML Tree Query</title>
-    <subtitle>Version 0.5 (alpha)</subtitle>
+    <subtitle>Version 0.5.1 (alpha)</subtitle>
   </articleinfo>
   <section>
     <title>Introduction</title>
@@ -121,9 +121,13 @@
     </para>
     <para>
       <firstterm>Predicate constraints</firstterm> assert equality, inequality, or regular expression match
-      between values computed from constants (integers, floats, or strings)
-      and values of attributes of either the matching node
-      or some other node in the query referred to using a variable.
+      between values computed from terms. An atomic term is a
+      constant (integer, float, or character string),
+      or an attribute of a node matched by the query.
+      A term is either an atomic term or a term obtained from other terms
+      using arithmetical (<literal>+, *, -, div, mod</literal>) or string 
+      (concatenation <literal>&amp;</literal> ) operators,
+      or functions.
     </para>
     <para>
       A <firstterm>nested node selector</firstterm>
@@ -635,7 +639,7 @@ t-node $b := [ parent $a ];</programlisting>
 
       #### Rcp without a grammatical coreference
       t-node 
-      [ t_lemma = '#Rcp', !1x coref_gram t-node [  ] ];
+      [ t_lemma = '#Rcp', !1x coref_gram.rf t-node [  ] ];
 
       ## PDT 2.0 specific relations: echild, eparent
    
@@ -710,7 +714,7 @@ t-node $b := [ parent $a ];</programlisting>
 
       #### how many coref arrows can xstart in one t-node
       t-node $t := 
-        [ coref_gram t-node $c := [  ] ];
+        [ coref_gram.rf t-node $c := [  ] ];
       >>  for $t give count()
       >> max()
 
@@ -943,11 +947,13 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      A constraint is either a 
 	    binary test predicate
 	    (<literal>=</literal>, 
+	    <literal>!=</literal>
 	    <literal>~</literal>, 
+	    <literal>!~</literal>, 
 	    <literal>&lt;</literal>
 	    <literal>&lt;=</literal>
 	    <literal>&gt;</literal> etc.) on
-	    expressions computed from atomic values,
+	    expressions (terms),
 	    or a node selector or subquery,
 	    or a reference to a named node selector
 	    (indicating that a node matched by referred 
@@ -975,12 +981,13 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 		<imagedata format="linespecific" fileref="rail_predicate.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
 		<phrase><![CDATA[ predicate : binaryComparison | setPredicate;
-		binaryComparison : expression ( ('!'? ('=' | TILDA | TILDASTAR)) | '<' | '>' | '<=' | '>=') expression  ;
-		setPredicate : (expression 'in' LEFTBRACE (expression +',') RIGHTBRACE) ; ]]></phrase>
+		binaryComparison : expression ( ('!'? ('=' | '~' | '~*' )) | '<' | '>' | '<=' | '>=') expression  ;
+		setPredicate : (expression '!'? 'in' '{' (expression +',') '}') ; ]]></phrase>
 	      </textobject>
 	    </mediaobject>
 	      <para>
-		A predicate is either a binary comparison or a set predicate.
+		A predicate is either a binary comparison of two expressions (terms) or a set membership predicate
+		applied to a term and a set specified as an enumeration of other terms.
 	      </para>
 	      <para>
 		The binary comparison consists of two expressions 
@@ -1028,7 +1035,9 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 
 	      <para>
 		Expressions are either literals (strings, integer of
-		floating point numbers), or functions, or any
+		floating point numbers), 
+		attribute paths,
+		or functions, or any
 		combination of these obtain by application of the
 		binary string-concatenation operator ('&amp;') or the
 		usual arithmetical operations for addition ('+'),
@@ -1044,10 +1053,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	  </varlistentry>
 	  <varlistentry>
 	    <term>literal</term>
-	    
 	    <listitem><mediaobject id="rail_literal">
-	      
-	      
 	      <imageobject role="html">
 		<imagedata format="PNG" fileref="rail_literal.png"/>
 	      </imageobject><imageobject>
@@ -1087,7 +1093,9 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      </imageobject><imageobject>
 		<imagedata format="linespecific" fileref="rail_attributePath.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
-		<phrase><![CDATA[ attributePath : (variable '.' )? XMLNAME + '/' ; ]]></phrase>
+		<phrase><![CDATA[ attributePath : '*'? (variable '.' )? (XMLNAME | index | element_index ) + '/' ;
+ index : '[' NUMBER ']';
+ element_index : XMLNAME index | index XMLNAME; ]]></phrase>
 	      </textobject>
 	    </mediaobject>
 	    <para>
@@ -1111,12 +1119,88 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      values, i.e. structures with attributes of their own.
 	      In such case one forms a slash-delimited attribute
 	      path leading from the node
-	      to some nested atomic value. For example
+	      to some nested atomic value.
+	      Each component of the path (step)
+	      is either a
+	    </para>
+	      <variablelist>
+		<varlistentry>
+		  <term>name</term>
+		  <listitem>
+		    <para>specifying a member in a structure or any element of the given name in a sequence</para>
+		  </listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>index (<literal>[<replaceable>n</replaceable>]</literal>)</term>
+		  <listitem>
+		    <para>specifying <replaceable>n</replaceable>-th element in an ordered list</para>
+		  </listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>name followed by an index (<literal><replaceable>foo</replaceable>[<replaceable>n</replaceable>]</literal>)</term>
+		  <listitem>
+		    <para>specifying <replaceable>n</replaceable>-th element of a given name (<literal>foo</literal>)
+		    in a sequence
+		    </para>
+		  </listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>name preceded by an index (<literal>[<replaceable>n</replaceable>]<replaceable>foo</replaceable></literal>)</term>
+		  <listitem>
+		    <para>specifying <replaceable>n</replaceable>-th element in a sequence
+		    and asserting that the <replaceable>n</replaceable>-th element name is as given (<literal>foo</literal>)
+		    </para>
+		  </listitem>
+		</varlistentry>
+	      </variablelist>
+	      <para>
+		If a partial attribute path returns an object of a
+		list type, the next step in the path can either be an
+		index or can be omitted (in which case any list member
+		matches); if it returns a sequence, the next step must be
+		an element name optionally followed or preceded by an
+		index. If it is a structure or container, the next
+		step must be a name of an attribute;  if it returns an
+		alternative or an unordered list, the next step must
+		be a valid step for the members of the alternative/list;
+		if it returns an atomic value, there must be no further step.
+	      </para>
+	      <para>
+	      For example
 	      <literal>gram/sempos</literal> selects
 	      the attribute <literal>sempos</literal>
 	      of a structure stored in the attribute
 	      <literal>gram</literal> of the node
 	      matched by the current selector.
+	      The path
+	      <literal>a/[1]/b</literal> may select
+	      an attribute b of a structure
+	      stored in the 2nd member
+	      of an ordered list stored in the attribute <literal>a</literal>;
+	      the path <literal>a/b</literal> selects
+	      the attribute b of any member of the list <literal>a</literal>.
+	    </para>
+	    <para>
+	      If some part of an attribute path leads to an alternative, list, or sequence,
+	      the path may match multiple values.
+	      Assume <replaceable>R</replaceable> is some predicate
+	      containing such an attribute path
+	      in some of its expressions.
+	      If attribute path is preceded by the <literal>*</literal> character
+	      (a primitive universal quantifier),
+	      then the predicate is true if and only if it is
+	      true for every value matched by the attribute path.
+	      If attribute path is not preceded by <literal>*</literal>,
+	      then 
+	      an existential quantifier is assumed: the predicate is true if and only if there
+	      exists a value matched by the attribute path
+	      for which the predicate is true.
+	      If the predicate contains more such attribute paths,
+	      the quantifiers (universal and implicit existential)
+	      are applied in the same order in which the attribute paths
+	      occur in the predicate.
+	      See <xref linkend="quantifiers"/>
+	      for details.
 	    </para>
 	    <para>
 	      Example:
@@ -1239,12 +1323,10 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      range over the original input rows
 	      aggregated by this particular vector.
 	      For example:
-	      <programlisting>a-node $a:= [ child a-node $b [] ];
->> for $a.afun, $b.afun
+	      <programlisting>a-node $n:= [ child a-node $b [] ];
+>> for $m.afun, $b.afun
    give $1, $2, count()
-   sort by $3
-  
-	      </programlisting>
+   sort by $3</programlisting>
 	      is a query whose body
 	      returns pairs of a-nodes in the parent-child relation.
 	      The output filter first computes 
@@ -1282,7 +1364,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	                                     | DOLLAR NUMBER
 					     | FUNC '(' (columnExp + ',' ) ')' 
 					     | AGGRFUNC '(' (columnExp + ',' ) 
-					          ('over' (columnExp + ',' ))?  ')' 
+					          ('over' (columnExp + ',' ) ('sort by' (columnExp + ',' ))?)?  ')' 
 					     | '(' columnExp ')') + ('+' | '-' | '*' | 'div' | 'mod' | AMP))  ; ]]></phrase>
 	      </textobject>
 	    </mediaobject>
@@ -1571,6 +1653,12 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    aggregation group.
 	    </para>
 	  </listitem>
+	  <listitem>
+	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable> over <replaceable>colspec,...</replaceable> sort by <replaceable>colspec,...</replaceable> )</literal>
+	    is a variant of the previous aggregations that forces an ordering on the aggregated values;
+	    this is currently only useful for the aggregation function <literal>concat()</literal>.
+	    </para>
+	  </listitem>
 	</orderedlist>
 	<variablelist>
 	  <varlistentry>
@@ -1582,8 +1670,11 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    <listitem><para>For each row considered, computes the expression and returns a sum of the results. The expression must evaluate to a number.</para></listitem>
 	  </varlistentry>
 	  <varlistentry>
-	    <term>concat(<replaceable>expression</replaceable> [ over ... ])</term>
-	    <listitem><para>For each row considered, computes the expression and returns a string that is a concatenation of the results in no particular order(!).</para></listitem>
+	    <term>concat(<replaceable>expression</replaceable>, [<replaceable>"separator"</replaceable>] [ over ... [sort by ...]])</term>
+	    <listitem><para>For each row considered, computes the expression and returns a character string  
+	    obtained by concatenating the results; the optional
+	    second argument may be a literal string to be used as a separator of the concatenated strings. The values are concatenated in
+	    no particular order unless the <literal>over ... sort by ...</literal> clause is used.</para></listitem>
 	  </varlistentry>
 	  <varlistentry>
 	    <term>min(<replaceable>expression</replaceable> [ over ... ])</term>
@@ -1602,6 +1693,262 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    <listitem><para>Returns the ratio of the value computed using the expression to the sum of all values computed using this expression over all rows considered.</para></listitem>
 	  </varlistentry>
 	</variablelist>
+      </section>
+      <section id="attribute_paths">
+	<title>Attribute paths</title>
+	<para>
+	  
+	</para>
+      </section>
+      <section id="quantifiers">
+	<title>Primitive quantifiers</title>
+	<para>
+	  An attribute path in PML-TQ can match one or more values on a given node, depending
+	  on the data types of the values obtained by evaluating individual steps of the attribute path.
+	  In this section we describe how the truth value of a predicate containing expressions
+	  in which such attribute paths occur is evaluated.
+	</para>
+	<para>
+	  We start with a few examples. Let <replaceable>R</replaceable> be
+	  the predicate 
+	  <programlisting>*a != b/c + *$n.d/e/f</programlisting>
+	  in the query
+	  <programlisting>z-node $n := [ child z-node $m := [ *a != b/c + *$n.d/e/f ] ]</programlisting>
+	  where <literal>z-node</literal> is some node type, and
+	  <literal>a</literal> 
+	  <literal>b/c</literal>,
+	  <literal>d/e/f</literal>
+	  are valid attribute paths for
+	  nodes of this type.
+	  Let <literal>N</literal> and
+	  <literal>M</literal> be 
+	  nodes from the searched data
+	  assigned to the selectors <literal>$n</literal>
+	  and <literal>$m</literal>.
+	</para>
+	<para>
+	  Let's assume
+	  that the attribute <literal>a</literal> is a list of numbers
+	  and that <literal>V<subscript>N,a</subscript></literal>
+	  is the set of all values of the attribute
+	  <literal>a</literal> for the node <literal>N</literal>.
+	  Similary, let 
+	  <literal>V<subscript>M,b/c</subscript></literal>
+	  be the set of all values of the attribute path
+	  <literal>b/c</literal> evaluated on the node <literal>M</literal>
+	  and
+	  <literal>V<subscript>N,d/e/f</subscript></literal>
+	  the set of all values of the attribute path
+	  <literal>d/e/f</literal> evaluated on the node <literal>N</literal>.
+	</para>
+	<para>The truth value of the predicate <literal>R</literal>
+	is obtained by evaluating the following formula:
+	<informalequation id="eq-1">
+	  <alt role="tex">
+	    \hbox{\sf(1)}\qquad\qquad (\forall x \in V_{N,a})(\exists y \in V_{M,b/c})(\forall z \in V_{N,d/e/f}) x\neq y + z
+	  </alt>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="quantifiers_f1.png"/>
+	    </imageobject>
+	</mediaobject></informalequation>
+	Thus, the query matches the nodes A, B if and only if
+	B is a child of A and the above formula holds.
+	Note that since the attribute paths
+	<literal>*a</literal>
+	and
+	<literal>*$a.d/e/f</literal>
+	start with the character '<literal>*</literal>'
+	(called a primitive universal quantifier)
+	the corresponding variables <literal>x,z</literal>
+	in the formula <link linkend="eq-1">(1)</link>
+	are universally quantified,
+	whereas 
+	<literal>y</literal>,
+	corresponding to <literal>b/c</literal>
+	is quantified existentially.
+	Note also, that the order of the quantifiers 
+	in the formula  <link linkend="eq-1">(1)</link>
+	preserves the order of the occurrence of 
+	the corresponding attribute paths in <literal>R</literal>.
+	</para>
+	<para>
+	  If we had instead written 
+	  <programlisting>! *a = b/c + *$n.d/e/f</programlisting>
+	  moving the negation (<literal>!</literal>) out of the predicate,
+	  the resulting formula would be completely different:
+	<informalequation id="eq-2">
+	  <alt role="tex">
+	    \hbox{\sf(2)}\qquad\qquad \neg(\forall x \in V_{N,a})(\exists y \in V_{M,b/c})(\forall z \in V_{N,d/e/f}) x= y + z
+	  </alt>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="quantifiers_f2.png"/>
+	    </imageobject>
+	</mediaobject></informalequation>
+	and equivalent to 
+	<informalequation id="eq-3">
+	  <alt role="tex">
+	    \hbox{\sf(3)}\qquad\qquad(\exists x \in V_{N,a})(\forall y \in V_{M,b/c})(\exists z \in V_{N,d/e/f}) x\neq y + z
+	  </alt>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="quantifiers_f3.png"/>
+	    </imageobject>
+	</mediaobject></informalequation>
+	</para>
+	<para>
+	  Let us give some more practical examples. 
+	  Assume nodes of the type <literal>p-node</literal> have an attribute
+	  <literal>functions</literal> that is an unordered list or an alternative of string values.
+	  Let us consider the following constraints and the translations to formulae
+	  (assuming <literal>V<subscript>N</subscript></literal> is the set of values of the <literal>functions</literal> 
+	  for a given p-node <literal>N</literal>):
+	</para>
+	<orderedlist>
+	  <listitem>
+	  <para><literal>functions = functions</literal> asserts that
+	  the list <literal>functions</literal>  on <literal>N</literal>  is non-empty, since
+	  the constraint translates to the formula
+	<inlineequation id="eq-5">
+	  <alt role="tex">
+	    \qquad\qquad (\exists x \in V_N)(\exists y \in V_N)x=y
+	  </alt>
+	  <graphic fileref="quantifiers_f5.png"/></inlineequation>
+	which is equvalent to 
+	<inlineequation>
+	  <alt role="tex">(\exists x \in V_N)x=x</alt>
+	  <graphic fileref="quantifiers_f5_1.png"/>
+	</inlineequation>
+	and to
+	<inlineequation>
+	  <alt role="tex">V_N\neq\emptyset</alt>
+	  <graphic fileref="quantifiers_f5_2.png"/>
+	</inlineequation>.
+	  </para>
+	  </listitem>
+	  <listitem>
+	  <para><literal>functions != functions</literal> asserts that
+	  the list <literal>functions</literal>  on <literal>N</literal>  contains
+	  (at least) two distinct strings, since
+	  it translates to 
+	<inlineequation id="eq-6">
+	  <alt role="tex">
+	    \qquad\qquad (\exists x \in V_N)(\exists y \in V_N)x\neq y
+	  </alt>
+	  <graphic fileref="quantifiers_f6.png"/></inlineequation>.
+	  </para>
+	  </listitem>
+	  <listitem>
+	  <para><literal>!functions = functions</literal> means that 
+	  the list <literal>functions</literal>  on <literal>N</literal>  is empty, since
+	  it is a negation of <literal>functions=functions</literal> .</para>
+</listitem>
+	  <listitem>
+	  <para><literal>*functions = *functions</literal> asserts that the list <literal>functions</literal>  on <literal>N</literal>  contains
+	  at most one unique value because it translates to
+	<inlineequation id="eq-7">
+	  <alt role="tex">
+	    \qquad\qquad (\forall x \in V_N)(\forall y \in V_N)x= y
+	  </alt>
+	  <graphic fileref="quantifiers_f7.png"/></inlineequation>,
+	which is satisfied if the set <literal>V<subscript>N</subscript></literal> 
+	is either empty or contains exactly one element.
+	  </para>
+	  </listitem>
+	  <listitem>
+	  <para><literal>*functions = functions</literal> is always satisfied, because it translates to
+	<inlineequation id="eq-8">
+	  <alt role="tex">
+	    \qquad\qquad (\forall x \in V_N)(\exists y \in V_N)x= y
+	  </alt>
+	  <graphic fileref="quantifiers_f8.png"/></inlineequation>.
+	  </para>
+	  </listitem>
+	  <listitem>
+	  <para><literal>functions = *functions</literal> asserts that the list
+	  <literal>functions</literal>  contains exactly one unique value,
+	  since it translates to
+	<inlineequation id="eq-9">
+	  <alt role="tex">
+	    \qquad\qquad (\exists x \in V_N)(\forall y \in V_N)x=y
+	  </alt>
+	  <graphic fileref="quantifiers_f9.png"/></inlineequation>.
+	  </para>
+	  </listitem>
+	  <listitem>
+	  <para><literal>*functions != functions</literal> asserts that the list 
+	  <literal>functions</literal>  is either empty
+	  or contains at least two unique value,
+	  since it translates to
+	<inlineequation id="eq-10">
+	  <alt role="tex">
+	    \qquad\qquad (\forall x \in V_N)(\exists y \in V_N)x\neq y
+	  </alt>
+	  <graphic fileref="quantifiers_f10.png"/></inlineequation>.
+	  </para>
+	  </listitem>
+	  <listitem>
+	  <para><literal>functions != *functions</literal> translates to
+	<inlineequation id="eq-11">
+	  <alt role="tex">
+	    \qquad\qquad (\exists x \in V_N)(\forall y \in V_N)x\neq y
+	  </alt>
+	  <graphic fileref="quantifiers_f11.png"/></inlineequation>
+	which is never satisfied
+	(since x=x).
+	  </para>
+	  </listitem>
+	</orderedlist>
+	<para>
+	  Now generally, let <literal>R</literal> be a predicate
+	  and let <literal>p<subscript>1</subscript>,…,p<subscript>n</subscript></literal>
+	  be an enumeration of all occurrences of attribute paths in expressions (terms)
+	  contained in <literal>R</literal> in the order of occurrence.
+	  Let for <replaceable>i</replaceable> (<literal>1≤<replaceable>i</replaceable>≤n</literal>),  <literal>Q<subscript><replaceable>i</replaceable></subscript></literal>
+	  denote the universal quantifier
+	  <inlineequation>
+	  <inlinemediaobject>
+	    <imageobject><imagedata fileref="quantifier_for_all.png"/></imageobject>
+	    <textobject role="tex"><phrase>\forall</phrase></textobject>
+	    <textobject><phrase>∀</phrase></textobject>
+	  </inlinemediaobject>
+	  </inlineequation>
+	  if <literal>p<subscript><replaceable>i</replaceable></subscript></literal>
+	  starts with a '<literal>*</literal>'
+	  and 
+	  <inlineequation>
+	  <inlinemediaobject>
+	    <imageobject><imagedata fileref="quantifier_exists.png"/></imageobject>
+	    <textobject role="tex"><phrase>\exists</phrase></textobject>
+	    <textobject><phrase>∃</phrase></textobject>
+	  </inlinemediaobject>
+	  </inlineequation>
+	  otherwise.
+	  Let <literal>V<subscript>1</subscript>,…,V<subscript>n</subscript></literal>
+	  be the sets of values obtained by evaluating the attribute paths
+	  <literal>p<subscript>1</subscript>,…,p<subscript>n</subscript></literal>,
+	  respectively, for some fixed assignment of nodes
+	  to the selectors in the query.
+	</para>
+	<para>Then the truth value of the predicate <literal>R</literal>
+	is that of the formula
+	<informalequation id="eq-r1">
+	  <alt role="tex">%\hbox{\sf(3)}
+	  \qquad\qquad(Q_1 x_1 \in V_1)\ldots(Q_n x_n \in V_n)R'</alt>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="quantifiers_r1.png"/>
+	    </imageobject>
+	</mediaobject></informalequation>
+	where <literal>R'</literal> is an atomic formula
+	obtained from <literal>R</literal>
+	by replacing the attribute paths
+	<literal>p<subscript>1</subscript>,…,p<subscript>n</subscript></literal>
+	by variables
+	<literal>x<subscript>1</subscript>,…,x<subscript>n</subscript></literal>.
+	(Note that each of the variables has exactly one occurrence in <literal>R'</literal>.)
+	</para>
       </section>
     </section>
     <section>

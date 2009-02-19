@@ -90,3 +90,7 @@ dt { font-weight: bold }
 .inlinemediaobject img {
     vertical-align: middle;
 }
+
+sub {
+	font-size: 70%;
+}
