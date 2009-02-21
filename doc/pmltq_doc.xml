@@ -236,8 +236,8 @@
       <guimenuitem>New Tree Query</guimenuitem>
     </menuchoice>.
     <mediaobject>
-      <imageobject><imagedata align="center" fileref="tred_select_search_s.png" format="PNG" /></imageobject>
-    </mediaobject>
+      <imageobject role="html"><imagedata align="center" fileref="tred_select_search_s.png" format="PNG"/></imageobject>
+    <imageobject role="fo"><imagedata align="center" fileref="tred_select_search_s.pdf" format="PDF"/></imageobject></mediaobject>
     Choose <guilabel>Treebank (server)</guilabel>
     and then select <guilabel>CREATE NEW CONNECTION</guilabel>.
     Fill the connection form as follows:
@@ -252,8 +252,8 @@
     <para>
       A window with an empty query tree is displayed by TrEd:
       <mediaobject>
-	<imageobject><imagedata align="center" fileref="tred_empty_query_s.png" format="PNG"/></imageobject>
-      </mediaobject>
+	<imageobject role="html"><imagedata align="center" fileref="tred_empty_query_s.png" format="PNG"/></imageobject>
+      <imageobject role="fo"><imagedata align="center" fileref="tred_empty_query_s.pdf" format="PDF"/></imageobject></mediaobject>
     </para>
     <bridgehead>A simple query</bridgehead>
     <para>
@@ -270,7 +270,7 @@
 	<keysym>Insert</keysym> or 
 	<guibutton>
 	  <inlinemediaobject>
-	    <imageobject><imagedata fileref="pmltq_icons/add_node.png" valign="top"/></imageobject>
+	    <imageobject role="html"><imagedata fileref="pmltq_icons/add_node.png" contentdepth="10pt" format="PNG"/></imageobject>
 	    <textobject><phrase>Add node</phrase></textobject>
 	  </inlinemediaobject>
 	</guibutton>
@@ -284,7 +284,7 @@
 	  or 
 	<guibutton>
 	  <inlinemediaobject>
-	    <imageobject><imagedata fileref="pmltq_icons/test_equality.png" valign="top"/></imageobject>
+	    <imageobject role="html"><imagedata fileref="pmltq_icons/test_equality.png" contentdepth="10pt" format="PNG"/></imageobject>
 	    <textobject><phrase>Equality</phrase></textobject>
 	  </inlinemediaobject>
 	</guibutton>
@@ -296,8 +296,8 @@
 	(both the attribute name and its value can be
 	selected from a list).
       <mediaobject>
-	<imageobject><imagedata align="center" fileref="tred_new_equality_test_s.png" format="PNG"/></imageobject>
-      </mediaobject>
+	<imageobject role="html"><imagedata align="center" fileref="tred_new_equality_test_s.png" format="PNG"/></imageobject>
+      <imageobject role="fo"><imagedata align="center" fileref="tred_new_equality_test_s.pdf" format="PDF"/></imageobject></mediaobject>
 	</para>
       </listitem>
       <listitem>
@@ -305,7 +305,7 @@
 	or
 	<guibutton>
 	  <inlinemediaobject>
-	    <imageobject><imagedata fileref="icons/edit_file.png" valign="top"/></imageobject>
+	    <imageobject role="html"><imagedata fileref="icons/edit_file.png" contentdepth="10pt" format="PNG"/></imageobject>
 	    <textobject><phrase>Edit query</phrase></textobject>
 	  </inlinemediaobject>
 	</guibutton>
@@ -332,22 +332,22 @@
     </itemizedlist>
     <para>The result in TrEd will look like this:</para>
     <mediaobject>
-      <imageobject><imagedata align="center" fileref="tutorial_queries_1.png" format="PNG"/></imageobject>
-    </mediaobject>
+      <imageobject role="html"><imagedata align="center" fileref="tutorial_queries_1.png" format="PNG"/></imageobject>
+    <imageobject role="fo"><imagedata align="center" fileref="tutorial_queries_1.pdf" format="PDF"/></imageobject></mediaobject>
     <para>
       To start the search now,
       press <keysym>Space</keysym> 
 	or
 	<guibutton>
 	  <inlinemediaobject>
-	    <imageobject><imagedata fileref="pmltq_icons/search_filter.png" valign="top"/></imageobject>
+	    <imageobject role="html"><imagedata fileref="pmltq_icons/search_filter.png" contentdepth="10pt" format="PNG"/></imageobject>
 	    <textobject><phrase>Query</phrase></textobject>
 	  </inlinemediaobject>
 	</guibutton>
 	or
 	<guibutton>
 	  <inlinemediaobject>
-	    <imageobject><imagedata fileref="pmltq_icons/search.png" valign="top"/></imageobject>
+	    <imageobject role="html"><imagedata fileref="pmltq_icons/search.png" contentdepth="10pt" format="PNG"/></imageobject>
 	    <textobject><phrase>Search</phrase></textobject>
 	  </inlinemediaobject>
 	</guibutton>.
@@ -356,8 +356,8 @@
 	and pressing <literal>Display</literal> will
 	show the first result in a new view:
     <mediaobject>
-      <imageobject><imagedata align="center" fileref="tred_first_result_s.png" format="PNG"/></imageobject>
-    </mediaobject>
+      <imageobject role="html"><imagedata align="center" fileref="tred_first_result_s.png" format="PNG"/></imageobject>
+    <imageobject role="fo"><imagedata align="center" fileref="tred_first_result_s.pdf" format="PDF"/></imageobject></mediaobject>
     To see the full sentence in the text field above the trees , click
     on the result view on the right.
     Next result can be displayed
@@ -366,7 +366,7 @@
     or
     <guibutton>
       <inlinemediaobject>
-	<imageobject><imagedata fileref="pmltq_icons/search_next.png" valign="top"/></imageobject>
+	<imageobject role="html"><imagedata fileref="pmltq_icons/search_next.png" contentdepth="10pt" format="PNG"/></imageobject>
 	<textobject><phrase>Next match</phrase></textobject>
       </inlinemediaobject>
     </guibutton>.
@@ -382,7 +382,7 @@
     or
     <guibutton>
       <inlinemediaobject>
-	<imageobject><imagedata fileref="icons/configure.png" valign="top"/></imageobject>
+	<imageobject role="html"><imagedata fileref="icons/configure.png" contentdepth="10pt" format="PNG"/></imageobject>
 	<textobject><phrase>Configure</phrase></textobject>
       </inlinemediaobject>
     </guibutton>,
@@ -396,7 +396,7 @@
     or
     <guibutton>
       <inlinemediaobject>
-	<imageobject><imagedata fileref="pmltq_icons/search_previous.png" valign="top"/></imageobject>
+	<imageobject role="html"><imagedata fileref="pmltq_icons/search_previous.png" contentdepth="10pt" format="PNG"/></imageobject>
 	<textobject><phrase>Previous match</phrase></textobject>
       </inlinemediaobject>
     </guibutton> 
@@ -404,7 +404,7 @@
     and press
     <guibutton>
       <inlinemediaobject>
-	<imageobject><imagedata fileref="icons/apply.png" valign="top"/></imageobject>
+	<imageobject role="html"><imagedata fileref="icons/apply.png" contentdepth="10pt" format="PNG"/></imageobject>
 	<textobject><phrase>This match</phrase></textobject>
       </inlinemediaobject>
     </guibutton> 
@@ -416,14 +416,14 @@
     by pressing
     <keysym>PageUp</keysym>/<guibutton>
     <inlinemediaobject>
-	<imageobject><imagedata fileref="icons/1leftarrow.png" valign="top"/></imageobject>
+	<imageobject role="html"><imagedata fileref="icons/1leftarrow.png" contentdepth="10pt" format="PNG"/></imageobject>
 	<textobject><phrase>Previous Tree</phrase></textobject>
       </inlinemediaobject>
     </guibutton>
     or 
     <keysym>PageDown</keysym>/<guibutton>
       <inlinemediaobject>
-	<imageobject><imagedata fileref="icons/1rightarrow.png" valign="top"/></imageobject>
+	<imageobject role="html"><imagedata fileref="icons/1rightarrow.png" contentdepth="10pt" format="PNG"/></imageobject>
 	<textobject><phrase>Next Tree</phrase></textobject>
       </inlinemediaobject>
     </guibutton>,
@@ -445,7 +445,7 @@
       <keysym>Insert</keysym> or 
       <guibutton>
 	<inlinemediaobject>
-	  <imageobject><imagedata fileref="pmltq_icons/add_node.png" valign="top"/></imageobject>
+	  <imageobject role="html"><imagedata fileref="pmltq_icons/add_node.png" contentdepth="10pt" format="PNG"/></imageobject>
 	  <textobject><phrase>Add node</phrase></textobject>
 	</inlinemediaobject>
       </guibutton>
@@ -500,7 +500,7 @@ t-node $b := [ parent $a ];</programlisting>
       <keysym>h</keysym> or 
       <guibutton>
 	<inlinemediaobject>
-	  <imageobject><imagedata fileref="pmltq_icons/toggle_hide_subtree.png" valign="top"/></imageobject>
+	  <imageobject role="html"><imagedata fileref="pmltq_icons/toggle_hide_subtree.png" contentdepth="10pt" format="PNG"/></imageobject>
 	  <textobject><phrase>(Un)Expand</phrase></textobject>
 	</inlinemediaobject>
       </guibutton>
@@ -508,15 +508,15 @@ t-node $b := [ parent $a ];</programlisting>
       The result will look like this:
     </para>
     <mediaobject>
-      <imageobject><imagedata align="center" fileref="tutorial_queries_1.png" format="PNG"/></imageobject>
-    </mediaobject>
+      <imageobject role="html"><imagedata align="center" fileref="tutorial_queries_1.png" format="PNG"/></imageobject>
+    <imageobject role="fo"><imagedata align="center" fileref="tutorial_queries_1.pdf" format="PDF"/></imageobject></mediaobject>
       </listitem>
       <listitem>
     <para>Select the auxiliary node representing the constraint <literal>functor="DPHR"</literal> and press
       <keysym>o</keysym> or 
       <guibutton>
 	<inlinemediaobject>
-	  <imageobject><imagedata fileref="pmltq_icons/or.png" valign="top"/></imageobject>
+	  <imageobject role="html"><imagedata fileref="pmltq_icons/or.png" contentdepth="10pt" format="PNG"/></imageobject>
 	  <textobject><phrase>OR</phrase></textobject>
 	</inlinemediaobject>
       </guibutton>
@@ -527,7 +527,7 @@ t-node $b := [ parent $a ];</programlisting>
       <keysym>=</keysym> or 
       <guibutton>
 	<inlinemediaobject>
-	  <imageobject><imagedata fileref="pmltq_icons/test_equality.png" valign="top"/></imageobject>
+	  <imageobject role="html"><imagedata fileref="pmltq_icons/test_equality.png" contentdepth="10pt" format="PNG"/></imageobject>
 	  <textobject><phrase>Equality</phrase></textobject>
 	</inlinemediaobject>
       </guibutton>
@@ -539,7 +539,7 @@ t-node $b := [ parent $a ];</programlisting>
       <keysym>Ctrl+Insert</keysym> or 
       <guibutton>
 	<inlinemediaobject>
-	  <imageobject><imagedata fileref="icons/editcopy.png" valign="top"/></imageobject>
+	  <imageobject role="html"><imagedata fileref="icons/editcopy.png" contentdepth="10pt" format="PNG"/></imageobject>
 	  <textobject><phrase>Copy</phrase></textobject>
 	</inlinemediaobject>
       </guibutton>
@@ -548,7 +548,7 @@ t-node $b := [ parent $a ];</programlisting>
       and press <keysym>Shift+Insert</keysym> or 
       <guibutton>
 	<inlinemediaobject>
-	  <imageobject><imagedata fileref="icons/editpaste.png" valign="top"/></imageobject>
+	  <imageobject role="html"><imagedata fileref="icons/editpaste.png" contentdepth="10pt" format="PNG"/></imageobject>
 	  <textobject><phrase>Paste</phrase></textobject>
 	</inlinemediaobject>
       </guibutton>
@@ -560,19 +560,19 @@ t-node $b := [ parent $a ];</programlisting>
       <listitem>
 	<para>The result will look like this: 
     <mediaobject>
-      <imageobject><imagedata align="center" fileref="tutorial_queries_2b.png" format="PNG"/></imageobject>
-    </mediaobject>
+      <imageobject role="html"><imagedata align="center" fileref="tutorial_queries_2b.png" format="PNG"/></imageobject>
+    <imageobject role="fo"><imagedata align="center" fileref="tutorial_queries_2b.pdf" format="PDF"/></imageobject></mediaobject>
     Selecting the top t-node and pressing <keysym>h</keysym> or
     <guibutton>
       <inlinemediaobject>
-	<imageobject><imagedata fileref="pmltq_icons/toggle_hide_subtree.png" valign="top"/></imageobject>
+	<imageobject role="html"><imagedata fileref="pmltq_icons/toggle_hide_subtree.png" contentdepth="10pt" format="PNG"/></imageobject>
 	<textobject><phrase>(Un)Expand</phrase></textobject>
       </inlinemediaobject>
     </guibutton>
     hides the auxiliary nodes, and gives this:
     <mediaobject>
-      <imageobject><imagedata align="center" fileref="tutorial_queries_2c.png" format="PNG"/></imageobject>
-    </mediaobject>
+      <imageobject role="html"><imagedata align="center" fileref="tutorial_queries_2c.png" format="PNG"/></imageobject>
+    <imageobject role="fo"><imagedata align="center" fileref="tutorial_queries_2c.pdf" format="PDF"/></imageobject></mediaobject>
 	</para>
       </listitem>
     </orderedlist>
@@ -599,7 +599,7 @@ t-node $b := [ parent $a ];</programlisting>
       either press <keysym>~</keysym> key or the
       <guibutton>
 	<inlinemediaobject>
-	  <imageobject><imagedata fileref="pmltq_icons/test_regexp.png" valign="middle"/></imageobject>
+	  <imageobject role="html"><imagedata fileref="pmltq_icons/test_regexp.png" valign="middle" format="PNG"/></imageobject>
 	  <textobject><phrase>RegExp</phrase></textobject>
 	</inlinemediaobject>
       </guibutton> toolbar button.
@@ -690,56 +690,56 @@ t-node $b := [ parent $a ];</programlisting>
 
       ## Functions
 
-      t-node [ functor='DPHR', sons()>1 ]
+      t-node [ functor='DPHR', sons()&gt;1 ]
 
       ## Output filter
 
       t-node [ functor='DPHR' ]
-      >> count()
+      &gt;&gt; count()
 
       ## Simple output filters 
 
       t-node $n := [ functor='DPHR' ]
-      >> max(sons($n))
+      &gt;&gt; max(sons($n))
 
       t-root $n := [ ]
-      >> descendants($n)
-      >> max(), min(), avg()
+      &gt;&gt; descendants($n)
+      &gt;&gt; max(), min(), avg()
 
       ## Global aggregation with 'for' clause
 
       t-node $n := [ ]
-      >> for $n.functor
+      &gt;&gt; for $n.functor
          give $1, count()
 
       #### how many coref arrows can xstart in one t-node
       t-node $t := 
         [ coref_gram.rf t-node $c := [  ] ];
-      >>  for $t give count()
-      >> max()
+      &gt;&gt;  for $t give count()
+      &gt;&gt; max()
 
       ## Ordering results
 
       t-node $n := [ ]
-      >> for $n.functor
+      &gt;&gt; for $n.functor
          give $1, count()
          sort by $2         
       
       ## Local aggregation with 'over'
       t-node $p := 
       [ echild t-node $c := [  ] ];
-      >> $p.functor,$c.functor
-      >> distinct $1,$2, count(over $1,$2), count(over $1)
-      >> $1, $2, percnt($3 div $4,2)
+      &gt;&gt; $p.functor,$c.functor
+      &gt;&gt; distinct $1,$2, count(over $1,$2), count(over $1)
+      &gt;&gt; $1, $2, percnt($3 div $4,2)
          sort by $1,0-$3
-      >> $1, $2, $3 &amp; '%'
+      &gt;&gt; $1, $2, $3 &amp; '%'
 
 
       t-node $p := [ echild t-node $c :=  [  ] ];
-      >>  for $p.functor,$c.functor
+      &gt;&gt;  for $p.functor,$c.functor
           give $1,$2,ratio(count() over $1)
           sort by $1,0-$3
-      >> $1, $2, percnt($3,2)
+      &gt;&gt; $1, $2, percnt($3,2)
 
 
     </programlisting>
@@ -758,8 +758,8 @@ t-node $b := [ parent $a ];</programlisting>
 	    <mediaobject id="rail_query">
 	      <imageobject role="html">
 		<imagedata format="PNG" fileref="rail_query.png"/>
-	      </imageobject><imageobject>
-		<imagedata format="linespecific" fileref="rail_query.pdf"/>
+	      </imageobject><imageobject role="fo">
+		<imagedata format="PDF" fileref="rail_query.pdf"/>
 	      </imageobject>
 	      <textobject role="syntax_diagram">
 		<phrase><![CDATA[ query : (nodeSelector + ';') ( ';' (outputFilter*) )? ; ]]></phrase>
@@ -777,8 +777,8 @@ t-node $b := [ parent $a ];</programlisting>
 	    <mediaobject id="rail_nodeSelector">
 	      <imageobject role="html">
 		<imagedata format="PNG" fileref="rail_nodeSelector.png"/>
-	      </imageobject><imageobject>
-		<imagedata format="linespecific" fileref="rail_nodeSelector.pdf"/>
+	      </imageobject><imageobject role="fo">
+		<imagedata format="PDF" fileref="rail_nodeSelector.pdf"/>
 	      </imageobject>
 	      <textobject role="syntax_diagram">
 		<phrase><![CDATA[ nodeSelector : TYPE (variable ':=' )? \\ '[' constraints?  ']' ;
@@ -832,8 +832,8 @@ t-node $b := [ parent $a ];</programlisting>
 	      
 	      <imageobject role="html">
 		<imagedata format="PNG" fileref="rail_variable.png"/>
-	      </imageobject><imageobject>
-		<imagedata format="linespecific" fileref="rail_variable.pdf"/>
+	      </imageobject><imageobject role="fo">
+		<imagedata format="PDF" fileref="rail_variable.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
 		<phrase><![CDATA[ variable : DOLLAR NAME ]]></phrase>
 	      </textobject>
@@ -856,8 +856,8 @@ t-node $b := [ parent $a ];</programlisting>
 	      
 	      <imageobject role="html">
 		<imagedata format="PNG" fileref="rail_optionalSelector.png"/>
-	      </imageobject><imageobject>
-		<imagedata format="linespecific" fileref="rail_optionalSelector.pdf"/>
+	      </imageobject><imageobject role="fo">
+		<imagedata format="PDF" fileref="rail_optionalSelector.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
 		<phrase><![CDATA[ optionalSelector : '?' nodeSelector; ]]></phrase>
 	      </textobject>
@@ -888,8 +888,8 @@ t-node $b := [ parent $a ];</programlisting>
 	      <mediaobject id="rail_subquery">
 	      <imageobject role="html">
 		<imagedata format="PNG" fileref="rail_subquery.png"/>
-	      </imageobject><imageobject>
-		<imagedata format="linespecific" fileref="rail_subquery.pdf"/>
+	      </imageobject><imageobject role="fo">
+		<imagedata format="PDF" fileref="rail_subquery.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
 		<phrase><![CDATA[ subquery : occurrences 'x' RELATION? nodeSelector;
 occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
@@ -920,8 +920,8 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      
 	      <imageobject role="html">
 		<imagedata format="PNG" fileref="rail_constraints.png"/>
-	      </imageobject><imageobject>
-		<imagedata format="linespecific" fileref="rail_constraints.pdf"/>
+	      </imageobject><imageobject role="fo">
+		<imagedata format="PDF" fileref="rail_constraints.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
 		<phrase><![CDATA[ constraints : constraint + ',';]]></phrase>
 	      </textobject>
@@ -936,8 +936,8 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    <listitem><mediaobject id="rail_constraint">
 	      <imageobject role="html">
 		<imagedata format="PNG" fileref="rail_constraint.png"/>
-	      </imageobject><imageobject>
-		<imagedata format="linespecific" fileref="rail_constraint.pdf"/>
+	      </imageobject><imageobject role="fo">
+		<imagedata format="PDF" fileref="rail_constraint.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
 		<phrase><![CDATA[ constraint : ((predicate | RELATION? nodeSelector | RELATION variable | subquery |  '(' constraint ')' | '!' constraint ) + ('and' | 'or' )) ;
  ]]></phrase>
@@ -977,12 +977,12 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      
 	      <imageobject role="html">
 		<imagedata format="PNG" fileref="rail_predicate.png"/>
-	      </imageobject><imageobject>
-		<imagedata format="linespecific" fileref="rail_predicate.pdf"/>
+	      </imageobject><imageobject role="fo">
+		<imagedata format="PDF" fileref="rail_predicate.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
 		<phrase><![CDATA[ predicate : binaryComparison | setPredicate;
-		binaryComparison : expression ( ('!'? ('=' | '~' | '~*' )) | '<' | '>' | '<=' | '>=') expression  ;
-		setPredicate : (expression '!'? 'in' '{' (expression +',') '}') ; ]]></phrase>
+		binaryComparison : expression ( ('!'? ('=' | 'TILDA' | 'TILDASTAR' )) | '<' | '>' | '<=' | '>=') expression  ;
+		setPredicate : (expression '!'? 'in' 'LEFTBRACE' (expression +',') 'RIGHTBRACE') ; ]]></phrase>
 	      </textobject>
 	    </mediaobject>
 	      <para>
@@ -1026,8 +1026,8 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      
 	      <imageobject role="html">
 		<imagedata format="PNG" fileref="rail_expression.png"/>
-	      </imageobject><imageobject>
-		<imagedata format="linespecific" fileref="rail_expression.pdf"/>
+	      </imageobject><imageobject role="fo">
+		<imagedata format="PDF" fileref="rail_expression.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
 		<phrase><![CDATA[ expression : (literal | attributePath | function | '(' expression ')') + ('+' | '-' | '*' | 'div' | 'mod' | AMP)  ; ]]></phrase>
 	      </textobject>
@@ -1056,8 +1056,8 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    <listitem><mediaobject id="rail_literal">
 	      <imageobject role="html">
 		<imagedata format="PNG" fileref="rail_literal.png"/>
-	      </imageobject><imageobject>
-		<imagedata format="linespecific" fileref="rail_literal.pdf"/>
+	      </imageobject><imageobject role="fo">
+		<imagedata format="PDF" fileref="rail_literal.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
 		<phrase><![CDATA[ literal : NUMBER | '"' STRING '"' | "'" STRING "'" ; ]]></phrase>
 	      </textobject>
@@ -1090,12 +1090,12 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      
 	      <imageobject role="html">
 		<imagedata format="PNG" fileref="rail_attributePath.png"/>
-	      </imageobject><imageobject>
-		<imagedata format="linespecific" fileref="rail_attributePath.pdf"/>
+	      </imageobject><imageobject role="fo">
+		<imagedata format="PDF" fileref="rail_attributePath.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
-		<phrase><![CDATA[ attributePath : '*'? (variable '.' )? (XMLNAME | index | element_index ) + '/' ;
+		<phrase><![CDATA[ attributePath : '*'? (variable '.' )? (XMLNAME | '[]' | index | elementIndex ) + '/' ;
  index : '[' NUMBER ']';
- element_index : XMLNAME index | index XMLNAME; ]]></phrase>
+ elementIndex : XMLNAME index | index XMLNAME; ]]></phrase>
 	      </textobject>
 	    </mediaobject>
 	    <para>
@@ -1128,6 +1128,12 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 		  <term>name</term>
 		  <listitem>
 		    <para>specifying a member in a structure or any element of the given name in a sequence</para>
+		  </listitem>
+		</varlistentry>
+		<varlistentry>
+		  <term>the string '[]'</term>
+		  <listitem>
+		    <para>used for obtaining the content of a container</para>
 		  </listitem>
 		</varlistentry>
 		<varlistentry>
@@ -1218,8 +1224,8 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    <listitem><mediaobject id="rail_function">
 	      <imageobject role="html">
 		<imagedata format="PNG" fileref="rail_function.png"/>
-	      </imageobject><imageobject>
-		<imagedata format="linespecific" fileref="rail_function.pdf"/>
+	      </imageobject><imageobject role="fo">
+		<imagedata format="PDF" fileref="rail_function.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
 		<phrase><![CDATA[ function : FUNC '(' (expression + ',' ) ')' ; ]]></phrase>
 	      </textobject>
@@ -1239,8 +1245,8 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      
 	      <imageobject role="html">
 		<imagedata format="PNG" fileref="rail_outputFilter.png"/>
-	      </imageobject><imageobject>
-		<imagedata format="linespecific" fileref="rail_outputFilter.pdf"/>
+	      </imageobject><imageobject role="fo">
+		<imagedata format="PDF" fileref="rail_outputFilter.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
 	      <phrase><![CDATA[ outputFilter : '>>' 
 	                                     ('for' (columnExp + ','))? \\
@@ -1261,8 +1267,8 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      expressions that are used to compute values of the output columns from
 	      the output of the body of the query or preceding filters.
 	      For example:
-	      <programlisting>>> $x.m/tag, depth($y)
->> 'found ' &amp; $1 &amp; ' at depth ' &amp; $2</programlisting>
+	      <programlisting>&gt;&gt; $x.m/tag, depth($y)
+&gt;&gt; 'found ' &amp; $1 &amp; ' at depth ' &amp; $2</programlisting>
 	      defines two output filters: the first returns
 	      a table whose rows correspond directly to
 	      the matches of the query body. Its first column
@@ -1284,7 +1290,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      (using an <literal>over</literal> clause)
 	      range over the whole input table.
 	      For example,
-	      <programlisting>>>min($1), max($1), avg($1)</programlisting>
+	      <programlisting>&gt;&gt;min($1), max($1), avg($1)</programlisting>
 	      is an output filter
 	      that computes the minimum, maximum and
 	      average form the values in the first column 
@@ -1324,7 +1330,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      aggregated by this particular vector.
 	      For example:
 	      <programlisting>a-node $n:= [ child a-node $b [] ];
->> for $m.afun, $b.afun
+&gt;&gt; for $m.afun, $b.afun
    give $1, $2, count()
    sort by $3</programlisting>
 	      is a query whose body
@@ -1355,9 +1361,9 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      
 	      
 	      <imageobject role="html">
-		<imagedata format="PNG" fileref="rail_columnExp.png"/>
-	      </imageobject><imageobject>
-		<imagedata format="linespecific" fileref="rail_columnExp.pdf"/>
+		<imagedata role="html" format="PNG" fileref="rail_columnExp.png"/>
+	      </imageobject><imageobject role="fo">
+		<imagedata width="100%" format="PDF" fileref="rail_columnExp.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
 	      <phrase><![CDATA[ columnExp : ((literal 
                                              | attributePath
@@ -1697,19 +1703,277 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
       <section id="attribute_paths">
 	<title>Attribute paths</title>
 	<para>
-	  
+	  Nodes in PML are usually 
+	  attribute-value structures with values that can be
+	  both of atomic PML data types (integers, strings, etc.) or
+	  complex PML data types (structures, lists, alternatives,
+	  sequences, containers). This means that to get to an atomic value
+	  stored in a node we sometimes have to travel through several nested
+	  complex data structures, starting from the top-level structure 
+	  which is the node itself to an atomic value nested somewhere within it.
+	  PML-TQ uses attribute paths to
+	  describe individual steps of such a travel.
+	  In this section we define how attribute paths are evaluated.
+	</para>
+	<para>
+	  An attribute path consists of a sequence of /-separated
+	  steps (optionally preceded by a primitive quantifier the
+	  semantics of which is described later in <xref linkend="quantifiers"/>).
+	  Each step is either a name or the string <literal>[]</literal> or
+	  an index or an element index.
+	  Let <replaceable>P</replaceable> be an attribute path 
+	  consisting of steps 
+	  <replaceable>S<subscript>1</subscript>,…,S<subscript>m</subscript></replaceable> (m&gt;0).
+	  The result of evaluation of an attribute path <replaceable>P</replaceable>
+	  on a node <replaceable>N</replaceable>
+	  is a set <replaceable>V<subscript>N,p</subscript></replaceable> of atomic values
+	  (integers, floats, or character strings).
+	  The evaluation proceeds by evaluating the steps
+	  from 1 to <replaceable>m</replaceable>; the evaluation
+	  of the step <replaceable>S<subscript>n</subscript></replaceable> (<replaceable>1≤n≤m</replaceable>)
+	  takes as input a set of values <replaceable>V<subscript>n</subscript></replaceable>
+	  and results in a set of values <replaceable>V<subscript>n+1</subscript></replaceable>.
+	  For each <replaceable>n</replaceable> (<replaceable>1≤n≤m+1</replaceable>), all
+	  values in <replaceable>V<subscript>n</subscript></replaceable>
+	  are of the same data type
+	  (which is complex for <replaceable>n≤m</replaceable> and atomic for <replaceable>n=m+1</replaceable>).
+	</para>
+	<para>
+	  The evaluation is initialized with a set
+	  <replaceable>V<subscript>1</subscript>={N}</replaceable>
+	  whose only element is
+	  the node <replaceable>N</replaceable>, which
+	  is either a structure or a container.
+	  The result of the evaluation 
+	  if the set <replaceable>V<subscript>N,p</subscript>=V<subscript>m+1</subscript></replaceable>.
+	</para>
+	<para>
+	  Let <replaceable>V<subscript>n</subscript></replaceable>
+	  be given.
+	  We now describe 
+	  the evaluation based on the syntactic type of the <replaceable>n</replaceable>-th step
+	  <replaceable>S<subscript>n</subscript></replaceable>
+	  and the data type of values in <replaceable>V<subscript>n</subscript></replaceable>.
+	  Let <replaceable>t<subscript>n</subscript></replaceable>
+	  denote the type of the values in <replaceable>V<subscript>n</subscript></replaceable>.
+	  <itemizedlist>
+	    <listitem><para>
+	      If <replaceable>t<subscript>n</subscript></replaceable> is an atomic type (and there is an <replaceable>n</replaceable>-th step),
+	      the query compiler reports and error and fails.</para>
+	    </listitem>
+	    <listitem><para>
+	      If <replaceable>t<subscript>n</subscript></replaceable> is a structure or container type and
+	      <replaceable>S<subscript>n</subscript></replaceable> is a name of a valid
+	      member for the type
+	      (i.e. one declared for it in the corresponding PML schema)
+	      then 
+	      <replaceable>V<subscript>n+1</subscript></replaceable>
+	      contains the value of the member
+	      computed from every element of <replaceable>V<subscript>n</subscript></replaceable>
+	      provided the value is non-null; i.e.
+	      <informalequation id="eq-a1">
+		<alt role="tex">V_{n+1}=\{v.S\,;\,v\in V_n\,\&amp;\,\neg\hbox{\sf is-null}(v.S)\}</alt>
+		<mediaobject>
+		  <imageobject role="html"><imagedata fileref="quantifiers_a1.png" format="PNG" align="center"/></imageobject>
+		  <imageobject role="fo"><imagedata fileref="quantifiers_a1.pdf" format="PDF" align="center"/></imageobject>
+		</mediaobject>
+	      </informalequation>
+	      If the step <replaceable>S<subscript>n</subscript></replaceable> is '<replaceable>[]</replaceable>'
+	      and  <replaceable>t<subscript>n</subscript></replaceable> is a container type 
+	      with non-void content (i.e. the container has some content type
+	      declared in the PML schema),  <replaceable>V<subscript>n+1</subscript></replaceable>
+	      consists of the content value of each element of <replaceable>V<subscript>n</subscript></replaceable>, i.e.
+	      <informalequation id="eq-a2">
+		<alt role="tex">V_{n+1}=\{c\,;\,c=\hbox{\sf content-of}(v)\,\&amp;\,v\in V_n\,\&amp;\,\neg\hbox{\sf is-null}(c)\}</alt>
+	        <mediaobject>
+		  <imageobject role="html"><imagedata fileref="quantifiers_a2.png" format="PNG" align="center"/></imageobject>
+		  <imageobject role="fo"><imagedata fileref="quantifiers_a2.pdf" format="PDF" align="center"/></imageobject>
+		</mediaobject>
+	      </informalequation>
+	      If <replaceable>S<subscript>n</subscript></replaceable> is anything else, the query compiler reports and error and fails.
+	    </para></listitem>
+	    <listitem>
+	    <para>
+	      If <replaceable>t<subscript>n</subscript></replaceable> is an ordered list
+	      and <replaceable>S<subscript>n</subscript></replaceable> is an index
+	      of the form <literal>[k]</literal>, where <replaceable>k</replaceable>
+	      is a non-negative integer number, then
+	      <replaceable>V<subscript>n+1</subscript></replaceable> consists
+	      of the <replaceable>(k+1)</replaceable>-th value (<literal>v[k]</literal>)
+	      of each list in <replaceable>V<subscript>n</subscript></replaceable>
+	      whose length is at least <replaceable>k+1</replaceable>, i.e.
+	      <informalequation id="eq-a3">
+		<alt role="tex">V_{n+1}=\{v[k]\,;\,v\in V_n\,\&amp;\,\hbox{\sf length}(v)&gt;k\,\&amp;\,v[k\neg\hbox{\sf is-null}(])\}</alt>
+	        <mediaobject>
+		  <imageobject role="html"><imagedata fileref="quantifiers_a3.png" format="PNG" align="center"/></imageobject>
+		  <imageobject role="fo"><imagedata fileref="quantifiers_a3.pdf" format="PDF" align="center"/></imageobject>
+		</mediaobject>
+	      </informalequation>
+	    </para></listitem>
+	    <listitem>
+	    <para>
+	      If <replaceable>t<subscript>n</subscript></replaceable> is a list or an alternative,
+	      and <replaceable>S<subscript>n</subscript></replaceable> is any step
+	      except for the case covered above (where 
+	      <replaceable>t<subscript>n</subscript></replaceable> was an ordered list  
+	      and <replaceable>S<subscript>n</subscript></replaceable> is an index), then
+	      <replaceable>V<subscript>n+1</subscript></replaceable> consists
+	      of all non-null values that occur in some list or alternative
+	      from  <replaceable>V<subscript>n</subscript></replaceable>, i.e.
+	      <informalequation id="eq-a3">
+		<alt role="tex">V_{n+1}=\{w\,;\,(\exists v\in V_n)(\exists k&lt;\hbox{\sf length}(v))(w=v[k]\,\&amp;\,\neg\hbox{\sf is-null}(w))\}</alt>
+	        <mediaobject>
+		  <imageobject role="html"><imagedata fileref="quantifiers_a3.png" format="PNG" align="center"/></imageobject>
+		  <imageobject role="fo"><imagedata fileref="quantifiers_a3.pdf" format="PDF" align="center"/></imageobject>
+		</mediaobject>
+	      </informalequation>
+	    </para>
+	    </listitem>
+	    <listitem>
+	    <para>
+	      If <replaceable>t<subscript>n</subscript></replaceable> is a sequence type
+	      and <replaceable>S<subscript>n</subscript></replaceable> is an element name <replaceable>E</replaceable> valid
+	      for the sequence type <replaceable>t<subscript>n</subscript></replaceable>,
+	      then 
+	      <replaceable>V<subscript>n+1</subscript></replaceable> consists
+	      of all non-null values of elements with a given
+	      name occurring in some sequence from 
+	      <replaceable>V<subscript>n</subscript></replaceable>, i.e.
+	      <informalequation id="eq-a4">
+		<alt role="tex">V_{n+1}=\{w\,;\,(\exists v\in V_n)(\exists k&lt;\hbox{\sf length}(v))(\hbox{\sf name-of}(v[k])=E\,\&amp;\,w=\hbox{\sf value-of}(v[k])\,\&amp;\,\neg\hbox{\sf is-null}(w))\}</alt>
+	        <mediaobject>
+		  <imageobject role="html"><imagedata fileref="quantifiers_a4.png" format="PNG" align="center"/></imageobject>
+		  <imageobject role="fo"><imagedata fileref="quantifiers_a4.pdf" format="PDF" align="center"/></imageobject>
+		</mediaobject>
+	      </informalequation>
+	    </para>
+	    <para>
+	      If <replaceable>S<subscript>n</subscript></replaceable> is of the form
+	      <literal>E[k]</literal>, where
+	      <replaceable>E</replaceable> is a valid element name for 
+	      <replaceable>t<subscript>n</subscript></replaceable> and <replaceable>k</replaceable>
+	      is a non-negative integer number,
+	      then for each sequence in <replaceable>V<subscript>n</subscript></replaceable> 
+	      the <replaceable>(k+1)</replaceable>-st occurrence of element named <replaceable>E</replaceable>
+	      (if exists) is taken and the element's value, if non-null,
+	      is added to <replaceable>V<subscript>n+1</subscript></replaceable>. Formally,
+	      <informalequation id="eq-a5">
+		<?dbtex delims='no'?>
+		<alt role="tex">
+		  \begin{equation*}
+		  \begin{split}
+		  V_{n+1}=\{w\,;\,(\exists v\in V_n)(\exists k&lt;\hbox{\sf length}(v))(
+		  &amp;\#\{l&lt;k \,;\, \hbox{\sf name-of}(v[l])=E \}=k\\
+		  &amp;\,\&amp;\,\hbox{\sf name-of}(v[k])=E\\
+		  &amp;\,\&amp;\,\hbox{\sf value-of}(v[k])=w \,\&amp;\,\neg\hbox{\sf is-null}(w))\}
+		  \end{split}
+		\end{equation*}
+		</alt>
+
+	        <mediaobject>
+		  <imageobject role="html"><imagedata fileref="quantifiers_a5.png" format="PNG" align="center"/></imageobject>
+		  <imageobject role="fo"><imagedata fileref="quantifiers_a5.pdf" format="PDF" align="center"/></imageobject>
+		</mediaobject>
+	      </informalequation>
+	    </para>
+	    <para>
+	      If <replaceable>S<subscript>n</subscript></replaceable> is of the form
+	      <literal>[k]E</literal>, where
+	      <replaceable>E</replaceable> is a valid element name for 
+	      <replaceable>t<subscript>n</subscript></replaceable> and <replaceable>k</replaceable>
+	      is a non-negative integer number,
+	      then for each sequence in <replaceable>V<subscript>n</subscript></replaceable> 
+	      of length at least <replaceable>k+1</replaceable> the
+	      <replaceable>(k+1)</replaceable>-st element is taken
+	      and if its name is <replaceable>E</replaceable> and its  value is non-null,
+	      the value is added to <replaceable>V<subscript>n+1</subscript></replaceable>. Formally,
+	      <informalequation id="eq-a6">
+		<?dbtex delims='no'?>
+		<alt role="tex">
+		  \begin{equation*}
+		  \begin{split}
+		  V_{n+1}=\{w\,;\,(\exists v\in V_n)(&amp;\hbox{\sf length}(v)&gt;k\,\&amp;\, \hbox{\sf name-of}(v[k])=E\\
+		  &amp;\,\&amp;\,w=\hbox{\sf value-of}(v[k])\,\&amp;\,\neg\hbox{\sf is-null}(w))\}
+		  \end{split}
+		\end{equation*}</alt>
+	        <mediaobject>
+		  <imageobject role="html"><imagedata fileref="quantifiers_a6.png" format="PNG" align="center"/></imageobject>
+		  <imageobject role="fo"><imagedata fileref="quantifiers_a6.pdf" format="PDF" align="center"/></imageobject>
+		</mediaobject>
+	      </informalequation>
+	    </para>
+	    </listitem>
+	  </itemizedlist>
 	</para>
       </section>
       <section id="quantifiers">
 	<title>Primitive quantifiers</title>
 	<para>
-	  An attribute path in PML-TQ can match one or more values on a given node, depending
-	  on the data types of the values obtained by evaluating individual steps of the attribute path.
-	  In this section we describe how the truth value of a predicate containing expressions
-	  in which such attribute paths occur is evaluated.
+	  As described above, evaluation of an attribute path 
+	  on some node may result in a set of values
+	  (usually empty or containing one element, but if
+	  lists, alternatives or sequences are on the path, the
+	  set can be of arbitrary finite cardinality).
+	  In this section we define how the truth value of a predicate involving
+	  attribute paths is evaluated.
+	  We start with the formal definition and then demonstrate it on a few examples. 
 	</para>
+	<formalpara>
+	  <title>Definition</title>
 	<para>
-	  We start with a few examples. Let <replaceable>R</replaceable> be
+	  Let <replaceable>R</replaceable> be a predicate
+	  and let <replaceable>p<subscript>1</subscript>,…,p<subscript>n</subscript></replaceable>
+	  be an enumeration of all occurrences of attribute paths in expressions (terms)
+	  contained in <replaceable>R</replaceable> in the order of occurrence
+	  and let <replaceable>N<subscript>1</subscript>,…,N<subscript>n</subscript></replaceable>
+	  be the nodes to which the attribute paths relate.
+	  Let for <replaceable>i</replaceable> (<replaceable>1≤<replaceable>i</replaceable>≤n</replaceable>),  <replaceable>Q<subscript><replaceable>i</replaceable></subscript></replaceable>
+	  denote the universal quantifier
+	  <inlineequation>
+	  <inlinemediaobject>
+	    <imageobject role="html"><imagedata fileref="quantifier_for_all.png" format="PNG"/></imageobject>
+	    <textobject role="tex"><phrase>\forall</phrase></textobject>
+	    <textobject><phrase>∀</phrase></textobject>
+	  </inlinemediaobject>
+	  </inlineequation>
+	  if <replaceable>p<subscript><replaceable>i</replaceable></subscript></replaceable>
+	  starts with a '<replaceable>*</replaceable>'
+	  and 
+	  <inlineequation>
+	  <inlinemediaobject>
+	    <imageobject role="html"><imagedata fileref="quantifier_exists.png" format="PNG"/></imageobject>
+	    <textobject role="tex"><phrase>\exists</phrase></textobject>
+	    <textobject><phrase>∃</phrase></textobject>
+	  </inlinemediaobject>
+	  </inlineequation>
+	  otherwise.
+	  Let <replaceable>V<subscript>i</subscript></replaceable>
+	  deonte the set 
+	  <replaceable>V<subscript>N<subscript>i</subscript>,p<subscript>i</subscript></subscript></replaceable>
+	  of atomic values obtained by evaluating the attribute paths
+	  <replaceable>p<subscript>i</subscript></replaceable>
+	  on the node <replaceable>N<subscript>i</subscript></replaceable>.
+	  Then the truth value of the predicate <replaceable>R</replaceable> for this assignment
+	is that of the formula
+	<inlineequation id="eq-r1">
+	  <alt role="tex">(Q_1 x_1 \in V_1)\ldots(Q_n x_n \in V_n)R'</alt>
+	  <inlinemediaobject>
+	    <imageobject role="html"><imagedata fileref="quantifiers_r1.png" format="PNG"/></imageobject>
+	    <imageobject role="fo"><imagedata fileref="quantifiers_r1.pdf" format="PDF"/></imageobject>
+	  </inlinemediaobject>
+	</inlineequation>
+	where <replaceable>R'</replaceable> is an atomic formula
+	obtained from <replaceable>R</replaceable>
+	by replacing the attribute paths
+	<replaceable>p<subscript>1</subscript>,…,p<subscript>n</subscript></replaceable>
+	by variables
+	<replaceable>x<subscript>1</subscript>,…,x<subscript>n</subscript></replaceable>.
+	(Note that each of the variables has exactly one occurrence in <replaceable>R'</replaceable>.)
+	</para>
+	</formalpara>
+	<para>
+	  Now let us demonstrate the definition on some examples.
+	  Let <replaceable>R</replaceable> be
 	  the predicate 
 	  <programlisting>*a != b/c + *$n.d/e/f</programlisting>
 	  in the query
@@ -1720,8 +1984,8 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	  <literal>d/e/f</literal>
 	  are valid attribute paths for
 	  nodes of this type.
-	  Let <literal>N</literal> and
-	  <literal>M</literal> be 
+	  Let <replaceable>N</replaceable> and
+	  <replaceable>M</replaceable> be 
 	  nodes from the searched data
 	  assigned to the selectors <literal>$n</literal>
 	  and <literal>$m</literal>.
@@ -1729,29 +1993,31 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	<para>
 	  Let's assume
 	  that the attribute <literal>a</literal> is a list of numbers
-	  and that <literal>V<subscript>N,a</subscript></literal>
+	  and that <replaceable>V<subscript>N,a</subscript></replaceable>
 	  is the set of all values of the attribute
-	  <literal>a</literal> for the node <literal>N</literal>.
+	  <replaceable>a</replaceable> for the node <replaceable>N</replaceable>.
 	  Similary, let 
-	  <literal>V<subscript>M,b/c</subscript></literal>
+	  <replaceable>V<subscript>M,b/c</subscript></replaceable>
 	  be the set of all values of the attribute path
-	  <literal>b/c</literal> evaluated on the node <literal>M</literal>
+	  <replaceable>b/c</replaceable> evaluated on the node <replaceable>M</replaceable>
 	  and
-	  <literal>V<subscript>N,d/e/f</subscript></literal>
+	  <replaceable>V<subscript>N,d/e/f</subscript></replaceable>
 	  the set of all values of the attribute path
-	  <literal>d/e/f</literal> evaluated on the node <literal>N</literal>.
+	  <literal>d/e/f</literal> evaluated on the node <replaceable>N</replaceable>.
 	</para>
-	<para>The truth value of the predicate <literal>R</literal>
+	<para>The truth value of the predicate <replaceable>R</replaceable>
 	is obtained by evaluating the following formula:
 	<informalequation id="eq-1">
 	  <alt role="tex">
 	    \hbox{\sf(1)}\qquad\qquad (\forall x \in V_{N,a})(\exists y \in V_{M,b/c})(\forall z \in V_{N,d/e/f}) x\neq y + z
 	  </alt>
 	  <mediaobject>
-	    <imageobject>
-	      <imagedata fileref="quantifiers_f1.png"/>
+	    <imageobject role="html">
+	      <imagedata align="center" fileref="quantifiers_f1.png" format="PNG"/>
 	    </imageobject>
-	</mediaobject></informalequation>
+	<imageobject role="fo">
+	      <imagedata align="center" fileref="quantifiers_f1.pdf" format="PDF"/>
+	    </imageobject></mediaobject></informalequation>
 	Thus, the query matches the nodes A, B if and only if
 	B is a child of A and the above formula holds.
 	Note that since the attribute paths
@@ -1760,17 +2026,17 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	<literal>*$a.d/e/f</literal>
 	start with the character '<literal>*</literal>'
 	(called a primitive universal quantifier)
-	the corresponding variables <literal>x,z</literal>
+	the corresponding variables <replaceable>x,z</replaceable>
 	in the formula <link linkend="eq-1">(1)</link>
 	are universally quantified,
 	whereas 
-	<literal>y</literal>,
+	<replaceable>y</replaceable>,
 	corresponding to <literal>b/c</literal>
 	is quantified existentially.
 	Note also, that the order of the quantifiers 
 	in the formula  <link linkend="eq-1">(1)</link>
 	preserves the order of the occurrence of 
-	the corresponding attribute paths in <literal>R</literal>.
+	the corresponding attribute paths in <replaceable>R</replaceable>.
 	</para>
 	<para>
 	  If we had instead written 
@@ -1782,77 +2048,99 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    \hbox{\sf(2)}\qquad\qquad \neg(\forall x \in V_{N,a})(\exists y \in V_{M,b/c})(\forall z \in V_{N,d/e/f}) x= y + z
 	  </alt>
 	  <mediaobject>
-	    <imageobject>
-	      <imagedata fileref="quantifiers_f2.png"/>
+	    <imageobject role="html">
+	      <imagedata fileref="quantifiers_f2.png" format="PNG" align="center"/>
 	    </imageobject>
-	</mediaobject></informalequation>
+	<imageobject role="fo">
+	      <imagedata fileref="quantifiers_f2.pdf" format="PDF" align="center"/>
+	    </imageobject></mediaobject></informalequation>
 	and equivalent to 
 	<informalequation id="eq-3">
 	  <alt role="tex">
 	    \hbox{\sf(3)}\qquad\qquad(\exists x \in V_{N,a})(\forall y \in V_{M,b/c})(\exists z \in V_{N,d/e/f}) x\neq y + z
 	  </alt>
 	  <mediaobject>
-	    <imageobject>
-	      <imagedata fileref="quantifiers_f3.png"/>
+	    <imageobject role="html">
+	      <imagedata fileref="quantifiers_f3.png" format="PNG" align="center"/>
 	    </imageobject>
-	</mediaobject></informalequation>
+	<imageobject role="fo">
+	      <imagedata fileref="quantifiers_f3.pdf" format="PDF" align="center"/>
+	    </imageobject></mediaobject></informalequation>
 	</para>
 	<para>
 	  Let us give some more practical examples. 
 	  Assume nodes of the type <literal>p-node</literal> have an attribute
 	  <literal>functions</literal> that is an unordered list or an alternative of string values.
 	  Let us consider the following constraints and the translations to formulae
-	  (assuming <literal>V<subscript>N</subscript></literal> is the set of values of the <literal>functions</literal> 
-	  for a given p-node <literal>N</literal>):
+	  (assuming <replaceable>V<subscript>N</subscript></replaceable> is the set of values of the <literal>functions</literal> 
+	  for a given p-node <replaceable>N</replaceable>):
 	</para>
 	<orderedlist>
 	  <listitem>
 	  <para><literal>functions = functions</literal> asserts that
-	  the list <literal>functions</literal>  on <literal>N</literal>  is non-empty, since
+	  the list <literal>functions</literal>  on <replaceable>N</replaceable>  is non-empty, since
 	  the constraint translates to the formula
 	<inlineequation id="eq-5">
 	  <alt role="tex">
 	    \qquad\qquad (\exists x \in V_N)(\exists y \in V_N)x=y
 	  </alt>
-	  <graphic fileref="quantifiers_f5.png"/></inlineequation>
+	  <inlinemediaobject>
+	    <imageobject role="html"><imagedata fileref="quantifiers_f5.png" format="PNG"/></imageobject>
+	    <imageobject role="fo"><imagedata fileref="quantifiers_f5.pdf" format="PDF"/></imageobject>
+	  </inlinemediaobject>
+	</inlineequation>
 	which is equvalent to 
 	<inlineequation>
 	  <alt role="tex">(\exists x \in V_N)x=x</alt>
-	  <graphic fileref="quantifiers_f5_1.png"/>
+	  <inlinemediaobject>
+	    <imageobject role="html"><imagedata fileref="quantifiers_f5_1.png" format="PNG"/></imageobject>
+	    <imageobject role="fo"><imagedata fileref="quantifiers_f5_1.pdf" format="PDF"/></imageobject>
+	  </inlinemediaobject>
 	</inlineequation>
 	and to
 	<inlineequation>
 	  <alt role="tex">V_N\neq\emptyset</alt>
-	  <graphic fileref="quantifiers_f5_2.png"/>
+	  <inlinemediaobject>
+	    <imageobject role="html"><imagedata fileref="quantifiers_f5_2.png" format="PNG"/></imageobject>
+	    <imageobject role="fo"><imagedata fileref="quantifiers_f5_2.pdf" format="PDF"/></imageobject>
+	  </inlinemediaobject>
 	</inlineequation>.
 	  </para>
 	  </listitem>
 	  <listitem>
 	  <para><literal>functions != functions</literal> asserts that
-	  the list <literal>functions</literal>  on <literal>N</literal>  contains
+	  the list <literal>functions</literal>  on <replaceable>N</replaceable>  contains
 	  (at least) two distinct strings, since
 	  it translates to 
 	<inlineequation id="eq-6">
 	  <alt role="tex">
 	    \qquad\qquad (\exists x \in V_N)(\exists y \in V_N)x\neq y
 	  </alt>
-	  <graphic fileref="quantifiers_f6.png"/></inlineequation>.
+	  <inlinemediaobject>
+	    <imageobject role="html"><imagedata fileref="quantifiers_f6.png" format="PNG"/></imageobject>
+	    <imageobject role="fo"><imagedata fileref="quantifiers_f6.pdf" format="PDF"/></imageobject>
+	  </inlinemediaobject>
+	</inlineequation>
 	  </para>
 	  </listitem>
 	  <listitem>
 	  <para><literal>!functions = functions</literal> means that 
-	  the list <literal>functions</literal>  on <literal>N</literal>  is empty, since
+	  the list <literal>functions</literal>  on <replaceable>N</replaceable>  is empty, since
 	  it is a negation of <literal>functions=functions</literal> .</para>
 </listitem>
 	  <listitem>
-	  <para><literal>*functions = *functions</literal> asserts that the list <literal>functions</literal>  on <literal>N</literal>  contains
+	  <para><literal>*functions = *functions</literal> asserts that the list <literal>functions</literal>  on <replaceable>N</replaceable>  contains
 	  at most one unique value because it translates to
 	<inlineequation id="eq-7">
 	  <alt role="tex">
 	    \qquad\qquad (\forall x \in V_N)(\forall y \in V_N)x= y
 	  </alt>
-	  <graphic fileref="quantifiers_f7.png"/></inlineequation>,
-	which is satisfied if the set <literal>V<subscript>N</subscript></literal> 
+	  <inlinemediaobject>
+	    <imageobject role="html"><imagedata fileref="quantifiers_f7.png" format="PNG"/></imageobject>
+	    <imageobject role="fo"><imagedata fileref="quantifiers_f7.pdf" format="PDF"/></imageobject>
+	  </inlinemediaobject>
+</inlineequation>,
+	which is satisfied if the set <replaceable>V<subscript>N</subscript></replaceable> 
 	is either empty or contains exactly one element.
 	  </para>
 	  </listitem>
@@ -1862,7 +2150,11 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	  <alt role="tex">
 	    \qquad\qquad (\forall x \in V_N)(\exists y \in V_N)x= y
 	  </alt>
-	  <graphic fileref="quantifiers_f8.png"/></inlineequation>.
+	  <inlinemediaobject>
+	    <imageobject role="html"><imagedata fileref="quantifiers_f8.png" format="PNG"/></imageobject>
+	    <imageobject role="fo"><imagedata fileref="quantifiers_f8.pdf" format="PDF"/></imageobject>
+	  </inlinemediaobject>
+</inlineequation>.
 	  </para>
 	  </listitem>
 	  <listitem>
@@ -1873,7 +2165,11 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	  <alt role="tex">
 	    \qquad\qquad (\exists x \in V_N)(\forall y \in V_N)x=y
 	  </alt>
-	  <graphic fileref="quantifiers_f9.png"/></inlineequation>.
+	  <inlinemediaobject>
+	    <imageobject role="html"><imagedata fileref="quantifiers_f9.png" format="PNG"/></imageobject>
+	    <imageobject role="fo"><imagedata fileref="quantifiers_f9.pdf" format="PDF"/></imageobject>
+	  </inlinemediaobject>
+</inlineequation>.
 	  </para>
 	  </listitem>
 	  <listitem>
@@ -1885,7 +2181,11 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	  <alt role="tex">
 	    \qquad\qquad (\forall x \in V_N)(\exists y \in V_N)x\neq y
 	  </alt>
-	  <graphic fileref="quantifiers_f10.png"/></inlineequation>.
+	  <inlinemediaobject>
+	    <imageobject role="fo"><imagedata fileref="quantifiers_f10.pdf" format="PDF"/></imageobject>
+	    <imageobject role="fo"><imagedata fileref="quantifiers_f10.pdf" format="PDF"/></imageobject>
+	  </inlinemediaobject>
+</inlineequation>.
 	  </para>
 	  </listitem>
 	  <listitem>
@@ -1894,61 +2194,16 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	  <alt role="tex">
 	    \qquad\qquad (\exists x \in V_N)(\forall y \in V_N)x\neq y
 	  </alt>
-	  <graphic fileref="quantifiers_f11.png"/></inlineequation>
+	  <inlinemediaobject>
+	    <imageobject role="html"><imagedata fileref="quantifiers_f11.png" format="PNG"/></imageobject>
+	    <imageobject role="fo"><imagedata fileref="quantifiers_f11.pdf" format="PDF"/></imageobject>
+	  </inlinemediaobject>
+</inlineequation>
 	which is never satisfied
 	(since x=x).
 	  </para>
 	  </listitem>
 	</orderedlist>
-	<para>
-	  Now generally, let <literal>R</literal> be a predicate
-	  and let <literal>p<subscript>1</subscript>,…,p<subscript>n</subscript></literal>
-	  be an enumeration of all occurrences of attribute paths in expressions (terms)
-	  contained in <literal>R</literal> in the order of occurrence.
-	  Let for <replaceable>i</replaceable> (<literal>1≤<replaceable>i</replaceable>≤n</literal>),  <literal>Q<subscript><replaceable>i</replaceable></subscript></literal>
-	  denote the universal quantifier
-	  <inlineequation>
-	  <inlinemediaobject>
-	    <imageobject><imagedata fileref="quantifier_for_all.png"/></imageobject>
-	    <textobject role="tex"><phrase>\forall</phrase></textobject>
-	    <textobject><phrase>∀</phrase></textobject>
-	  </inlinemediaobject>
-	  </inlineequation>
-	  if <literal>p<subscript><replaceable>i</replaceable></subscript></literal>
-	  starts with a '<literal>*</literal>'
-	  and 
-	  <inlineequation>
-	  <inlinemediaobject>
-	    <imageobject><imagedata fileref="quantifier_exists.png"/></imageobject>
-	    <textobject role="tex"><phrase>\exists</phrase></textobject>
-	    <textobject><phrase>∃</phrase></textobject>
-	  </inlinemediaobject>
-	  </inlineequation>
-	  otherwise.
-	  Let <literal>V<subscript>1</subscript>,…,V<subscript>n</subscript></literal>
-	  be the sets of values obtained by evaluating the attribute paths
-	  <literal>p<subscript>1</subscript>,…,p<subscript>n</subscript></literal>,
-	  respectively, for some fixed assignment of nodes
-	  to the selectors in the query.
-	</para>
-	<para>Then the truth value of the predicate <literal>R</literal>
-	is that of the formula
-	<informalequation id="eq-r1">
-	  <alt role="tex">%\hbox{\sf(3)}
-	  \qquad\qquad(Q_1 x_1 \in V_1)\ldots(Q_n x_n \in V_n)R'</alt>
-	  <mediaobject>
-	    <imageobject>
-	      <imagedata fileref="quantifiers_r1.png"/>
-	    </imageobject>
-	</mediaobject></informalequation>
-	where <literal>R'</literal> is an atomic formula
-	obtained from <literal>R</literal>
-	by replacing the attribute paths
-	<literal>p<subscript>1</subscript>,…,p<subscript>n</subscript></literal>
-	by variables
-	<literal>x<subscript>1</subscript>,…,x<subscript>n</subscript></literal>.
-	(Note that each of the variables has exactly one occurrence in <literal>R'</literal>.)
-	</para>
       </section>
     </section>
     <section>
@@ -1992,3 +2247,9 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
     <para/>
   </section>
 </article>
+
+
+
+
+
+

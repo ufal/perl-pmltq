@@ -36,8 +36,12 @@ cat <<'EOF' > "${name}.tex"
 \railannotatefont{\rmfamily\itshape}
 \railnamefont{\sffamily\itshape} 
 \railindexfont{\sffamily\itshape}
+\pagestyle{empty}
+\textwidth=60cm
+\textheight=60cm
+\setlength{\pdfpagewidth}{\textwidth}
+\setlength{\pdfpageheight}{\textheight}
 \begin{document}
-\thispagestyle{empty}
 \begin{rail}
 EOF
 

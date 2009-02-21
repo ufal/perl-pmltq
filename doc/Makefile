@@ -6,6 +6,8 @@
 ## X-URL: 
 
 XSL=http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl
+FOXSL2=http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl
+FOXSL=print.xsl
 
 .PHONY: clean rails all html tex
 
@@ -13,22 +15,32 @@ all: rails html
 
 html: pmltq_doc.html
 
+print: pmltq_doc.fo
+
 htmltex: pmltq_doc.html tex
 
 tex: tex-math-equations.tex
-	latex tex-math-equations.tex
-	dvi2bitmap --resolution=600 --scaledown=5 tex-math-equations.dvi
+	./tex2bitmap.sh tex-math-equations.tex
 
 rails: pmltq_doc.xml mk_rail.sh mk_rails.xsh
 	./mk_rails.xsh pmltq_doc.xml
 
 pmltq_doc.html: pmltq_doc.xml
 	xsltproc --xinclude \
+           --param ignore.image.scaling 1 \
 	   --stringparam use.role.for.mediaobject 1 \
            --stringparam preferred.mediaobjectrole html \
            --stringparam html.stylesheet blue.css \
            --stringparam tex.math.in.alt latex \
         -o pmltq_doc.html $(XSL) pmltq_doc.xml 
+
+pmltq_doc.fo: pmltq_doc.xml
+	xsltproc --xinclude \
+	   --stringparam use.role.for.mediaobject 1 \
+           --stringparam tex.math.in.alt latex \
+	-o pmltqdoc.fo $(FOXSL) pmltq_doc.xml 
+	xep pmltqdoc.fo # pdfxmltex pmltqdoc.fo
+
 
 clean:
 	rm pmltq_doc.html
