@@ -144,3 +144,8 @@ div.index em a {
   font-weight: bold; 
   text-decoration: none
 }
+
+.math {
+  font-family: "Times New Roman", serif; 
+  font-style: italic; 
+}

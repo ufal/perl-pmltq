@@ -5,9 +5,11 @@
 ## Keywords: 
 ## X-URL: 
 
-XSL=http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl
-FOXSL2=http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl
+XSL=html.xsl
 FOXSL=print.xsl
+
+XSL_ORIG=http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl
+FOXSL_ORIG=http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl
 
 .PHONY: clean rails all html tex
 

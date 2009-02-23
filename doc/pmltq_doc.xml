@@ -1131,7 +1131,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 		  </listitem>
 		</varlistentry>
 		<varlistentry>
-		  <term>the string '[]'</term>
+		  <term>the string <literal>'[]'</literal></term>
 		  <listitem>
 		    <para>used for obtaining the content of a container</para>
 		  </listitem>
@@ -1705,84 +1705,87 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	<para>
 	  Nodes in PML are usually 
 	  attribute-value structures with values that can be
-	  both of atomic PML data types (integers, strings, etc.) or
+	  of either atomic PML data types (integers, strings, etc.) or
 	  complex PML data types (structures, lists, alternatives,
-	  sequences, containers). This means that to get to an atomic value
-	  stored in a node we sometimes have to travel through several nested
+	  sequences, containers). This means that to get 
+	  to an atomic value
+	  stored within a node we sometimes have to travel through several nested
 	  complex data structures, starting from the top-level structure 
-	  which is the node itself to an atomic value nested somewhere within it.
+	  which is the node itself.
 	  PML-TQ uses attribute paths to
-	  describe individual steps of such a travel.
+	  describe the route of such a travel.
 	  In this section we define how attribute paths are evaluated.
 	</para>
 	<para>
-	  An attribute path consists of a sequence of /-separated
-	  steps (optionally preceded by a primitive quantifier the
-	  semantics of which is described later in <xref linkend="quantifiers"/>).
-	  Each step is either a name or the string <literal>[]</literal> or
-	  an index or an element index.
-	  Let <replaceable>P</replaceable> be an attribute path 
+	  An attribute path consists of a sequence of 
+	  steps separated by slashes. This sequence can be optionally preceded by a primitive quantifier the
+	  semantics of which is described later in <xref linkend="quantifiers"/>.
+	  Each step is either a name, the string '<literal>[]</literal>',
+	  an index, or an element index.
+	</para>
+	<para>
+	  Let <phrase role="math">P</phrase> be an attribute path 
 	  consisting of steps 
-	  <replaceable>S<subscript>1</subscript>,…,S<subscript>m</subscript></replaceable> (m&gt;0).
-	  The result of evaluation of an attribute path <replaceable>P</replaceable>
-	  on a node <replaceable>N</replaceable>
-	  is a set <replaceable>V<subscript>N,p</subscript></replaceable> of atomic values
+	  <phrase role="math">S<subscript>1</subscript>,…,S<subscript>m</subscript> (m&gt;0)</phrase>.
+	  The result of evaluation of <phrase role="math">P</phrase>
+	  on a node <phrase role="math">N</phrase>
+	  is a set <phrase role="math">V<subscript>N,P</subscript></phrase> of atomic values
 	  (integers, floats, or character strings).
 	  The evaluation proceeds by evaluating the steps
-	  from 1 to <replaceable>m</replaceable>; the evaluation
-	  of the step <replaceable>S<subscript>n</subscript></replaceable> (<replaceable>1≤n≤m</replaceable>)
-	  takes as input a set of values <replaceable>V<subscript>n</subscript></replaceable>
-	  and results in a set of values <replaceable>V<subscript>n+1</subscript></replaceable>.
-	  For each <replaceable>n</replaceable> (<replaceable>1≤n≤m+1</replaceable>), all
-	  values in <replaceable>V<subscript>n</subscript></replaceable>
-	  are of the same data type
-	  (which is complex for <replaceable>n≤m</replaceable> and atomic for <replaceable>n=m+1</replaceable>).
+	  from 1 to <phrase role="math">m</phrase>; the evaluation
+	  of the step <phrase role="math">S<subscript>n</subscript></phrase> (<phrase role="math">1≤n≤m</phrase>)
+	  takes as input a set of values <phrase role="math">V<subscript>n</subscript></phrase>
+	  and results in a set of values <phrase role="math">V<subscript>n+1</subscript></phrase>.
+	  For each <phrase role="math">n</phrase> (<phrase role="math">1≤n≤m+1</phrase>), all
+	  values in <phrase role="math">V<subscript>n</subscript></phrase>
+	  are of equal data type
+	  (which, if <phrase role="math">P</phrase> is a valid attribute path for <phrase role="math">N</phrase>, is complex for <phrase role="math">n≤m</phrase> and atomic for <phrase role="math">n=m+1</phrase>).
 	</para>
 	<para>
 	  The evaluation is initialized with a set
-	  <replaceable>V<subscript>1</subscript>={N}</replaceable>
+	  <phrase role="math">V<subscript>1</subscript>={N}</phrase>
 	  whose only element is
-	  the node <replaceable>N</replaceable>, which
+	  the node <phrase role="math">N</phrase>, which
 	  is either a structure or a container.
 	  The result of the evaluation 
-	  if the set <replaceable>V<subscript>N,p</subscript>=V<subscript>m+1</subscript></replaceable>.
+	  if the set <phrase role="math">V<subscript>N,p</subscript>=V<subscript>m+1</subscript></phrase>.
 	</para>
 	<para>
-	  Let <replaceable>V<subscript>n</subscript></replaceable>
+	  Let <phrase role="math">V<subscript>n</subscript></phrase>
 	  be given.
 	  We now describe 
-	  the evaluation based on the syntactic type of the <replaceable>n</replaceable>-th step
-	  <replaceable>S<subscript>n</subscript></replaceable>
-	  and the data type of values in <replaceable>V<subscript>n</subscript></replaceable>.
-	  Let <replaceable>t<subscript>n</subscript></replaceable>
-	  denote the type of the values in <replaceable>V<subscript>n</subscript></replaceable>.
+	  the evaluation based on the syntactic type of the <phrase role="math">n</phrase>-th step
+	  <phrase role="math">S<subscript>n</subscript></phrase>
+	  and the data type of values in <phrase role="math">V<subscript>n</subscript></phrase>.
+	  Let <phrase role="math">t<subscript>n</subscript></phrase>
+	  denote the type of the values in <phrase role="math">V<subscript>n</subscript></phrase>.
 	  <itemizedlist>
 	    <listitem><para>
-	      If <replaceable>t<subscript>n</subscript></replaceable> is an atomic type (and there is an <replaceable>n</replaceable>-th step),
-	      the query compiler reports and error and fails.</para>
+	      If <phrase role="math">t<subscript>n</subscript></phrase> is an atomic type (and there is an <phrase role="math">n</phrase>-th step),
+	      the query compiler reports an error and fails.</para>
 	    </listitem>
 	    <listitem><para>
-	      If <replaceable>t<subscript>n</subscript></replaceable> is a structure or container type and
-	      <replaceable>S<subscript>n</subscript></replaceable> is a name of a valid
-	      member for the type
-	      (i.e. one declared for it in the corresponding PML schema)
+	      If <phrase role="math">t<subscript>n</subscript></phrase> is a structure or container type and
+	      <phrase role="math">S<subscript>n</subscript></phrase> is a name of a valid
+	      member for <phrase role="math">t<subscript>n</subscript></phrase>
+	      (according to the declaration of <phrase role="math">t<subscript>n</subscript></phrase> in the  corresponding PML schema)
 	      then 
-	      <replaceable>V<subscript>n+1</subscript></replaceable>
-	      contains the value of the member
-	      computed from every element of <replaceable>V<subscript>n</subscript></replaceable>
+	      for every element of <phrase role="math">V<subscript>n</subscript></phrase>, <phrase role="math">V<subscript>n+1</subscript></phrase>
+	      contains the value of its 
+	      member <phrase role="math">S<subscript>n</subscript></phrase>,
 	      provided the value is non-null; i.e.
 	      <informalequation id="eq-a1">
-		<alt role="tex">V_{n+1}=\{v.S\,;\,v\in V_n\,\&amp;\,\neg\hbox{\sf is-null}(v.S)\}</alt>
+		<alt role="tex">V_{n+1}=\{v.{S_n}\,;\,v\in V_n\,\&amp;\,\neg\hbox{\sf is-null}(v.{S_n})\}</alt>
 		<mediaobject>
 		  <imageobject role="html"><imagedata fileref="quantifiers_a1.png" format="PNG" align="center"/></imageobject>
 		  <imageobject role="fo"><imagedata fileref="quantifiers_a1.pdf" format="PDF" align="center"/></imageobject>
 		</mediaobject>
 	      </informalequation>
-	      If the step <replaceable>S<subscript>n</subscript></replaceable> is '<replaceable>[]</replaceable>'
-	      and  <replaceable>t<subscript>n</subscript></replaceable> is a container type 
+	      If the step <phrase role="math">S<subscript>n</subscript></phrase> is '<literal>[]</literal>'
+	      and  <phrase role="math">t<subscript>n</subscript></phrase> is a container type 
 	      with non-void content (i.e. the container has some content type
-	      declared in the PML schema),  <replaceable>V<subscript>n+1</subscript></replaceable>
-	      consists of the content value of each element of <replaceable>V<subscript>n</subscript></replaceable>, i.e.
+	      declared in the PML schema),  <phrase role="math">V<subscript>n+1</subscript></phrase>
+	      consists of the content value of each element of <phrase role="math">V<subscript>n</subscript></phrase>, i.e.
 	      <informalequation id="eq-a2">
 		<alt role="tex">V_{n+1}=\{c\,;\,c=\hbox{\sf content-of}(v)\,\&amp;\,v\in V_n\,\&amp;\,\neg\hbox{\sf is-null}(c)\}</alt>
 	        <mediaobject>
@@ -1790,18 +1793,18 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 		  <imageobject role="fo"><imagedata fileref="quantifiers_a2.pdf" format="PDF" align="center"/></imageobject>
 		</mediaobject>
 	      </informalequation>
-	      If <replaceable>S<subscript>n</subscript></replaceable> is anything else, the query compiler reports and error and fails.
+	      If <phrase role="math">S<subscript>n</subscript></phrase> is anything else, the query compiler reports and error and fails.
 	    </para></listitem>
 	    <listitem>
 	    <para>
-	      If <replaceable>t<subscript>n</subscript></replaceable> is an ordered list
-	      and <replaceable>S<subscript>n</subscript></replaceable> is an index
-	      of the form <literal>[k]</literal>, where <replaceable>k</replaceable>
+	      If <phrase role="math">t<subscript>n</subscript></phrase> is an ordered list
+	      and <phrase role="math">S<subscript>n</subscript></phrase> is an index
+	      of the form <literal>[k]</literal>, where <phrase role="math">k</phrase>
 	      is a non-negative integer number, then
-	      <replaceable>V<subscript>n+1</subscript></replaceable> consists
-	      of the <replaceable>(k+1)</replaceable>-th value (<literal>v[k]</literal>)
-	      of each list in <replaceable>V<subscript>n</subscript></replaceable>
-	      whose length is at least <replaceable>k+1</replaceable>, i.e.
+	      <phrase role="math">V<subscript>n+1</subscript></phrase> consists
+	      of the <phrase role="math">(k+1)</phrase>-th value (<phrase role="math">v[k]</phrase>)
+	      of each list in <phrase role="math">V<subscript>n</subscript></phrase>
+	      whose length is at least <phrase role="math">k+1</phrase>, i.e.
 	      <informalequation id="eq-a3">
 		<alt role="tex">V_{n+1}=\{v[k]\,;\,v\in V_n\,\&amp;\,\hbox{\sf length}(v)&gt;k\,\&amp;\,v[k\neg\hbox{\sf is-null}(])\}</alt>
 	        <mediaobject>
@@ -1812,33 +1815,39 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    </para></listitem>
 	    <listitem>
 	    <para>
-	      If <replaceable>t<subscript>n</subscript></replaceable> is a list or an alternative,
-	      and <replaceable>S<subscript>n</subscript></replaceable> is any step
+	      If <phrase role="math">t<subscript>n</subscript></phrase> is a list or an alternative,
+	      and <phrase role="math">S<subscript>n</subscript></phrase> is any step
 	      except for the case covered above (where 
-	      <replaceable>t<subscript>n</subscript></replaceable> was an ordered list  
-	      and <replaceable>S<subscript>n</subscript></replaceable> is an index), then
-	      <replaceable>V<subscript>n+1</subscript></replaceable> consists
+	      <phrase role="math">t<subscript>n</subscript></phrase> was an ordered list  
+	      and <phrase role="math">S<subscript>n</subscript></phrase> an index), 
+	      let <phrase role="math">V'<subscript>n</subscript></phrase> consist
 	      of all non-null values that occur in some list or alternative
-	      from  <replaceable>V<subscript>n</subscript></replaceable>, i.e.
+	      from  <phrase role="math">V<subscript>n</subscript></phrase>, i.e.
 	      <informalequation id="eq-a3">
-		<alt role="tex">V_{n+1}=\{w\,;\,(\exists v\in V_n)(\exists k&lt;\hbox{\sf length}(v))(w=v[k]\,\&amp;\,\neg\hbox{\sf is-null}(w))\}</alt>
+		<alt role="tex">V'_{n}=\{w\,;\,(\exists v\in V_n)(\exists k&lt;\hbox{\sf length}(v))(w=v[k]\,\&amp;\,\neg\hbox{\sf is-null}(w))\}</alt>
 	        <mediaobject>
 		  <imageobject role="html"><imagedata fileref="quantifiers_a3.png" format="PNG" align="center"/></imageobject>
 		  <imageobject role="fo"><imagedata fileref="quantifiers_a3.pdf" format="PDF" align="center"/></imageobject>
 		</mediaobject>
 	      </informalequation>
+	      Then <phrase role="math">V<subscript>n+1</subscript></phrase>
+	      is obtained by applying the step 
+	      <phrase role="math">S<subscript>n</subscript></phrase>
+	      on the set 
+	      <phrase role="math">V'<subscript>n</subscript></phrase>
+	      instead according to these rules.
 	    </para>
 	    </listitem>
 	    <listitem>
 	    <para>
-	      If <replaceable>t<subscript>n</subscript></replaceable> is a sequence type
-	      and <replaceable>S<subscript>n</subscript></replaceable> is an element name <replaceable>E</replaceable> valid
-	      for the sequence type <replaceable>t<subscript>n</subscript></replaceable>,
+	      If <phrase role="math">t<subscript>n</subscript></phrase> is a sequence type
+	      and <phrase role="math">S<subscript>n</subscript></phrase> is an element name <phrase role="math">E</phrase> valid
+	      for the sequence type <phrase role="math">t<subscript>n</subscript></phrase>,
 	      then 
-	      <replaceable>V<subscript>n+1</subscript></replaceable> consists
+	      <phrase role="math">V<subscript>n+1</subscript></phrase> consists
 	      of all non-null values of elements with a given
 	      name occurring in some sequence from 
-	      <replaceable>V<subscript>n</subscript></replaceable>, i.e.
+	      <phrase role="math">V<subscript>n</subscript></phrase>, i.e.
 	      <informalequation id="eq-a4">
 		<alt role="tex">V_{n+1}=\{w\,;\,(\exists v\in V_n)(\exists k&lt;\hbox{\sf length}(v))(\hbox{\sf name-of}(v[k])=E\,\&amp;\,w=\hbox{\sf value-of}(v[k])\,\&amp;\,\neg\hbox{\sf is-null}(w))\}</alt>
 	        <mediaobject>
@@ -1848,15 +1857,15 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      </informalequation>
 	    </para>
 	    <para>
-	      If <replaceable>S<subscript>n</subscript></replaceable> is of the form
+	      If <phrase role="math">S<subscript>n</subscript></phrase> is of the form
 	      <literal>E[k]</literal>, where
-	      <replaceable>E</replaceable> is a valid element name for 
-	      <replaceable>t<subscript>n</subscript></replaceable> and <replaceable>k</replaceable>
+	      <phrase role="math">E</phrase> is a valid element name for 
+	      <phrase role="math">t<subscript>n</subscript></phrase> and <phrase role="math">k</phrase>
 	      is a non-negative integer number,
-	      then for each sequence in <replaceable>V<subscript>n</subscript></replaceable> 
-	      the <replaceable>(k+1)</replaceable>-st occurrence of element named <replaceable>E</replaceable>
+	      then for each sequence in <phrase role="math">V<subscript>n</subscript></phrase> 
+	      the <phrase role="math">(k+1)</phrase>-st occurrence of element named <phrase role="math">E</phrase>
 	      (if exists) is taken and the element's value, if non-null,
-	      is added to <replaceable>V<subscript>n+1</subscript></replaceable>. Formally,
+	      is added to <phrase role="math">V<subscript>n+1</subscript></phrase>. Formally,
 	      <informalequation id="eq-a5">
 		<?dbtex delims='no'?>
 		<alt role="tex">
@@ -1877,16 +1886,16 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      </informalequation>
 	    </para>
 	    <para>
-	      If <replaceable>S<subscript>n</subscript></replaceable> is of the form
+	      If <phrase role="math">S<subscript>n</subscript></phrase> is of the form
 	      <literal>[k]E</literal>, where
-	      <replaceable>E</replaceable> is a valid element name for 
-	      <replaceable>t<subscript>n</subscript></replaceable> and <replaceable>k</replaceable>
+	      <phrase role="math">E</phrase> is a valid element name for 
+	      <phrase role="math">t<subscript>n</subscript></phrase> and <phrase role="math">k</phrase>
 	      is a non-negative integer number,
-	      then for each sequence in <replaceable>V<subscript>n</subscript></replaceable> 
-	      of length at least <replaceable>k+1</replaceable> the
-	      <replaceable>(k+1)</replaceable>-st element is taken
-	      and if its name is <replaceable>E</replaceable> and its  value is non-null,
-	      the value is added to <replaceable>V<subscript>n+1</subscript></replaceable>. Formally,
+	      then for each sequence in <phrase role="math">V<subscript>n</subscript></phrase> 
+	      of length at least <phrase role="math">k+1</phrase> the
+	      <phrase role="math">(k+1)</phrase>-st element is taken
+	      and if its name is <phrase role="math">E</phrase> and its  value is non-null,
+	      the value is added to <phrase role="math">V<subscript>n+1</subscript></phrase>. Formally,
 	      <informalequation id="eq-a6">
 		<?dbtex delims='no'?>
 		<alt role="tex">
@@ -1921,13 +1930,13 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	<formalpara>
 	  <title>Definition</title>
 	<para>
-	  Let <replaceable>R</replaceable> be a predicate
-	  and let <replaceable>p<subscript>1</subscript>,…,p<subscript>n</subscript></replaceable>
+	  Let <phrase role="math">R</phrase> be a predicate
+	  and let <phrase role="math">p<subscript>1</subscript>,…,p<subscript>n</subscript></phrase>
 	  be an enumeration of all occurrences of attribute paths in expressions (terms)
-	  contained in <replaceable>R</replaceable> in the order of occurrence
-	  and let <replaceable>N<subscript>1</subscript>,…,N<subscript>n</subscript></replaceable>
+	  contained in <phrase role="math">R</phrase> in the order of occurrence
+	  and let <phrase role="math">N<subscript>1</subscript>,…,N<subscript>n</subscript></phrase>
 	  be the nodes to which the attribute paths relate.
-	  Let for <replaceable>i</replaceable> (<replaceable>1≤<replaceable>i</replaceable>≤n</replaceable>),  <replaceable>Q<subscript><replaceable>i</replaceable></subscript></replaceable>
+	  Let for <phrase role="math">i</phrase> (<phrase role="math">1≤<phrase role="math">i</phrase>≤n</phrase>),  <phrase role="math">Q<subscript><phrase role="math">i</phrase></subscript></phrase>
 	  denote the universal quantifier
 	  <inlineequation>
 	  <inlinemediaobject>
@@ -1936,8 +1945,8 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    <textobject><phrase>∀</phrase></textobject>
 	  </inlinemediaobject>
 	  </inlineequation>
-	  if <replaceable>p<subscript><replaceable>i</replaceable></subscript></replaceable>
-	  starts with a '<replaceable>*</replaceable>'
+	  if <phrase role="math">p<subscript><phrase role="math">i</phrase></subscript></phrase>
+	  starts with a '<phrase role="math">*</phrase>'
 	  and 
 	  <inlineequation>
 	  <inlinemediaobject>
@@ -1947,13 +1956,13 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	  </inlinemediaobject>
 	  </inlineequation>
 	  otherwise.
-	  Let <replaceable>V<subscript>i</subscript></replaceable>
+	  Let <phrase role="math">V<subscript>i</subscript></phrase>
 	  deonte the set 
-	  <replaceable>V<subscript>N<subscript>i</subscript>,p<subscript>i</subscript></subscript></replaceable>
+	  <phrase role="math">V<subscript>N<subscript>i</subscript>,p<subscript>i</subscript></subscript></phrase>
 	  of atomic values obtained by evaluating the attribute paths
-	  <replaceable>p<subscript>i</subscript></replaceable>
-	  on the node <replaceable>N<subscript>i</subscript></replaceable>.
-	  Then the truth value of the predicate <replaceable>R</replaceable> for this assignment
+	  <phrase role="math">p<subscript>i</subscript></phrase>
+	  on the node <phrase role="math">N<subscript>i</subscript></phrase>.
+	  Then the truth value of the predicate <phrase role="math">R</phrase> for this assignment
 	is that of the formula
 	<inlineequation id="eq-r1">
 	  <alt role="tex">(Q_1 x_1 \in V_1)\ldots(Q_n x_n \in V_n)R'</alt>
@@ -1962,18 +1971,18 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    <imageobject role="fo"><imagedata fileref="quantifiers_r1.pdf" format="PDF"/></imageobject>
 	  </inlinemediaobject>
 	</inlineequation>
-	where <replaceable>R'</replaceable> is an atomic formula
-	obtained from <replaceable>R</replaceable>
+	where <phrase role="math">R'</phrase> is an atomic formula
+	obtained from <phrase role="math">R</phrase>
 	by replacing the attribute paths
-	<replaceable>p<subscript>1</subscript>,…,p<subscript>n</subscript></replaceable>
+	<phrase role="math">p<subscript>1</subscript>,…,p<subscript>n</subscript></phrase>
 	by variables
-	<replaceable>x<subscript>1</subscript>,…,x<subscript>n</subscript></replaceable>.
-	(Note that each of the variables has exactly one occurrence in <replaceable>R'</replaceable>.)
+	<phrase role="math">x<subscript>1</subscript>,…,x<subscript>n</subscript></phrase>.
+	(Note that each of the variables has exactly one occurrence in <phrase role="math">R'</phrase>.)
 	</para>
 	</formalpara>
 	<para>
 	  Now let us demonstrate the definition on some examples.
-	  Let <replaceable>R</replaceable> be
+	  Let <phrase role="math">R</phrase> be
 	  the predicate 
 	  <programlisting>*a != b/c + *$n.d/e/f</programlisting>
 	  in the query
@@ -1984,8 +1993,8 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	  <literal>d/e/f</literal>
 	  are valid attribute paths for
 	  nodes of this type.
-	  Let <replaceable>N</replaceable> and
-	  <replaceable>M</replaceable> be 
+	  Let <phrase role="math">N</phrase> and
+	  <phrase role="math">M</phrase> be 
 	  nodes from the searched data
 	  assigned to the selectors <literal>$n</literal>
 	  and <literal>$m</literal>.
@@ -1993,19 +2002,19 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	<para>
 	  Let's assume
 	  that the attribute <literal>a</literal> is a list of numbers
-	  and that <replaceable>V<subscript>N,a</subscript></replaceable>
+	  and that <phrase role="math">V<subscript>N,a</subscript></phrase>
 	  is the set of all values of the attribute
-	  <replaceable>a</replaceable> for the node <replaceable>N</replaceable>.
+	  <literal>a</literal> for the node <phrase role="math">N</phrase>.
 	  Similary, let 
-	  <replaceable>V<subscript>M,b/c</subscript></replaceable>
+	  <phrase role="math">V<subscript>M,b/c</subscript></phrase>
 	  be the set of all values of the attribute path
-	  <replaceable>b/c</replaceable> evaluated on the node <replaceable>M</replaceable>
+	  <literal>b/c</literal> evaluated on the node <phrase role="math">M</phrase>
 	  and
-	  <replaceable>V<subscript>N,d/e/f</subscript></replaceable>
+	  <phrase role="math">V<subscript>N,d/e/f</subscript></phrase>
 	  the set of all values of the attribute path
-	  <literal>d/e/f</literal> evaluated on the node <replaceable>N</replaceable>.
+	  <literal>d/e/f</literal> evaluated on the node <phrase role="math">N</phrase>.
 	</para>
-	<para>The truth value of the predicate <replaceable>R</replaceable>
+	<para>The truth value of the predicate <phrase role="math">R</phrase>
 	is obtained by evaluating the following formula:
 	<informalequation id="eq-1">
 	  <alt role="tex">
@@ -2026,17 +2035,17 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	<literal>*$a.d/e/f</literal>
 	start with the character '<literal>*</literal>'
 	(called a primitive universal quantifier)
-	the corresponding variables <replaceable>x,z</replaceable>
+	the corresponding variables <phrase role="math">x</phrase> and <phrase role="math">z</phrase>
 	in the formula <link linkend="eq-1">(1)</link>
 	are universally quantified,
 	whereas 
-	<replaceable>y</replaceable>,
+	<phrase role="math">y</phrase>,
 	corresponding to <literal>b/c</literal>
 	is quantified existentially.
 	Note also, that the order of the quantifiers 
 	in the formula  <link linkend="eq-1">(1)</link>
 	preserves the order of the occurrence of 
-	the corresponding attribute paths in <replaceable>R</replaceable>.
+	the corresponding attribute paths in <phrase role="math">R</phrase>.
 	</para>
 	<para>
 	  If we had instead written 
@@ -2072,13 +2081,13 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	  Assume nodes of the type <literal>p-node</literal> have an attribute
 	  <literal>functions</literal> that is an unordered list or an alternative of string values.
 	  Let us consider the following constraints and the translations to formulae
-	  (assuming <replaceable>V<subscript>N</subscript></replaceable> is the set of values of the <literal>functions</literal> 
-	  for a given p-node <replaceable>N</replaceable>):
+	  (assuming <phrase role="math">V<subscript>N</subscript></phrase> is the set of values of the <literal>functions</literal> 
+	  for a given p-node <phrase role="math">N</phrase>):
 	</para>
 	<orderedlist>
 	  <listitem>
 	  <para><literal>functions = functions</literal> asserts that
-	  the list <literal>functions</literal>  on <replaceable>N</replaceable>  is non-empty, since
+	  the list <literal>functions</literal>  on <phrase role="math">N</phrase>  is non-empty, since
 	  the constraint translates to the formula
 	<inlineequation id="eq-5">
 	  <alt role="tex">
@@ -2109,7 +2118,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	  </listitem>
 	  <listitem>
 	  <para><literal>functions != functions</literal> asserts that
-	  the list <literal>functions</literal>  on <replaceable>N</replaceable>  contains
+	  the list <literal>functions</literal>  on <phrase role="math">N</phrase>  contains
 	  (at least) two distinct strings, since
 	  it translates to 
 	<inlineequation id="eq-6">
@@ -2125,11 +2134,11 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	  </listitem>
 	  <listitem>
 	  <para><literal>!functions = functions</literal> means that 
-	  the list <literal>functions</literal>  on <replaceable>N</replaceable>  is empty, since
+	  the list <literal>functions</literal>  on <phrase role="math">N</phrase>  is empty, since
 	  it is a negation of <literal>functions=functions</literal> .</para>
 </listitem>
 	  <listitem>
-	  <para><literal>*functions = *functions</literal> asserts that the list <literal>functions</literal>  on <replaceable>N</replaceable>  contains
+	  <para><literal>*functions = *functions</literal> asserts that the list <literal>functions</literal>  on <phrase role="math">N</phrase>  contains
 	  at most one unique value because it translates to
 	<inlineequation id="eq-7">
 	  <alt role="tex">
@@ -2140,7 +2149,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    <imageobject role="fo"><imagedata fileref="quantifiers_f7.pdf" format="PDF"/></imageobject>
 	  </inlinemediaobject>
 </inlineequation>,
-	which is satisfied if the set <replaceable>V<subscript>N</subscript></replaceable> 
+	which is satisfied if the set <phrase role="math">V<subscript>N</subscript></phrase> 
 	is either empty or contains exactly one element.
 	  </para>
 	  </listitem>
@@ -2247,9 +2256,3 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
     <para/>
   </section>
 </article>
-
-
-
-
-
-
