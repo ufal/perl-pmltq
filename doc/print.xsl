@@ -1,11 +1,12 @@
 <?xml version='1.0'?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
+		xmlns:str="http://exslt.org/strings"
                 version='1.0'>
   <!-- Import docbook stylesheet. Or import slides/fo/plain.xsl, or ... -->
   <xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl"/>
 
-  <xsl:param name="passivetex.extensions" select="1"></xsl:param>
+  <xsl:param name="xep.extensions" select="1"></xsl:param>
   <!-- Essential templates to prevent PassiveTeX from choking: -->
   <xsl:param name="section.autolabel" select="1"/>
   <xsl:param name="section.label.includes.component.label" select="1"/>
@@ -77,5 +78,20 @@
     <xsl:attribute name="space-after.maximum">0em</xsl:attribute>
   </xsl:attribute-set>
 
+  <xsl:template match="text()[ancestor::phrase[@role='math']]">
+    <xsl:for-each select="str:tokenize(string(.), '')">
+      <xsl:choose>
+	<xsl:when test="starts-with(translate(.,'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+			                        'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'),'x')">
+	  <fo:inline font-style="italic">
+	    <xsl:value-of select="."/>
+	  </fo:inline>
+	</xsl:when>
+	<xsl:otherwise>
+	  <xsl:value-of select="."/>
+	</xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+  </xsl:template>
 
 </xsl:stylesheet>

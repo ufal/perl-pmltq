@@ -237,7 +237,7 @@
     </menuchoice>.
     <mediaobject>
       <imageobject role="html"><imagedata align="center" fileref="tred_select_search_s.png" format="PNG"/></imageobject>
-    <imageobject role="fo"><imagedata align="center" fileref="tred_select_search_s.pdf" format="PDF"/></imageobject></mediaobject>
+    </mediaobject>
     Choose <guilabel>Treebank (server)</guilabel>
     and then select <guilabel>CREATE NEW CONNECTION</guilabel>.
     Fill the connection form as follows:
@@ -253,7 +253,7 @@
       A window with an empty query tree is displayed by TrEd:
       <mediaobject>
 	<imageobject role="html"><imagedata align="center" fileref="tred_empty_query_s.png" format="PNG"/></imageobject>
-      <imageobject role="fo"><imagedata align="center" fileref="tred_empty_query_s.pdf" format="PDF"/></imageobject></mediaobject>
+      </mediaobject>
     </para>
     <bridgehead>A simple query</bridgehead>
     <para>
@@ -297,7 +297,7 @@
 	selected from a list).
       <mediaobject>
 	<imageobject role="html"><imagedata align="center" fileref="tred_new_equality_test_s.png" format="PNG"/></imageobject>
-      <imageobject role="fo"><imagedata align="center" fileref="tred_new_equality_test_s.pdf" format="PDF"/></imageobject></mediaobject>
+      </mediaobject>
 	</para>
       </listitem>
       <listitem>
@@ -333,7 +333,7 @@
     <para>The result in TrEd will look like this:</para>
     <mediaobject>
       <imageobject role="html"><imagedata align="center" fileref="tutorial_queries_1.png" format="PNG"/></imageobject>
-    <imageobject role="fo"><imagedata align="center" fileref="tutorial_queries_1.pdf" format="PDF"/></imageobject></mediaobject>
+    </mediaobject>
     <para>
       To start the search now,
       press <keysym>Space</keysym> 
@@ -357,7 +357,7 @@
 	show the first result in a new view:
     <mediaobject>
       <imageobject role="html"><imagedata align="center" fileref="tred_first_result_s.png" format="PNG"/></imageobject>
-    <imageobject role="fo"><imagedata align="center" fileref="tred_first_result_s.pdf" format="PDF"/></imageobject></mediaobject>
+    </mediaobject>
     To see the full sentence in the text field above the trees , click
     on the result view on the right.
     Next result can be displayed
@@ -509,7 +509,7 @@ t-node $b := [ parent $a ];</programlisting>
     </para>
     <mediaobject>
       <imageobject role="html"><imagedata align="center" fileref="tutorial_queries_1.png" format="PNG"/></imageobject>
-    <imageobject role="fo"><imagedata align="center" fileref="tutorial_queries_1.pdf" format="PDF"/></imageobject></mediaobject>
+    </mediaobject>
       </listitem>
       <listitem>
     <para>Select the auxiliary node representing the constraint <literal>functor="DPHR"</literal> and press
@@ -572,7 +572,7 @@ t-node $b := [ parent $a ];</programlisting>
     hides the auxiliary nodes, and gives this:
     <mediaobject>
       <imageobject role="html"><imagedata align="center" fileref="tutorial_queries_2c.png" format="PNG"/></imageobject>
-    <imageobject role="fo"><imagedata align="center" fileref="tutorial_queries_2c.pdf" format="PDF"/></imageobject></mediaobject>
+    </mediaobject>
 	</para>
       </listitem>
     </orderedlist>
@@ -599,7 +599,7 @@ t-node $b := [ parent $a ];</programlisting>
       either press <keysym>~</keysym> key or the
       <guibutton>
 	<inlinemediaobject>
-	  <imageobject role="html"><imagedata fileref="pmltq_icons/test_regexp.png" valign="middle" format="PNG"/></imageobject>
+	  <imageobject role="html"><imagedata fileref="pmltq_icons/test_regexp.png" contentdepth="10pt" valign="middle" format="PNG"/></imageobject>
 	  <textobject><phrase>RegExp</phrase></textobject>
 	</inlinemediaobject>
       </guibutton> toolbar button.
@@ -626,8 +626,6 @@ t-node $b := [ parent $a ];</programlisting>
     </para>
     <bridgehead>TODO</bridgehead>
     <programlisting>
-      t-node [ functor in {"CPHR", "DPHR"} , t-node [ ] ]
-
       ## Types of relations
 
       ## relations based on PML references
@@ -1848,6 +1846,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      of all non-null values of elements with a given
 	      name occurring in some sequence from 
 	      <phrase role="math">V<subscript>n</subscript></phrase>, i.e.
+
 	      <informalequation id="eq-a4">
 		<alt role="tex">V_{n+1}=\{w\,;\,(\exists v\in V_n)(\exists k&lt;\hbox{\sf length}(v))(\hbox{\sf name-of}(v[k])=E\,\&amp;\,w=\hbox{\sf value-of}(v[k])\,\&amp;\,\neg\hbox{\sf is-null}(w))\}</alt>
 	        <mediaobject>
@@ -1855,10 +1854,11 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 		  <imageobject role="fo"><imagedata fileref="quantifiers_a4.pdf" format="PDF" align="center"/></imageobject>
 		</mediaobject>
 	      </informalequation>
+
 	    </para>
 	    <para>
 	      If <phrase role="math">S<subscript>n</subscript></phrase> is of the form
-	      <literal>E[k]</literal>, where
+	      '<literal>E[k]</literal>', where
 	      <phrase role="math">E</phrase> is a valid element name for 
 	      <phrase role="math">t<subscript>n</subscript></phrase> and <phrase role="math">k</phrase>
 	      is a non-negative integer number,
@@ -1887,7 +1887,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    </para>
 	    <para>
 	      If <phrase role="math">S<subscript>n</subscript></phrase> is of the form
-	      <literal>[k]E</literal>, where
+	      '<literal>[k]E</literal>', where
 	      <phrase role="math">E</phrase> is a valid element name for 
 	      <phrase role="math">t<subscript>n</subscript></phrase> and <phrase role="math">k</phrase>
 	      is a non-negative integer number,
@@ -2016,9 +2016,16 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	</para>
 	<para>The truth value of the predicate <phrase role="math">R</phrase>
 	is obtained by evaluating the following formula:
+	<informaltable pgwide="1" colsep="0" rowsep="0" frame="none">
+		<tgroup cols="2" colsep="0pt" >
+		  <colspec colnum="1" align="center" colwidth="95"/>
+		  <colspec colnum="2" align="right" colwidth="5"/>
+		  <tbody>
+		    <row><entry>
+		      <para>
 	<informalequation id="eq-1">
 	  <alt role="tex">
-	    \hbox{\sf(1)}\qquad\qquad (\forall x \in V_{N,a})(\exists y \in V_{M,b/c})(\forall z \in V_{N,d/e/f}) x\neq y + z
+	    (\forall x \in V_{N,a})(\exists y \in V_{M,b/c})(\forall z \in V_{N,d/e/f}) x\neq y + z
 	  </alt>
 	  <mediaobject>
 	    <imageobject role="html">
@@ -2027,6 +2034,13 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	<imageobject role="fo">
 	      <imagedata align="center" fileref="quantifiers_f1.pdf" format="PDF"/>
 	    </imageobject></mediaobject></informalequation>
+		      </para>
+	    </entry><entry>(1)</entry>
+		    </row>
+		  </tbody>
+		</tgroup>
+	      </informaltable>
+
 	Thus, the query matches the nodes A, B if and only if
 	B is a child of A and the above formula holds.
 	Note that since the attribute paths
@@ -2052,9 +2066,16 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	  <programlisting>! *a = b/c + *$n.d/e/f</programlisting>
 	  moving the negation (<literal>!</literal>) out of the predicate,
 	  the resulting formula would be completely different:
+	      <informaltable pgwide="1" colsep="0" rowsep="0" frame="none">
+		<tgroup cols="2" colsep="0pt" >
+		  <colspec colnum="1" align="center" colwidth="95"/>
+		  <colspec colnum="2" align="right" colwidth="5"/>
+		  <tbody>
+		    <row><entry>
+		      <para>
 	<informalequation id="eq-2">
 	  <alt role="tex">
-	    \hbox{\sf(2)}\qquad\qquad \neg(\forall x \in V_{N,a})(\exists y \in V_{M,b/c})(\forall z \in V_{N,d/e/f}) x= y + z
+	    \neg(\forall x \in V_{N,a})(\exists y \in V_{M,b/c})(\forall z \in V_{N,d/e/f}) x= y + z
 	  </alt>
 	  <mediaobject>
 	    <imageobject role="html">
@@ -2063,10 +2084,24 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	<imageobject role="fo">
 	      <imagedata fileref="quantifiers_f2.pdf" format="PDF" align="center"/>
 	    </imageobject></mediaobject></informalequation>
+		      </para>
+	    </entry><entry>(2)</entry>
+		    </row>
+		  </tbody>
+		</tgroup>
+	      </informaltable>
+
 	and equivalent to 
+	      <informaltable pgwide="1" colsep="0" rowsep="0" frame="none">
+		<tgroup cols="2" colsep="0pt" >
+		  <colspec colnum="1" align="center" colwidth="95"/>
+		  <colspec colnum="2" align="right" colwidth="5"/>
+		  <tbody>
+		    <row><entry>
+		      <para>
 	<informalequation id="eq-3">
 	  <alt role="tex">
-	    \hbox{\sf(3)}\qquad\qquad(\exists x \in V_{N,a})(\forall y \in V_{M,b/c})(\exists z \in V_{N,d/e/f}) x\neq y + z
+	    (\exists x \in V_{N,a})(\forall y \in V_{M,b/c})(\exists z \in V_{N,d/e/f}) x\neq y + z
 	  </alt>
 	  <mediaobject>
 	    <imageobject role="html">
@@ -2075,6 +2110,13 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	<imageobject role="fo">
 	      <imagedata fileref="quantifiers_f3.pdf" format="PDF" align="center"/>
 	    </imageobject></mediaobject></informalequation>
+		      </para>
+	    </entry><entry>(3)</entry>
+		    </row>
+		  </tbody>
+		</tgroup>
+	      </informaltable>
+
 	</para>
 	<para>
 	  Let us give some more practical examples. 
@@ -2129,7 +2171,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    <imageobject role="html"><imagedata fileref="quantifiers_f6.png" format="PNG"/></imageobject>
 	    <imageobject role="fo"><imagedata fileref="quantifiers_f6.pdf" format="PDF"/></imageobject>
 	  </inlinemediaobject>
-	</inlineequation>
+	</inlineequation>.
 	  </para>
 	  </listitem>
 	  <listitem>
@@ -2191,9 +2233,9 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    \qquad\qquad (\forall x \in V_N)(\exists y \in V_N)x\neq y
 	  </alt>
 	  <inlinemediaobject>
+	    <imageobject role="html"><imagedata fileref="quantifiers_f10.png" format="PNG"/></imageobject>
 	    <imageobject role="fo"><imagedata fileref="quantifiers_f10.pdf" format="PDF"/></imageobject>
-	    <imageobject role="fo"><imagedata fileref="quantifiers_f10.pdf" format="PDF"/></imageobject>
-	  </inlinemediaobject>
+	    </inlinemediaobject>
 </inlineequation>.
 	  </para>
 	  </listitem>
@@ -2207,7 +2249,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    <imageobject role="html"><imagedata fileref="quantifiers_f11.png" format="PNG"/></imageobject>
 	    <imageobject role="fo"><imagedata fileref="quantifiers_f11.pdf" format="PDF"/></imageobject>
 	  </inlinemediaobject>
-</inlineequation>
+</inlineequation>,
 	which is never satisfied
 	(since x=x).
 	  </para>
@@ -2256,3 +2298,4 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
     <para/>
   </section>
 </article>
+
