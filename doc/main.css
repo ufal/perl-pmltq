@@ -9,7 +9,8 @@ li > p, td > p {
 }
 
 body, th, td {
-	background-color: #FFFFFF;
+    max-width: 70em;
+    background-color: #FFFFFF;
 }
 
 /* nadpisy */
@@ -41,7 +42,7 @@ h4.title {
 
 body, td, th {
 	font-family: Trebuchet MS, Arial, Helvetica, sans-serif; 
-	font-size: 14px;
+	font-size: 10pt;
 }
 
 code, .programlisting, .literallayout {
@@ -148,4 +149,11 @@ div.index em a {
 .math {
   font-family: "Times New Roman", serif; 
   /* font-style: italic;  */
+}
+
+.right {
+    border: 0;
+    float: right;
+    margin: 0.5em 0 0.5em 1em; 
+    clear: right;
 }
