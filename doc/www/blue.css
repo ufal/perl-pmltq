@@ -65,5 +65,6 @@ dt { font-weight: bold }
 .framed, .note { 
    background-color: #ffffcc;
    border: dashed 1pt;
-   padding: 0 12pt 0 12pt;
+   padding: 6pt 12pt 6pt 12pt;
+   z-index: 0;
 }
