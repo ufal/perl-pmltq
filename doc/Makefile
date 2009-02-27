@@ -11,7 +11,7 @@ FOXSL=print.xsl
 XSL_ORIG=http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl
 FOXSL_ORIG=http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl
 
-.PHONY: clean rails all html tex
+.PHONY: clean rails all html tex cleanall cleanhtml
 
 all: rails html
 
@@ -43,9 +43,13 @@ pmltq_doc.fo: pmltq_doc.xml
 	-o pmltqdoc.fo $(FOXSL) pmltq_doc.xml 
 	xep pmltqdoc.fo # pdfxmltex pmltqdoc.fo
 
+cleanall: clean cleanhtml
+	rm pmltq_doc.html rail_*.pdf rail_*.png
+
+cleanhtml: clean
+	rm pmltq_doc.html
 
 clean:
-	rm pmltq_doc.html
-	rm -f rail_*.log  rail_*.aux rail_*.tex rail_*.rao rail_*.rai rail_*.pdf
+	rm -f rail_*.log  rail_*.aux rail_*.tex rail_*.rao rail_*.rai *.out *~
 
 ### Makefile ends here
