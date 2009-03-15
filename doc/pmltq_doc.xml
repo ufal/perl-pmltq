@@ -979,8 +979,8 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 		<imagedata format="PDF" fileref="rail_predicate.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
 		<phrase><![CDATA[ predicate : binaryComparison | setPredicate;
-		binaryComparison : expression ( ('!'? ('=' | 'TILDA' | 'TILDASTAR' )) | '<' | '>' | '<=' | '>=') expression  ;
-		setPredicate : (expression '!'? 'in' 'LEFTBRACE' (expression +',') 'RIGHTBRACE') ; ]]></phrase>
+		binaryComparison : expression ( ('!'? ('=' | TILDA | TILDASTAR )) | '<' | '>' | '<=' | '>=') expression  ;
+		setPredicate : (expression '!'? 'in' LEFTBRACE (expression +',') RIGHTBRACE) ; ]]></phrase>
 	      </textobject>
 	    </mediaobject>
 	      <para>
@@ -1251,7 +1251,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 					     ('give')? ('distinct')?
 	                                     (columnExp + ',') \\
 					     ('sort by'
-					      (columnExp + ','))?; ]]></phrase>
+					      ((DOLLAR NUMBER ('asc'|'desc')?) + ','))?; ]]></phrase>
 	      </textobject>
 	    </mediaobject>
 	    <para>
@@ -1301,10 +1301,18 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      Each filter may be followed by
 	      a <literal>sort by</literal> clause
 	      which specifies the order of rows in the resulting table.
-	      The clause is followed by a list of column expressions
-	      that should refer to the columns of the table produced by this filter
+	      The clause is followed by a comma-separated list of
+	      column references.
+	      They refer to the columns 
+	      of the table produced by this filter
 	      and are used to compute the primary, secondary, tertiary,… etc.
 	      sorting key.
+	      Each column reference 
+	      can be followed by the word
+	      <literal>asc</literal> or
+	      <literal>desc</literal>
+	      to enforce ascendant (default) or descendant ordering
+	      on the corresponding column.
 	    </para>
 	    <para>
 	      The filter may optionally be preceded
