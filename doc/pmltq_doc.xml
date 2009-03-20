@@ -6,7 +6,7 @@
       <surname>Pajas</surname>
     </author>
     <title>PML Tree Query</title>
-    <subtitle>Version 0.6 (alpha)</subtitle>
+    <subtitle>Version 0.7 (alpha)</subtitle>
   </articleinfo>
   <section>
     <title>Introduction</title>
@@ -22,7 +22,7 @@
       The query language is declarative and offers both textual and
       graphical representation of queries.  Currently, there are two
       implementations of the query engine, one is based on relational
-      database (Oracle) and the other is Perl-based (using the TrEd
+      database (Oracle or PostgreSQL >= 8.4) and the other is Perl-based (using the TrEd
       toolkit), and three user interfaces: a full-featured graphical
       user interface built in TrEd, a very raw WEB-based interface
       with text-only output, and command-line interface.
