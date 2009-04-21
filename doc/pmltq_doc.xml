@@ -6,7 +6,7 @@
       <surname>Pajas</surname>
     </author>
     <title>PML Tree Query</title>
-    <subtitle>Version 0.7.1 (alpha)</subtitle>
+    <subtitle>Version 0.7.2 (alpha)</subtitle>
   </articleinfo>
   <section>
     <title>Introduction</title>
@@ -79,8 +79,8 @@
       the relationships between the nodes 
       are as declared in the query.
       Such a tuple of nodes from the treebank is called
-      a <firstterm>match</firstterm>
-      and there can be zero, one, or more
+      a <firstterm>match</firstterm>.
+      There can be zero, one, or more
       distinct matches of the query in the treebank
       (two matches are distinct if they differ in
       at least one node).
@@ -96,8 +96,8 @@
       The body of a PML-TQ query is formed by one or more <firstterm>node selectors</firstterm>,
       which can nest further node selectors.
       A node selector represents a 
-      node the treebank and two different selectors represent
-      two different nodes (except for subqueries as described later).
+      node the treebank and <emphasis>two different selectors represent
+      two different nodes</emphasis> (except for subqueries as described later).
       It specifies the type of the node (the nodes in the treebank annotation can be typed
       or the query can refer to several annotation layers with different types of nodes),
       a symbolic name for the selector (variable),
@@ -158,8 +158,10 @@
       and nodes outside the subquery cannot
       refer to nodes within the subquery;
       however, nodes in the subquery may refer
-      to the nodes in its outer scope (except, of course,
-      to nodes within another subquery).
+      to the nodes in its outer scope (of course,
+      except for nodes within another subquery).
+    </para>
+    <para>
       A subquery constraint is verified as follows:
       for each match of the selector
       among whose constraints the subquery occurs,
@@ -179,18 +181,18 @@
     <para>
       A PML-TQ query can be represented graphically as 
       one or more trees whose nodes
-      represent the node selectors
-      and whose edges represent declaration and subquery nesting.
+      are the node selectors
+      and whose edges represent nesting of selectors and subqueries.
       In this sense we may sometimes refer to selectors
       as <firstterm>query nodes</firstterm>
       and to the query as <firstterm>query graph</firstterm>
       or <firstterm>query tree</firstterm> (a technical root
-      can be added above all the trees so that the forest becomes a single tree).
-      The edges can be typed (colored) to represent
-      the relationship between the corresponding nodes.
-      Additionally, relationships between non-nested nodes 
-      can be represented by additional layer of edges in the graph
-      that may arbitrarily cross the basic tree structure of the query.
+      can be added above all the trees so that a forest becomes a single tree).
+      The edges can be labeled or colored to represent
+      different relationships between nodes.
+      Relationships between nodes represented by non-nested selectors
+      can be represented by additional layer of edges (arrows) in the graph
+      that may arbitrarily cross the basic tree structure of the query tree.
     </para>
 <!--
     <glossary>
@@ -226,7 +228,8 @@
       textual form as well as how to build and run the query graphically in
       the tree editor TrEd.
     </para>
-    <bridgehead>Getting started</bridgehead>
+    <section>
+    <title>Getting started</title>
     <para>
       To start experimenting with the toolkit,
       start TrEd and press <keycombo><keysym>Ctrl</keysym><keysym>F3</keysym></keycombo>
@@ -255,7 +258,9 @@
 	<imageobject role="html"><imagedata align="center" fileref="tred_empty_query_s.png" format="PNG"/></imageobject>
       </mediaobject>
     </para>
-    <bridgehead>A simple query</bridgehead>
+    </section>
+    <section>
+      <title>A simple query</title>
     <para>
       Now we may create our first simple query.
       We shall search for all nodes of the type <literal>t-node</literal>
@@ -429,8 +434,9 @@
     </guibutton>,
     respectively.
     </para>
-
-    <bridgehead>A query with two nodes</bridgehead>
+    </section>
+    <section>
+    <title>A query with two nodes</title>
     <para>We shall now make the query more complex
     by adding another node to it.
     We shall ask for a t-node with
@@ -486,7 +492,9 @@ t-node $b := [ parent $a ];</programlisting>
     either indicating that <literal>$a</literal> has a child $b or
     that <literal>$b</literal> has a parent $a.
     </para>
-    <bridgehead>Disjunctions, regular expressions and set enumerations</bridgehead>
+    </section>
+    <section>
+    <title>Disjunctions, regular expressions and set enumerations</title>
     <para>We now extend our query expression
     to cover also t-nodes with functor <literal>CPHR</literal>.
     This can be done in three different ways:
@@ -624,42 +632,31 @@ t-node $b := [ parent $a ];</programlisting>
       allows the enumeration to be created 
       by selecting the desired values from a list.
     </para>
-    <bridgehead>TODO</bridgehead>
-    <programlisting>
-      ## Types of relations
-
-      ## relations based on PML references
-      
-      #### reverted dependency
+    </section>
+    <section>
+      <title>Types of relations (TODO)</title>
+      <para>Relations based on PML references:</para>
+      <para>Example on <literal>a/lex.rf</literal> relation connecting
+      t-layer to a-layer:</para>
+    <programlisting>#### t-layer dependency reversed on a-layer
       t-node [ t-node [ a/lex.rf $a0 ],
                a/lex.rf $a1 ];
-      a-node $a0 := [  a-node $a1 := [  ] ];
-
-      #### Rcp without a grammatical coreference
+      a-node $a0 := [  a-node $a1 := [  ] ];</programlisting>
+    <para>Example on coreference:</para>
+    <programlisting>#### Rcp without a grammatical coreference
       t-node 
-      [ t_lemma = '#Rcp', !1x coref_gram.rf t-node [  ] ];
-
-      ## PDT 2.0 specific relations: echild, eparent
-   
-      # 7.
-      t-node [ echild t-node [ functor='DPHR' ], echild t-node [ functor='DPHR' ] ]
-
-
-      #
-      t-node $a := [ gram/sempos='v', 
+      [ t_lemma = '#Rcp', !1x coref_gram.rf t-node [  ] ];</programlisting>
+    <para>Implementation/corpus specific relations</para>
+    <para>Examples using PDT 2.0 specific relations: <literal>echild</literal>, <literal>eparent</literal>:</para>
+    <programlisting>t-node [ echild t-node [ functor='DPHR' ], echild t-node [ functor='DPHR' ] ]</programlisting>
+    <programlisting>t-node $a := [ gram/sempos='v', 
                      ! echild t-node [ functor in { 'ACT','PAT','ADDR','ORIG','EFF' } ] 
-		   ]
-
-      #
-       t-node [ 0x eparent t-node [ ] ]
-
-      #
-       t-node [ 0x eparent t-node [  ], 
+		   ]</programlisting>
+    <programlisting>t-node [ 0x eparent t-node [ ] ]</programlisting>
+    <programlisting>t-node [ 0x eparent t-node [  ], 
                 gram/sempos ~ '^n',
-		functor !~ '^(PAR|DENOM)$' ];
-
-
-      #### reverted e-dependency, exclude numbers
+		functor !~ '^(PAR|DENOM)$' ];</programlisting>
+    <programlisting>#### reverted e-dependency, exclude numbers
       a-node $ref0 := [ 
         m/tag !~ '^C' ,
         echild a-node $ref1 := [
@@ -669,78 +666,145 @@ t-node $b := [ parent $a ];</programlisting>
       t-node [ 
         a/lex.rf $ref1, 
         echild t-node [ a/lex.rf $ref0 ] 
-      ];
-
-
-      ## Subqueries
-
-      # 3.
-      t-node [ functor='DPHR', 2+x child t-node [ ] ]
-
-      # 4.
-      t-node [ functor='DPHR', 2+x descendant t-node [ ] ]
-
-      # 5.
-      t-node [ 2+x child t-node [ functor='DPHR' ] ]
-
-      # 6.
-      t-node [ 2+x echild t-node [ functor='DPHR' ] ]
-
-      ## Functions
-
-      t-node [ functor='DPHR', sons()&gt;1 ]
-
-      ## Output filter
-
+      ];</programlisting>
+    </section>
+    <section>
+      <title>Labeled relations (using a <literal>member</literal> selector)</title>
+      <para>The member selector is useful 
+            for querying some types of complex-valued node attributes,
+	    e.g. lists of complex structures. Such attributes do not occur
+	    in PDT&#160;2.0, but do occur for example in CoNLL-2009 Shared Task
+	    data when converted to PML.
+      </para>
+      <para>Each node in CoNLL-2009 ST data 
+      can be annotated as an argument of some other node, called predicate.
+      The argument node carries an attribute
+        <literal>apreds</literal> which is a list
+	of all predicates it belongs to. The list consists
+	of structures with two members:
+	a PML reference to the predicate node (<literal>apreds/target.rf</literal>)
+	and an argument label <literal>apreds/label</literal>.
+	The set of argument labels differs from language to language;
+	for Czech data, the labels correspond to tectogrammatical functors
+	and the predicates to effective parents.
+      </para>
+      <para>
+	So, each structure in the list represents one labeled semantic relation.
+	To be able to combine constraints on the
+	target node (predicate) with the label of the relation that points
+	to it, we must use a feature of PML-TQ called
+	<literal>member</literal> selectors.
+      </para>
+      <para>
+	The following example finds a PAT argument and its corresponding predicate:
+      </para>
+      <programlisting>node $arg := [ 
+  member apreds [ 
+    label = 'PAT', 
+    target.rf node $pred := [ ] 
+  ] 
+]</programlisting>
+    <para>The intermediate <literal>member</literal> selector
+       matches one element of the <literal>apreds</literal> list at a time
+       and tests its label. If the label matches,
+       the nested node seletor
+       for the <literal>target.rf</literal> PML-reference relation
+       takes action.
+     </para>
+     <para>More details and further examples are given in <xref linkend="member_selectors"/>.
+     </para>
+    </section>
+    <section>
+      <title>Subqueries (TODO)</title>
+    <programlisting>t-node [ functor='DPHR', 2+x child t-node [ ] ]</programlisting>
+    <programlisting>t-node [ functor='DPHR', 2+x descendant t-node [ ] ]</programlisting>
+    <programlisting>t-node [ 2+x child t-node [ functor='DPHR' ] ]</programlisting>
+    <programlisting>t-node [ 2+x echild t-node [ functor='DPHR' ] ]</programlisting>
+    </section>
+    <section>
+      <title>Looking for small result trees?</title>
+      <para>Sometimes you want to find a good small example tree
+      demonstrating some linguistic phenomenon. You want it to fit
+      to a presentation slide or an article page.
+      You can do so by putting a limit on the tree size.
+      </para>
+      <para>Using a subquery this can be done as follows:</para>
+      <programlisting>t-node [
+  same-tree-as t-node 10-x,
+  functor='DPHR', # the rest of your query
+]</programlisting>
+      <para>This selects t-nodes with <literal>functor='DPHR'</literal>
+      in trees with at most 10 other t-nodes.
+      Using functions, this can be written as
+      </para>
+      <programlisting>t-root [ 
+  descendants() &lt;= 10,
+  descendant t-node [ functor='DPHR' ]
+]</programlisting>
+      <para>but note that in this case the <literal>t-root</literal> appears as a node
+      in the result set. To avoid it, we can write </para>
+      <programlisting>t-node [
+  functor='DPHR',
+  1x ancestor t-root [ descendants() &lt;= 10 ]
+]</programlisting>
+      <para>For treebanks that do not have a special node type for the root node,
+      we can write e.g.:</para>
+      <programlisting>node [ 
+  functor='DPHR', 
+  1x ancestor node [ 
+    !parent node [],
+    descendants() &lt;= 10 
+  ]
+]</programlisting>
+    </section>
+    <section>
+      <title>Functions (TODO)</title>
+    <programlisting>t-node [ functor='DPHR', sons()&gt;1 ]</programlisting>
+    </section>
+    <section>
+      <title>Output filters (TODO)</title>
+    <programlisting># counting occurrences
       t-node [ functor='DPHR' ]
-      &gt;&gt; count()
-
-      ## Simple output filters 
-
+      &gt;&gt; count()</programlisting>
+    <programlisting># simple aggregation: computing a maximum
       t-node $n := [ functor='DPHR' ]
-      &gt;&gt; max(sons($n))
-
+      &gt;&gt; max(sons($n))</programlisting>
+    <programlisting># max, min and average tree depth
       t-root $n := [ ]
       &gt;&gt; descendants($n)
-      &gt;&gt; max(), min(), avg()
-
-      ## Global aggregation with 'for' clause
-
+      &gt;&gt; max(), min(), avg()</programlisting>
+    <para>Aggregation using the 'for' clause:</para>
+    <programlisting># count functor occurrences
       t-node $n := [ ]
       &gt;&gt; for $n.functor
-         give $1, count()
-
-      #### how many coref arrows can xstart in one t-node
+         give $1, count()</programlisting>
+    <programlisting># how many coref arrows can start in one t-node
       t-node $t := 
         [ coref_gram.rf t-node $c := [  ] ];
       &gt;&gt;  for $t give count()
-      &gt;&gt; max()
-
-      ## Ordering results
-
-      t-node $n := [ ]
+      &gt;&gt; max()</programlisting>
+    <para>Ordering results:</para>
+    <programlisting>t-node $n := [ ]
       &gt;&gt; for $n.functor
          give $1, count()
-         sort by $2         
-      
-      ## Local aggregation with 'over'
+         sort by $2</programlisting>
+    <para>Using the 'over' clause to speify different grouping for each aggregation function:</para>
+    <programlisting># joint functor distribution:
+      # distribution of a functor X if governed by functor Y
       t-node $p := 
       [ echild t-node $c := [  ] ];
       &gt;&gt; $p.functor,$c.functor
       &gt;&gt; distinct $1,$2, count(over $1,$2), count(over $1)
       &gt;&gt; $1, $2, percnt($3 div $4,2)
          sort by $1,0-$3
-      &gt;&gt; $1, $2, $3 &amp; '%'
-
-
+      &gt;&gt; $1, $2, $3 &amp; '%'</programlisting>
+    <programlisting># the same using ratio()
       t-node $p := [ echild t-node $c :=  [  ] ];
       &gt;&gt;  for $p.functor,$c.functor
           give $1,$2,ratio(count() over $1)
           sort by $1,0-$3
-      &gt;&gt; $1, $2, percnt($3,2)
-
-
-    </programlisting>
+      &gt;&gt; $1, $2, percnt($3,2)</programlisting>
+    </section>
   </section>
   <section>
     <title>Query Language</title>
@@ -881,6 +945,36 @@ t-node $b := [ parent $a ];</programlisting>
 	    </listitem>
 	  </varlistentry>
 	  <varlistentry>
+	    <term>member selector</term>
+	    <listitem>
+	      <mediaobject id="rail_memberSelector">
+	      <imageobject role="html">
+		<imagedata format="PNG" fileref="rail_memberSelector.png"/>
+	      </imageobject><imageobject role="fo">
+		<imagedata format="PDF" fileref="rail_memberSelector.pdf"/>
+	      </imageobject><textobject role="syntax_diagram">
+		<phrase><![CDATA[ memberSelector : 'member' attributePath (variable ':=' )? \\ '[' constraints?  ']'
+ ]]></phrase>
+	      </textobject>
+	    </mediaobject>
+	      <para>Member selector can be used
+	        to match complex values
+		in node attributes
+		of alternative, list, or sequence type.
+		The selected value
+		is then treated almost as a node.
+		Although we do not indicate it explicitly in the syntax,
+		member selectors cannot nest
+		node selectors via tree-structure or 
+		ordering relations.
+	      </para>
+	      <para>
+		Member selectors are described in detail more
+		in  <xref linkend="member_selectors"/>.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
 	    <term>subquery</term>
 	    <listitem>
 	      <mediaobject id="rail_subquery">
@@ -889,7 +983,7 @@ t-node $b := [ parent $a ];</programlisting>
 	      </imageobject><imageobject role="fo">
 		<imagedata format="PDF" fileref="rail_subquery.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
-		<phrase><![CDATA[ subquery : occurrences 'x' RELATION? nodeSelector;
+		<phrase><![CDATA[ subquery : occurrences 'x' ( memberSelector | relation? nodeSelector );
 occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
  ]]></phrase>
 	      </textobject>
@@ -937,7 +1031,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      </imageobject><imageobject role="fo">
 		<imagedata format="PDF" fileref="rail_constraint.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
-		<phrase><![CDATA[ constraint : ((predicate | RELATION? nodeSelector | RELATION variable | subquery |  '(' constraint ')' | '!' constraint ) + ('and' | 'or' )) ;
+		<phrase><![CDATA[ constraint : ((predicate | relation? nodeSelector | memberSelector | relation variable | subquery |  '(' constraint ')' | '!' constraint ) + ('and' | 'or' )) ;
  ]]></phrase>
 	      </textobject>
 	    </mediaobject>
@@ -952,11 +1046,11 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    <literal>&lt;=</literal>
 	    <literal>&gt;</literal> etc.) on
 	    expressions (terms),
-	    or a node selector or subquery,
-	    or a reference to a named node selector
+	    a node selector, member selector, subquery,
+	    a reference to a named node selector
 	    (indicating that a node matched by referred 
 	    selector must be in the corresponding relation to the
-	    node matched by the current selector)
+	    node matched by the current selector),
 	    or a logical combination of any of these.
 	    However, a node selector used in a complex logical expression is
 	    treated as a subquery with at least one occurrence.
@@ -964,6 +1058,204 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    <para>The intended way of reading a constraint aloud in English
 	    in the context of a node selector is to precede it with
 	    the word <quote>has</quote>.
+	    </para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>relation</term>
+	    <listitem><mediaobject id="rail_relation">
+	      <imageobject role="html">
+		<imagedata format="PNG" fileref="rail_relation.png"/>
+	      </imageobject><imageobject role="fo">
+		<imagedata format="PDF" fileref="rail_relation.pdf"/>
+	      </imageobject><textobject role="syntax_diagram">
+		<phrase><![CDATA[ relation : treeRelation | orderingRelation | pmlRefRelation | implementationSpecificRelation ; ]]></phrase>
+	      </textobject>
+	    </mediaobject>
+	    <para>
+	      PML-TQ has the following types of relation:
+	    </para>
+	    <variablelist>
+	      <varlistentry>
+		<term>tree relations</term>
+		<listitem>
+<mediaobject id="rail_treeRelation">
+	      <imageobject role="html">
+		<imagedata format="PNG" fileref="rail_treeRelation.png"/>
+	      </imageobject><imageobject role="fo">
+		<imagedata format="PDF" fileref="rail_treeRelation.pdf"/>
+	      </imageobject><textobject role="syntax_diagram">
+		<phrase><![CDATA[ treeRelation : ( 'child' | 'parent' | 'same-tree-as' | 'descendant' distanceInterval? | 'ancestor' distanceInterval? ) '::'? ;
+		distanceInterval : LEFTBRACE NUMBER? ',' NUMBER? RIGHTBRACE ; ]]></phrase>
+	      </textobject>
+	    </mediaobject>
+	    <para>
+		  These are child, parent, descendant and
+		  ancestor. The last two can be followed by
+		  a distance interval of the forms
+		  <literal>{min,max}</literal>,
+		  or <literal>{,max}</literal>, or
+		  <literal>{min,}</literal>
+		  where <literal>min</literal> and <literal>max</literal>
+		  are positive integers.
+		</para>
+		<para>
+		  For example, in
+		  <programlisting>t-node $a := [ descendant{3,} t-node $b := [ ] ]</programlisting>
+		  <literal>$b</literal> 
+		  matches a descendant of <literal>$a</literal>
+		  such that there are at least two nodes
+		  on the path from $a to $b strictly
+		  between $a to $b.
+		</para></listitem>
+	      </varlistentry>
+	      <varlistentry>
+		<term>ordering relations</term>
+		<listitem>
+		<mediaobject id="rail_orderingRelation">
+		<imageobject role="html">
+		<imagedata format="PNG" fileref="rail_orderingRelation.png"/>
+		</imageobject><imageobject role="fo">
+		<imagedata format="PDF" fileref="rail_orderingRelation.pdf"/>
+		</imageobject><textobject role="syntax_diagram">
+		<phrase><![CDATA[ orderingRelation : ('depth-first-precedes' | 'depth-first-follows' | 'order-precedes' | 'order-follows') '::'? ; ]]></phrase>
+		</textobject>
+		</mediaobject>
+		<para>
+		  Relations
+		  <literal>depth-first-precedes</literal> 
+		  and <literal>depth-first-follows</literal>
+		  constraint mutual position of two
+		  nodes in the canonical depth first ordering of the
+		  tree.
+		</para>
+		<para>Relations <literal>order-precedes</literal>,
+		<literal>order-follows</literal>
+		are only available for treebanks
+		with explicit total ordering on the trees (typically dependency treebanks).
+		</para>
+		<para>
+		  For example, in
+		  <programlisting>t-node $a := [ depth-first-precedes t-node $b := [ order-precedes $a ] ]</programlisting>
+		  <literal>$a</literal> 
+		  matches a node that
+		  precedes <literal>$b</literal>
+		  in the depth-first order
+		  but follows <literal>$b</literal> in the total ordering of the tree;
+		  thus, for instance,
+		  <literal>$b</literal> can be a descendant
+		  of <literal>$a</literal> that precedes
+		  <literal>$a</literal>.
+		</para></listitem>
+	      </varlistentry>
+	      <varlistentry>
+		<term>relations based on PML-references</term>
+		<listitem>
+		<mediaobject id="rail_pmlRefRelation">
+		<imageobject role="html">
+		<imagedata format="PNG" fileref="rail_pmlRefRelation.png"/>
+		</imageobject><imageobject role="fo">
+		<imagedata format="PDF" fileref="rail_pmlRefRelation.pdf"/>
+		</imageobject><textobject role="syntax_diagram">
+		<phrase><![CDATA[ pmlRefRelation : attributePath '->'? ; ]]></phrase>
+	      </textobject>
+	    </mediaobject>
+		  <para>
+		    These relations represent ID-based references.
+		    They are derived from 
+		    attributes declared 
+		    in the specific PML schema
+		    of the treebank as PML references and represent the relation
+		    from a referring node (the one
+		    containing the reference)
+		    to the referenced node
+		    (the one whose ID the reference contains).
+		  </para>
+		  <para>
+		    The name of the relation is an attribute path
+		    to a PML reference (declared in the PML schema 
+		    as <literal>&lt;cdata format="PMLREF"/></literal>).
+		  </para>
+		  <para>
+		    For example, nodes of the type <literal>t-node</literal> 
+		    in PDT&#160;2.0 are structures declares as follows:
+<programlisting>  &lt;type name="t-node.type">
+    &lt;structure role="#NODE" name="t-node">
+      ...
+      &lt;member name="a">
+	&lt;structure>
+	  &lt;member name="lex.rf">
+	    &lt;cdata format="PMLREF"/>
+	  &lt;/member>
+	  &lt;member name="aux.rf">
+	    &lt;list ordered="0">
+	      &lt;cdata format="PMLREF"/>
+	    &lt;/list>
+	  &lt;/member>
+	&lt;/structure>
+      &lt;/member>
+      ...
+    &lt;/structure>
+  &lt;/type></programlisting>
+		  </para>
+		  <para>So, for a <literal>t-node</literal>, the attribute paths <literal>a/lex.rf</literal> and  <literal>a/aux.rf</literal>
+		    refer to PML references. They represent
+		    a pointer to a lexical counterpart node on the analytical layer,
+		    and zero or more pointers to related auxiliary nodes on the analytical layer
+		    (prepositions, conjunctions, auxiliary verbs, etc.).
+		    We can thus use these relations as follows:
+		    <programlisting>t-node $t:= [ a/lex.rf a-node $a:= [ afun='Sb' ], a/aux.rf a-node $x:= [ afun = 'AuxP' ] ]</programlisting>
+		    The query locates a <literal>t-node</literal> <literal>$t</literal>
+		    whose lexical counterpart on the analytical layer
+		    is the node <literal>$b</literal> with <literal>afun='Sb'</literal>
+		    and that contains at least one pointer to an auxiliary node
+		    <literal>$x</literal> with <literal>afun='AuxP'</literal>
+		    (a preposition).
+		  </para>
+		  <para>
+		    Since the names of node attributes may be in collision with
+		    other types of relations, we 
+		    may force 
+		    interpreting a relation as a <literal>pmlRefRelation</literal>
+		    by following it by the characters <literal>-></literal>.
+		  </para>
+		</listitem>
+	      </varlistentry>
+	      <varlistentry>
+		<term>implementation specific relations</term>
+		<listitem>
+		  <mediaobject id="railimplementationSpecificRelation">
+		    <imageobject role="html">
+		      <imagedata format="PNG" fileref="railimplementationSpecificRelation.png"/>
+		      </imageobject><imageobject role="fo">
+		      <imagedata format="PDF" fileref="railimplementationSpecificRelation.pdf"/>
+		      </imageobject><textobject role="syntax_diagram">
+		      <phrase><![CDATA[ implementationSpecificRelation : NAME '::'? ; ]]></phrase>
+		    </textobject>
+		  </mediaobject>
+		  <para>
+		    An implementation can choose to provide further
+		    set of relations provided that their names
+		    are not in collision with
+		    the tree relations and ordering relations.
+		  </para>
+		  <para>For example, the standard implementation of PML-TQ 
+		    defines relations <literal>echild</literal> and
+		    <literal>eparent</literal> for the PDT&#160;2.0
+		    treebank to represent so called effective-parent and effective-child relations.
+		  </para>
+		</listitem>
+	      </varlistentry>
+	    </variablelist>
+	    <para>
+	      All relation names except for PML-reference relations
+	      can be followed by two colons in cases that could
+	      lead to syntactical ambiguity
+	      (e.g. if they can be confused with node types).
+	      PML-reference relations can be followed
+	      by an arrow (a dash and greater-than characters)
+	      to avoid confusion with other relations,
+	      node types, or keywords.
 	    </para>
 	    </listitem>
 	  </varlistentry>
@@ -1399,313 +1691,6 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	</variablelist>
     </section>
   </section>
-  <section id="functions">
-      <title>Functions</title>
-      <section>
-	<title>Functions related to the tree structure</title>
-      <variablelist>
-	<varlistentry>
-	  <term>name($var?)</term>
-	  <listitem><para>Return the name of a node matched by the given selector
-	  (assume current selector if used without an argument).
-	  This function only makes sense if the node is an element of a PML sequence
-	  (of trees or child nodes).</para></listitem>
-	</varlistentry>
-	<varlistentry>
-	  <term>depth($var?)</term>
-	  <listitem><para>Returns the depth in the tree (counting from 0)
-	  of a node matched by a given selector. If no argument is given, the current selector is assumed.</para></listitem>
-	</varlistentry>
-	<varlistentry>
-	  <term>descendants($var?)</term>
-	  <listitem><para>Returns the number of descendants
-	  of the node matched by a given selector. If no argument is given, the current selector is assumed.</para></listitem>
-	</varlistentry>
-	<varlistentry>
-	  <term>lbrothers($var?)</term>
-	  <listitem><para>Returns the number of left siblings
-	  of the node matched by a given selector. If no argument is given, the current selector is assumed.</para></listitem>
-	</varlistentry>
-	<varlistentry>
-	  <term>rbrothers($var?)</term>
-	  <listitem><para>Returns the number of right siblings
-	  of the node matched by a given selector. If no argument is given, the current selector is assumed.</para></listitem>
-	</varlistentry>
-	<varlistentry>
-	  <term>sons($var?)</term>
-	  <listitem><para>Returns the number of child nodes
-	  of the node matched by a given selector. If no argument is given, the current selector is assumed.</para></listitem>
-	</varlistentry>
-	<varlistentry>
-	  <term>depth_first_order($var?)</term>
-	  <listitem><para>Returns the depth-first order of the
-	  node matched by the given selector (counting from 0). If no argument is given, the current selector is assumed.</para></listitem>
-	</varlistentry>
-      </variablelist>	
-      </section>
-      <section>
-	<title>Functions related to corpus</title>
-      <variablelist>
-	<varlistentry>
-	  <term>file($var?)</term>
-	  <listitem><para>Returns the file name of a document in which the node matched by a given
-	  (or current) selector occurrs.</para></listitem>
-	</varlistentry>
-	<varlistentry>
-	  <term>tree_no($var?)</term>
-	  <listitem><para>Returns index of a tree in which a the node
-	  matched by a given (or current) selector occurs,
-	  i.e. the position of the tree in its document.</para></listitem>
-	</varlistentry>
-	<varlistentry>
-	  <term>address($var?)</term>
-	  <listitem><para>Returns an URL uniquely determining the node
-	  matched by a given (or current) selector.
-	  The same value can be also computed using the following expression:
-	  <literal>file($var) &amp; '##' &amp; tree_no($var) &amp; '.' &amp; depth_first_order($var)</literal>.</para></listitem>
-	</varlistentry>
-      </variablelist>
-      </section>
-      <section>
-	<title>String functions</title>
-      <variablelist>
-	<varlistentry>
-	  <term>length(string)</term>
-	  <listitem><para>Returns the string length of a given expression.</para></listitem>
-	</varlistentry>
-	<varlistentry>
-	  <term>substr(string,offset,length?)</term>
-	  <listitem><para>Returns a substring of a given string starting at at a given offset (first character
-	  in the string has offset 0) and spanning for a given length or to the end of the string, 
-	  if length is omitted or if the original string has less than offset+length characters.</para></listitem>
-	</varlistentry>
-	<varlistentry>
-	  <term>match(string,regexp,flags?)</term>
-	  <listitem><para>Returns the first substring of a given string 
-	  matching a given regular expression.
-	  The optional third argument can be a string of flags modifying the behavior of the regular
-	  expression matching procedure. The following flags are supported:
-	</para>
-	  <variablelist>
-	    <varlistentry>
-	      <term>i</term>
-	      <listitem>
-		<para>case insensitive match</para>
-	      </listitem>
-	    </varlistentry>
-	    <varlistentry>
-	      <term>c</term>
-	      <listitem>
-		<para>case sensitive match (default)</para>
-	      </listitem>
-	    </varlistentry>
-	    <varlistentry>
-	      <term>n</term>
-	      <listitem>
-		<para>allows the period (.) to match the newline character</para>
-	      </listitem>
-	    </varlistentry>
-	    <varlistentry>
-	      <term>m</term>
-	      <listitem>
-		<para>Treat string as multiple lines.
-		That is, change "^" and "$" from matching the start or end of the string to matching the
-		start or end of any line anywhere within the string.
-		</para>
-	      </listitem>
-	    </varlistentry>
-	  </variablelist>
-	  </listitem>
-	</varlistentry>
-	<varlistentry>
-	  <term>replace(string,substr,replacement)</term>
-	  <listitem><para>Substitutes a given replacement for all (non-overlapping) occurrences of a given
-	  substring in a given string and returns the result. For example, <literal>replace('banana ananas','ana','ANA')</literal>
-	  returns <literal>bANAna ANAnas</literal>.</para></listitem>
-	</varlistentry>
-	<varlistentry>
-	  <term>substitute(string,regexp,replacement,flags?)</term>
-	  <listitem><para>Substitutes a given replacement for the first or all (non-overlapping) substrings
-	  matching a given regular expression in a given string and returns the result. 
-	</para>
-	<para>
-	  The default behavior is to replace just the first matching substring. 
-	  To replace all occurrences, use the flag 'g'. 
-	</para>
-	<para>
-	  The replacement string may contain references to subexpressions 
-	  of the matching regular expression (subexpressions are parts of the expressions 
-	  enclosed in brackets). The string \N, where N is a digit from 1 to 9, is a reference
-	  to the N-th subexpression (counting opening brackets from the left),
-	  and is substituted in the result by the substring matched by that subexpression.
-	  For example, if the regular expression was
-	  <literal>a(b(c))(d)</literal>, then 
-	  <literal>\1</literal>, <literal>\2</literal>,
-	  and <literal>\3</literal> refer
-	  to the subexpressions <literal>(b(c))</literal>,
-	  <literal>(c)</literal>,
-	  and <literal>(d)</literal>, respectively.
-	</para>
-	<para>Since backslash (<literal>\</literal>) is used
-	to introduce subexpression references in the replacement string,
-	literal backslash has to be written as <literal>\\</literal>.
-	</para>
-	<para>
-	  The optional third argument is a string of flags modifying the behavior of the regular
-	  expression matching procedure. Any of the flags described above for the
-	  function <literal>match()</literal> can be used here, and additionally
-	  <literal>substitute()</literal> supports the following flag:
-	</para>
-	  <variablelist>
-	    <varlistentry>
-	      <term>g</term>
-	      <listitem>
-		<para>global replace: replace all non-overlapping matches of a given regular expression</para>
-	      </listitem>
-	    </varlistentry>
-	  </variablelist>
-	  <para>
-	    For example, <literal>substitute('banana ananas','([^n])a','\1@','g')</literal>
-	    returns the string <literal>b@nana @nanas</literal>.
-	  </para>
-	  </listitem>
-	</varlistentry>	
-	<varlistentry>
-	  <term>lower(string)</term>
-	  <listitem><para>Returns lowercase version of a given expression.</para></listitem>
-	</varlistentry>
-	<varlistentry>
-	  <term>upper(string)</term>
-	  <listitem><para>Returns uppercase version of a given expression.</para></listitem>
-	</varlistentry>
-	<varlistentry>
-	  <term>tr(string,characters_to_replace,replacement)</term>
-	  <listitem><para>Replaces all occurences of given characters in a string with corresponding characters in the replacement set,
-	  that is, replaces all occurrences of the Nth character from <replaceable>characters_to_replace</replaceable> with the Nth character
-	  in the <replaceable>replacement</replaceable>. For example, <literal>tr('122-34','24','ab')</literal> returns the string 
-	  <literal>1aa-b4</literal>.</para></listitem>
-	</varlistentry>
-      </variablelist>
-      </section>
-      <section>
-	<title>Numerical functions</title>
-	<variablelist>
-	  <varlistentry>
-	    <term>ceil(number)</term>
-	    <listitem><para>Return the smallest integer value greater than or equal to a given numerical argument.</para></listitem>
-	  </varlistentry>
-	  <varlistentry>
-	    <term>floor(number)</term>
-	    <listitem><para>Return the largest integer value less than or equal to the numerical argument.</para></listitem>
-	  </varlistentry>
-	  <varlistentry>
-	    <term>round(number,places?)</term>
-	    <listitem><para>Returns a given number rounded to a specified number of decimal places (0 if the second argument is not specified).</para></listitem>
-	  </varlistentry>
-	  <varlistentry>
-	    <term>trunc(number,places?)</term>
-	    <listitem><para>Returns a number truncated to a certain number of decimal places (0 if second argument is not specified).</para></listitem>
-	  </varlistentry>
-	  <!--
-	      <varlistentry>
-	      <term>percnt(number,places?)</term>
-	      <listitem><para>This is a convenience function, which returns
-	      the same value as <literal>round(100*number,places)</literal>.</para></listitem>
-	      </varlistentry>
-	  -->
-	</variablelist>
-      </section>
-      <section>
-	<title>Aggregation functions</title>
-	<para>
-	  Aggregation functions can only be
-	  used in output filters.
-	  There are two ways
-	  of using these functions:
-	</para>
-	<orderedlist>
-	  <listitem>
-	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable>)</literal>.
-	    If this form is used in the
-	    <literal>give</literal> part of a
-	    <literal>for ... give ...</literal>
-	    clause, the function
-	    computes its value by considering
-	    only those input rows that
-	    belong to the current aggregation
-	    group.
-	    If used outside a
-	    <literal>for ... give ...</literal>
-	    clause, the function
-	    computes its value by considering
-	    all input rows (i.e.
-	    the rows returned by the preceding filter
-	    or the body of the query).
-	    </para>
-	  </listitem>
-	  <listitem>
-	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable> over <replaceable>colspec, ...</replaceable>)</literal>.
-	    This form creates a temporary aggregation
-	    of the current input according to given column
-	    specifications following the <literal>over</literal> keyword
-	    and computes the value by considering
-	    input rows of the aggregation group
-	    to which the current input row belongs.
-	    Unlike <literal>for ... give ...</literal>,
-	    this type of aggregation does not
-	    propagate to the output, so the
-	    filter still returns one output row for each input row,
-	    rather than a row for each aggregation group.
-	    </para>
-	  </listitem>
-	  <listitem>
-	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable> over all)</literal>
-	    computes the value by considering
-	    all input rows, not just those in the current
-	    aggregation group.
-	    </para>
-	  </listitem>
-	  <listitem>
-	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable> over <replaceable>colspec,...</replaceable> sort by <replaceable>colspec,...</replaceable> )</literal>
-	    is a variant of the previous aggregations that forces an ordering on the aggregated values;
-	    this is currently only useful for the aggregation function <literal>concat()</literal>.
-	    </para>
-	  </listitem>
-	</orderedlist>
-	<variablelist>
-	  <varlistentry>
-	    <term>count([ over ... ])</term>
-	    <listitem><para>Returns the number of input rows considered.</para></listitem>
-	  </varlistentry>
-	  <varlistentry>
-	    <term>sum(<replaceable>expression</replaceable> [ over ... ])</term>
-	    <listitem><para>For each row considered, computes the expression and returns a sum of the results. The expression must evaluate to a number.</para></listitem>
-	  </varlistentry>
-	  <varlistentry>
-	    <term>concat(<replaceable>expression</replaceable>, [<replaceable>"separator"</replaceable>] [ over ... [sort by ...]])</term>
-	    <listitem><para>For each row considered, computes the expression and returns a character string  
-	    obtained by concatenating the results; the optional
-	    second argument may be a literal string to be used as a separator of the concatenated strings. The values are concatenated in
-	    no particular order unless the <literal>over ... sort by ...</literal> clause is used.</para></listitem>
-	  </varlistentry>
-	  <varlistentry>
-	    <term>min(<replaceable>expression</replaceable> [ over ... ])</term>
-	    <listitem><para>For each row considered, computes the expression and returns the minimum of the resulting values. The expression must evaluate to a number.</para></listitem>
-	  </varlistentry>
-	  <varlistentry>
-	    <term>max(<replaceable>expression</replaceable> [ over ... ])</term>
-	    <listitem><para>For each row considered, computes the expression and returns the maximum of the resulting values. The expression must evaluate to a number.</para></listitem>
-	  </varlistentry>
-	  <varlistentry>
-	    <term>avg(<replaceable>expression</replaceable> [ over ... ])</term>
-	    <listitem><para>For each row considered, computes the expression and returns the average of the resulting values. The expression must evaluate to a number.</para></listitem>
-	  </varlistentry>
-	  <varlistentry>
-	    <term>ratio(<replaceable>expression</replaceable> [ over ... ])</term>
-	    <listitem><para>Returns the ratio of the value computed using the expression to the sum of all values computed using this expression over all rows considered.</para></listitem>
-	  </varlistentry>
-	</variablelist>
-      </section>
       <section id="attribute_paths">
 	<title>Attribute paths</title>
 	<para>
@@ -2263,6 +2248,721 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	  </para>
 	  </listitem>
 	</orderedlist>
+      </section>
+      <section id="member_selectors">
+	<title>Member selectors</title>
+	<para>While primitive quantifiers allow one to quantify over
+	atomic values on a complete attribute path, something it is
+	useful to quantify over elements on some partial attribute
+	paths while specifying conditions on the quantified element.
+	This can be done using the relation <literal>member</literal>,
+	which allows us to access data structures stored in node's
+	attributes almost as if they were regular nodes.
+	</para>
+	<para>
+	  For example: assume each node contains an
+	  annotation of the bridging anaphora.
+	  This can be represented by an attribute called
+	  <literal>bridging</literal> that is a list of
+	  structures with two members, 
+	  <literal>informal-type</literal> (a string value for the type of the anaphora) and
+	  <literal>target.rf</literal> (a PML reference to the anaphora antecedent).
+	  So, each element of the <literal>bridging</literal>
+	  list represents a pointer to another node labeled by a type.
+	  We might want to ask for nodes with <literal>functor="ACT"</literal> that are pointed to
+	  from the current node by a pointer with a specific <literal>informal-type</literal>,
+	  say <literal>"CONTRAST"</literal>.
+	</para>
+	<para>
+	  The following query will <emphasis>not work</emphasis>
+
+	  <programlisting>t-node $n := [ 
+  bridging/informal-type = "CONTRAST",
+  bridging/target-node.rf t-node [ functor="ACT" ]
+]</programlisting> 
+
+The problem with this query is that <literal>bridging</literal> attribute
+contains a list and constraints on its values 
+are independent.
+So,
+<literal>$n</literal> can still match a node
+whose <literal>bridging</literal> attribute is a list consisting of two list members, one that
+points to an ACTor but whose
+<literal>informal-label</literal> is not
+<literal>"CONTRAST"</literal>, and one with
+<literal>informal-label="CONTRAST"</literal> but pointing
+somewhere else.
+	</para>
+	<para>In order to be able to say that these list members are the same,
+	we have to use the <literal>member</literal> selector:
+	</para>
+	<programlisting>t-node $n:= [ 
+  member bridging [ 
+    informal-type = "CONTRAST", 
+    target-node.rf t-node [ functor="ACT" ] 
+  ] 
+]</programlisting>
+<para>This query says that 
+one of the values matched by the attribute path <literal>bridging</literal>
+(i.e. one of the members of the list contained in the attribute <literal>bridging</literal> of
+the node matched by <literal>$a</literal>)
+has
+<literal>informal-type="CONTRAST"</literal>
+and points to a <literal>t-node</literal> with
+<literal>functor="ACT"</literal>.
+Thus, <literal>member</literal> selector works as an existential 
+quantification over values of a list or alt attribute.
+We can also use <literal>member</literal> selector
+for sequence attributes, but the attribute path
+that follows the  <literal>member</literal> keyword
+must specify a particular element name in the last step.
+For example, if <literal>bridging</literal> was not a list but
+a sequence 
+of elements named e.g. <literal>terminal</literal>, <literal>non-terminal</literal>,
+we must use either
+<programlisting>member bridging/terminal [...] </programlisting>
+to quantify over all terminals in the <literal>bridging</literal> sequence
+or 
+<programlisting>member bridging/non-terminal [...] </programlisting>
+to quantify over all non-terminals in the <literal>bridging</literal> sequence.
+</para>
+<para>Of course, we can use <literal>member</literal> selectors within 
+<literal>member</literal> selectors and (as we have seen), we can
+use PML-reference relations within <literal>member</literal> selectors.
+But since the objects represented by the <literal>member</literal> selector
+are not a regular nodes
+one cannot use the tree-structure selectors such as
+<literal>child</literal> or <literal>parent</literal>
+within <literal>member</literal> selectors.
+</para>
+<para>A <literal>member</literal> selector can be used for a
+subquery, i.e. prefixed by an occurrence clause or used in boolean
+expressions. In particular, negated or 0-occurring
+<literal>member</literal> selector with negated constraints
+can be used to formulate universal quantification over values of a list, alt, or sequence.
+</para>
+<para>
+</para>
+      </section>
+      <section>
+	<title>Aggregation explained</title>
+	<para>
+	  By aggregation we mean computing one value for a set of input data,
+	  e.g. computing a sum or maximum of certain values
+	  using an aggregation function
+	  (a list of aggregation functions is given
+	  in <xref linkend="agg_functions"/>).
+	  PML-TQ offers aggregation functionality in the output filters:
+	  a column value returned by a filter may be computed
+	  by combining values computed from a group of input rows.
+	</para>
+	<para>
+	  A filter can perfrom aggregation using the following ways:
+	  <itemizedlist>
+	    <listitem><para>
+	      Aggregating over all input rows.</para>
+	      <para> 
+	      In this case case the filter produces exactly one output row
+	      whose columns are either constant or computed 
+	      by aggregating values computed from all input rows
+	      using an aggregation function.
+	      </para>
+	      <para>
+		Examples of such filters are
+		<programlisting> >> count() </programlisting>
+		computing just the count of all input rows, or
+		<programlisting> >> concat($1), sum($2)/count(), max($2)-min($2)</programlisting>
+		computing a row consisting of three columns:
+		the first one concatenating all values in column 1 of the input from the preceding filter,
+		the second computing an average value of column 2 of the input
+		(which we could also write as <literal>avg($2)</literal>),
+		the third the difference between maximum and minimum value 
+		column 2 of the input.
+	      </para>
+	    </listitem>
+	    <listitem><para>Partitioning input rows into groups and aggregating over each group.</para>
+	    <para>
+	      This method allows one to define
+	      a partition on the input rows into groups that share some key value
+	      and then operate on each of these groups individually,
+	      producing one output row per partition group.
+	    </para>
+	    <para>In the first step, we compute a vector of values from each input row, called key,
+	    and put all rows that produce the same key to one group.
+	    Then we can apply aggregation functions over each of the group
+	    and combine them with the key values to produce one output row for each group
+	    of input rows. For example, consider the following query:
+	    </para>
+	    <programlisting>t-root $r:= [ descendant t-node $n [] ]
+  >> $r.id, depth($n)
+  >> for $1 give max($2)
+  >> for $1 give $1, count() sort by $2 desc</programlisting>
+	    <para>The main part of the query returns 
+	    all pairs of nodes <literal>($r,$n)</literal>
+	    where $r is a root node and $n is any of its descendants.
+	    For all such occurrences, the first filter produces
+	    a row with two columns: the (unique) ID of <literal>$r</literal> and
+	    the depth of the node <literal>$n</literal> in the tree.
+	    </para>
+	    <para>
+	      The second filter takes the first column of its input row 
+	      as the key and groups the input row by this key;
+	      this results in as many groups as there were
+	      unique root nodes in the matching set
+	      and each group consists of the input rows
+	      that belong to one root.
+	      This is done by the <literal>for $1</literal> clause.
+	      <literal>give max($2)</literal> clause says
+	      that for each group, we want to produce
+	      a row with a single column whose value is calculated
+	      as the maximum of the values in column 2 of the input filter,
+	      i.e. maximum of depths of the nodes <literal>$n</literal>
+	      for the given root <literal>$r</literal>.
+	      This is basically the depth of the tree rooted in
+	      <literal>$r</literal>.
+	    </para>
+	    <para>
+	      Finally, the third filter computes a distribution
+	      of tree depths. It's input are
+	      depths of individual trees.
+	      It groups the input rows according
+	      to their 1st (and only) column (the depth).
+	      Since there is just one input column, the key vector here is the
+	      whole input row; so within each group, all rows are identical.
+	      The filter counts number of rows in each group and
+	      for each group produces an putput row
+	      whose first column is the first value of the key vector
+	      (in our case the tree depth) and the second is the count
+	      (number of trees of that depth).
+	      The final
+	      <literal>sort by $2 desc</literal> 
+	      clause says that the rows produced by this
+	      filter should be order
+	      by the 2nd column in the descending order.
+	    </para>
+	    <para>
+	      Note that there are two types of column references
+	      in the <literal>give...</literal> clause.
+	      Those that occcur within an aggregation function
+	      (such as <literal>$2</literal> in <literal>max($2)</literal>)
+	      refer to the column of the input rows (in a given aggregation group).
+	      Those that occur outside an aggregation function,
+	      (such as <literal>$1</literal> in <literal>$1,count()</literal>)
+	      refer to the field of the key vector
+	      (so it is guaranteed that this value is constant over 
+	      all rows in one aggregation group).
+	    </para>
+	    </listitem>
+	    <listitem>
+	      <para>Aggregating over dynamically created groups.</para>
+	      <para>
+		This method allows each aggregation function to create
+		a different partitioning to aggregation groups
+		and also to impose the order in which an aggregation function
+		computes its value,
+		which may be important for order-sensitive aggregation functions
+		such as concatenation (<literal>concat()</literal>).
+		Consider this example on PDT 2.0:
+	      </para>
+	      <programlisting>t-node $a := 
+[  t_lemma = '#Forn', t-node $b := [ functor = "FPHR" ] ];
+  >> $a.id, distinct concat($b.t_lemma, ' ' over $a sort by $b.deepord )
+	      </programlisting>
+	      <para>
+		The selective part of the query finds t-node <literal>$a</literal> with
+		<literal>t_lemma='#Forn'</literal> which
+		is a technical node governing a flat list
+		of words in a foregin language
+		and its child-node <literal>$b</literal>
+		with functor <literal>FPHR</literal> (foreign phrase),
+		which matches any of the words.
+	      </para>
+	      <para>
+		To reconstruct the foreign phrase, 
+		we need for each <literal>$a</literal> to concatenate 
+		the <literal>t_lemma</literal> of all corresponding
+		<literal>$b</literal>'s in the ordering of the tree
+		(given by the attribute <literal>deepord</literal>).
+		The input to our filter are the pairs of nodes
+		<literal>$a</literal> and <literal>$b</literal>.
+	      </para>
+	      <para>
+		The concatenation is performed by the aggregating
+		function <literal>concat</literal>.
+		The first argument says which value we
+		want to extract from each input,
+		the second argument <literal>' '</literal>
+		is optional and specifies a separator
+		of the concatenated values.
+		The
+		<literal>over ...</literal> clause
+		defines partitioning into aggregation groups just as the
+		<literal>for ...</literal> clause;
+		the difference is that this partitioning is
+		particular to this aggregation function,
+		not to the whole filter.
+		In fact, given an input row,
+		the expression <literal>concat($b.t_lemma, ' ' over $a ...</literal> says
+		that we want to select those input rows where <literal>$a</literal> is
+		the same as in the current row, and
+		for this selection concatenate the values <literal>$b.t_lemma</literal>.
+		The <literal>sort by...</literal> clause says that
+		the selected rows should be ordered
+		by <literal>$b.deepord</literal>.
+	      </para>
+	      <para>
+		Unlike partitioning using the
+		<literal>for...</literal> clause, this type of
+		partitioning is done within the aggregation function,
+		so the filter produces one output row for each input
+		row, not just one per aggregation group.  Thus, we
+		would get the same output for each input pair
+		<literal>($a,$b)</literal> where <literal>$a</literal>
+		is the same; we therefore use the keyword
+		<literal>distinct</literal> to filter out the
+		duplicities from the output.
+	      </para>
+	      <para>
+		Thus, on the output, we get the ID of <literal>$a</literal>
+		and the foreign phrase its subtree represents.
+	      </para>
+	      <para>
+		This type of aggregation can also be combined
+		with the <literal>for...</literal> clause
+		to define a further partition on the aggregation groups
+		defined by the <literal>for...</literal> clause.
+		The column references within a <literal>over...</literal>
+		clause refer to the keys of the 
+		<literal>for...</literal> clause.
+	      </para>
+	      <para>
+		The clause <literal>over all</literal>
+		can be used as a special variant of the
+		<literal>over...</literal>
+		that creates only one aggregation group that spans over all
+		input rows.
+	      </para>
+	    </listitem>
+	  </itemizedlist>
+	</para>
+	<para>
+	  Let us consider an example that combines
+	  aggregation using <literal>for...</literal>
+	  with aggregation using <literal>over...</literal>.
+	</para>
+	<para>
+	  Let's say that for each functor A we want to know 
+	  the probability that a child of a node with functor=A has
+	  functor A, B, C, D, etc.
+	  In other words, we want to compute the 
+	  joint distribution of functor labels over nodes
+	  connected by an edge. This is done by the following query:
+	</para>
+	<programlisting>t-node $p := [  t-node $c := [  ] ];
+>>  for $p.functor,$c.functor
+    give $1,$2,count() div sum(count() over $1)
+    sort by $1,$3 desc,$2
+>> $1,$2,percnt($3,2) &amp; '%'</programlisting>
+	<para>
+	  The selective part select a pair of t-nodes
+	  <literal>($p,$c)</literal> where
+	  <literal>$p</literal> governs <literal>$c</literal>.
+	</para>
+	<para>
+	  We first group together pairs with the same pair of functors
+	  using <literal> for $p.functor,$c.functor</literal>.  This
+	  partitions original input rows into aggregation groups
+	  <literal>g<subscript>1</subscript>,...,g<subscript>n</subscript></literal>,
+	  each determined by the unique value of the grouping key
+	  <literal>($p.functor,$c.functor)</literal>.  For each group
+	  we give to the next filter this pair of functors and the
+	  probability of the second functor on the first one. The
+	  filter thus produces one output row for each group.  Let us
+	  see how the output row is produced for a group
+	  <literal>g<subscript>i</subscript></literal> whose key is
+	  for example <literal>('PRED','ACT')</literal>.
+	</para>
+	<para>
+	  The first two columns are just taken from the key vector,
+	  using <literal>$1,$2</literal> and producing
+	  'PRED','ACT'. The probability 
+	  that 'ACT' is governed by 'PRED'
+	  is computed using the following expression:
+	</para>
+	<programlisting>count()<co id="ex.joint.func.count.1" linkends="ex.joint.func.count.1.desc"/> div sum(count() over $1)<co id="ex.joint.func.sum" linkends="ex.joint.func.sum.desc"/></programlisting>
+	<calloutlist>
+	  <callout arearefs="ex.joint.func.count.1" id="ex.joint.func.count.1.desc">
+	    <para>
+	      The first <literal>count()</literal> just computes the number of rows
+	      in the current aggregation group <literal>g<subscript>i</subscript></literal>,
+	      i.e. the number of occurrences of 'PRED','ACT'
+	      among the selected pairs of nodes.
+	    </para>
+	  </callout>
+	  <callout arearefs="ex.joint.func.sum" id="ex.joint.func.sum.desc">
+	    <para>
+	      The <literal>over $1</literal> clause
+	      in the expression <literal>sum(... over $1)</literal>.
+	      partitions
+	      the set <literal>g<subscript>1</subscript>,...,g<subscript>n</subscript></literal>
+	      into aggregation groups of higher level,
+	      putting together those groups, that
+	      share the 1st column of the aggregation key.
+	    </para>
+	    <para>
+	      So, our current group <literal>g<subscript>i</subscript></literal>
+	      for ('PRED','ACT')
+	      representing
+	      will end up in one sack with 
+	      all groups whose key starts with 'PRED',
+	      e.g. ('PRED','PAT'), ('PRED','EFF'), etc.
+	      For our group <literal>g<subscript>i</subscript></literal>,
+	      the sum will compute its value over this sack,
+	      by summing the number of elements
+	      in each group that ended in this sack.
+	      Thus the result is in fact
+	      the number of all occurrences
+	      of 'PRED' dominating any other functor.
+	    </para>
+	  </callout>
+	</calloutlist>
+	<para>
+	  The filter then orders the results
+	  primarily by the functor of the parent node,
+	  secondarily by the probability in decreasing order,
+	  and tertiary by the functor of the child.
+	  The second filter merely applies the expression
+	  <literal>percnt($3,2) &amp; '%'</literal>
+	  to the 3rd column, dividing it by 100, rounding the result to
+	  two decimal points and appends a percent sign.
+	</para>
+	<para>The output looks like this (without the ellipses):</para>
+	<programlisting>ACMP	RSTR	54.37%
+ACMP	PAT	10.77%
+ACMP	ACT	10.34%
+ACMP	APP	4.99%
+...
+ACT	RSTR	49.56%
+ACT	PAT	9.75%
+ACT	APP	8.68%
+...
+ADDR	RSTR	64.67%
+ADDR	APP	14.74%
+ADDR	PAT	4.24%
+ADDR	ID	3.17%
+...
+ADVS	PRED	48.5%
+ADVS	ACT	13.18%
+ADVS	CM	9.09%
+...</programlisting>
+      </section>
+  <section id="functions">
+      <title>Functions</title>
+      <section>
+	<title>Functions related to the tree structure</title>
+      <variablelist>
+	<varlistentry>
+	  <term>name($var?)</term>
+	  <listitem><para>Return the name of a node matched by the given selector
+	  (assume current selector if used without an argument).
+	  This function only makes sense if the node is an element of a PML sequence
+	  (of trees or child nodes).</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>depth($var?)</term>
+	  <listitem><para>Returns the depth in the tree (counting from 0)
+	  of a node matched by a given selector. If no argument is given, the current selector is assumed.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>descendants($var?)</term>
+	  <listitem><para>Returns the number of descendants
+	  of the node matched by a given selector. If no argument is given, the current selector is assumed.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>lbrothers($var?)</term>
+	  <listitem><para>Returns the number of left siblings
+	  of the node matched by a given selector. If no argument is given, the current selector is assumed.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>rbrothers($var?)</term>
+	  <listitem><para>Returns the number of right siblings
+	  of the node matched by a given selector. If no argument is given, the current selector is assumed.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>sons($var?)</term>
+	  <listitem><para>Returns the number of child nodes
+	  of the node matched by a given selector. If no argument is given, the current selector is assumed.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>depth_first_order($var?)</term>
+	  <listitem><para>Returns the depth-first order of the
+	  node matched by the given selector (counting from 0). If no argument is given, the current selector is assumed.</para></listitem>
+	</varlistentry>
+      </variablelist>	
+      </section>
+      <section>
+	<title>Functions related to corpus</title>
+      <variablelist>
+	<varlistentry>
+	  <term>file($var?)</term>
+	  <listitem><para>Returns the file name of a document in which the node matched by a given
+	  (or current) selector occurrs.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>tree_no($var?)</term>
+	  <listitem><para>Returns index of a tree in which a the node
+	  matched by a given (or current) selector occurs,
+	  i.e. the position of the tree in its document.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>address($var?)</term>
+	  <listitem><para>Returns an URL uniquely determining the node
+	  matched by a given (or current) selector.
+	  The same value can be also computed using the following expression:
+	  <literal>file($var) &amp; '##' &amp; tree_no($var) &amp; '.' &amp; depth_first_order($var)</literal>.</para></listitem>
+	</varlistentry>
+      </variablelist>
+      </section>
+      <section>
+	<title>String functions</title>
+      <variablelist>
+	<varlistentry>
+	  <term>length(string)</term>
+	  <listitem><para>Returns the string length of a given expression.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>substr(string,offset,length?)</term>
+	  <listitem><para>Returns a substring of a given string starting at at a given offset (first character
+	  in the string has offset 0) and spanning for a given length or to the end of the string, 
+	  if length is omitted or if the original string has less than offset+length characters.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>match(string,regexp,flags?)</term>
+	  <listitem><para>Returns the first substring of a given string 
+	  matching a given regular expression.
+	  The optional third argument can be a string of flags modifying the behavior of the regular
+	  expression matching procedure. The following flags are supported:
+	</para>
+	  <variablelist>
+	    <varlistentry>
+	      <term>i</term>
+	      <listitem>
+		<para>case insensitive match</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term>c</term>
+	      <listitem>
+		<para>case sensitive match (default)</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term>n</term>
+	      <listitem>
+		<para>allows the period (.) to match the newline character</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term>m</term>
+	      <listitem>
+		<para>Treat string as multiple lines.
+		That is, change "^" and "$" from matching the start or end of the string to matching the
+		start or end of any line anywhere within the string.
+		</para>
+	      </listitem>
+	    </varlistentry>
+	  </variablelist>
+	  </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>replace(string,substr,replacement)</term>
+	  <listitem><para>Substitutes a given replacement for all (non-overlapping) occurrences of a given
+	  substring in a given string and returns the result. For example, <literal>replace('banana ananas','ana','ANA')</literal>
+	  returns <literal>bANAna ANAnas</literal>.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>substitute(string,regexp,replacement,flags?)</term>
+	  <listitem><para>Substitutes a given replacement for the first or all (non-overlapping) substrings
+	  matching a given regular expression in a given string and returns the result. 
+	</para>
+	<para>
+	  The default behavior is to replace just the first matching substring. 
+	  To replace all occurrences, use the flag 'g'. 
+	</para>
+	<para>
+	  The replacement string may contain references to subexpressions 
+	  of the matching regular expression (subexpressions are parts of the expressions 
+	  enclosed in brackets). The string \N, where N is a digit from 1 to 9, is a reference
+	  to the N-th subexpression (counting opening brackets from the left),
+	  and is substituted in the result by the substring matched by that subexpression.
+	  For example, if the regular expression was
+	  <literal>a(b(c))(d)</literal>, then 
+	  <literal>\1</literal>, <literal>\2</literal>,
+	  and <literal>\3</literal> refer
+	  to the subexpressions <literal>(b(c))</literal>,
+	  <literal>(c)</literal>,
+	  and <literal>(d)</literal>, respectively.
+	</para>
+	<para>Since backslash (<literal>\</literal>) is used
+	to introduce subexpression references in the replacement string,
+	literal backslash has to be written as <literal>\\</literal>.
+	</para>
+	<para>
+	  The optional third argument is a string of flags modifying the behavior of the regular
+	  expression matching procedure. Any of the flags described above for the
+	  function <literal>match()</literal> can be used here, and additionally
+	  <literal>substitute()</literal> supports the following flag:
+	</para>
+	  <variablelist>
+	    <varlistentry>
+	      <term>g</term>
+	      <listitem>
+		<para>global replace: replace all non-overlapping matches of a given regular expression</para>
+	      </listitem>
+	    </varlistentry>
+	  </variablelist>
+	  <para>
+	    For example, <literal>substitute('banana ananas','([^n])a','\1@','g')</literal>
+	    returns the string <literal>b@nana @nanas</literal>.
+	  </para>
+	  </listitem>
+	</varlistentry>	
+	<varlistentry>
+	  <term>lower(string)</term>
+	  <listitem><para>Returns lowercase version of a given expression.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>upper(string)</term>
+	  <listitem><para>Returns uppercase version of a given expression.</para></listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>tr(string,characters_to_replace,replacement)</term>
+	  <listitem><para>Replaces all occurences of given characters in a string with corresponding characters in the replacement set,
+	  that is, replaces all occurrences of the Nth character from <replaceable>characters_to_replace</replaceable> with the Nth character
+	  in the <replaceable>replacement</replaceable>. For example, <literal>tr('122-34','24','ab')</literal> returns the string 
+	  <literal>1aa-b4</literal>.</para></listitem>
+	</varlistentry>
+      </variablelist>
+      </section>
+      <section>
+	<title>Numerical functions</title>
+	<variablelist>
+	  <varlistentry>
+	    <term>ceil(number)</term>
+	    <listitem><para>Return the smallest integer value greater than or equal to a given numerical argument.</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>floor(number)</term>
+	    <listitem><para>Return the largest integer value less than or equal to the numerical argument.</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>round(number,places?)</term>
+	    <listitem><para>Returns a given number rounded to a specified number of decimal places (0 if the second argument is not specified).</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>trunc(number,places?)</term>
+	    <listitem><para>Returns a number truncated to a certain number of decimal places (0 if second argument is not specified).</para></listitem>
+	  </varlistentry>
+	  <!--
+	      <varlistentry>
+	      <term>percnt(number,places?)</term>
+	      <listitem><para>This is a convenience function, which returns
+	      the same value as <literal>round(100*number,places)</literal>.</para></listitem>
+	      </varlistentry>
+	  -->
+	</variablelist>
+      </section>
+      <section id="agg_functions">
+	<title>Aggregation functions</title>
+	<para>
+	  Aggregation functions compute a singe value from a set of values.
+	  They can only be
+	  used in output filters.
+	  There are several ways
+	  of using these functions:
+	</para>
+	<orderedlist>
+	  <listitem>
+	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable>)</literal>.
+	    If this form is used in the
+	    <literal>give</literal> part of a
+	    <literal>for ... give ...</literal>
+	    clause, the function
+	    computes its value by considering
+	    only those input rows that
+	    belong to the current aggregation
+	    group.
+	    If used outside a
+	    <literal>for ... give ...</literal>
+	    clause, the function
+	    computes its value by considering
+	    all input rows (i.e.
+	    the rows returned by the preceding filter
+	    or the body of the query).
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable> over <replaceable>colspec, ...</replaceable>)</literal>.
+	    This form creates a temporary aggregation
+	    of the current input according to given column
+	    specifications following the <literal>over</literal> keyword
+	    and computes the value by considering
+	    input rows of the aggregation group
+	    to which the current input row belongs.
+	    Unlike <literal>for ... give ...</literal>,
+	    this type of aggregation does not
+	    propagate to the output, so the
+	    filter still returns one output row for each input row,
+	    rather than a row for each aggregation group.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable> over all)</literal>
+	    computes the value by considering
+	    all input rows, not just those in the current
+	    aggregation group.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable> over <replaceable>colspec,...</replaceable> sort by <replaceable>colspec,...</replaceable> )</literal>
+	    is a variant of the previous aggregations that forces an ordering on the aggregated values;
+	    this is currently only useful for the aggregation function <literal>concat()</literal>.
+	    </para>
+	  </listitem>
+	</orderedlist>
+	<variablelist>
+	  <varlistentry>
+	    <term>count([ over ... ])</term>
+	    <listitem><para>Returns the number of input rows considered.</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>sum(<replaceable>expression</replaceable> [ over ... ])</term>
+	    <listitem><para>For each row considered, computes the expression and returns a sum of the results. The expression must evaluate to a number.</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>concat(<replaceable>expression</replaceable>, [<replaceable>"separator"</replaceable>] [ over ... [sort by ...]])</term>
+	    <listitem><para>For each row considered, computes the expression and returns a character string  
+	    obtained by concatenating the results; the optional
+	    second argument may be a literal string to be used as a separator of the concatenated strings. The values are concatenated in
+	    no particular order unless the <literal>over ... sort by ...</literal> clause is used.</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>min(<replaceable>expression</replaceable> [ over ... ])</term>
+	    <listitem><para>For each row considered, computes the expression and returns the minimum of the resulting values. The expression must evaluate to a number.</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>max(<replaceable>expression</replaceable> [ over ... ])</term>
+	    <listitem><para>For each row considered, computes the expression and returns the maximum of the resulting values. The expression must evaluate to a number.</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>avg(<replaceable>expression</replaceable> [ over ... ])</term>
+	    <listitem><para>For each row considered, computes the expression and returns the average of the resulting values. The expression must evaluate to a number.</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>ratio(<replaceable>expression</replaceable> [ over ... ])</term>
+	    <listitem><para>Returns the ratio of the value computed using the expression to the sum of all values computed using this expression over all rows considered.</para></listitem>
+	  </varlistentry>
+	</variablelist>
       </section>
     </section>
     <section>

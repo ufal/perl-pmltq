@@ -11,9 +11,13 @@
       This distribution contains a database-driven implementation of a PML-TQ search
       system for linguistic treebanks.
     </p>
+
     <div class="framed" style="display: table-cell;">
       <p>
       <b>Note:</b>
+      </p>
+      <ul>
+      <li>
       If you only want to search over a small
       amount of PML files on your computer,
       you can use a Perl-driven client-side PML-TQ search engine,
@@ -24,7 +28,20 @@
       the SQL based version available on this page,
       but does not require any installation, configuration,
       or data conversion.
-      </p>
+      </li>
+      <li>We are also hosting a search server
+      with several treebanks
+      (including <a href="http://ufal.mff.cuni.cz/pdt/">PDT 2.0</a>).
+      For searching over the treebanks we host,
+      you also need just 
+      <a href="http://ufal.mff.cuni.cz/~pajas/tred">TrEd</a>
+      and the <b>pmltq</b> extension (see section Client below).
+      This service requires registration, which you
+      can obtain by sending
+      <a href="mailto:pajas@ufal.mff.cuni.cz">me</a>
+      an e-mail.
+      </li>
+      </ul>
     </div>
     <p>PML-TQ query engine has a client server architecture
       (HTTP client + tiny HTTP server + CGI + SQL database backend) 
@@ -60,11 +77,11 @@
     </p>
 </div>
     <h4>Version</h4>
-    <p>Current version is 0.7.1 (alpha)</p>
+    <p>Current version is 0.7.2 (alpha)</p>
     <p>This realease is ready for testing, but some important parts of the documentation
     are still missing.</p>
     <h4>Download</h4>
-    <p><a href="pmltq-0.7.1.tar.gz">pmltq.tar.gz</a> - PML-TQ distribution package</p>
+    <p><a href="pmltq-0.7.2.tar.gz">pmltq.tar.gz</a> - PML-TQ distribution package</p>
 
     <h4>Documentation</h4>
     <ul>
