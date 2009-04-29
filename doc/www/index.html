@@ -17,7 +17,7 @@
       <b>Note:</b>
       </p>
       <ul>
-      <li>
+      <li><p>
       If you only want to search over a small
       amount of PML files on your computer,
       you can use a Perl-driven client-side PML-TQ search engine,
@@ -27,19 +27,21 @@
       The client-side engine is slower than
       the SQL based version available on this page,
       but does not require any installation, configuration,
-      or data conversion.
+      or data conversion.</p>
       </li>
-      <li>We are also hosting a search server
+      <li><p>We are also hosting a PML-TQ server
       with several treebanks
-      (including <a href="http://ufal.mff.cuni.cz/pdt/">PDT 2.0</a>).
-      For searching over the treebanks we host,
+      including <a href="http://ufal.mff.cuni.cz/pdt/">PDT 2.0</a>,
+      and CoNLL 2009 Shared Task data (for CoNLL 2009 ST participants only).
+      To use our PML-TQ server,
       you also need just 
       <a href="http://ufal.mff.cuni.cz/~pajas/tred">TrEd</a>
       and the <b>pmltq</b> extension (see section Client below).
-      This service requires registration, which you
+      </p>
+      <p>Querying using our server <b>requires registration</b>, which you
       can obtain by sending
       <a href="mailto:pajas@ufal.mff.cuni.cz">me</a>
-      an e-mail.
+      an e-mail.</p>
       </li>
       </ul>
     </div>
@@ -68,12 +70,22 @@
 </div>
 <div>
     <h4>Server</h4>
+    <p>You only need to install the server
+       if you want to use PML-TQ for fast querying over a mid-to-large-sized treebank
+       of your own. For individual files or small treebanks, up to say 10K trees (your mileage may vary),
+       the Perl-based query engine built into the TrEd and the command-line client
+       should be sufficient.
+       You can also register for querying treebanks hosted on our PML-TQ servers - see above).
+    </p>
     <p>
-      The PML-TQ server requires an Oracle (recommended) or PostgresSQL 
-      database and a treebank encoded in (or convertible to)
+      Running a PML-TQ server requires either Oracle or PostgresSQL
+      database, Perl >= 5.8.8 (plus several Perl modules installable from CPAN),
+      and a treebank encoded in (or convertible to)
       the <a href="http://ufal.mff.cuni.cz/jazz/PML/index_en.html">PML format</a>.
+    </p>
+    <p>
       The server has been tested on Linux
-      with <a href="http://www.oracle.com/technology/software/products/database/index.html">Oracle XE 10g</a> and <a href="http://www.postgresql.org/">PostgresSQL 8.4 (developement snapshot)</a>.
+      with <a href="http://www.oracle.com/technology/software/products/database/index.html">Oracle XE 10g</a> and <a href="http://www.postgresql.org/">PostgresSQL (8.4beta)</a>.
     </p>
 </div>
     <h4>Version</h4>
@@ -105,7 +117,7 @@
 	install_deps.sh - install modules required by the search server
 	pmltq_http  - small HTTP server providing PML-TQ services
 	pml2base.pl - PML to SQL database conversion script
-	pmltq	    - command-line client for SQL or HTTP engine</pre>
+	pmltq	    - command-line client for both dabase and Perl-driven query engine</pre>
     <h4>Quick start</h4>
     <dl>
       <dt>Install an SQL database server.</dt>
@@ -116,11 +128,12 @@
       <dt>Init the database:</dt>
       <dd>For Oracle:
       <pre class="literallayout">
-	sqlplus @ sql/init_oracle.sql
-      	sqlplus @ sql/pml2base_init.sql</pre>
+	echo quit | sqlplus @ sql/init_oracle.sql
+      	echo quit | sqlplus @ sql/pml2base_init.sql</pre>
       For PostgreSQL:
       <pre class="literallayout">
-      	sqlplus @ sql/pml2base_init-pg.sql</pre>
+	psql -F sql/init_postgres.sql
+      	psql -F sql/pml2base_init-pg.sql</pre>
       </dd>
       <dt>Load data into the database</dt>
       <dd>Use <tt>pml2base.pl</tt> or <tt>contrib/pml2base.btred</tt>
@@ -135,6 +148,7 @@
       <dd>
       <pre class="literallayout">
       	./pmltq_http</pre>
+	(see <tt>pmltq_http --help</tt> for more options).
       </dd>
       <dt>Test some queries</dt>
       <dd>
@@ -153,7 +167,7 @@
       </dd>
     </dl>
     <h4>Copyright</h4>
-    <p>Copyright (c) 2008 by Petr Pajas and Jan Štěpánek</p>
+    <p>Copyright (c) 2008-2009 by Petr Pajas and Jan Štěpánek</p>
     <h4>Acknowledgement</h4>
     <p>The development of PML-TQ is a part of the project <a href="http://ufal.mff.cuni.cz/jazz/">"Integration of language resources for information extraction from natural texts"</a>, Information Society of Grant Agency of Academy of Sciences of the Czech Republic: 1ET101120503</p>
   </body>
