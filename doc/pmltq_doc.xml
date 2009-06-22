@@ -57,7 +57,7 @@
     <title>Basic concepts</title>
     <para>
       A <firstterm>PML-TQ query</firstterm>
-      consists of a <firstterm>body</firstterm> that selects
+      consists of a <firstterm>selective part</firstterm> that selects
       nodes from the treebank and an optional
       list of <firstterm>output filters</firstterm> that
       are used to
@@ -66,16 +66,15 @@
       of a query.
     </para>
     <para>
-      The body of a PML-TQ query defines of
+      The selective part of a PML-TQ query defines
       restrictions on properties 
       of one or more nodes from the treebank
       and describes their mutual relationships
       (e.g. the topological configuration in
       the tree structure).
       An ordered tuple of nodes in the treebank <firstterm>matches</firstterm>
-      the query if each of them
-      satisfies the corresponding constraints
-      on its properties and
+      the query if each of the nodes
+      satisfies the corresponding constraints and
       the relationships between the nodes 
       are as declared in the query.
       Such a tuple of nodes from the treebank is called
@@ -86,28 +85,25 @@
       at least one node).
     </para>
     <para>
-      A PML-TQ query can 
-      optionally define a list of <firstterm>output filters</firstterm> that
-      can extract data from the matching nodes,
-      compute statistics, and further format and post-process the results
-      of a query.
+      The selective part is formed by one or more <firstterm>node selectors</firstterm>,
+      which can directly nest further node selectors.
+      All these selectors form the top-level scope of the query.
+      Inner scopes are defined by subqueries as described later.
     </para>
     <para>
-      The body of a PML-TQ query is formed by one or more <firstterm>node selectors</firstterm>,
-      which can nest further node selectors.
       A node selector represents a 
-      node the treebank and <emphasis>two different selectors represent
-      two different nodes</emphasis> (except for subqueries as described later).
-      It specifies the type of the node (the nodes in the treebank annotation can be typed
+      node the treebank. <emphasis>Two different selectors in the same scope always represent
+      two different nodes</emphasis>.
+      The selector specifies the type of the node it selects (the nodes in the treebank annotation can be typed
       or the query can refer to several annotation layers with different types of nodes),
-      a symbolic name for the selector (variable),
+      an optional symbolic name for the selector (variable),
       and a set of constraints on the node.
       There are several types
       of constraints:
       <itemizedlist>
 	<listitem><para>predicates</para></listitem>
 	<listitem>
-	  <para>nested node selectors</para>
+	  <para>directly nested node selectors</para>
 	</listitem>
 	<listitem>
 	  <para>references</para>
@@ -133,8 +129,10 @@
       A <firstterm>nested node selector</firstterm>
       represents a node and
       specifies the relationship between
-      this node and the
-      node among whose constraints it is declared.
+      the node it represents and the
+      node represented by the selector among whose constraints it is declared.
+      The nested selector and the containing selector
+      belong to the same scope.
       The relationship specification can be omitted
       in which case it defaults to <literal>child</literal>,
       meaning that the nested selector is matched by a child
@@ -147,19 +145,23 @@
     <para>
       A <firstterm>reference</firstterm> is a declaration of the relationship
       between the nodes corresponding to the current selector and 
-      some other named selector.
+      some other named selector. The referred selector
+      must either in the same as the current selector
+      or in the outer scope of the the current selector.
     </para>
     <para>
-      Finally, a <firstterm>subquery</firstterm> is a 
+      A <firstterm>subquery</firstterm> is a 
       selector
       with specification of restrictions on number of occurrences.
-      The nodes declared within a subquery
-      are not part of the resulting match,
-      and nodes outside the subquery cannot
-      refer to nodes within the subquery;
-      however, nodes in the subquery may refer
-      to the nodes in its outer scope (of course,
-      except for nodes within another subquery).
+      Each subquery starts a new scope
+      whose outer scope is
+      the scope of the containing selector together with the containing selector's outer scope (if any).
+      Selectors declared within a subquery
+      are not part of the resulting match.
+      Selectors from the outer scope cannot
+      refer to selectors within the scope of the subquery;
+      however, selectors in the scope of the subquery may refer
+      to selectors in the subquery's outer scope.
     </para>
     <para>
       A subquery constraint is verified as follows:
@@ -1555,13 +1557,13 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    <para>
 	      The simplest form of a filter consists of a comma-separated list of
 	      expressions that are used to compute values of the output columns from
-	      the output of the body of the query or preceding filters.
+	      the output of the selective part of the query or preceding filters.
 	      For example:
 	      <programlisting>&gt;&gt; $x.m/tag, depth($y)
 &gt;&gt; 'found ' &amp; $1 &amp; ' at depth ' &amp; $2</programlisting>
 	      defines two output filters: the first returns
 	      a table whose rows correspond directly to
-	      the matches of the query body. Its first column
+	      the matches of the query's selective part. Its first column
 	      contains the value of the attribute <literal>m/tag</literal>
 	      of the node matched by the node selector <literal>$x</literal>
 	      and the second column is the depth of the node
@@ -1631,7 +1633,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 &gt;&gt; for $m.afun, $b.afun
    give $1, $2, count()
    sort by $3</programlisting>
-	      is a query whose body
+	      is a query whose selective part
 	      returns pairs of a-nodes in the parent-child relation.
 	      The output filter first computes 
 	      a pair of values of the attribute <literal>afun</literal>
@@ -2898,7 +2900,7 @@ ADVS	CM	9.09%
 	    computes its value by considering
 	    all input rows (i.e.
 	    the rows returned by the preceding filter
-	    or the body of the query).
+	    or the selective part of the query).
 	    </para>
 	  </listitem>
 	  <listitem>
