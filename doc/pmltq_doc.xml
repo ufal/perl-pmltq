@@ -21,11 +21,12 @@
     <para>
       The query language is declarative and offers both textual and
       graphical representation of queries.  Currently, there are two
-      implementations of the query engine, one is based on relational
-      database (Oracle or PostgreSQL >= 8.4) and the other is Perl-based (using the TrEd
-      toolkit), and three user interfaces: a full-featured graphical
-      user interface built in TrEd, a very raw WEB-based interface
-      with text-only output, and command-line interface.
+      implementations of the query engine, one based on a relational
+      database (Oracle or PostgreSQL >= 8.4), the other on Perl and the TrEd
+      toolkit. Three are also three user interfaces available:
+      a full-featured graphical
+      user interface built in TrEd, a simple WEB-based interface for the 
+      database-based query engine, and a text-only command-line interface.
     </para>
     <para>
       TODO: Purpose, features, and comparison with other query languages and engines
@@ -37,6 +38,12 @@
 	<para>queries can span over all layers of annotation (including annotation dictionaries)</para>
       </listitem>
       <listitem>
+	<para>allows arbitrary logical constraints</para>
+      </listitem>
+      <listitem>
+	<para>supports output filters (generate custom text output, compute statistics, ...)</para>
+      </listitem>
+      <listitem>
 	<para>offers graphical query representation with relations between nodes depicted as arrows</para>
       </listitem>
       <listitem>
@@ -44,12 +51,6 @@
       </listitem>
       <listitem>
 	<para>understands PML data model (no conversion, no information loss)</para>
-      </listitem>
-      <listitem>
-	<para>allows arbitrary logical constraints</para>
-      </listitem>
-      <listitem>
-	<para>supports output filters (generate custom text output, compute statistics, ...)</para>
       </listitem>
     </orderedlist>
   </section>
@@ -59,11 +60,11 @@
       A <firstterm>PML-TQ query</firstterm>
       consists of a <firstterm>selective part</firstterm> that selects
       nodes from the treebank and an optional
-      list of <firstterm>output filters</firstterm> that
+      sequence of <firstterm>output filters</firstterm> that
       are used to
       extract data from the matching nodes,
       compute statistics, and/or format and post-process the results
-      of a query.
+      of the query.
     </para>
     <para>
       The selective part of a PML-TQ query defines
@@ -72,12 +73,47 @@
       and describes their mutual relationships
       (e.g. the topological configuration in
       the tree structure).
-      An ordered tuple of nodes in the treebank <firstterm>matches</firstterm>
-      the query if each of the nodes
-      satisfies the corresponding constraints and
-      the relationships between the nodes 
-      are as declared in the query.
-      Such a tuple of nodes from the treebank is called
+      It is formed by one or more <firstterm>node selectors</firstterm>
+      that can be nested (as described below); these selectors
+      belong to the highest scope of the query.
+      Inner scopes of the query are given by subqueries also described later.
+    </para>
+    <para>
+      A node selector represents a 
+      node the treebank. <emphasis>Two different selectors in the same scope always represent
+      two different nodes</emphasis>.
+      Selectors can be named
+      and referred to from other node selectors.
+      A selector must specify the type of nodes it selects (the nodes in the treebank annotation can be typed
+      or the query can refer to several annotation layers with different types of nodes),
+      and may impose a set of constraints on the node (including
+      relationships to nodes represented by other selectors).
+    </para>
+    <para>
+      Selectors may nest other selectors;
+      a nested selector belongs to the same scope 
+      as the containing selector
+      The nested selector may explicitly specify the 
+      relation of the node it represents to the node
+      represented by the containing selector; the default relation
+      is <literal>child</literal>.
+      The nesting of selectors can thus naturally follow
+      the topology of the matching tree.
+    </para>
+    <para>
+      A mapping which assigns 
+      to each selector of the 
+      highest scope of the
+      query
+      a node from a treebank 
+      is called a <firstterm>match</firstterm>,
+      if each of the nodes is of the type specified by the corresponding selector
+      and all the nodes simulatneously satisfy
+      the constraints imposed on them by their corresponding selectors
+      (including constraints on their mutual relationships).
+      The range of the mapping represented as a tuple
+      (ordered accordingly to some ordering of the selectors)
+      is called
       a <firstterm>match</firstterm>.
       There can be zero, one, or more
       distinct matches of the query in the treebank
@@ -85,33 +121,23 @@
       at least one node).
     </para>
     <para>
-      The selective part is formed by one or more <firstterm>node selectors</firstterm>,
-      which can directly nest further node selectors.
-      All these selectors form the top-level scope of the query.
-      Inner scopes are defined by subqueries as described later.
-    </para>
-    <para>
-      A node selector represents a 
-      node the treebank. <emphasis>Two different selectors in the same scope always represent
-      two different nodes</emphasis>.
-      The selector specifies the type of the node it selects (the nodes in the treebank annotation can be typed
-      or the query can refer to several annotation layers with different types of nodes),
-      an optional symbolic name for the selector (variable),
-      and a set of constraints on the node.
       There are several types
       of constraints:
       <itemizedlist>
 	<listitem><para>predicates</para></listitem>
+	<!--
 	<listitem>
 	  <para>directly nested node selectors</para>
 	</listitem>
+	-->
 	<listitem>
 	  <para>references</para>
 	</listitem>
 	<listitem>
-	  <para>subqueries
-	  </para>
-	  <para>boolean combinations of predicates, references, and subqueries</para>
+	  <para>subqueries</para>
+	</listitem>
+	<listitem>
+	  <para>boolean combinations of the above</para>
 	</listitem>
       </itemizedlist>
     </para>
@@ -126,23 +152,6 @@
       or functions.
     </para>
     <para>
-      A <firstterm>nested node selector</firstterm>
-      represents a node and
-      specifies the relationship between
-      the node it represents and the
-      node represented by the selector among whose constraints it is declared.
-      The nested selector and the containing selector
-      belong to the same scope.
-      The relationship specification can be omitted
-      in which case it defaults to <literal>child</literal>,
-      meaning that the nested selector is matched by a child
-      of the node matching the containing selector.
-      Thus, nesting of selectors can naturally follow
-      the topology of the matching tree.
-      Nested selectors can be named
-      using a variable and referred to from other node selectors.
-    </para>
-    <para>
       A <firstterm>reference</firstterm> is a declaration of the relationship
       between the nodes corresponding to the current selector and 
       some other named selector. The referred selector
@@ -150,18 +159,22 @@
       or in the outer scope of the the current selector.
     </para>
     <para>
-      A <firstterm>subquery</firstterm> is a 
-      selector
-      with specification of restrictions on number of occurrences.
+      A <firstterm>subquery</firstterm> is formed by a
+      selector called the <firstterm>leading selector of the subquery</firstterm>
+      augmented by a set of restrictions on the number of occurrences,
+      i.e. the number of distinct nodes matched by the
+      leading selector among the matches of the whole subquery.
+      The leading selector can nest other selectors.
       Each subquery starts a new scope
       whose outer scope is
       the scope of the containing selector together with the containing selector's outer scope (if any).
-      Selectors declared within a subquery
-      are not part of the resulting match.
-      Selectors from the outer scope cannot
-      refer to selectors within the scope of the subquery;
-      however, selectors in the scope of the subquery may refer
-      to selectors in the subquery's outer scope.
+      Unlike selectors from the highest scope,
+      selectors declared within a subquery
+      do not represent any particular node in the resulting match.
+      They can refer to selectors from the same scope,
+      and also to selectors from the outer scope,
+      but not vice versa (selectors from the outer scope cannot refer to the selectors
+      in the subquery).
     </para>
     <para>
       A subquery constraint is verified as follows:
@@ -169,8 +182,8 @@
       among whose constraints the subquery occurs,
       all matches of the subquery are located
       (these may coincide with nodes
-      matching the outside query).
-      The number of distinct nodes matching the top node of the subquery
+      matched by the selectors in the outer scope).
+      The number of distinct nodes matching the leading selector of the subquery
       are counted and this number is compared with the restrictions
       on number of occurrences.
       The constraint is satisfied if and only if
@@ -229,6 +242,8 @@
       Treebank 2.0 and we always show both how to write the query in
       textual form as well as how to build and run the query graphically in
       the tree editor TrEd.
+      The textual form of the query can also be used 
+      in the web or command-line interface.
     </para>
     <section>
     <title>Getting started</title>
