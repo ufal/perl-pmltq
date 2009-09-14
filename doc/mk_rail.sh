@@ -14,6 +14,12 @@ if [ -z "$file" ]; then
   file=-
 fi
 
+if [ -f "${name}.tex" ]; then
+  mv "${name}.tex" "${name}.tex.orig"
+else
+  rm "${name}.tex.orig";
+fi
+
 cat <<'EOF' > "${name}.tex"
 \documentclass{article}
 \pdfoutput=1
@@ -48,6 +54,14 @@ EOF
 cat "$file" >> "${name}.tex"
 echo '\end{rail}' >> "${name}.tex"
 echo '\end{document}' >> "${name}.tex"
+
+if [ -f "${name}.tex.orig" ] && cmp "${name}.tex" "${name}.tex.orig"; then
+    echo "${name}.tex is up to date"
+    rm "${name}.tex.orig"
+    exit 0;
+else 
+    rm "${name}.tex.orig";
+fi
 
 pdflatex "${name}" && \
 rail "${name}" && \
