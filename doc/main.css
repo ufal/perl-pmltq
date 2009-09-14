@@ -1,5 +1,5 @@
 body {
-	margin: 2% 3%;
+	margin: 10pt 10pt;
 	text-align: justify;
 }
 
@@ -21,11 +21,17 @@ h1, h2, h3, h4, h5, h6 {
 
 h1.title, h2.title, h3.title, h4.title, h5.title, h6.title {
 /*	text-transform: uppercase; */
-	margin-top: 2.17em;
+	margin-top: 16pt;
 }
 
+h1.title img {
+  margin: -16pt 0px 0px -10pt;
+}
+
+
+
 h4.title, h5.title, h6.title {
-	margin-top: 2.17em;
+	margin-top: 16pt;
 }
 
 

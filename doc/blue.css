@@ -85,3 +85,26 @@ dt { font-weight: bold }
 .framed > h3, .note > h3, .warning > h3, .tip > h3 {
   margin: 0 0 0 0;
 }
+
+.guibutton img {
+  vertical-align: -30%;
+  color: black;
+  background: #f0f0f0;
+  border: 1px solid;
+  border-color: #d0d0d0 #505050  #606060 #c0c0c0;
+  font: monospace;
+  font-size: 80%;
+  padding: 3px;
+}
+
+
+.keysym { 
+color: black;
+background: #f0f0f0;
+border: 1px solid;
+border-color: #d0d0d0 #505050  #606060 #c0c0c0;
+padding: 0px 2px 0px 2px;
+font: monospace;
+font-size: 100%;
+padding: 2px 3px 2px 3px;
+ }

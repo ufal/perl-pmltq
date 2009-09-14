@@ -5,8 +5,16 @@
       <firstname>Petr</firstname>
       <surname>Pajas</surname>
     </author>
-    <title>PML Tree Query</title>
-    <subtitle>Version 0.7.2 (alpha)</subtitle>
+    <title role="main_title"><medialabel>
+      <inlinemediaobject>
+	<imageobject>
+	  <imagedata fileref="images/pmltq.png"/>
+	</imageobject>
+	<textobject><phrase>PML Tree Query</phrase></textobject>
+      </inlinemediaobject>
+    </medialabel>
+    </title>
+    <subtitle>Documentation for version 0.7.2 (alpha)</subtitle>
   </articleinfo>
   <section>
     <title>Introduction</title>
@@ -249,7 +257,7 @@
     <title>Getting started</title>
     <para>
       To start experimenting with the toolkit,
-      start TrEd and press <keycombo><keysym>Ctrl</keysym><keysym>F3</keysym></keycombo>
+      start TrEd and press <keycombo action="simul"><keysym>Ctrl</keysym><keysym>F3</keysym></keycombo>
       or select <menuchoice>
       <guimenu>Macros</guimenu>
       <guisubmenu>TredMacro</guisubmenu>
@@ -517,7 +525,7 @@ t-node $b := [ parent $a ];</programlisting>
     This can be done in three different ways:
     </para>
     <para>Using a disjunction:
-    <programlisting>t-node [ (functor='DPHR' or functor='CPHR'), t-node [ ] ]</programlisting>
+    <programlisting>t-node [ functor='DPHR' or functor='CPHR', t-node [ ] ]</programlisting>
     Apart from editing the query, this can be created using the GUI e.g. in the following steps:
     <orderedlist>
       <listitem><para>Select the top query node (the one with the <literal>functor="DPHR"</literal> constraint</para></listitem>
@@ -561,7 +569,7 @@ t-node $b := [ parent $a ];</programlisting>
       and <literal>"CPHR"</literal> as <literal>b</literal> in the form.
       Alternatively, you can select the node
       <literal>functor="DPHR"</literal>, press
-      <keysym>Ctrl+Insert</keysym> or 
+      <keycombo action="simul"><keysym>Ctrl</keysym><keysym>Insert</keysym></keycombo> or 
       <guibutton>
 	<inlinemediaobject>
 	  <imageobject role="html"><imagedata fileref="icons/editcopy.png" contentdepth="10pt" format="PNG"/></imageobject>
@@ -570,7 +578,7 @@ t-node $b := [ parent $a ];</programlisting>
       </guibutton>
       to copy it into the clipboard,
       then select the <literal>OR</literal> node
-      and press <keysym>Shift+Insert</keysym> or 
+      and press <keycombo action="simul"><keysym>Shift</keysym><keysym>Insert</keysym></keycombo> or 
       <guibutton>
 	<inlinemediaobject>
 	  <imageobject role="html"><imagedata fileref="icons/editpaste.png" contentdepth="10pt" format="PNG"/></imageobject>
@@ -776,21 +784,62 @@ t-node $b := [ parent $a ];</programlisting>
     </section>
     <section>
       <title>Functions (TODO)</title>
-    <programlisting>t-node [ functor='DPHR', sons()&gt;1 ]</programlisting>
+    <programlisting># a leaf node (using functions)
+t-node [ sons()=0 ]</programlisting>
+
+    <programlisting># a leaf node (using a subquery)
+t-node [ 0x child t-node [ ] ]</programlisting>
+
+    <programlisting># right-most child
+t-node [ rbrothers()=0 ]</programlisting>
+
+    <programlisting># left-most child
+t-node [ lbrothers()=0 ]</programlisting>
+
+    <programlisting># first leaf node in a subtree of $t (using functinos)
+t-node $t := [
+  descendant t-node [ 
+    sons()=0,
+   depth_first_order()-depth()=depth_first_order($t)-depth($t) 
+  ]
+]</programlisting>
+
+    <programlisting># first leaf node in a subtree of $t (using a subquery)
+t-node $t := [
+  descendant t-node $d := [ sons()=0 ],
+  0x descendant [ depth-first-precedes $d ],
+]</programlisting>
+
+    <programlisting># last leaf node in a subtree of $t
+t-node $t := [
+  descendant t-node [ 
+    sons()=0,
+   depth_first_order()-depth()=depth_first_order($t)+descendants($t)-1-depth($t)
+  ]
+]</programlisting>
+
+    <programlisting># last leaf node in a subtree of $t (using a subquery)
+t-node $t := [
+  descendant t-node $d := [ sons()=0 ],
+  0x descendant [ depth-first-follows $d ],
+]</programlisting>
+
+
+
     </section>
     <section>
       <title>Output filters (TODO)</title>
     <programlisting># counting occurrences
       t-node [ functor='DPHR' ]
       &gt;&gt; count()</programlisting>
-    <programlisting># simple aggregation: computing a maximum
+    <programlisting># simple use of a group function: computing a maximum
       t-node $n := [ functor='DPHR' ]
       &gt;&gt; max(sons($n))</programlisting>
     <programlisting># max, min and average tree depth
       t-root $n := [ ]
       &gt;&gt; descendants($n)
       &gt;&gt; max(), min(), avg()</programlisting>
-    <para>Aggregation using the 'for' clause:</para>
+    <para>Grouping using the 'for' clause:</para>
     <programlisting># count functor occurrences
       t-node $n := [ ]
       &gt;&gt; for $n.functor
@@ -805,7 +854,7 @@ t-node $b := [ parent $a ];</programlisting>
       &gt;&gt; for $n.functor
          give $1, count()
          sort by $2</programlisting>
-    <para>Using the 'over' clause to speify different grouping for each aggregation function:</para>
+    <para>Using the 'over' clause to speify different grouping for each group function:</para>
     <programlisting># joint functor distribution:
       # distribution of a functor X if governed by functor Y
       t-node $p := 
@@ -813,14 +862,29 @@ t-node $b := [ parent $a ];</programlisting>
       &gt;&gt; $p.functor,$c.functor
       &gt;&gt; distinct $1,$2, count(over $1,$2), count(over $1)
       &gt;&gt; $1, $2, percnt($3 div $4,2)
-         sort by $1,0-$3
+         sort by $1,$3 desc
       &gt;&gt; $1, $2, $3 &amp; '%'</programlisting>
     <programlisting># the same using ratio()
       t-node $p := [ echild t-node $c :=  [  ] ];
       &gt;&gt;  for $p.functor,$c.functor
           give $1,$2,ratio(count() over $1)
-          sort by $1,0-$3
+          sort by $1,$3 desc
       &gt;&gt; $1, $2, percnt($3,2)</programlisting>
+
+      <para>Ranking</para>
+    <programlisting>
+# get the three most frequent parts of speech for every afun
+# (if some tags occur the same number of times for a given afun,
+#  we sample those that come first alphabetically) 
+
+a-node $a:= [ ]
+>> $a.afun, substr($a.m/tag,0,1)  # get afun and part of speech (POS)
+>> for $1,$2 give $1, $2, count() # count occurrences of POS for each afun
+>> $1, $2, row_number(over $1 sort by ($3 desc, $2)) # get the rank of each POS over the afun
+   sort by $1, $3
+>> filter $4 &lt;= 3
+>> $1, $2, $3
+</programlisting>
     </section>
   </section>
   <section>
@@ -919,7 +983,7 @@ t-node $b := [ parent $a ];</programlisting>
 	    </mediaobject>
 	    <para>Variables are used to name node selectors and refer to them
 	    from other parts of the query. Variable starts
-	    with a '$' (dollar) character and is followed by 
+	    with a '<literal>$</literal>' (dollar) character and is followed by 
 	    a NAME consisting of alphabetical character or underscore
 	    and zero or more alphanumerical characters or underscores.
 	    For example, <literal>$foo_02</literal> or <literal>$x</literal> are
@@ -1048,11 +1112,17 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      </imageobject><imageobject role="fo">
 		<imagedata format="PDF" fileref="rail_constraint.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
-		<phrase><![CDATA[ constraint : ((predicate | relation? nodeSelector | memberSelector | relation variable | subquery |  '(' constraint ')' | '!' constraint ) + ('and' | 'or' )) ;
+		<phrase><![CDATA[ constraint : ( ('!')? (predicate | relation? nodeSelector | memberSelector | relation variable | subquery |  '(' constraint ')' ) | (constraint ('and' | 'or' | ',' ) constraint)) ;
  ]]></phrase>
 	      </textobject>
 	    </mediaobject>
 <para>
+  The logical operators have the following precedence (in decreasing order):
+  '<literal>!</literal>', 
+  '<literal>and</literal>', 
+  '<literal>or</literal>', 
+   '<literal>,</literal>'; except for having the lowest precedence,
+   comma (<literal>,</literal>) has the semantics of <literal>and</literal>.
 	      A constraint is either a 
 	    binary test predicate
 	    (<literal>=</literal>, 
@@ -1534,7 +1604,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      </imageobject><imageobject role="fo">
 		<imagedata format="PDF" fileref="rail_function.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
-		<phrase><![CDATA[ function : FUNC '(' (expression + ',' ) ')' ; ]]></phrase>
+		<phrase><![CDATA[ function : FUNCTION '(' (expression + ',' ) ')' ; ]]></phrase>
 	      </textobject>
 	    </mediaobject>
 	    <para>
@@ -1555,60 +1625,70 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      </imageobject><imageobject role="fo">
 		<imagedata format="PDF" fileref="rail_outputFilter.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
-	      <phrase><![CDATA[ outputFilter : '>>' 
-	                                     ('for' (columnExp + ','))? \\
-					     ('give')? ('distinct')?
-	                                     (columnExp + ',') \\
-					     ('sort by'
-					      ((DOLLAR NUMBER ('asc'|'desc')?) + ','))?; ]]></phrase>
+	      <phrase><![CDATA[ outputFilter : '>>' ('for' (columnExp + ',') 'give' |
+                                                      ('give')?)
+					        ('distinct')? (columnExp + ',')
+	                                     \\ (('>>')? 'sort by'
+					        ((DOLLAR NUMBER ('asc'|'desc')?) + ','))?
+                                             \\ ('>>' 'filter' rowConstraint *);
+                                rowConstraint : ( ('!')? (rowBinaryComparison | rowSetPredicate | '(' rowConstraint ')') )
+                                              | (rowConstraint ('and' | 'or' | ',' ) rowConstraint) ;
+				rowBinaryComparison : columnExp ( ('!'? ('=' | TILDA | TILDASTAR )) | '<' | '>' | '<=' | '>=') columnExp  ;
+				rowSetPredicate : (columnExp '!'? 'in' LEFTBRACE (literal +',') RIGHTBRACE) ; ]]></phrase>
 	      </textobject>
 	    </mediaobject>
 	    <para>
 	      An output filter transforms its input
-	      (the result of the query
-	      or the previous filter) into a table of values
-	      whose columns are computed according to the filter specification.
+	      (the result of the selective part of the query
+	      or the output of the previous filter) into a table of values
+	      arranged into columns computed according to the filter specification.
 	    </para>
 	    <para>
-	      The simplest form of a filter consists of a comma-separated list of
-	      expressions that are used to compute values of the output columns from
-	      the output of the selective part of the query or preceding filters.
-	      For example:
+	      The simplest form of a filter consists of a
+	      comma-separated list of expressions, each of which
+	      computes a column value in an output row from either the
+	      values of (some) column of the input row (output from the previous filter) or, in case of
+	      the first filter, the attributes of nodes matched by the
+	      selective part of the query.  For example:
+
 	      <programlisting>&gt;&gt; $x.m/tag, depth($y)
 &gt;&gt; 'found ' &amp; $1 &amp; ' at depth ' &amp; $2</programlisting>
-	      defines two output filters: the first returns
-	      a table whose rows correspond directly to
-	      the matches of the query's selective part. Its first column
-	      contains the value of the attribute <literal>m/tag</literal>
-	      of the node matched by the node selector <literal>$x</literal>
-	      and the second column is the depth of the node
-	      matched by the node selector <literal>$y</literal>.
-	      The second output filter produces a table with just one
-	      column 
-	      with values of the form
-	      <literal>found <replaceable>X</replaceable> at depth <replaceable>Y</replaceable></literal>,
-	      where <replaceable>X</replaceable>
-	      and <replaceable>Y</replaceable>
-	      represent the two columns from the preceding filter.
+
+	      defines two output filters: the
+	      first returns a table whose rows correspond directly to
+	      the matches of the query's selective part. Its first
+	      column contains the value of the attribute
+	      <literal>m/tag</literal> of the node matched by the node
+	      selector <literal>$x</literal> and the second column is
+	      the depth of the node matched by the node selector
+	      <literal>$y</literal>.  The second output filter
+	      produces a table with just one column with values of the
+	      form <literal>found <replaceable>X</replaceable> at
+	      depth <replaceable>Y</replaceable></literal>, where
+	      <replaceable>X</replaceable> and
+	      <replaceable>Y</replaceable> represent the two columns
+	      from the preceding filter.
 	    </para>
 	    <para>
-	      In this case aggregation functions
-	      that do not specify aggregation window
-	      (using an <literal>over</literal> clause)
+	      The column expressions can also use group functions
+	      that do not specify partitioning
+	      (using an <literal>over</literal> clause) and therefore
 	      range over the whole input table.
+	      In that case, all column expressions must result in
+	      constant values and the filter will produce a single row.
+	    </para>
+	    <para>
 	      For example,
 	      <programlisting>&gt;&gt;min($1), max($1), avg($1)</programlisting>
 	      is an output filter
 	      that computes the minimum, maximum and
 	      average form the values in the first column 
 	      of the preceding filter
-	      (and returns a table with three columns and a single row).
-	    </para>
-	    <para>
+	      (and returns a table with exactly one row having these three values in its three columns).
 	    </para>
 	    <para>
 	      Each filter may be followed by
-	      a <literal>sort by</literal> clause
+	      a <literal>&gt;&gt; sort by</literal> clause
 	      which specifies the order of rows in the resulting table.
 	      The clause is followed by a comma-separated list of
 	      column references.
@@ -1623,50 +1703,115 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      to enforce ascendant (default) or descendant ordering
 	      on the corresponding column.
 	    </para>
+	    
 	    <para>
 	      The filter may optionally be preceded
 	      by a <literal>for</literal> clause
-	      that performs aggregation
-	      of the input before computing
-	      the output.
+	      that partitions the input rows
+	      into groups
+	      according to given keys
+	      and produces one output row
+	      for each group; any group function
+	      occuring in the output column expression
+	      will range over the current group.
+	    </para>
+	    <para>
 	      The <literal>for</literal> clause consists
 	      of a set of column expressions
 	      used to compute a vector of values from each input
-	      row and aggregates all input rows
-	      resulting in the same vector.
-	      These vectors are used instead
-	      of the original rows as input
-	      for the rest of the filter,
-	      but all aggregation functions
-	      in the rest of the query
-	      that do not specify aggregation window
-	      (using an <literal>over</literal> clause)
-	      range over the original input rows
-	      aggregated by this particular vector.
-	      For example:
-	      <programlisting>a-node $n:= [ child a-node $b [] ];
-&gt;&gt; for $m.afun, $b.afun
-   give $1, $2, count()
-   sort by $3</programlisting>
-	      is a query whose selective part
-	      returns pairs of a-nodes in the parent-child relation.
-	      The output filter first computes 
-	      a pair of values of the attribute <literal>afun</literal>
-	      and then groups the results according
-	      to this pair. The
-	      <literal>$1, $2, count()</literal>
-	      part of the filter returns
-	      a table lists all distinct
-	      pairs of <literal>afun</literal> values
-	      and for each pair adds the number of
-	      matches with this particular pair of <literal>afun</literal> values
-	      computed using the aggregation function <literal>count()</literal>
-	      that ranges over the group of aggregated matches.
-	      The result is further sorted by the third column,
-	      i.e. by the number of matches.
+	      row. This vector serves as a key
+	      by which the input rows are partitioned into groups.
+	      The <literal>give</literal> clause
+	      now produces one output row
+	      for each group. Note that the column references
+	      occurring in the <literal>give</literal> clause
+	      are interpreted as references to the columns of the key vector,
+	      except for the case of column references
+	      occurring in arguments of group functions
+	      (that do not declare its own partitioning using an <literal>over</literal> clause),
+	      which refer to the columns of the input rows
+	      within the current group.
 	    </para>
 	    <para>
-	      TODO: detail rules on using column references and aggregation functions
+	      For example: 
+
+<programlisting><![CDATA[
+a-node $a:= [ child a-node $b := [] ];
+>> for $a.afun, $b.afun
+give $1, $2, count()
+sort by $3 desc]]></programlisting>
+
+ is a query whose
+	      selective part returns pairs of a-nodes in the
+	      parent-child relationship.  The output filter first computes
+	      a key, in this case a vector of two of values: the
+	      attribute <literal>afun</literal> of the parent and the
+	      child. Then it groups the results according to this key and for
+	      each group returns 
+	      a row consisting of three values: the 
+	      two columns from the key vector (<literal>$1, $2</literal>
+	      and the number of elements in the corresponding group
+	      (<literal>count()</literal>).  The <literal>sort
+	      by</literal> clause reorders this output by the
+	      third column in descendant order.
+	      As a result we get 
+	      the frequency table of cooccurrence of 
+	      <literal>afun</literal> attribute values on
+	      an edge in the treebank
+	      with the most frequent <literal>afun</literal> pairs first,
+	      which may look like this:
+
+<programlisting>Atr     Atr     87306
+AuxP    Adv     56344
+Sb      Atr     56269
+Obj     Atr     51908
+Adv     Atr     48741
+Pred    Sb      44963
+Pred    AuxP    39125
+Pred    Obj     31744
+AuxP    Atr     31227
+Coord   Atr     30569
+Coord   Pred    24739
+Pred    Adv     24196
+...</programlisting>
+
+	    </para>
+
+	    <para>
+	      TODO: detail the rules on using column references and group functions
+	    </para>
+	    <para>
+	      A filter can further be followed by 
+	      one or more <literal>&gt;&gt; filter</literal> clauses
+	      which drop certain output rows, leaving
+	      only those rows that satisfy a specific constraint. For
+	      example, the following query
+	      <programlisting><![CDATA[a-node $n:= [ ]
+  # Filter 1
+  >> give lower($n.m/form)
+  >> filter $1 ~ '^[a-z]' 
+
+  # Filter 2
+  >> for $1 give $1,count()
+  >> filter $2 >= 1000 
+
+  # Filter 3
+  >> give $1,$2 sort by $2 desc]]></programlisting>
+	      retrieves a list frequent word forms
+	      from a treebank. The selective part returns
+	      each node <literal>$n</literal> of the type <literal>a-node</literal>.
+	      For each such node, filter 1 retrieves its lowercased word form
+	      from the attribute <literal>m/form</literal>
+	      and drops those forms that do not start with a letter.
+	      Filter 2 groups the rows with the same form
+	      and counts the number of rows in each group, producing
+	      a table with two columns: a form and number of its occurrences;
+	      due to the grouping, the first column now contains only unique values.
+	      The <literal>filter</literal> clause of Filter 2 prunes this table,
+	      preserving only rows where the number of occurrences is at least 1000.
+	      Finally, filter 3 copies both input columns and orders the
+	      table by its second column, in the decreasing order, so
+	      that the most frequent forms appear on top.
 	    </para>
 	    </listitem>
 	  </varlistentry>
@@ -1681,25 +1826,27 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 		<imagedata width="100%" format="PDF" fileref="rail_columnExp.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
 	      <phrase><![CDATA[ columnExp : ((literal 
-                                             | attributePath
-	                                     | DOLLAR NUMBER
-					     | FUNC '(' (columnExp + ',' ) ')' 
-					     | AGGRFUNC '(' (columnExp + ',' ) 
-					          ('over' (columnExp + ',' ) ('sort by' (columnExp + ',' ))?)?  ')' 
-					     | '(' columnExp ')') + ('+' | '-' | '*' | 'div' | 'mod' | AMP))  ; ]]></phrase>
+                                             | inputValueRef
+					     | FUNCTION '(' (columnExp + ',' ) ')' 
+					     | GROUPFUNCTION '(' (columnExp + ',' ) 
+					          ('over' (columnExp + ',' ) ('sort by' (columnRef + ',' ))?)?  ')' 
+					     | '(' columnExp ')') + ('+' | '-' | '*' | 'div' | 'mod' | AMP))  ;
+			inputValueRef:    attributePath
+					     | columnRef ;
+                        columnRef:        DOLLAR NUMBER; ]]></phrase>
 	      </textobject>
 	    </mediaobject>
 	    <para>
-	      Column expressions are expressions that
-	      further allow use of column references of the
+	      Column expressions are expressions that 
+	      additionally allow group functions and column references of the
 	      form <literal>$<replaceable>N</replaceable></literal> where
-	      <literal><replaceable>N</replaceable></literal>
-	      is a positive integer 
-	      and the use of aggregation functions
-	      apart from normal functions.
+	      <literal><replaceable>N</replaceable></literal>.
+	      Note that in the first output filter following the selective part of the query,
+	      attribute paths must be used to refer to the input of the filter,
+	      where as everywhere else column references must be used.
 	    </para>
 	    <para>
-	      The exact rules on usage of aggregation functions
+	      The exact rules on usage of group functions
 	      and column references in column expressions
 	      are detailed in the description of output filters above.
 	    </para>
@@ -2354,7 +2501,7 @@ within <literal>member</literal> selectors.
 </para>
 <para>A <literal>member</literal> selector can be used for a
 subquery, i.e. prefixed by an occurrence clause or used in boolean
-expressions. In particular, negated or 0-occurring
+expressions. In particular, negated or zero-times occurring
 <literal>member</literal> selector with negated constraints
 can be used to formulate universal quantification over values of a list, alt, or sequence.
 </para>
@@ -2362,27 +2509,24 @@ can be used to formulate universal quantification over values of a list, alt, or
 </para>
       </section>
       <section>
-	<title>Aggregation explained</title>
+	<title>Group functions explained</title>
 	<para>
-	  By aggregation we mean computing one value for a set of input data,
-	  e.g. computing a sum or maximum of certain values
-	  using an aggregation function
-	  (a list of aggregation functions is given
-	  in <xref linkend="agg_functions"/>).
-	  PML-TQ offers aggregation functionality in the output filters:
-	  a column value returned by a filter may be computed
-	  by combining values computed from a group of input rows.
+	  PML-TQ supports group functions in the output filters.
+	  These functions compute its value based on a group of input
+	  rows, not just the current row. For example, one can use
+	  them to compute a sum or maximum over a group of input rows,
+	  or a rank of the current input row in some particular
+	  ordering of the group of input rows it belongs to.
 	</para>
 	<para>
-	  A filter can perfrom aggregation using the following ways:
+	  A filter can specify grouping of input rows in the following ways:
 	  <itemizedlist>
 	    <listitem><para>
-	      Aggregating over all input rows.</para>
+	      Considering all input rows as one group.</para>
 	      <para> 
 	      In this case case the filter produces exactly one output row
 	      whose columns are either constant or computed 
-	      by aggregating values computed from all input rows
-	      using an aggregation function.
+	      by applying a group function.
 	      </para>
 	      <para>
 		Examples of such filters are
@@ -2397,23 +2541,28 @@ can be used to formulate universal quantification over values of a list, alt, or
 		column 2 of the input.
 	      </para>
 	    </listitem>
-	    <listitem><para>Partitioning input rows into groups and aggregating over each group.</para>
+	    <listitem><para>Partitioning input rows into groups and evaluating group functions over over each group.</para>
 	    <para>
 	      This method allows one to define
 	      a partition on the input rows into groups that share some key value
 	      and then operate on each of these groups individually,
 	      producing one output row per partition group.
 	    </para>
-	    <para>In the first step, we compute a vector of values from each input row, called key,
-	    and put all rows that produce the same key to one group.
-	    Then we can apply aggregation functions over each of the group
-	    and combine them with the key values to produce one output row for each group
-	    of input rows. For example, consider the following query:
+	    <para>In the first step, the filter computes a vector of values from each input row, called a <firstterm>key</firstterm>,
+	    and puts all rows that produce the same key to one group.
+	    The filter then produces for each group one output row,
+	    computed based on the
+	    columns of the group key and group functions ranging over the group.
 	    </para>
-	    <programlisting>t-root $r:= [ descendant t-node $n [] ]
-  >> $r.id, depth($n)
-  >> for $1 give max($2)
-  >> for $1 give $1, count() sort by $2 desc</programlisting>
+	    <para>
+	      For example, consider the following query:
+	    </para>
+	    <programlisting>t-root $r:= [ 
+  descendant t-node $n [] 
+]
+>> $r.id, depth($n)
+>> for $1 give max($2)
+>> for $1 give $1, count() sort by $2 desc</programlisting>
 	    <para>The main part of the query returns 
 	    all pairs of nodes <literal>($r,$n)</literal>
 	    where $r is a root node and $n is any of its descendants.
@@ -2422,16 +2571,16 @@ can be used to formulate universal quantification over values of a list, alt, or
 	    the depth of the node <literal>$n</literal> in the tree.
 	    </para>
 	    <para>
-	      The second filter takes the first column of its input row 
+	      The second filter takes the first column of its input row (i.e. the <literal>ID</literal>)
 	      as the key and groups the input row by this key;
 	      this results in as many groups as there were
 	      unique root nodes in the matching set
 	      and each group consists of the input rows
 	      that belong to one root.
-	      This is done by the <literal>for $1</literal> clause.
+	      This is done by the <literal>for $1</literal> clause. The
 	      <literal>give max($2)</literal> clause says
 	      that for each group, we want to produce
-	      a row with a single column whose value is calculated
+	      an output row with a single column whose value is calculated
 	      as the maximum of the values in column 2 of the input filter,
 	      i.e. maximum of depths of the nodes <literal>$n</literal>
 	      for the given root <literal>$r</literal>.
@@ -2443,47 +2592,48 @@ can be used to formulate universal quantification over values of a list, alt, or
 	      of tree depths. It's input are
 	      depths of individual trees.
 	      It groups the input rows according
-	      to their 1st (and only) column (the depth).
+	      to their first and only column (the depth).
 	      Since there is just one input column, the key vector here is the
-	      whole input row; so within each group, all rows are identical.
-	      The filter counts number of rows in each group and
-	      for each group produces an putput row
-	      whose first column is the first value of the key vector
+	      whole input row; so all rows within each group are identical.
+	      For each group, the filter counts number of rows in it
+	      and outputs a row
+	      whose first column is the first column of the group key
 	      (in our case the tree depth) and the second is the count
-	      (number of trees of that depth).
-	      The final
+	      (number of trees of the particular depth).
+	      Finally, the
 	      <literal>sort by $2 desc</literal> 
-	      clause says that the rows produced by this
-	      filter should be order
-	      by the 2nd column in the descending order.
+	      clause orders the output table by the 2nd column in the descending order.
 	    </para>
 	    <para>
 	      Note that there are two types of column references
 	      in the <literal>give...</literal> clause.
-	      Those that occcur within an aggregation function
+	      Those that occcur within a grouping function
 	      (such as <literal>$2</literal> in <literal>max($2)</literal>)
-	      refer to the column of the input rows (in a given aggregation group).
-	      Those that occur outside an aggregation function,
+	      refer to columns of the rows in the current group.
+	      Those that occur outside a group function,
 	      (such as <literal>$1</literal> in <literal>$1,count()</literal>)
-	      refer to the field of the key vector
+	      refer to columns of the key vector of the current group
 	      (so it is guaranteed that this value is constant over 
-	      all rows in one aggregation group).
+	      all rows in each group).
 	    </para>
 	    </listitem>
 	    <listitem>
-	      <para>Aggregating over dynamically created groups.</para>
-	      <para>
-		This method allows each aggregation function to create
-		a different partitioning to aggregation groups
-		and also to impose the order in which an aggregation function
-		computes its value,
-		which may be important for order-sensitive aggregation functions
-		such as concatenation (<literal>concat()</literal>).
+	      <para>On-line grouping within group functions.</para>
+	      <para>PML-TQ also allows group functions to be computed over
+	        some group of input rows without actually
+		partitioning the input, i.e. without reducing
+		the number of output rows to one per group.
+		Using this method, each group function can specify
+		its own way of grouping and ordering of the input rows.
 		Consider this example on PDT 2.0:
 	      </para>
-	      <programlisting>t-node $a := 
-[  t_lemma = '#Forn', t-node $b := [ functor = "FPHR" ] ];
-  >> $a.id, distinct concat($b.t_lemma, ' ' over $a sort by $b.deepord )
+	      <programlisting>t-node $a := [
+  t_lemma = '#Forn',
+  t-node $b := [ 
+   functor = "FPHR" 
+  ]
+];
+>> $a.id, distinct concat($b.t_lemma, ' ' over $a sort by $b.deepord )
 	      </programlisting>
 	      <para>
 		The selective part of the query finds t-node <literal>$a</literal> with
@@ -2500,11 +2650,11 @@ can be used to formulate universal quantification over values of a list, alt, or
 		the <literal>t_lemma</literal> of all corresponding
 		<literal>$b</literal>'s in the ordering of the tree
 		(given by the attribute <literal>deepord</literal>).
-		The input to our filter are the pairs of nodes
-		<literal>$a</literal> and <literal>$b</literal>.
 	      </para>
 	      <para>
-		The concatenation is performed by the aggregating
+		The input to our filter are the pairs of nodes
+		<literal>$a</literal> and <literal>$b</literal>.
+		The concatenation is performed by the group
 		function <literal>concat</literal>.
 		The first argument says which value we
 		want to extract from each input,
@@ -2513,10 +2663,10 @@ can be used to formulate universal quantification over values of a list, alt, or
 		of the concatenated values.
 		The
 		<literal>over ...</literal> clause
-		defines partitioning into aggregation groups just as the
+		defines partitioning into groups just as the
 		<literal>for ...</literal> clause;
 		the difference is that this partitioning is
-		particular to this aggregation function,
+		particular to this group function,
 		not to the whole filter.
 		In fact, given an input row,
 		the expression <literal>concat($b.t_lemma, ' ' over $a ...</literal> says
@@ -2530,9 +2680,9 @@ can be used to formulate universal quantification over values of a list, alt, or
 	      <para>
 		Unlike partitioning using the
 		<literal>for...</literal> clause, this type of
-		partitioning is done within the aggregation function,
+		partitioning is done within the group function,
 		so the filter produces one output row for each input
-		row, not just one per aggregation group.  Thus, we
+		row, not just one per group.  Thus, we
 		would get the same output for each input pair
 		<literal>($a,$b)</literal> where <literal>$a</literal>
 		is the same; we therefore use the keyword
@@ -2544,19 +2694,19 @@ can be used to formulate universal quantification over values of a list, alt, or
 		and the foreign phrase its subtree represents.
 	      </para>
 	      <para>
-		This type of aggregation can also be combined
+		This type of grouping can also be combined
 		with the <literal>for...</literal> clause
-		to define a further partition on the aggregation groups
-		defined by the <literal>for...</literal> clause.
-		The column references within a <literal>over...</literal>
-		clause refer to the keys of the 
+		to define a partitioning on the set of groups
+		produced by the <literal>for...</literal> clause.
+		In that case, the column references within a <literal>over...</literal>
+		clause refer to the columns of the group key of the 
 		<literal>for...</literal> clause.
 	      </para>
 	      <para>
 		The clause <literal>over all</literal>
 		can be used as a special variant of the
-		<literal>over...</literal>
-		that creates only one aggregation group that spans over all
+		<literal>over...</literal> 
+		that creates only one group that spans over all
 		input rows.
 	      </para>
 	    </listitem>
@@ -2564,8 +2714,7 @@ can be used to formulate universal quantification over values of a list, alt, or
 	</para>
 	<para>
 	  Let us consider an example that combines
-	  aggregation using <literal>for...</literal>
-	  with aggregation using <literal>over...</literal>.
+	  grouping based on '<literal>for</literal>' and '<literal>over</literal>'.
 	</para>
 	<para>
 	  Let's say that for each functor A we want to know 
@@ -2588,7 +2737,7 @@ can be used to formulate universal quantification over values of a list, alt, or
 	<para>
 	  We first group together pairs with the same pair of functors
 	  using <literal> for $p.functor,$c.functor</literal>.  This
-	  partitions original input rows into aggregation groups
+	  partitions original input rows into groups
 	  <literal>g<subscript>1</subscript>,...,g<subscript>n</subscript></literal>,
 	  each determined by the unique value of the grouping key
 	  <literal>($p.functor,$c.functor)</literal>.  For each group
@@ -2611,7 +2760,7 @@ can be used to formulate universal quantification over values of a list, alt, or
 	  <callout arearefs="ex.joint.func.count.1" id="ex.joint.func.count.1.desc">
 	    <para>
 	      The first <literal>count()</literal> just computes the number of rows
-	      in the current aggregation group <literal>g<subscript>i</subscript></literal>,
+	      in the current group <literal>g<subscript>i</subscript></literal>,
 	      i.e. the number of occurrences of 'PRED','ACT'
 	      among the selected pairs of nodes.
 	    </para>
@@ -2622,9 +2771,9 @@ can be used to formulate universal quantification over values of a list, alt, or
 	      in the expression <literal>sum(... over $1)</literal>.
 	      partitions
 	      the set <literal>g<subscript>1</subscript>,...,g<subscript>n</subscript></literal>
-	      into aggregation groups of higher level,
+	      into groups of higher level,
 	      putting together those groups, that
-	      share the 1st column of the aggregation key.
+	      share the 1st column of the group key.
 	    </para>
 	    <para>
 	      So, our current group <literal>g<subscript>i</subscript></literal>
@@ -2890,13 +3039,13 @@ ADVS	CM	9.09%
 	</variablelist>
       </section>
       <section id="agg_functions">
-	<title>Aggregation functions</title>
+	<title>Group Functions</title>
 	<para>
-	  Aggregation functions compute a singe value from a set of values.
-	  They can only be
-	  used in output filters.
-	  There are several ways
-	  of using these functions:
+	  A group function is a function that computes its value based on a group of input
+	  rows, not just the current row.
+	  Group functions can only be used in the <literal>give...</literal> clause
+	  of an output filter and cannot be used in the selective part of the query.
+	  There are several ways of using these functions:
 	</para>
 	<orderedlist>
 	  <listitem>
@@ -2907,8 +3056,7 @@ ADVS	CM	9.09%
 	    clause, the function
 	    computes its value by considering
 	    only those input rows that
-	    belong to the current aggregation
-	    group.
+	    belong to the current group.
 	    If used outside a
 	    <literal>for ... give ...</literal>
 	    clause, the function
@@ -2919,31 +3067,32 @@ ADVS	CM	9.09%
 	    </para>
 	  </listitem>
 	  <listitem>
-	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable> over <replaceable>colspec, ...</replaceable>)</literal>.
-	    This form creates a temporary aggregation
+	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable> over <replaceable>columnExp, ...</replaceable>)</literal>.
+	    This form creates a temporary partitioning
 	    of the current input according to given column
 	    specifications following the <literal>over</literal> keyword
-	    and computes the value by considering
-	    input rows of the aggregation group
+	    and computes its value by considering
+	    input rows of the group
 	    to which the current input row belongs.
-	    Unlike <literal>for ... give ...</literal>,
-	    this type of aggregation does not
+	    Unlike with <literal>for ... give ...</literal>,
+	    this partitioning is only used to 
+	    compute the value of the group function and does not
 	    propagate to the output, so the
 	    filter still returns one output row for each input row,
-	    rather than a row for each aggregation group.
+	    rather than a row for each group.
 	    </para>
 	  </listitem>
 	  <listitem>
 	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable> over all)</literal>
-	    computes the value by considering
-	    all input rows, not just those in the current
-	    aggregation group.
+	    computes its value by considering all input rows (if used in the <literal>give ...</literal> 
+	    clause of a <literal>for ... give ...</literal> filter, this means not just rows in the current group).
 	    </para>
 	  </listitem>
 	  <listitem>
-	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable> over <replaceable>colspec,...</replaceable> sort by <replaceable>colspec,...</replaceable> )</literal>
-	    is a variant of the previous aggregations that forces an ordering on the aggregated values;
-	    this is currently only useful for the aggregation function <literal>concat()</literal>.
+	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable> over <replaceable>columnExp,...</replaceable> sort by <replaceable>columnRef,...</replaceable> )</literal>
+	    is a variant of the previous aggregations that forces an ordering on the rows within a group;
+	    this is currently only useful for the group function <literal>concat()</literal>
+	    and the ranking functions <literal>row_number()</literal>, <literal>rank()</literal>, and <literal>dense_rank()</literal>.
 	    </para>
 	  </listitem>
 	</orderedlist>
@@ -2978,6 +3127,43 @@ ADVS	CM	9.09%
 	  <varlistentry>
 	    <term>ratio(<replaceable>expression</replaceable> [ over ... ])</term>
 	    <listitem><para>Returns the ratio of the value computed using the expression to the sum of all values computed using this expression over all rows considered.</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>row_number([over ...] [sort by ...])</term>
+	    <listitem><para>For each row considered, returns
+	    its number within its group counting from 1.
+	    The partitioning can be specified
+	    by the <literal>over ...</literal> clause
+	    and the rows in each group can be ordered by the <literal>sort by ...</literal> clause.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>rank([over ...] [sort by ...])</term>
+	    <listitem><para>For each row considered, returns
+	    its rank with gaps within its group counting from 1.
+	    The partitioning can be specified
+	    by the <literal>over ...</literal> clause
+	    and the rows in each group can be ordered by the <literal>sort by ...</literal> clause.
+	    The returned value for a row is the same as <literal>row_number()</literal>
+	    of its first peer (the first row in the group with the same sort key).
+	    For example, the values in a (already sorted) group <literal>1,1,1,3,7,7,20</literal> have the following ranks:
+	    <literal>1,1,1,4,5,5,7</literal>. See also <literal>dense_rank()</literal>.
+	  </para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>dense_rank([over ...] [sort by ...])</term>
+	    <listitem><para>For each row considered, returns
+	    its rank without gaps within its group counting from 1.
+	    The partitioning can be specified
+	    by the <literal>over ...</literal> clause
+	    and the rows in each group can be ordered by the <literal>sort by ...</literal> clause.
+	    The returned value for a row is the number
+	    of peer groups that precede the current row.
+	    For example, the values in a (already sorted) group (1,1,1,3,7,7,20) have the following
+	    <literal>1,1,1,3,7,7,20</literal> have the following ranks: <literal>1,1,1,2,3,3,4</literal>.
+	  </para>
+	    </listitem>
 	  </varlistentry>
 	</variablelist>
       </section>
