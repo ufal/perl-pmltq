@@ -30,15 +30,17 @@
       The query language is declarative and offers both textual and
       graphical representation of queries.  Currently, there are two
       implementations of the query engine, one based on a relational
-      database (Oracle or PostgreSQL >= 8.4), the other on Perl and the TrEd
-      toolkit. Three are also three user interfaces available:
-      a full-featured graphical
-      user interface built in TrEd, a simple WEB-based interface for the 
-      database-based query engine, and a text-only command-line interface.
+      database (Oracle or PostgreSQL >= 8.4), the other based on Perl and the TrEd
+      toolkit. Three user interfaces are available:
+      a WEB-based interface for the database-based query engine
+      displaying query results as SVG,
+      a full-featured graphical user interface for both engines available as a plug-in to the
+      tree editor TrEd,
+      and a text-only command-line interface.
     </para>
     <para>
       TODO: Purpose, features, and comparison with other query languages and engines
-      (XPath, NetGraph, TGrep2, Nite, LPath+)
+      (XPath, NetGraph, TGrep2, Nite, LPath+, TigerSearch)
     </para>
     <para>Main features:</para>
     <orderedlist>
@@ -2705,9 +2707,11 @@ can be used to formulate universal quantification over values of a list, alt, or
 	      <para>
 		The clause <literal>over all</literal>
 		can be used as a special variant of the
-		<literal>over...</literal> 
-		that creates only one group that spans over all
-		input rows.
+		<literal>over...</literal> clause
+		creating only one group which spans over all
+		input rows. The same effect can also be achieved
+		using a constant key in the <literal>over...</literal> clause,
+		e.g. <literal>over 0</literal>.
 	      </para>
 	    </listitem>
 	  </itemizedlist>
@@ -3090,8 +3094,8 @@ ADVS	CM	9.09%
 	  </listitem>
 	  <listitem>
 	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable> over <replaceable>columnExp,...</replaceable> sort by <replaceable>columnRef,...</replaceable> )</literal>
-	    is a variant of the previous aggregations that forces an ordering on the rows within a group;
-	    this is currently only useful for the group function <literal>concat()</literal>
+	    is a variant of the previous grouping that forces an ordering on the rows within a group;
+	    this is useful for the group function <literal>concat()</literal>
 	    and the ranking functions <literal>row_number()</literal>, <literal>rank()</literal>, and <literal>dense_rank()</literal>.
 	    </para>
 	  </listitem>
