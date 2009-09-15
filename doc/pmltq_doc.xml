@@ -662,6 +662,7 @@ t-node $b := [ parent $a ];</programlisting>
     </section>
     <section>
       <title>Types of relations (TODO)</title>
+
       <para>Relations based on PML references:</para>
       <para>Example on <literal>a/lex.rf</literal> relation connecting
       t-layer to a-layer:</para>
@@ -673,6 +674,9 @@ t-node $b := [ parent $a ];</programlisting>
     <programlisting>#### Rcp without a grammatical coreference
       t-node 
       [ t_lemma = '#Rcp', !1x coref_gram.rf t-node [  ] ];</programlisting>
+    <para>Transitive closure of a coreference relation:</para>
+    <programlisting>t-node [ coref_gram.rf{1,} t-node [ ] ]</programlisting>
+
     <para>Implementation/corpus specific relations</para>
     <para>Examples using PDT 2.0 specific relations: <literal>echild</literal>, <literal>eparent</literal>:</para>
     <programlisting>t-node [ echild t-node [ functor='DPHR' ], echild t-node [ functor='DPHR' ] ]</programlisting>
@@ -694,6 +698,11 @@ t-node $b := [ parent $a ];</programlisting>
         a/lex.rf $ref1, 
         echild t-node [ a/lex.rf $ref0 ] 
       ];</programlisting>
+    <para>Transitive closure of an implementation/corpus specific relation</para>
+    <programlisting># effective descendant
+    t-node [ echild{1,} t-node [ ] ]</programlisting>
+    <programlisting># effective grand-grand child
+    t-node [ echild{2,2} t-node [ ] ]</programlisting>
     </section>
     <section>
       <title>Labeled relations (using a <literal>member</literal> selector)</title>
@@ -894,8 +903,220 @@ a-node $a:= [ ]
     <para>
       Basic examples, syntax reference.
     </para>
+
     <section>
-      <title>Brief PML-TQ syntax reference</title>
+      <title>Common syntax constructions</title>
+      <para>Selectors</para>
+      <informaltable>
+	<tgroup cols="2">
+	  <tbody>
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> [ ... ]</literal>
+	    </entry>
+	    <entry><para>Selector for nodes of a given type (list of types depends on the treebank)</para></entry>
+	    </row>
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ ... ]</literal>
+	    </entry>
+	    <entry><para>Named selector (can be referred to as <literal>$a</literal>)</para></entry>
+	    </row>
+	  </tbody>
+	</tgroup>
+      </informaltable>
+
+      <para>Node relationships</para>
+
+      <informaltable>
+	<tgroup cols="2">
+	  <tbody>
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ child <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> is a child of <literal>$a</literal>
+	    </para></entry>
+	    </row>
+
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ child <replaceable>TYPE</replaceable> $b:= [ lbrothers()=0 ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> is the first child of <literal>$a</literal>
+	    </para></entry>
+	    </row>
+
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ child <replaceable>TYPE</replaceable> $b:= [ lbrothers()=<replaceable>N</replaceable>-1 ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> is the <replaceable>N</replaceable>-th child of <literal>$a</literal>
+	    </para></entry>
+	    </row>
+
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ child <replaceable>TYPE</replaceable> $b:= [ rbrothers()=0 ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> is the last child of <literal>$a</literal>
+	    </para></entry>
+	    </row>
+
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ child <replaceable>TYPE</replaceable> $b:= [ rbrothers()=<replaceable>N</replaceable>-1 ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> is the <replaceable>N</replaceable>-th to last child of <literal>$a</literal>
+	    </para></entry>
+	    </row>
+
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ children()=1, child <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> is the only child of <literal>$a</literal>
+	    </para></entry>
+	    </row>
+
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ parent <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> is the parent <literal>$a</literal>
+	    
+	    </para></entry>
+	    </row>
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ ancestor <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> dominates <literal>$a</literal> (<literal>$b</literal> is an ancestor of <literal>$a</literal>)
+	    </para></entry>
+	    </row>
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ ancestor{1,2} <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> is the parent or grand parent of <literal>$a</literal>
+	    </para></entry>
+	    </row>
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ descendant <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> is dominated by <literal>$a</literal> (<literal>$b</literal> is a descendant of <literal>$a</literal>)
+	    </para></entry>
+	    </row>
+
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ descendant{1,2} <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> is the child or grand child <literal>$a</literal>
+	    </para></entry>
+	    </row>
+
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ descendant <replaceable>TYPE</replaceable> $b:= [ ], 0x descendant [ order-precedes $b ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> is a left-most descendant <literal>$a</literal>
+	    </para></entry>
+	    </row>
+
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ descendant <replaceable>TYPE</replaceable> $b:= [ ], 0x descendant [ order-follows $b ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> is a right-most descendant <literal>$a</literal>
+	    </para></entry>
+	    </row>
+
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ sibling <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> is the sibling <literal>$a</literal>
+	    </para></entry>
+	    </row>
+
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ sibling{,-1} <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> is the preceding sibling of <literal>$a</literal>
+	    </para></entry>
+	    </row>
+
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ sibling{-1,-1} <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> is the immediately preceding sibling of <literal>$a</literal>
+	    </para></entry>
+	    </row>
+
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ sibling{1,} <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> is the following sibling <literal>$a</literal>
+	    </para></entry>
+	    </row>
+
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ sibling{1,1} <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> is the immediately following sibling of <literal>$a</literal>
+	    </para></entry>
+	    </row>
+
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ same-tree-as <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> belongs to the same tree as <literal>$a</literal>
+	    </para></entry>
+	    </row>
+
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ order-follows <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> belongs to the same tree as <literal>$a</literal> and follows <literal>$a</literal>
+	    </para></entry>
+	    </row>
+
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ order-follows{1,1} <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> belongs to the same tree as <literal>$a</literal> and immediatelly follows <literal>$a</literal>
+	    </para></entry>
+	    </row>
+
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ order-precedes <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> belongs to the same tree as <literal>$a</literal> and precedes <literal>$a</literal>
+	    </para></entry>
+	    </row>
+
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ order-follows{1,1} <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> belongs to the same tree as <literal>$a</literal> and immediatelly precedes <literal>$a</literal>
+	    </para></entry>
+	    </row>
+
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ order-follows{-1,1} <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> belongs to the same tree as <literal>$a</literal> and either immediatelly precedes or immediatelly follows <literal>$a</literal>
+	    </para></entry>
+	    </row>
+
+	    <row><entry>
+	      <literal><replaceable>TYPE</replaceable> $a := [ same-document-as <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
+	    </entry>
+	    <entry><para><literal>$b</literal> belongs to the same document as <literal>$a</literal>
+	    </para></entry>
+	    </row>
+
+	  </tbody>
+	</tgroup>
+      </informaltable>
+
+
+      <para>Logical expressions</para>
+      <para>Value comparison</para>
+      <para>Arithmetical and string operators</para>
+      <para>Subquery and number of occurrences</para>
+      <para>Functions</para>
+      <para>Output filters</para>
+    </section>
+
+    <section>
+      <title>PML-TQ Syntax Reference</title>
       <variablelist>
 	<varlistentry>
 	  <term>query</term>
@@ -1174,29 +1395,42 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      </imageobject><imageobject role="fo">
 		<imagedata format="PDF" fileref="rail_treeRelation.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
-		<phrase><![CDATA[ treeRelation : ( 'child' | 'parent' | 'same-tree-as' | 'descendant' distanceInterval? | 'ancestor' distanceInterval? ) '::'? ;
+		<phrase><![CDATA[ treeRelation : ( 'child' | 'parent' | 'same-tree-as' | 'descendant' distanceInterval? | 'ancestor' distanceInterval? | 'sibling' distanceInterval?) '::'? ;
 		distanceInterval : LEFTBRACE NUMBER? ',' NUMBER? RIGHTBRACE ; ]]></phrase>
 	      </textobject>
 	    </mediaobject>
 	    <para>
-		  These are child, parent, descendant and
-		  ancestor. The last two can be followed by
-		  a distance interval of the forms
-		  <literal>{min,max}</literal>,
-		  or <literal>{,max}</literal>, or
-		  <literal>{min,}</literal>
-		  where <literal>min</literal> and <literal>max</literal>
-		  are positive integers.
-		</para>
-		<para>
-		  For example, in
-		  <programlisting>t-node $a := [ descendant{3,} t-node $b := [ ] ]</programlisting>
-		  <literal>$b</literal> 
-		  matches a descendant of <literal>$a</literal>
-		  such that there are at least two nodes
-		  on the path from $a to $b strictly
-		  between $a to $b.
-		</para></listitem>
+	      These are child, parent, descendant,
+	      ancestor, and sibling. The last three can be followed by
+	      a distance interval of the forms
+	      <literal>{min,max}</literal>,
+	      or <literal>{,max}</literal>, or
+	      <literal>{min,}</literal>
+	      where <literal>min</literal> and <literal>max</literal>
+	      are integers with
+	      <literal>min</literal> less than or equal to <literal>max</literal>.
+	      These values must be positive for   
+	      the relations <literal>descendant</literal> and 
+	      <literal>ancestor</literal>.
+	      For the <literal>sibling</literal> relation,
+	      negative distance bound values range over
+	      preceding siblings and positive bound
+	      values range over following siblings.
+	    </para>
+	    <para>For example, in the query
+	    <programlisting>t-node $a := [ sibling{-1,2} t-node $b := [ ] ]</programlisting>
+	    the node <literal>$b</literal> can be either the immediatelly preceding
+	    sibling of <literal>$a</literal> or one of the two siblings
+	    immediatelly following <literal>$a</literal>.
+	    </para>
+	    <para>
+	      In the query
+	      <programlisting>t-node $a := [ descendant{3,} t-node $b := [ ] ]</programlisting>
+	      <literal>$b</literal> 
+	      matches a descendant of <literal>$a</literal>
+	      such that there are at least two nodes
+	      on the path from $a to $b strictly
+	      between $a to $b.</para></listitem>
 	      </varlistentry>
 	      <varlistentry>
 		<term>ordering relations</term>
@@ -1207,7 +1441,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 		</imageobject><imageobject role="fo">
 		<imagedata format="PDF" fileref="rail_orderingRelation.pdf"/>
 		</imageobject><textobject role="syntax_diagram">
-		<phrase><![CDATA[ orderingRelation : ('depth-first-precedes' | 'depth-first-follows' | 'order-precedes' | 'order-follows') '::'? ; ]]></phrase>
+		<phrase><![CDATA[ orderingRelation : ('depth-first-precedes' | 'depth-first-follows' | 'order-precedes' | 'order-follows') distanceInterval? '::'? ; ]]></phrase>
 		</textobject>
 		</mediaobject>
 		<para>
@@ -1224,6 +1458,16 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 		with explicit total ordering on the trees (typically dependency treebanks).
 		</para>
 		<para>
+		  These relations can be followed by
+		  a distance interval of the forms
+		  <literal>{min,max}</literal>,
+		  or <literal>{,max}</literal>, or
+		  <literal>{min,}</literal>
+		  where <literal>min</literal> and <literal>max</literal>
+		  are (possibly negative) integers, with
+		  <literal>min</literal> less than or equal to <literal>max</literal>.
+		</para>
+		<para>
 		  For example, in
 		  <programlisting>t-node $a := [ depth-first-precedes t-node $b := [ order-precedes $a ] ]</programlisting>
 		  <literal>$a</literal> 
@@ -1235,7 +1479,30 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 		  <literal>$b</literal> can be a descendant
 		  of <literal>$a</literal> that precedes
 		  <literal>$a</literal>.
-		</para></listitem>
+		</para>
+		<para>
+		  In the following query, <literal>$a</literal>
+		  must immediatelly precede <literal>$b</literal>
+		  in the total ordering of the tree:
+		  <programlisting>t-node $a := [ order-precedes{,1} t-node $b := [ ] ]</programlisting>
+		  Conversely, in
+		  <programlisting>t-node $a := [ order-precedes{2,} t-node $b := [ ] ]</programlisting>
+		  <literal>$a</literal> precedes <literal>$b</literal>,
+		  but there must be at least one other node between the nodes
+		  <literal>$a</literal> and <literal>$b</literal>.
+		  The query
+		  <programlisting>t-node $a := [ order-precedes{1,2} t-node $b := [ ] ]</programlisting>
+		  allows at most one node between <literal>$a</literal> and <literal>$b</literal>
+		  in the total ordering of the tree.
+		</para>
+		<para>
+		  Negative distance bound extends the relation in the oposite direction. For example,
+		  in this query:
+		  <programlisting>t-node $a := [ order-precedes{-1,1} t-node $b := [ ] ]</programlisting>
+		  <literal>$a</literal> either immediatelly precedes <literal>$b</literal>
+		  or immediatelly follows <literal>$b</literal>.
+		</para>
+		</listitem>
 	      </varlistentry>
 	      <varlistentry>
 		<term>relations based on PML-references</term>
@@ -1319,7 +1586,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 		      </imageobject><imageobject role="fo">
 		      <imagedata format="PDF" fileref="railimplementationSpecificRelation.pdf"/>
 		      </imageobject><textobject role="syntax_diagram">
-		      <phrase><![CDATA[ implementationSpecificRelation : NAME '::'? ; ]]></phrase>
+		      <phrase><![CDATA[ implementationSpecificRelation : NAME distanceInterval? '::'? ; ]]></phrase>
 		    </textobject>
 		  </mediaobject>
 		  <para>
@@ -1332,6 +1599,33 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 		    defines relations <literal>echild</literal> and
 		    <literal>eparent</literal> for the PDT&#160;2.0
 		    treebank to represent so called effective-parent and effective-child relations.
+		  </para>
+		  <para>
+		    These relations can be optionally followed by
+		    an interval bounding the number of transitive
+		    applications of the relation.
+		    It can be of the forms
+		    <literal>{min,max}</literal>,
+		    or <literal>{,max}</literal>, or
+		    <literal>{min,}</literal>
+		    where <literal>min</literal> and <literal>max</literal>
+		    are positive integers, with
+		    <literal>min</literal> less than or equal to <literal>max</literal>.
+		  </para>
+		  <para>
+		    For example, <literal>eparent{1,}</literal>
+		    is a transitive closure of the <literal>eparent</literal>
+		    relation (i.e.\ effective ancestor).
+		    Similarly, in
+		    <programlisting>t-node $a:=[ echild{1,2} $b:=[] ]</programlisting>
+		    the node <literal>$a</literal> must be an effective
+		    parent or effective parent of an effective grand parent
+		    of <literal>$b</literal>.
+		    The queries
+		    <programlisting>t-node $a:=[ echild $b:=[] ]</programlisting>
+		    and
+		    <programlisting>t-node $a:=[ echild{1,1} $b:=[] ]</programlisting>
+		    are equivalent.
 		  </para>
 		</listitem>
 	      </varlistentry>
