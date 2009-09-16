@@ -54,7 +54,7 @@
 	<para>supports output filters (generate custom text output, compute statistics, ...)</para>
       </listitem>
       <listitem>
-	<para>offers graphical query representation with relations between nodes depicted as arrows</para>
+	<para>offers graphical query representation with relations (links) between nodes depicted as arrows</para>
       </listitem>
       <listitem>
 	<para>GUI interface built into TrEd</para>
@@ -243,22 +243,28 @@
   <section>
     <title>Tutorial</title>
     <para>
-      Step by step tutorial (TrEd based).
-    </para>
-    <para>
       The purpose of this tutorial is to show how to create and run
-      queries. It gradually passes from very simple to complex
-      queries. The examples are queries over the Prague Dependency
-      Treebank 2.0 and we always show both how to write the query in
-      textual form as well as how to build and run the query graphically in
-      the tree editor TrEd.
+      queries from the tree editor TrEd.
       The textual form of the query can also be used 
       in the web or command-line interface.
+    </para>
+    <para>
+      As our examples, we use queries over the Prague Dependency
+      Treebank 2.0; conceptually similar queries can be applied to
+      most other treebanks, although the node types and attributes
+      will be probably different.
+    </para>
+    <para>
+      The tutorial gradually passes from very simple to complex
+      queries and demonstrates various common syntactic constructions of the PML-TQ language.
+      We always show how to write the query in the
+      textual form as well as how to build and run the query graphically in
+      the tree editor TrEd.
     </para>
     <section>
     <title>Getting started</title>
     <para>
-      To start experimenting with the toolkit,
+      To start experimenting with the toolkit from TrEd,
       start TrEd and press <keycombo action="simul"><keysym>Ctrl</keysym><keysym>F3</keysym></keycombo>
       or select <menuchoice>
       <guimenu>Macros</guimenu>
@@ -285,16 +291,31 @@
 	<imageobject role="html"><imagedata align="center" fileref="tred_empty_query_s.png" format="PNG"/></imageobject>
       </mediaobject>
     </para>
+    <para>You can also use the toolkit without TrEd from a web browser
+    (although you will not be able to
+    build the query graphically nor see the graphical representation of your query).
+    To start, just open the search engine URL and log in
+    using any web browser capable of combining JavaScript, CSS, and  SVG (<ulink url="http://www.w3.org/Graphics/SVG/">Scalable Vector Graphics</ulink>). At the time of writing this tutorial, 
+    the best choice is the Opera browser, followed by 
+    Google Chrome, Firefox, and Safari (please avoid Microsoft Internet Explorer
+    because it lacks native SVG support).
+    </para>
+    <para>
+      The Opera browser displaying a query and a result tree:
+      <mediaobject>
+	<imageobject role="html"><imagedata align="center" fileref="images/screenshot_web_s.png" format="PNG"/></imageobject>
+      </mediaobject>
+    </para>
     </section>
     <section>
       <title>A simple query</title>
     <para>
       Now we may create our first simple query.
       We shall search for all nodes of the type <literal>t-node</literal>
-      (tectogrammatical nodes in PDT~2.0) that
+      (tectogrammatical nodes in PDT 2.0) that
       whose attribute <literal>functor</literal>
       equals to <literal>DPHR</literal>.
-      The query can be created in several ways:
+      In TrEd, the query can be created in several ways:
     </para>
     <itemizedlist>
       <listitem>
@@ -661,51 +682,176 @@ t-node $b := [ parent $a ];</programlisting>
     </para>
     </section>
     <section>
-      <title>Types of relations (TODO)</title>
+      <title>Types of relations (links)</title>
+      <section>
+	<title>Structural relations</title>
+	<para>The nodes in the query 
+	can be linked by several types of relations.
+	The built-in relations are 
+	the structural relations (child, parent, ancestor, descendant, sibling,
+	same-tree-as, same-document-as),
+	ordering relations (depth-first-precedes, depth-first-follows, order-precedes, order-follows).
+	The name of a built-in relation can optionally be followed by a pair of colons <literal>::</literal>
+	in order to distinguish it for PML reference relations
+	described below.
+	</para>
+      </section>
+      <section>
+	<title>PML Reference Links</title>
+	<para>
+	  The PML data model allows connecting nodes (and other data
+	  structures) by so called PML references. 
+	  In PML-TQ one can use any PML reference as a
+	  relation by using the attribute path of 
+	  an attribute containing the reference,
+	  optionally followed by <literal>-></literal>
+	  (in order to prevent a collision with a similarly named
+	  built-in or implementation specific relations).
+	  For example, in PDT&#160;2.0, the nodes
+	  on the t-layer are connected to nodes
+	  on the a-layer using a PML references in the attributes
+	  <literal>a/lex.rf</literal> and
+	  <literal>a/aux.rf</literal>.
+	  The following query uses the <literal>a/lex.rf</literal>
+	  PML reference as a relation:
+	</para>      
+      <programlisting>
+# t-layer dependency reversed on a-layer
+a-node $A := [
+ child a-node $B := [  ]
+];
 
-      <para>Relations based on PML references:</para>
-      <para>Example on <literal>a/lex.rf</literal> relation connecting
-      t-layer to a-layer:</para>
-    <programlisting>#### t-layer dependency reversed on a-layer
-      t-node [ t-node [ a/lex.rf $a0 ],
-               a/lex.rf $a1 ];
-      a-node $a0 := [  a-node $a1 := [  ] ];</programlisting>
-    <para>Example on coreference:</para>
-    <programlisting>#### Rcp without a grammatical coreference
-      t-node 
-      [ t_lemma = '#Rcp', !1x coref_gram.rf t-node [  ] ];</programlisting>
-    <para>Transitive closure of a coreference relation:</para>
-    <programlisting>t-node [ coref_gram.rf{1,} t-node [ ] ]</programlisting>
-
-    <para>Implementation/corpus specific relations</para>
-    <para>Examples using PDT 2.0 specific relations: <literal>echild</literal>, <literal>eparent</literal>:</para>
-    <programlisting>t-node [ echild t-node [ functor='DPHR' ], echild t-node [ functor='DPHR' ] ]</programlisting>
-    <programlisting>t-node $a := [ gram/sempos='v', 
-                     ! echild t-node [ functor in { 'ACT','PAT','ADDR','ORIG','EFF' } ] 
-		   ]</programlisting>
-    <programlisting>t-node [ 0x eparent t-node [ ] ]</programlisting>
-    <programlisting>t-node [ 0x eparent t-node [  ], 
-                gram/sempos ~ '^n',
-		functor !~ '^(PAR|DENOM)$' ];</programlisting>
-    <programlisting>#### reverted e-dependency, exclude numbers
-      a-node $ref0 := [ 
-        m/tag !~ '^C' ,
-        echild a-node $ref1 := [
-	  m/tag !~ '^C' 
-        ]
-      ];
-      t-node [ 
-        a/lex.rf $ref1, 
-        echild t-node [ a/lex.rf $ref0 ] 
-      ];</programlisting>
-    <para>Transitive closure of an implementation/corpus specific relation</para>
-    <programlisting># effective descendant
-    t-node [ echild{1,} t-node [ ] ]</programlisting>
-    <programlisting># effective grand-grand child
-    t-node [ echild{2,2} t-node [ ] ]</programlisting>
+t-node [
+  child t-node [
+    a/lex.rf $A 
+  ],
+  a/lex.rf $B
+];
+</programlisting>
+      <para>PML references are also used in PDT&#160;2.0 to representat 
+      textual and grammatical coreference links (attributes <literal>coref_text.rf</literal> and
+      <literal>coref_gram.rf</literal>.
+      For eaxmple, the following query searches for 
+      a grammatical coreference where antecedent
+      precedes the postcedent. The query
+      defines selectors for two tectogrammatical nodes <literal>$ante</literal> (antecedent)
+      and <literal>$post</literal> (postcedent) connected
+      by a grammatical-coreference link <literal>coref_gram.rf</literal>,
+      such that
+      the lexical counterpart of <literal>$post</literal>
+      follows that of <literal>$antec</literal>
+      in the ordering of the a-layer
+      (which coincides with the ordering of the original sentence).
+      </para>
+    <programlisting>
+t-node $ante := [
+ a/lex.rf $ante_lex := [],
+ coref_gram.rf t-node $post := [
+   a/lex.rf $post_lex [ order-follows $ante_lex ],
+ ]
+]</programlisting>
+      <para>In the last example, the two t-nodes were
+      directly connected by a grammatical-coreference link. If we
+      want to look for nodes connected by a chain
+      of grammatical-coreference links, we can do it
+      by using a transitive closure of the relation
+      <literal>coref_gram.rf</literal>, which
+      can be expressed in PML-TQ as
+      <literal>coref_gram.rf{1,}</literal>.
+      The lower bound <literal>1</literal> means
+      we are looking for chains of length at least 1
+      and the absence of the upper bound means that
+      we put no limits on the length of the chain.
+      </para>
+      <programlisting>
+t-node $ante := [
+ a/lex.rf $ante_lex := [],
+ coref_gram.rf{1,} t-node $post := [
+   a/lex.rf $post_lex [ order-follows $ante_lex ],
+ ]
+]</programlisting>
+      <para>
+	In TrEd, a relation can be made transitive
+	by specifying the minimum and/or maximum bound;
+	this can be done e.g. by double-clicking on an existing
+	relation arrow.
+      </para>
+      <para>Note that in the case of a cyclic chain of PML references,
+      the chains maximum length is the number of distinct nodes in the
+      chain plus one (i.e. the chain is allowed to start and end on the
+      same node, but it is not allowed to continue another round along the cycle).
+      For example, the following query searches for a cycle in
+      the annotatin of textual coreference in the PDT&#160;2.0 tectogrammatical annotation
+      (indeed, there is one cycle of length 2 left there by a mistake):
+      </para>
+    <programlisting>
+t-node $t := [
+ coref_gram.rf{1,} $t
+]</programlisting>
+      </section>
+      <section>
+	<title>Implementation- or corpus-specific relations </title>
+	<para>Finally, any particlar implementation or installation of the PML-TQ query engine 
+	can extend the language by programmatically-defining additional
+	specific relations.
+	The relations behave syntactically as the built-in relations
+	and must use different names than the built-in relations
+	(their name can be followed by a pair of colons <literal>::</literal>
+	in order to distinguish them from a PML reference relation).
+	</para>
+	<para>The current implementation defines two specific for
+	the PDT&#160;2.0 annotation: <literal>echild</literal> and <literal>eparent</literal>.
+	These relations can be used both on tectogrammatical and analytical layer
+	and represent the effective dependency, rather than 
+	technical dependency representated by 
+	the built-in relations <literal>child</literal> and <literal>parent</literal>.
+	Thus, they abstract from certain constructions such as
+	coordination and aposition as well as the dominance of prepositions
+	(<literal>afun="AuxP"</literal>)
+	and connectives (<literal>afun="AuxC"</literal>) on the analytical layer.
+	</para>
+	<para>Here are a few examples of queries using these relations:</para>
+    <programlisting>
+# a semantic verb with an ACT(or) and EFF(ect)
+t-node [ 
+  gram/sempos='v',
+  echild t-node [ functor='ACT' ], 
+  echild t-node [ functor='EFF' ],
+]</programlisting>
+    <programlisting>
+# a t-node with two effective parents (common modifier of coordinated nodes)
+t-node [ 
+  eparent t-node [ ], 
+  eparent t-node [ ],
+]</programlisting>
+    <programlisting>
+# a verb with no actant
+t-node $a := [ gram/sempos='v', 
+  ! echild t-node [ functor in { 'ACT','PAT','ADDR','ORIG','EFF' } ] 
+]</programlisting>
+<programlisting>
+# reversed effective dependency on a-layer and t-layer
+# excluding numeric constructions
+a-node $A := [ 
+  m/tag !~ '^C',
+  echild a-node $B := [
+    m/tag !~ '^C' 
+  ]
+];
+t-node [ 
+  a/lex.rf $B, 
+  echild t-node [ a/lex.rf $A ] 
+];</programlisting>
+   <para>Just like PML reference relations, specific relations 
+   can be used in the transitive form by setting minimum and maximum bounds, for example:</para>
+   <programlisting># effective descendant
+t-node [ echild{1,} t-node [ ] ]</programlisting>
+<programlisting># effective grand-grand child
+t-node [ echild{2,2} t-node [ ] ]</programlisting>
+</section>
     </section>
-    <section>
-      <title>Labeled relations (using a <literal>member</literal> selector)</title>
+    <section id="tut_member_selector">
+      <title>Querying labeled references using the <literal>member</literal> selector</title>
       <para>The member selector is useful 
             for querying some types of complex-valued node attributes,
 	    e.g. lists of complex structures. Such attributes do not occur
@@ -751,11 +897,142 @@ t-node $b := [ parent $a ];</programlisting>
      </para>
     </section>
     <section>
-      <title>Subqueries (TODO)</title>
-    <programlisting>t-node [ functor='DPHR', 2+x child t-node [ ] ]</programlisting>
-    <programlisting>t-node [ functor='DPHR', 2+x descendant t-node [ ] ]</programlisting>
-    <programlisting>t-node [ 2+x child t-node [ functor='DPHR' ] ]</programlisting>
-    <programlisting>t-node [ 2+x echild t-node [ functor='DPHR' ] ]</programlisting>
+      <title>Subqueries (testing existence, non-existence and number of occurrences)</title>
+      <para>
+	Sometimes it is useful to test existence, non-existence or 
+	number of occurrences of a node related to our query. For example,
+	to find all predicates without a subject in PDT&#160;2.0, we could use
+	the following query
+      </para>
+      <programlisting>a-node [ afun='Pred', 0x echild a-node [ afun='Sb' ] ]</programlisting>
+      <para>The query finds an a-node with <literal>afun='Pred'</literal> that has 
+      no effective children with <literal>afun='Sb'</literal>.
+      This is expressed using a selector preceded by a restriction on number of occurrences (0x - zero times),
+      which is called a subquery. 
+      </para>
+      <para>To create a subquery graphically in TrEd,
+      simply create the selector <literal>echild a-node [ afun='Sb' ]</literal> as usual
+      and then, with the corresponding query subtree selected, press
+      <keysym>x</keysym> or
+      <guibutton>
+      <inlinemediaobject>
+	<imageobject role="html"><imagedata fileref="pmltq_icons/subquery.png" contentdepth="10pt" valign="middle" format="PNG"/></imageobject>
+	<textobject><phrase>Occurrences</phrase></textobject>
+      </inlinemediaobject>
+      </guibutton>.
+      </para>
+      <para>Of course, we could constrain the number of ocurrences to a non-zero value, too.
+      For example, to find all predicates that govern one subject or one object, but not both,
+      we could use the following query:</para>
+      <programlisting>a-node [ afun='Pred', 1x echild a-node [ afun in {'Sb','Obj'} ] ]</programlisting>
+      <para>The nodes matched by subqueries are not part of the result 
+      match (in our example, the match would consist of the predicate nodes only, 
+      the subjects or objects would not be included).
+      </para>
+      <para>The number of occurrences of a subquery can be constrained not only to a single number (0 in our example)
+      but to any finite union of bounded or partially unbounded intervals of positive integers;
+      e.g. <literal>0|2..4|6+x</literal> restricts the number of ocurrences
+      to zero, two to four, or six or more, eliminating one and five.
+      While the plus sign stands for <emphasis>or more</emphasis>,
+      the minus sign means <emphasis>or less</emphasis>, as in <literal>4-x</literal> (occurring four or less times).
+      </para>
+      <para>Subqueries are also created using boolean operators, such as negation:</para>
+      <programlisting>a-node [ afun='Pred', ! echild a-node [ afun='Sb' ] ]</programlisting>
+      <para>In this example, the selector 
+      <literal>! echild a-node [ afun='Sb' ]</literal>
+      is automatically turned into a (still negated) subquery with one and more occurrences;
+      the query becomes:
+      <programlisting>a-node [ afun='Pred', ! 1+x echild a-node [ afun='Sb' ] ]</programlisting>
+      </para>
+      <para>To create this query graphically, create the selector 
+      <literal>echild a-node [ afun='Sb' ]</literal> as usual, 
+      then select the query node corresponding to 
+      <literal>a-node [ afun='Pred' ]</literal>,
+      create a negation node (press <keysym>!</keysym> or
+      <guibutton>
+      <inlinemediaobject>
+	<imageobject role="html"><imagedata fileref="pmltq_icons/not.png" contentdepth="10pt" valign="middle" format="PNG"/></imageobject>
+	<textobject><phrase>NOT</phrase></textobject>
+      </inlinemediaobject>
+      </guibutton>)
+      and drag the query subtree corresponding to the subject onto the
+      negation node.
+      </para>      
+      <para>A common use of subqueries is also constraining nodes on a descending path
+      from one node to another. Let us for example formulate a query searching
+      for a descending chain of tectogrammatical nodes with the functor
+      <literal>RSTR</literal> (restrictive or descriptive abdominal modification).
+      We want the chain to satisfy the following conditions:
+      </para>
+      <orderedlist>
+	<listitem id="subq-i1">
+	  <para>The chain is connected to a node <literal>$N</literal>
+	  which is a semantic noun (<literal>gram/sempos ~ "^n"</literal>) and 
+	  has other functor than <literal>RSTR</literal></para>
+	</listitem>
+	<listitem id="subq-i3"><para>The chain is at least 3 nodes long.</para></listitem>
+	<listitem id="subq-i4">
+	  <para>The descending chain ends with a node <literal>$R</literal> with the functor <literal>RSTR</literal></para>
+	</listitem>
+	<listitem id="subq-i5">
+	  <para>The chain cannot descend beyond <literal>$R</literal>,
+	  i.e. <literal>$R</literal> has no child node with the functor <literal>RSTR</literal>.
+	  </para>
+	</listitem>
+	<listitem id="subq-i2">
+	  <para>All nodes that belong to the chain have the functor <literal>RSTR</literal>
+	  </para>
+	</listitem>
+      </orderedlist>
+      <para>
+      The corresponding query looks like this:
+      </para>
+      <programlisting>
+t-node $N:= [
+  # condition <xref linkend="subq-i1"/>.
+  gram/sempos ~ "^n",
+  functor != "RSTR", 
+
+  # conditions <xref linkend="subq-i3"/>. and <xref linkend="subq-i4"/>.
+  descendant{3,} t-node $R := [
+    functor = "RSTR", 
+    # condition <xref linkend="subq-i5"/>. 
+    0x  t-node [ functor = "RSTR" ]
+  ],
+
+  # condition <xref linkend="subq-i2"/>.
+  0x descendant t-node [
+    !functor = "RSTR", 
+    descendant $R 
+  ], 
+];</programlisting>
+ <para>Note how the condition <xref linkend="subq-i2"/>. is expressed:
+ we say that there is no descendant of $N dominating $R whose <literal>functor</literal>
+ would not equal <literal>RSTR</literal>. Thus, we have rewritten the original condition of the form
+ <inlineequation id="eq-subq1" >
+   <?dbtex delims='no'?>
+   <alt role="tex">\[\forall x C(x,N,R) \]</alt>
+   <inlinemediaobject>
+     <imageobject role="html"><imagedata fileref="subq_eq1.png" format="PNG"/></imageobject>
+     <imageobject role="fo"><imagedata fileref="subq_eq1.pdf" format="PDF"/></imageobject>
+     <textobject><phrase role="math">∀x C(x,N,R)</phrase></textobject>
+   </inlinemediaobject>
+ </inlineequation>
+ as
+ <inlineequation id="eq-subq2">
+   <?dbtex delims='no'?>
+   <alt role="tex">\[\neg\exists x \neg C(x,N,R) \]</alt>
+   <inlinemediaobject>
+     <imageobject role="html"><imagedata fileref="subq_eq2.png" format="PNG"/></imageobject>
+     <imageobject role="fo"><imagedata fileref="subq_eq2.pdf" format="PDF"/></imageobject>
+     <textobject><phrase role="math">¬ ∃x ¬C(x,N,R)</phrase></textobject>
+   </inlinemediaobject>
+ </inlineequation>.
+ </para>
+    <!-- <programlisting>t-node [ functor='DPHR', 2+x child t-node [ ] ]</programlisting> -->
+    <!-- <programlisting>t-node [ functor='DPHR', 2+x descendant t-node [ ] ]</programlisting> -->
+    <!-- <programlisting>t-node [ 2+x child t-node [ functor='DPHR' ] ]</programlisting> -->
+    <!-- <programlisting>t-node [ 2+x echild t-node [ functor='DPHR' ] ]</programlisting> -->
     </section>
     <section>
       <title>Looking for small result trees?</title>
@@ -786,27 +1063,87 @@ t-node $b := [ parent $a ];</programlisting>
       <para>For treebanks that do not have a special node type for the root node,
       we can write e.g.:</para>
       <programlisting>node [ 
-  functor='DPHR', 
+  functor='DPHR',
   1x ancestor node [ 
-    !parent node [],
+    depth() = 0, # the root
     descendants() &lt;= 10 
   ]
 ]</programlisting>
     </section>
     <section>
-      <title>Functions (TODO)</title>
-    <programlisting># a leaf node (using functions)
+      <title>Functions</title>
+      <para>PML-TQ provides a set of built-in functions
+      that can be used in expressions constraining
+      nodes and also in output filters.
+      The functions can be split into the following categories:
+      </para>
+      <itemizedlist>
+	<listitem><para>functions returning information about the tree structure</para>
+	</listitem>
+	<listitem>
+	  <para>functions related information about documents</para>
+	</listitem>
+	<listitem>
+	  <para>string functions</para>
+	</listitem>
+	<listitem>
+	  <para>numerical functions</para>
+	</listitem>
+	<listitem>
+	  <para>group functions (applicable only in output filters)</para>
+	</listitem>
+      </itemizedlist>
+      <para>For description of all individual functions,
+      refer to <xref linkend="functions"/>.
+      Here, we only give a few examples demonstrating the use
+      of some of the functions from the first category
+      on a few common query constructions, usually also 
+      expressible by means of subqueries.
+      Whether it is more efficient to use functions than
+      subqueries may depend on implementation.</para>
+      <programlisting># a leaf node (using functions)
 t-node [ sons()=0 ]</programlisting>
-
+  <para>The above query can be created graphically
+  in TrEd by creating a <literal>t-node</literal> selector
+  (press <keysym>Insert</keysym> or 
+  <guibutton>
+    <inlinemediaobject>
+      <imageobject role="html"><imagedata fileref="pmltq_icons/add_node.png" contentdepth="10pt" format="PNG"/></imageobject>
+      <textobject><phrase>Add node</phrase></textobject>
+    </inlinemediaobject>
+  </guibutton>
+  on the toolbar and select a node type (<guilabel>t-node</guilabel> in our example) from
+  the list), then create an equality constraint by pressing
+  <keysym>=</keysym> or 
+  <guibutton>
+    <inlinemediaobject>
+      <imageobject role="html"><imagedata fileref="pmltq_icons/test_equality.png" contentdepth="10pt" format="PNG"/></imageobject>
+      <textobject><phrase>Equality</phrase></textobject>
+    </inlinemediaobject>
+  </guibutton>
+  and fill-in <literal>sons()</literal> as <guilabel>a</guilabel>
+  and <literal>0</literal> as <guilabel>a</guilabel>.
+  </para>
+  <para>
+    Alternativelly, type the query in the text form editor
+    (opened by pressing <keysym>e</keysym> 
+	or
+	<guibutton>
+	  <inlinemediaobject>
+	    <imageobject role="html"><imagedata fileref="icons/edit_file.png" contentdepth="10pt" format="PNG"/></imageobject>
+	    <textobject><phrase>Edit query</phrase></textobject>
+	  </inlinemediaobject>
+	</guibutton>).
+    The function names with argument templates can be inserted
+    using the <guilabel>Functions</guilabel> button in the editor.
+  </para>
+  <para>Other queries involving functions can be created similarly.</para>
     <programlisting># a leaf node (using a subquery)
 t-node [ 0x child t-node [ ] ]</programlisting>
-
     <programlisting># right-most child
 t-node [ rbrothers()=0 ]</programlisting>
-
     <programlisting># left-most child
 t-node [ lbrothers()=0 ]</programlisting>
-
     <programlisting># first leaf node in a subtree of $t (using functinos)
 t-node $t := [
   descendant t-node [ 
@@ -814,13 +1151,11 @@ t-node $t := [
    depth_first_order()-depth()=depth_first_order($t)-depth($t) 
   ]
 ]</programlisting>
-
     <programlisting># first leaf node in a subtree of $t (using a subquery)
 t-node $t := [
   descendant t-node $d := [ sons()=0 ],
   0x descendant [ depth-first-precedes $d ],
 ]</programlisting>
-
     <programlisting># last leaf node in a subtree of $t
 t-node $t := [
   descendant t-node [ 
@@ -828,66 +1163,152 @@ t-node $t := [
    depth_first_order()-depth()=depth_first_order($t)+descendants($t)-1-depth($t)
   ]
 ]</programlisting>
-
     <programlisting># last leaf node in a subtree of $t (using a subquery)
 t-node $t := [
   descendant t-node $d := [ sons()=0 ],
   0x descendant [ depth-first-follows $d ],
 ]</programlisting>
-
-
-
     </section>
     <section>
-      <title>Output filters (TODO)</title>
+      <title>Output filters</title>
+      <para>Output filters are used for
+      extracting data from the nodes matched by the query
+      and generating tabular output.
+      Filters must follow
+      the selective part of the query and start with <literal>&gt;&gt;</literal>.
+      Filters can be chained: the first filter extracts data
+      from the matching nodes and all subsequent
+      filters operate on the output from the immediately preceding filter.
+      Details can be found in the <link linkend="outputFilter">PML-TQ Syntax Reference</link>
+      and <xref linkend="agg_functions"/>.
+      </para>
+      <para>The TrEd GUI does not provide any graphical builder for output-filter
+      nor does it represent the filters graphically. To enter
+      a filter, open the entire query in the query editor
+      (press <keycombo action="simul"><keysym>Ctrl</keysym><keysym>E</keysym></keycombo>
+      or
+      <guibutton>
+	<inlinemediaobject>
+	  <imageobject role="html"><imagedata fileref="icons/edit_file.png" contentdepth="10pt" format="PNG"/></imageobject>
+	  <textobject><phrase>Edit query</phrase></textobject>
+	</inlinemediaobject>
+	</guibutton> on the toolbar),
+	place the cursor at the end of the query and enter the filter code.
+	Various buttons in the editor can be used to 
+	insert special symbols, and templates for functions and common constructions.
+      </para>
+      <para>One of the simplest filters
+      uses the group function <literal>count()</literal> to
+      compute the total number of matches of the query in the treebank:</para>
     <programlisting># counting occurrences
       t-node [ functor='DPHR' ]
       &gt;&gt; count()</programlisting>
-    <programlisting># simple use of a group function: computing a maximum
-      t-node $n := [ functor='DPHR' ]
-      &gt;&gt; max(sons($n))</programlisting>
-    <programlisting># max, min and average tree depth
-      t-root $n := [ ]
-      &gt;&gt; descendants($n)
-      &gt;&gt; max(), min(), avg()</programlisting>
-    <para>Grouping using the 'for' clause:</para>
-    <programlisting># count functor occurrences
-      t-node $n := [ ]
-      &gt;&gt; for $n.functor
-         give $1, count()</programlisting>
-    <programlisting># how many coref arrows can start in one t-node
-      t-node $t := 
-        [ coref_gram.rf t-node $c := [  ] ];
-      &gt;&gt;  for $t give count()
-      &gt;&gt; max()</programlisting>
-    <para>Ordering results:</para>
+      <para>The group functions
+      <literal>min()</literal>, <literal>max()</literal>, and
+      <literal>avg()</literal>, can be used to compute maximum,
+      minimum, and average values of data extracted from the
+      matching nodes.
+      For example: to compute a maximum number of child nodes
+      of a t-node with the functor <literal>DPHR</literal>,
+      we can use the following:
+      </para>
+      <programlisting>
+t-node $n := [ functor='DPHR' ]
+&gt;&gt; max(sons($n))</programlisting>
+      <para>The following query computes maximum, minimum and average size of a tectogrammatical tree:</para>
+      <programlisting>
+t-root $n := [ ]
+&gt;&gt; descendants($n)
+&gt;&gt; max(), min(), avg()</programlisting>
+    <para>The above query uses two filters: the first
+      extracts the number of descendants from each 
+      node matched by the selector <literal>$n</literal>,
+      the second computes maximum, minimum and average value
+      from the values returned by the first filter.
+    </para>
+    <para>The following query
+    shows a common grouping construction using the 'for' clause.
+    It extracts the attribute <literal>functor</literal> from
+    the matched nodes and for each distinct
+    value counts the number it occurred:
+    </para>
+    <programlisting>
+t-node $n := [ ]
+&gt;&gt; for $n.functor
+   give $1, count()</programlisting>
+    <para>Note that <literal>$1</literal> in the <literal>give</literal> clause
+    refers to the first (and only) key used in the <literal>for</literal> clause,
+    i.e. to <literal>$n.functor</literal>.
+    </para>
+    <para>By appending a <literal>sort by</literal> clause to a filter,
+    we may reorder the rows it produces by some of its columns.
+    In the following query, the output of the filter
+    is sorted using the second output column (the <literal>count()</literal>)
+    in descendant order as the primary key
+    and the first output column (the <literal>$1</literal> in the <literal>give</literal> clause)
+    in the default (ascending) order:
+    </para>
     <programlisting>t-node $n := [ ]
       &gt;&gt; for $n.functor
          give $1, count()
-         sort by $2</programlisting>
-    <para>Using the 'over' clause to speify different grouping for each group function:</para>
-    <programlisting># joint functor distribution:
-      # distribution of a functor X if governed by functor Y
-      t-node $p := 
-      [ echild t-node $c := [  ] ];
-      &gt;&gt; $p.functor,$c.functor
-      &gt;&gt; distinct $1,$2, count(over $1,$2), count(over $1)
-      &gt;&gt; $1, $2, percnt($3 div $4,2)
-         sort by $1,$3 desc
-      &gt;&gt; $1, $2, $3 &amp; '%'</programlisting>
-    <programlisting># the same using ratio()
-      t-node $p := [ echild t-node $c :=  [  ] ];
-      &gt;&gt;  for $p.functor,$c.functor
-          give $1,$2,ratio(count() over $1)
-          sort by $1,$3 desc
-      &gt;&gt; $1, $2, percnt($3,2)</programlisting>
-
-      <para>Ranking</para>
+         sort by $2 desc, $1</programlisting>
+	 
+    <para>The <literal>for</literal> clause can 
+    be used to create groups not only by attribute values, but also by
+    some of the matching nodes. For example, in order to 
+    find out how many grammatical-coreference links can start in one tectogrammatical node,
+    we may use the following query:</para>
     <programlisting>
-# get the three most frequent parts of speech for every afun
-# (if some tags occur the same number of times for a given afun,
-#  we sample those that come first alphabetically) 
-
+      t-node $antecedent := 
+        [ coref_gram.rf t-node $postcedent := [  ] ];
+      &gt;&gt;  for $t give count()
+      &gt;&gt; max()</programlisting>
+    <para>
+    The selective part of the query matches every pair of tectogrammatical nodes 
+    that are linked by a grammatical-coreference link.
+    The first filter groups the resulting pairs of nodes
+    by the first of the nodes (<literal>$antecedent</literal>) and outputs the number
+    of pairs in each group; this is the number
+    of grammatical-coreference links starting in the node <literal>$antecedent</literal>.
+    The second filter simply computes the maximum of the values returned by the first filter.
+    </para>	 
+    <para>The <literal>for</literal> clause partitions all 
+    input rows into groups before any further processing
+    and the subsequent <literal>give</literal> clause
+    then produces one output row for each group,
+    letting all group functions, such as
+    <literal>count()</literal>, <literal>min()</literal>, 
+    <literal>max()</literal>, etc. 
+    operate on the particular group. 
+    </para>
+    <para>
+      PML-TQ further supports a syntax that
+      allows different partitions to befined
+      for different group function and also
+      let the <literal>give</literal> clause
+      operate on all input rows.
+      This is done by
+      following the function arguments by an <literal>over</literal> clause.
+      Here we show an example where we use
+      one of the ranking group functions
+      (<literal>row_number()</literal>)
+      to select just a few top ranking rows
+      from each group.
+      Please refer to <xref linkend="grouping_explained"/> for more examples.
+    </para>
+    <para>
+      In the following query we 
+      extract the syntactic label (<literal>afun</literal>)
+      and the part of speech (the first position of the morphological tag)
+      from every
+      node on the analytical (morpho-syntactical) layer
+      of PDT&#160;2.0. Then we apply further filters to
+      output in order to obtain the three most frequent parts of speech
+      for each <literal>afun</literal>.
+      If several parts of speech occur the same number of times for a given afun,
+      we sample those three that come first alphabetically.
+    </para>
+    <programlisting>
 a-node $a:= [ ]
 >> $a.afun, substr($a.m/tag,0,1)  # get afun and part of speech (POS)
 >> for $1,$2 give $1, $2, count() # count occurrences of POS for each afun
@@ -1911,7 +2332,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    </para>
 	    </listitem>
 	  </varlistentry>
-	  <varlistentry>
+	  <varlistentry id="outputFilter">
 	    <term>outputFilter</term>
 	    <listitem><mediaobject id="rail_outputFilter">
 	      
@@ -2163,9 +2584,11 @@ Pred    Adv     24196
 	  stored within a node we sometimes have to travel through several nested
 	  complex data structures, starting from the top-level structure 
 	  which is the node itself.
-	  PML-TQ uses attribute paths to
-	  describe the route of such a travel.
+	  PML-TQ uses attribute paths to describe the route of such a travel.
 	  In this section we define how attribute paths are evaluated.
+	  (Note: complex queries over nested attribute values
+	  can be performed by combining attribute paths with the <literal>member</literal> selector,
+	  see <xref linkend="member_selectors"/>.)
 	</para>
 	<para>
 	  An attribute path consists of a sequence of 
@@ -2804,7 +3227,7 @@ can be used to formulate universal quantification over values of a list, alt, or
 <para>
 </para>
       </section>
-      <section>
+      <section id="grouping_explained">
 	<title>Group functions explained</title>
 	<para>
 	  PML-TQ supports group functions in the output filters.
@@ -3101,7 +3524,8 @@ can be used to formulate universal quantification over values of a list, alt, or
 	  two decimal points and appends a percent sign.
 	</para>
 	<para>The output looks like this (without the ellipses):</para>
-	<programlisting>ACMP	RSTR	54.37%
+	<programlisting id="joint_functor_results">
+ACMP	RSTR	54.37%
 ACMP	PAT	10.77%
 ACMP	ACT	10.34%
 ACMP	APP	4.99%
@@ -3119,7 +3543,80 @@ ADVS	PRED	48.5%
 ADVS	ACT	13.18%
 ADVS	CM	9.09%
 ...</programlisting>
+ <para>The query just explained can also be rewritten as follows:</para>
+    <programlisting>
+t-node $p := [ t-node $c := [  ] ];
+&gt;&gt; $p.functor,$c.functor
+&gt;&gt; distinct $1,$2, count(over $1,$2) div count(over $1)
+   sort by $1,$3 desc, $2
+&gt;&gt; $1, $2, percnt($3,2) &amp; '%'</programlisting>
+<!--
+    <para>
+      It first finds all pairs of nodes (<literal>$p,$c</literal>) in the relation of effective dependence
+      and extracts their functors.
+      Next, we apply the filter:
+      <literal>distinct $1,$2, count(over $1,$2), count(over $1)</literal>
+      produces four columns:
+      the two functors, the number of occurrences of this particular
+      pair of functors
+      (since <literal>count(over $1,$2)</literal> partitions
+      the input rows by the pair of functors and counts the number
+      of elements in the group to which the current input row belongs),
+      and the number of occurrences of the first functor
+      (<literal>count(over $1)</literal>). The
+      <literal>distinct</literal> keyword removes
+      any duplicates from the output.
+      So, for each distinct pair of functors occurring
+      on the effective dependency edge
+      we get the total number of occurrences of this pair
+      and the number of co-occurrences of the second of the functors
+      with the first one.
+      The third filters divides these two values
+      and reorders the output using the first functor as
+      the primary key and the computed ratio in descending order as the secondary key.
+      Finally, in the last filter, 
+      we convert the ratio to percents
+      and rounds it to two decimal points by applying
+      the function <literal>percnt($3,2)</literal>
+      and appending the percent sign.
+      Note that if we did this already in a the third filter, the
+      <literal>sort by</literal> clause would consider
+      values in the third column as strings,
+      which would result in alphabetical rather than numerical ordering,
+      putting e.g. both <literal>2%</literal> and <literal>20%</literal> before <literal>10%</literal>.
+    </para>-->
+    <para>Another reformulation of the query uses the group function <literal>ratio()</literal>:</para>
+    <programlisting>
+t-node $p := [ echild t-node $c :=  [  ] ];
+&gt;&gt;  for $p.functor,$c.functor
+  give $1,$2,ratio(count() over $1)
+  sort by $1,$3 desc
+&gt;&gt; $1, $2, percnt($3,2) desc</programlisting>
+ <para>Finally, we may insert filters selecting just
+ a few (say two) best ranking rows for each functor in the first column:
+</para>
+    <programlisting>
+t-node $p := [ echild t-node $c :=  [  ] ];
+&gt;&gt;  for $p.functor,$c.functor
+  give $1,$2,ratio(count() over $1)
+  sort by $1,$3 desc
+&gt;&gt; $1,$2,$3, row_number(over $1)
+&gt;&gt; filter $4&lt;=2
+&gt;&gt; $1, $2, percnt($3,2) desc</programlisting>
+<para>to produce the following output (continuing after the final ellipsis):</para>
+	<programlisting id="joint_functor_results">ACMP	RSTR	54.37%
+ACMP	RSTR	54.37%
+ACMP	PAT	10.77%
+ACT	RSTR	49.56%
+ACT	PAT	9.75%
+ADDR	RSTR	64.67%
+ADDR	APP	14.74%
+ADVS	PRED	48.5%
+ADVS	ACT	13.18%
+...</programlisting>
       </section>
+
+
   <section id="functions">
       <title>Functions</title>
       <section>

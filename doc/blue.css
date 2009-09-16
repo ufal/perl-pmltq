@@ -97,6 +97,9 @@ dt { font-weight: bold }
   padding: 3px;
 }
 
+.inlinemediaobject img {
+  vertical-align: -30%;
+}
 
 .keysym { 
 color: black;
@@ -107,4 +110,4 @@ padding: 0px 2px 0px 2px;
 font: monospace;
 font-size: 100%;
 padding: 2px 3px 2px 3px;
- }
+}
