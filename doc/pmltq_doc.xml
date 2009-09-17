@@ -14,17 +14,17 @@
       </inlinemediaobject>
     </medialabel>
     </title>
-    <subtitle>Documentation for version 0.7.2 (alpha)</subtitle>
+    <subtitle>Documentation for version 0.7.5 (alpha)</subtitle>
   </articleinfo>
   <section>
     <title>Introduction</title>
     <para>
       PML Tree Query (PML-TQ) is a query language and search engine
-      targeted for querying over multi-layer annotated treebanks
-      stored in the PML data format. As such, it can be used to
-      perform queries over dependency or constituency treebanks,
-      parallel treebanks, or other kinds of richly structured and/or
-      multi-layered types of annotation.
+      targeted for querying multi-layer annotated treebanks
+      stored in the PML data format. It can be used to
+      query all kinds of treebanks:
+      dependency, constituency, multi-layered,
+      parallel treebanks, as well as other kinds of richly structured types of annotation.
     </para>
     <para>
       The query language is declarative and offers both textual and
@@ -37,10 +37,6 @@
       a full-featured graphical user interface for both engines available as a plug-in to the
       tree editor TrEd,
       and a text-only command-line interface.
-    </para>
-    <para>
-      TODO: Purpose, features, and comparison with other query languages and engines
-      (XPath, NetGraph, TGrep2, Nite, LPath+, TigerSearch)
     </para>
     <para>Main features:</para>
     <orderedlist>
@@ -63,6 +59,10 @@
 	<para>understands PML data model (no conversion, no information loss)</para>
       </listitem>
     </orderedlist>
+    <para>
+      TODO: comparison with other query languages and engines
+      (NetGraph, TGrep2, TigerSearch, Nite, XPath, LPath+)
+    </para>
   </section>
   <section>
     <title>Basic concepts</title>
@@ -73,66 +73,68 @@
       sequence of <firstterm>output filters</firstterm> that
       are used to
       extract data from the matching nodes,
-      compute statistics, and/or format and post-process the results
-      of the query.
+      post-process the results,
+      compute statistics, generate tabular output, etc.
     </para>
     <para>
-      The selective part of a PML-TQ query defines
-      restrictions on properties 
-      of one or more nodes from the treebank
-      and describes their mutual relationships
-      (e.g. the topological configuration in
+      The <firstterm>selective part</firstterm> of a PML-TQ query postulates
+      requirements on one or more nodes from the treebank
+      and their mutual relationships
+      (e.g. on the topological configuration in
       the tree structure).
-      It is formed by one or more <firstterm>node selectors</firstterm>
-      that can be nested (as described below); these selectors
-      belong to the highest scope of the query.
-      Inner scopes of the query are given by subqueries also described later.
+      It is formed by one or more <firstterm>node selectors</firstterm>.
+      which form the outmost scope of the query.
+      Inner scopes of the query are given by nested subqueries as described later.
     </para>
     <para>
-      A node selector represents a 
-      node the treebank. <emphasis>Two different selectors in the same scope always represent
-      two different nodes</emphasis>.
-      Selectors can be named
-      and referred to from other node selectors.
-      A selector must specify the type of nodes it selects (the nodes in the treebank annotation can be typed
-      or the query can refer to several annotation layers with different types of nodes),
-      and may impose a set of constraints on the node (including
-      relationships to nodes represented by other selectors).
+      A <firstterm>node selector</firstterm> represents a 
+      node the treebank of a certain type
+      (in the PML data model,
+      the nodes in the treebank annotation can be typed;
+      the query can also refer to several annotation layers with different types of nodes)
+      and postulates constraints on its properties including
+      relationships to nodes represented by other selectors.
     </para>
     <para>
-      Selectors may nest other selectors;
+      Selectors may <firstterm>nest</firstterm> other selectors;
       a nested selector belongs to the same scope 
       as the containing selector
       The nested selector may explicitly specify the 
-      relation of the node it represents to the node
-      represented by the containing selector; the default relation
+      relation of its matching node to the node matched 
+      by the containing selector; the default relation
       is <literal>child</literal>.
       The nesting of selectors can thus naturally follow
       the topology of the matching tree.
     </para>
     <para>
-      A mapping which assigns 
-      to each selector of the 
-      highest scope of the
-      query
-      a node from a treebank 
-      is called a <firstterm>match</firstterm>,
-      if each of the nodes is of the type specified by the corresponding selector
-      and all the nodes simulatneously satisfy
-      the constraints imposed on them by their corresponding selectors
-      (including constraints on their mutual relationships).
-      The range of the mapping represented as a tuple
-      (ordered accordingly to some ordering of the selectors)
-      is called
-      a <firstterm>match</firstterm>.
-      There can be zero, one, or more
-      distinct matches of the query in the treebank
-      (two matches are distinct if they differ in
-      at least one node).
+      Selectors can also be named and referred to from other node selectors;
+      however, in many cases, the need for explicitly naming them
+      can be eliminated by nesting. 
     </para>
     <para>
-      There are several types
-      of constraints:
+      A <firstterm>match</firstterm> of a query
+      is a mapping which assigns 
+      to each outmost-scoped selector 
+      a node from a treebank (called a <firstterm>matching node</firstterm>)
+      of the type specified by the selector,
+      in such a way that all the matching nodes are mutually distinct
+      and simulatneously satisfy
+      the constraints postulated by their corresponding selectors
+      (including constraints on their mutual relationships).
+      The <firstterm>match</firstterm> can be represented
+      as a tuple of the matching nodes
+      ordered accordingly to some canonical ordering of the selectors
+      from the outmost scope of the query.
+      There can be zero, one, or more
+      distinct matches of the query in the treebank
+      (two matches are distinct if, as ordered tuples, they differ in
+      at least one node).
+    </para>
+    <para>Non-identity rule: Two distinct selectors <emphasis>in the same scope</emphasis> of the query always represent
+    two distinct nodes in each match of the query or sub-query..
+    </para>
+    <para>
+      Selectors can postulate the following types of <firstterm>constraints</firstterm>:
       <itemizedlist>
 	<listitem><para>predicates</para></listitem>
 	<!--
@@ -141,7 +143,7 @@
 	</listitem>
 	-->
 	<listitem>
-	  <para>references</para>
+	  <para>references to other selectors</para>
 	</listitem>
 	<listitem>
 	  <para>subqueries</para>
@@ -150,35 +152,49 @@
 	  <para>boolean combinations of the above</para>
 	</listitem>
       </itemizedlist>
+      In the following descriptions, we refer to the selector postulating a constraint as
+      as the <firstterm>current selector</firstterm>.
     </para>
     <para>
       <firstterm>Predicate constraints</firstterm> assert equality, inequality, or regular expression match
       between values computed from terms. An atomic term is a
       constant (integer, float, or character string),
-      or an attribute of a node matched by the query.
+      or an attribute of a node matched by the current selector or some other selector
+      in the current or outer scope of the query.
       A term is either an atomic term or a term obtained from other terms
       using arithmetical (<literal>+, *, -, div, mod</literal>) or string 
       (concatenation <literal>&amp;</literal> ) operators,
       or functions.
     </para>
     <para>
-      A <firstterm>reference</firstterm> is a declaration of the relationship
-      between the nodes corresponding to the current selector and 
-      some other named selector. The referred selector
-      must either in the same as the current selector
-      or in the outer scope of the the current selector.
+      A <firstterm>reference</firstterm> is a constraint on the relationship
+      of a node matched by some named selector to the 
+      node matched by the current selector. 
+      The referred selector
+      must either belong to the same scope as the current selector
+      or to its outer scope.
     </para>
     <para>
-      A <firstterm>subquery</firstterm> is formed by a
-      selector called the <firstterm>leading selector of the subquery</firstterm>
-      augmented by a set of restrictions on the number of occurrences,
-      i.e. the number of distinct nodes matched by the
-      leading selector among the matches of the whole subquery.
+      A <firstterm>subquery</firstterm> is formed by a 
+      selector
+      (called the <firstterm>leading selector of the subquery</firstterm>)
+      nested in the current selector
+      and      
+      augmented by restrictions on the number of occurrences,
+      computed as the number of distinct nodes matched by the
+      leading selector of the subquery relatively to a fixed 
+      match of the selectors in the current and outer scope (including the current selector).
+      For example, to postulate a constraint that each node matched by the current selector
+      must have at least two child nodes, we create a subquery
+      in form of a nested selector in the child relation to the current selector
+      and restrict the number of occurrences to two and more.
+    </para>
+    <para>
       The leading selector can nest other selectors.
       Each subquery starts a new scope
       whose outer scope is
       the scope of the containing selector together with the containing selector's outer scope (if any).
-      Unlike selectors from the highest scope,
+      Unlike selectors from the outmost scope,
       selectors declared within a subquery
       do not represent any particular node in the resulting match.
       They can refer to selectors from the same scope,
@@ -188,26 +204,26 @@
     </para>
     <para>
       A subquery constraint is verified as follows:
-      for each match of the selector
-      among whose constraints the subquery occurs,
+      for each match of the selectors
+      in the current and outer scope,
       all matches of the subquery are located
       (these may coincide with nodes
       matched by the selectors in the outer scope).
-      The number of distinct nodes matching the leading selector of the subquery
+      The number of distinct nodes matched by the leading selector of the subquery
       are counted and this number is compared with the restrictions
       on number of occurrences.
       The constraint is satisfied if and only if
       these restrictions are met.
     </para>
-    <para>A constraint can also be a boolean combination of other constraints,
-    but if a node selector occurs in a boolean combination
+    <para>A constraint can also be a boolean combination of other constraints;
+    a nested node selector occuring in a boolean combination
+    with other nested node selectors or constraints
     it is considered to be a subquery with at least one occurrence.
     </para>
     <para>
-      A PML-TQ query can be represented graphically as 
+      A PML-TQ query can be visualized as a graph consisting of
       one or more trees whose nodes
-      are the node selectors
-      and whose edges represent nesting of selectors and subqueries.
+      are the selectors connected by edges according to the nesting of selectors and subqueries.
       In this sense we may sometimes refer to selectors
       as <firstterm>query nodes</firstterm>
       and to the query as <firstterm>query graph</firstterm>
@@ -215,9 +231,9 @@
       can be added above all the trees so that a forest becomes a single tree).
       The edges can be labeled or colored to represent
       different relationships between nodes.
-      Relationships between nodes represented by non-nested selectors
-      can be represented by additional layer of edges (arrows) in the graph
-      that may arbitrarily cross the basic tree structure of the query tree.
+      References to named selectors 
+      can be represented by an additional layer of links (edges) in the graph
+      that may go across the basic tree structure of the query tree.
     </para>
 <!--
     <glossary>
@@ -1148,7 +1164,7 @@ t-node [ lbrothers()=0 ]</programlisting>
 t-node $t := [
   descendant t-node [ 
     sons()=0,
-   depth_first_order()-depth()=depth_first_order($t)-depth($t) 
+    depth_first_order()-depth()=depth_first_order($t)-depth($t) 
   ]
 ]</programlisting>
     <programlisting># first leaf node in a subtree of $t (using a subquery)
@@ -1160,7 +1176,7 @@ t-node $t := [
 t-node $t := [
   descendant t-node [ 
     sons()=0,
-   depth_first_order()-depth()=depth_first_order($t)+descendants($t)-1-depth($t)
+    depth_first_order()-depth()=depth_first_order($t)+descendants($t)-1-depth($t)
   ]
 ]</programlisting>
     <programlisting># last leaf node in a subtree of $t (using a subquery)
@@ -1201,8 +1217,8 @@ t-node $t := [
       uses the group function <literal>count()</literal> to
       compute the total number of matches of the query in the treebank:</para>
     <programlisting># counting occurrences
-      t-node [ functor='DPHR' ]
-      &gt;&gt; count()</programlisting>
+t-node [ functor='DPHR' ]
+&gt;&gt; count()</programlisting>
       <para>The group functions
       <literal>min()</literal>, <literal>max()</literal>, and
       <literal>avg()</literal>, can be used to compute maximum,
@@ -1249,9 +1265,9 @@ t-node $n := [ ]
     in the default (ascending) order:
     </para>
     <programlisting>t-node $n := [ ]
-      &gt;&gt; for $n.functor
-         give $1, count()
-         sort by $2 desc, $1</programlisting>
+&gt;&gt; for $n.functor
+   give $1, count()
+   sort by $2 desc, $1</programlisting>
 	 
     <para>The <literal>for</literal> clause can 
     be used to create groups not only by attribute values, but also by
@@ -1259,10 +1275,11 @@ t-node $n := [ ]
     find out how many grammatical-coreference links can start in one tectogrammatical node,
     we may use the following query:</para>
     <programlisting>
-      t-node $antecedent := 
-        [ coref_gram.rf t-node $postcedent := [  ] ];
-      &gt;&gt;  for $t give count()
-      &gt;&gt; max()</programlisting>
+t-node $antecedent := [
+  coref_gram.rf t-node $postcedent := [  ]
+];
+&gt;&gt;  for $t give count()
+&gt;&gt; max()</programlisting>
     <para>
     The selective part of the query matches every pair of tectogrammatical nodes 
     that are linked by a grammatical-coreference link.
@@ -1635,6 +1652,69 @@ a-node $a:= [ ]
 	    </para>
 	  </listitem>
 	</varlistentry>
+	  <varlistentry>
+	    <term>constraints</term>
+	    
+	    <listitem><mediaobject id="rail_constraints">
+	      
+	      
+	      <imageobject role="html">
+		<imagedata format="PNG" fileref="rail_constraints.png"/>
+	      </imageobject><imageobject role="fo">
+		<imagedata format="PDF" fileref="rail_constraints.pdf"/>
+	      </imageobject><textobject role="syntax_diagram">
+		<phrase><![CDATA[ constraints : constraint + ',';]]></phrase>
+	      </textobject>
+	    </mediaobject>
+
+	    <para>One or more constraints.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>constraint</term>
+	    
+	    <listitem><mediaobject id="rail_constraint">
+	      <imageobject role="html">
+		<imagedata format="PNG" fileref="rail_constraint.png"/>
+	      </imageobject><imageobject role="fo">
+		<imagedata format="PDF" fileref="rail_constraint.pdf"/>
+	      </imageobject><textobject role="syntax_diagram">
+		<phrase><![CDATA[ constraint : ( ('!')? (predicate | relation? nodeSelector | optionalSelector | memberSelector | relation variable | subquery |  '(' constraint ')' ) | (constraint ('and' | 'or' | ',' ) constraint)) ;
+ ]]></phrase>
+	      </textobject>
+	    </mediaobject>
+<para>
+  The logical operators have the following precedence (in decreasing order):
+  '<literal>!</literal>', 
+  '<literal>and</literal>', 
+  '<literal>or</literal>', 
+   '<literal>,</literal>'; except for having the lowest precedence,
+   comma (<literal>,</literal>) has the semantics of <literal>and</literal>.
+	      A constraint is either a 
+	    binary test predicate
+	    (<literal>=</literal>, 
+	    <literal>!=</literal>
+	    <literal>~</literal>, 
+	    <literal>!~</literal>, 
+	    <literal>&lt;</literal>
+	    <literal>&lt;=</literal>
+	    <literal>&gt;</literal> etc.) on
+	    expressions (terms),
+	    a node selector, member selector, subquery,
+	    a reference to a named node selector
+	    (indicating that a node matched by referred 
+	    selector must be in the corresponding relation to the
+	    node matched by the current selector),
+	    or a logical combination of any of these.
+	    However, a node selector used in a complex logical expression is
+	    treated as a subquery with at least one occurrence.
+	    </para>
+	    <para>The intended way of reading a constraint aloud in English
+	    in the context of a node selector is to precede it with
+	    the word <quote>has</quote>.
+	    </para>
+	    </listitem>
+	  </varlistentry>
 	<varlistentry>
 	  <term>optionalSelector</term>
 	  <listitem>
@@ -1646,7 +1726,7 @@ a-node $a:= [ ]
 	      </imageobject><imageobject role="fo">
 		<imagedata format="PDF" fileref="rail_optionalSelector.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
-		<phrase><![CDATA[ optionalSelector : '?' nodeSelector; ]]></phrase>
+		<phrase><![CDATA[ optionalSelector : '?' relation? nodeSelector; ]]></phrase>
 	      </textobject>
 	    </mediaobject>
 
@@ -1713,83 +1793,23 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
  ]]></phrase>
 	      </textobject>
 	    </mediaobject>
-	      <para>Subquery is a subtree in the query tree that
-	      specifies number of occurrences. For example,
-	      <literal>3x</literal> specifies that the subtree must
+	      <para>Subquery is a nested selector with
+	      a constraint on the number of occurrences
+	      of the matching nodes (with respect to a fixed
+	      match of the containing selector).
+	      For example,
+	      <literal>3x</literal> specifies that the subquery must
 	      match <emphasis>exactly</emphasis> three times,
-	      <literal>3+x</literal> specifies that the subtree must
+	      <literal>3+x</literal> specifies that it must
 	      match <emphasis>at least</emphasis> three times,
-	      <literal>3-x</literal> specifies that the subtree must
-	      match <emphasis>at most</emphasis> three times and
-	      <literal>3-10x</literal> specifies that the subtree must
-	      match <emphasis>at least</emphasis> three times but at
+	      <literal>3-x</literal> specifies it must
+	      match <emphasis>at most</emphasis> three times, and
+	      <literal>3-10x</literal> specifies that it must
+	      match <emphasis>at least</emphasis> three times and at
 	      most ten times.
 	      </para>
-	      <note><para>Node selectors belonging to a subquery cannot be
-	      referred to by name from outside the subquery.</para></note>
-	    </listitem>
-	  </varlistentry>
-	  <varlistentry>
-	    <term>constraints</term>
-	    
-	    <listitem><mediaobject id="rail_constraints">
-	      
-	      
-	      <imageobject role="html">
-		<imagedata format="PNG" fileref="rail_constraints.png"/>
-	      </imageobject><imageobject role="fo">
-		<imagedata format="PDF" fileref="rail_constraints.pdf"/>
-	      </imageobject><textobject role="syntax_diagram">
-		<phrase><![CDATA[ constraints : constraint + ',';]]></phrase>
-	      </textobject>
-	    </mediaobject>
-
-	    <para>One or more constraints.</para>
-	    </listitem>
-	  </varlistentry>
-	  <varlistentry>
-	    <term>constraint</term>
-	    
-	    <listitem><mediaobject id="rail_constraint">
-	      <imageobject role="html">
-		<imagedata format="PNG" fileref="rail_constraint.png"/>
-	      </imageobject><imageobject role="fo">
-		<imagedata format="PDF" fileref="rail_constraint.pdf"/>
-	      </imageobject><textobject role="syntax_diagram">
-		<phrase><![CDATA[ constraint : ( ('!')? (predicate | relation? nodeSelector | memberSelector | relation variable | subquery |  '(' constraint ')' ) | (constraint ('and' | 'or' | ',' ) constraint)) ;
- ]]></phrase>
-	      </textobject>
-	    </mediaobject>
-<para>
-  The logical operators have the following precedence (in decreasing order):
-  '<literal>!</literal>', 
-  '<literal>and</literal>', 
-  '<literal>or</literal>', 
-   '<literal>,</literal>'; except for having the lowest precedence,
-   comma (<literal>,</literal>) has the semantics of <literal>and</literal>.
-	      A constraint is either a 
-	    binary test predicate
-	    (<literal>=</literal>, 
-	    <literal>!=</literal>
-	    <literal>~</literal>, 
-	    <literal>!~</literal>, 
-	    <literal>&lt;</literal>
-	    <literal>&lt;=</literal>
-	    <literal>&gt;</literal> etc.) on
-	    expressions (terms),
-	    a node selector, member selector, subquery,
-	    a reference to a named node selector
-	    (indicating that a node matched by referred 
-	    selector must be in the corresponding relation to the
-	    node matched by the current selector),
-	    or a logical combination of any of these.
-	    However, a node selector used in a complex logical expression is
-	    treated as a subquery with at least one occurrence.
-	    </para>
-	    <para>The intended way of reading a constraint aloud in English
-	    in the context of a node selector is to precede it with
-	    the word <quote>has</quote>.
-	    </para>
+	      <note><para>Node selectors that belong to a subquery cannot be
+	      referred to by name from outside the subquery (outer scope).</para></note>
 	    </listitem>
 	  </varlistentry>
 	  <varlistentry>
@@ -2478,7 +2498,8 @@ sort by $3 desc]]></programlisting>
 	      with the most frequent <literal>afun</literal> pairs first,
 	      which may look like this:
 
-<programlisting>Atr     Atr     87306
+<programlisting>
+Atr     Atr     87306
 AuxP    Adv     56344
 Sb      Atr     56269
 Obj     Atr     51908
@@ -2493,10 +2514,6 @@ Pred    Adv     24196
 ...</programlisting>
 
 	    </para>
-
-	    <para>
-	      TODO: detail the rules on using column references and group functions
-	    </para>
 	    <para>
 	      A filter can further be followed by 
 	      one or more <literal>&gt;&gt; filter</literal> clauses
@@ -2504,16 +2521,16 @@ Pred    Adv     24196
 	      only those rows that satisfy a specific constraint. For
 	      example, the following query
 	      <programlisting><![CDATA[a-node $n:= [ ]
-  # Filter 1
-  >> give lower($n.m/form)
-  >> filter $1 ~ '^[a-z]' 
+# Filter 1
+>> give lower($n.m/form)
+>> filter $1 ~ '^[a-z]' 
 
-  # Filter 2
-  >> for $1 give $1,count()
-  >> filter $2 >= 1000 
+# Filter 2
+>> for $1 give $1,count()
+>> filter $2 >= 1000 
 
-  # Filter 3
-  >> give $1,$2 sort by $2 desc]]></programlisting>
+# Filter 3
+>> give $1,$2 sort by $2 desc]]></programlisting>
 	      retrieves a list frequent word forms
 	      from a treebank. The selective part returns
 	      each node <literal>$n</literal> of the type <literal>a-node</literal>.
@@ -3151,14 +3168,13 @@ Pred    Adv     24196
 	  <literal>informal-type</literal> (a string value for the type of the anaphora) and
 	  <literal>target.rf</literal> (a PML reference to the anaphora antecedent).
 	  So, each element of the <literal>bridging</literal>
-	  list represents a pointer to another node labeled by a type.
+	  list represents a labeled link to another node.
 	  We might want to ask for nodes with <literal>functor="ACT"</literal> that are pointed to
 	  from the current node by a pointer with a specific <literal>informal-type</literal>,
 	  say <literal>"CONTRAST"</literal>.
 	</para>
 	<para>
 	  The following query will <emphasis>not work</emphasis>
-
 	  <programlisting>t-node $n := [ 
   bridging/informal-type = "CONTRAST",
   bridging/target-node.rf t-node [ functor="ACT" ]
@@ -3604,7 +3620,7 @@ t-node $p := [ echild t-node $c :=  [  ] ];
 &gt;&gt; filter $4&lt;=2
 &gt;&gt; $1, $2, percnt($3,2) desc</programlisting>
 <para>to produce the following output (continuing after the final ellipsis):</para>
-	<programlisting id="joint_functor_results">ACMP	RSTR	54.37%
+	<programlisting id="joint_functor_results">
 ACMP	RSTR	54.37%
 ACMP	PAT	10.77%
 ACT	RSTR	49.56%
