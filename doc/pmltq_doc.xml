@@ -4076,7 +4076,7 @@ ADVS	ACT	13.18%
 	      with respect to the other rows in the same group;
 	      the rank is based on ordering the group according to the expressions in the <literal>sort by ...</literal> clause.
 	      Ties, i.e. rows with equal values
-	      of the expressions in the <literal>sort by ...</literal> clause
+	      of the expressions in the <literal>sort by ...</literal> clause,
 	      receive the same rank,
 	      however, if two rows do receive the same rank the rank numbers will subsequently skip:
 	      if two rows are of rank 1, the next rank will be 3 (there will be no rank 2).
@@ -4095,7 +4095,7 @@ ADVS	ACT	13.18%
 	    with respect to the other rows in the same group;
 	    the rank is based on ordering the group according to the expressions in the <literal>sort by ...</literal> clause.
 	    Ties, i.e. rows with equal values
-	    of the expressions in the <literal>sort by ...</literal> clause
+	    of the expressions in the <literal>sort by ...</literal> clause,
 	    receive the same rank. A dense rank returns a ranking number without any gaps. 
 	    For example, the values in an (already sorted) group (1,1,1,3,7,7,20) have the following
 	    <literal>1,1,1,3,7,7,20</literal> have the following ranks: <literal>1,1,1,2,3,3,4</literal>.
