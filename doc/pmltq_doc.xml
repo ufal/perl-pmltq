@@ -4069,29 +4069,37 @@ ADVS	ACT	13.18%
 	  </varlistentry>
 	  <varlistentry>
 	    <term>rank([over ...] [sort by ...])</term>
-	    <listitem><para>For each row considered, returns
-	    its rank with gaps within its group counting from 1.
-	    The partitioning can be specified
-	    by the <literal>over ...</literal> clause
-	    and the rows in each group can be ordered by the <literal>sort by ...</literal> clause.
-	    The returned value for a row is the same as <literal>row_number()</literal>
-	    of its first peer (the first row in the group with the same sort key).
-	    For example, the values in a (already sorted) group <literal>1,1,1,3,7,7,20</literal> have the following ranks:
-	    <literal>1,1,1,4,5,5,7</literal>. See also <literal>dense_rank()</literal>.
-	  </para>
+	    <listitem><para>
+	      For each row considered, returns
+	      its relative rank 
+	      with gaps counting from 1
+	      with respect to the other rows in the same group;
+	      the rank is based on ordering the group according to the expressions in the <literal>sort by ...</literal> clause.
+	      Ties, i.e. rows with equal values
+	      of the expressions in the <literal>sort by ...</literal> clause
+	      receive the same rank,
+	      however, if two rows do receive the same rank the rank numbers will subsequently skip:
+	      if two rows are of rank 1, the next rank will be 3 (there will be no rank 2).
+	      Thus, the returned value for a row is the same as <literal>row_number()</literal>
+	      of the first row in the group with the same sort key.
+	      For example, the values in an (already sorted) group <literal>1,1,1,3,7,7,20</literal> have the following ranks:
+	      <literal>1,1,1,4,5,5,7</literal>. See also <literal>dense_rank()</literal>.
+	    </para>
 	    </listitem>
 	  </varlistentry>
 	  <varlistentry>
 	    <term>dense_rank([over ...] [sort by ...])</term>
 	    <listitem><para>For each row considered, returns
-	    its rank without gaps within its group counting from 1.
-	    The partitioning can be specified
-	    by the <literal>over ...</literal> clause
-	    and the rows in each group can be ordered by the <literal>sort by ...</literal> clause.
-	    The returned value for a row is the number
-	    of peer groups that precede the current row.
-	    For example, the values in a (already sorted) group (1,1,1,3,7,7,20) have the following
+	    its relative rank 
+	    without gaps counting from 1
+	    with respect to the other rows in the same group;
+	    the rank is based on ordering the group according to the expressions in the <literal>sort by ...</literal> clause.
+	    Ties, i.e. rows with equal values
+	    of the expressions in the <literal>sort by ...</literal> clause
+	    receive the same rank. A dense rank returns a ranking number without any gaps. 
+	    For example, the values in an (already sorted) group (1,1,1,3,7,7,20) have the following
 	    <literal>1,1,1,3,7,7,20</literal> have the following ranks: <literal>1,1,1,2,3,3,4</literal>.
+	    See also <literal>rank()</literal>.
 	  </para>
 	    </listitem>
 	  </varlistentry>
