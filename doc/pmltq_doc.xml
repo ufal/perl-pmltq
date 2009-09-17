@@ -256,7 +256,7 @@
     </glossary>
 -->
   </section>
-  <section>
+  <section id="tutorial">
     <title>Tutorial</title>
     <para>
       The purpose of this tutorial is to show how to create and run
@@ -280,13 +280,13 @@
     <section>
     <title>Getting started</title>
     <para>
-      To start experimenting with the toolkit from TrEd,
-      start TrEd and press <keycombo action="simul"><keysym>Ctrl</keysym><keysym>F3</keysym></keycombo>
+      To start using PML-TQ from the tree editor TrEd,
+      press <keycombo action="simul"><keysym>Ctrl</keysym><keysym>F3</keysym></keycombo>
       or select <menuchoice>
       <guimenu>Macros</guimenu>
       <guisubmenu>TredMacro</guisubmenu>
       <guimenuitem>New Tree Query</guimenuitem>
-    </menuchoice>.
+    </menuchoice> from the main menu in TrEd.
     <mediaobject>
       <imageobject role="html"><imagedata align="center" fileref="tred_select_search_s.png" format="PNG"/></imageobject>
     </mediaobject>
@@ -315,12 +315,6 @@
     the best choice is the Opera browser, followed by 
     Google Chrome, Firefox, and Safari (please avoid Microsoft Internet Explorer
     because it lacks native SVG support).
-    </para>
-    <para>
-      The Opera browser displaying a query and a result tree:
-      <mediaobject>
-	<imageobject role="html"><imagedata align="center" fileref="images/screenshot_web_s.png" format="PNG"/></imageobject>
-      </mediaobject>
     </para>
     </section>
     <section>
@@ -1336,7 +1330,133 @@ a-node $a:= [ ]
 </programlisting>
     </section>
   </section>
-  <section>
+  <section id="user-interfaces">
+    <title>User Interfaces</title>
+
+  <section id="tred-interface">
+    <title>Graphical interface in TrEd</title>
+    <para>A complete graphical user interface for PML-TQ is available
+    as an extension to the tree editor TrEd and provides the following features:
+    </para>
+    <itemizedlist>
+      <listitem><para>interactive graphical query builder</para></listitem>
+      <listitem><para>intelligent text query editor</para></listitem>
+      <listitem><para>client interface for remote PML-TQ search server</para></listitem>
+      <listitem><para>built-in sequential search engine for local files</para></listitem>
+      <listitem><para>visualization of resulting trees and documents</para></listitem>
+      <listitem><para>multiple views for queryies spanning over several layers or trees</para></listitem>
+      <listitem><para>query history (queries stored in a local file)</para></listitem>
+    </itemizedlist>
+    <para>To use this interface, start by downloading and installing the tree editor TrEd
+    from <ulink url="http://ufal.mff.cuni.cz/~pajas/tred/"/>.
+    The PML-TQ interface is available as an extension called <application>PML Tree Query Interface for TrEd (pmltq)</application>
+    which can be either selected during installation of TrEd (on Windows)
+    or from TrEd as follows:
+    </para>
+    <orderedlist>
+      <listitem><para>Start TrEd</para></listitem>
+      <listitem><para>Select <menuchoice><guimenu>Setup</guimenu>
+      <guimenuitem>Manage Extensions ...</guimenuitem>
+      </menuchoice> from the main menu</para></listitem>
+      <listitem><para>In the extension manager dialog press <guibutton>Get New Extensions</guibutton> button
+      (connection to the Internet is required at this point).</para></listitem>
+      <listitem><para>In the list of 
+      available extensions locate an extension titled <application>PML Tree Query Interface for TrEd (pmltq)</application>
+      and check the <guibutton>Install</guibutton> checkbutton beside it.
+      </para></listitem>
+      <listitem><para>If you intend to query some treebanks for which a specific TrEd extension is provided,
+      such as <application>Prague Dependency Treebank 2.0</application>, 
+      <application>Penn Treebank</application>,
+      <application>Penn Arabic Treebank</application>,
+      <application>Tiger Corpus</application>,
+      <application>CoNLL 2009 Shared Task</application> data set etc, 
+      check those extensions as well.
+      </para></listitem>
+      <listitem><para>Press the <guibutton>Install Selected</guibutton> button,
+      wait for the installation to complete and close the extension mananger
+      with the  <guibutton>Close</guibutton> button.</para></listitem>
+    </orderedlist>
+    <para>See <xref linkend="tutorial"/> for a quick introduction
+    to the query interface.</para>
+  </section>
+  <section id="web-interface">
+    <title>Web interface</title>
+    <para>The PML-TQ search servers provide a client interface in the
+    form of a web application that can be accessed by any web browser
+    capable of combining JavaScript, CSS, and SVG (Scalable Vector
+    Graphics). At the time of writing this tutorial, the best choice
+    is the Opera browser, followed by Google Chrome, Firefox, and
+    Safari (please avoid Microsoft Internet Explorer because it lacks
+    native SVG support).
+    </para>
+    <para>
+      Unlike the TrEd interface, this interface does not require any installation,
+      but lacks some features such as graphical query builder and 
+      graphical representation of the query (the queries must be entered in the text form),
+      and of course does not support querying local files. The history
+      of past queries is available for queries run on the
+      particular PML-TQ search service.
+    </para>
+    <para>For a quick introduction
+    to the query language, see <xref linkend="tutorial"/> (only the text version of the queries is applicable).</para>
+    <para>
+      To start using the web interface, simply open the PML-TQ server URL
+      in a web browser, enter your query and press <guibutton>Submit New Query</guibutton>.
+    </para>
+    <figure id="fig-opera">
+      <title>The Opera browser displaying a query and a result tree</title>
+      <mediaobject>	<imageobject role="html"><imagedata align="center" fileref="images/screenshot_web_s.png" format="PNG"/></imageobject>
+      </mediaobject>
+    </figure>
+    <para>
+      Results of queries with output filters are displayed as an HTML
+      table, queries without filters are rendered using SVG with the
+      matching nodes highlighted by colours.  A simple toolbar is
+      displayed above the tree, with buttons for scaling the SVG image
+      and displaying next, Nth, or previous match.  For each matching
+      node a button in a corresponding color is created above the
+      displayed tree; by pressing the button, the tree containing the particular node
+      can be displayed, which is useful for queries whose match can span
+      across several trees or several annotation layers
+      (see <xref linkend="fig-opera"/>
+      Below the toolbar,
+      the file name, tree number, total number of trees in the file and 
+      the sentence (or other kind of textual representation) of the tree is displayed.
+      The <literal>&lt;</literal> and <literal>&gt;</literal>
+      links preceding the file name can be used to display
+      neighboring trees from the same document.
+    </para>
+  </section>
+  <section id="command-line-interface">
+    <title>Command-line interface</title>
+    <para>PML-TQ comes with a command-line client
+    utility called <literal>pmltq</literal>. The tool
+    can be used to perform queries remotely
+    (by connecting to a remote PML-TQ search engine)
+    or locally (using one of the 
+    tools that come with the TrEd toolkit: <literal>btred</literal>,
+    <literal>ntred</literal>, and <literal>jtred</literal>).
+    </para>
+    <para>
+      Currently this client is able to produces plain-text output only, so
+      it is best used in connection with queries that provide output filters.
+    </para>
+    <para>
+      TODO: general usage yet to be documented. Run
+      <programlisting>pmltq --help</programlisting>
+      to display information about the program command-line options and usage.
+      <!--
+      describe 'pmltq' command-line utility,
+      describe usage from btred command line
+      -->
+    </para>
+  </section>
+  <section id="btred-interface">
+    <title>BTrEd interface</title>
+    <para/>
+  </section>
+  </section>
+  <section id="query-language">
     <title>Query Language</title>
     <para>
       Basic examples, syntax reference.
@@ -2588,8 +2708,7 @@ Pred    Adv     24196
 	  </varlistentry>	  
 	</variablelist>
     </section>
-  </section>
-      <section id="attribute_paths">
+  <section id="attribute_paths">
 	<title>Attribute paths</title>
 	<para>
 	  Nodes in PML are usually 
@@ -3983,34 +4102,8 @@ ADVS	ACT	13.18%
     <title>Examples</title>
     <para/>
   </section>
-  <section>
-    <title>Graphical representation in TrEd</title>
-    <para>
-    </para>
   </section>
-  <section>
-    <title>TrEd search interface</title>
-    <para>
-    </para>
-  </section>
-  <section>
-    <title>Web interface</title>
-    <para/>
-  </section>
-  <section>
-    <title>Command-line interface</title>
-    <para>
-      <!--
-      describe 'pmltq' command-line utility,
-      describe usage from btred command line
-      -->
-    </para>
-  </section>
-  <section>
-    <title>BTrEd interface</title>
-    <para/>
-  </section>
-  <section>
+      <section>
     <title>Installing SQL Server and HTTP Proxy</title>
     <para>
     </para>
