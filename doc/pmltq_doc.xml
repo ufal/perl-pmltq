@@ -83,7 +83,7 @@
       (e.g. on the topological configuration in
       the tree structure).
       It is formed by one or more <firstterm>node selectors</firstterm>.
-      which form the outmost scope of the query.
+      which form the outermost scope of the query.
       Inner scopes of the query are given by nested subqueries as described later.
     </para>
     <para>
@@ -114,17 +114,17 @@
     <para>
       A <firstterm>match</firstterm> of a query
       is a mapping which assigns 
-      to each outmost-scoped selector 
+      to each outermost-scoped selector 
       a node from a treebank (called a <firstterm>matching node</firstterm>)
       of the type specified by the selector,
       in such a way that all the matching nodes are mutually distinct
-      and simulatneously satisfy
+      and simultaneously satisfy
       the constraints postulated by their corresponding selectors
       (including constraints on their mutual relationships).
       The <firstterm>match</firstterm> can be represented
       as a tuple of the matching nodes
       ordered accordingly to some canonical ordering of the selectors
-      from the outmost scope of the query.
+      from the outermost scope of the query.
       There can be zero, one, or more
       distinct matches of the query in the treebank
       (two matches are distinct if, as ordered tuples, they differ in
@@ -194,7 +194,7 @@
       Each subquery starts a new scope
       whose outer scope is
       the scope of the containing selector together with the containing selector's outer scope (if any).
-      Unlike selectors from the outmost scope,
+      Unlike selectors from the outermost scope,
       selectors declared within a subquery
       do not represent any particular node in the resulting match.
       They can refer to selectors from the same scope,
@@ -216,7 +216,7 @@
       these restrictions are met.
     </para>
     <para>A constraint can also be a boolean combination of other constraints;
-    a nested node selector occuring in a boolean combination
+    a nested node selector occurring in a boolean combination
     with other nested node selectors or constraints
     it is considered to be a subquery with at least one occurrence.
     </para>
@@ -296,7 +296,7 @@
     for <literal>id</literal> use any ID you like to name this connection configuration
     with, e.g. PDT-server (the name must start with a letter, must not contain spaces nor any special characters).
     As an URL, fill the search engine URL (e.g. <literal>http://mysearchserver.org:8082</literal>
-    where <replaceable>mysearchserver.org</replaceable> is the hostname or IP address of your
+    where <replaceable>mysearchserver.org</replaceable> is the host name or IP address of your
     PML-TQ search server and <replaceable>8082</replaceable> is the port the search service listens on.
     Fill in <literal>username</literal> and <literal>password</literal> for the search service
     that you have received from the service administrator. When done, confirm with <literal>OK</literal>.
@@ -477,14 +477,14 @@
     tree but the complete document, so it is possible to see the tree
     preceding or following the currently matching tree
     by pressing
-    <keysym>PageUp</keysym>/<guibutton>
+    <keysym>Page Up</keysym>/<guibutton>
     <inlinemediaobject>
 	<imageobject role="html"><imagedata fileref="icons/1leftarrow.png" contentdepth="10pt" format="PNG"/></imageobject>
 	<textobject><phrase>Previous Tree</phrase></textobject>
       </inlinemediaobject>
     </guibutton>
     or 
-    <keysym>PageDown</keysym>/<guibutton>
+    <keysym>Page Down</keysym>/<guibutton>
       <inlinemediaobject>
 	<imageobject role="html"><imagedata fileref="icons/1rightarrow.png" contentdepth="10pt" format="PNG"/></imageobject>
 	<textobject><phrase>Next Tree</phrase></textobject>
@@ -645,7 +645,7 @@ t-node $b := [ parent $a ];</programlisting>
     </para>
     <para>Using a regular expression:
     <programlisting>t-node [ functor ~ '[CD]PHR', t-node [ ] ]</programlisting>
-    Symbol <literal>~</literal> (tilda) denotes a binary relation
+    Symbol <literal>~</literal> (tilde) denotes a binary relation
     between two values that is true if and only if the value on the
     left interpreted as string matches the value on the right interpreted 
     as regular expression. The regular expression <literal>[CD]PHR</literal>
@@ -738,10 +738,10 @@ t-node [
   a/lex.rf $B
 ];
 </programlisting>
-      <para>PML references are also used in PDT&#160;2.0 to representat 
+      <para>PML references are also used in PDT&#160;2.0 to represent at 
       textual and grammatical coreference links (attributes <literal>coref_text.rf</literal> and
       <literal>coref_gram.rf</literal>.
-      For eaxmple, the following query searches for 
+      For example, the following query searches for 
       a grammatical coreference where antecedent
       precedes the postcedent. The query
       defines selectors for two tectogrammatical nodes <literal>$ante</literal> (antecedent)
@@ -791,7 +791,7 @@ t-node $ante := [
       chain plus one (i.e. the chain is allowed to start and end on the
       same node, but it is not allowed to continue another round along the cycle).
       For example, the following query searches for a cycle in
-      the annotatin of textual coreference in the PDT&#160;2.0 tectogrammatical annotation
+      the annotation of textual coreference in the PDT&#160;2.0 tectogrammatical annotation
       (indeed, there is one cycle of length 2 left there by a mistake):
       </para>
     <programlisting>
@@ -801,8 +801,8 @@ t-node $t := [
       </section>
       <section>
 	<title>Implementation- or corpus-specific relations </title>
-	<para>Finally, any particlar implementation or installation of the PML-TQ query engine 
-	can extend the language by programmatically-defining additional
+	<para>Finally, any particular implementation or installation of the PML-TQ query engine 
+	can extend the language by defining and implementing additional
 	specific relations.
 	The relations behave syntactically as the built-in relations
 	and must use different names than the built-in relations
@@ -813,10 +813,10 @@ t-node $t := [
 	the PDT&#160;2.0 annotation: <literal>echild</literal> and <literal>eparent</literal>.
 	These relations can be used both on tectogrammatical and analytical layer
 	and represent the effective dependency, rather than 
-	technical dependency representated by 
+	technical dependency represented by 
 	the built-in relations <literal>child</literal> and <literal>parent</literal>.
 	Thus, they abstract from certain constructions such as
-	coordination and aposition as well as the dominance of prepositions
+	coordination and apposition as well as the dominance of prepositions
 	(<literal>afun="AuxP"</literal>)
 	and connectives (<literal>afun="AuxC"</literal>) on the analytical layer.
 	</para>
@@ -899,7 +899,7 @@ t-node [ echild{2,2} t-node [ ] ]</programlisting>
     <para>The intermediate <literal>member</literal> selector
        matches one element of the <literal>apreds</literal> list at a time
        and tests its label. If the label matches,
-       the nested node seletor
+       the nested node selector
        for the <literal>target.rf</literal> PML-reference relation
        takes action.
      </para>
@@ -931,7 +931,7 @@ t-node [ echild{2,2} t-node [ ] ]</programlisting>
       </inlinemediaobject>
       </guibutton>.
       </para>
-      <para>Of course, we could constrain the number of ocurrences to a non-zero value, too.
+      <para>Of course, we could constrain the number of occurrences to a non-zero value, too.
       For example, to find all predicates that govern one subject or one object, but not both,
       we could use the following query:</para>
       <programlisting>a-node [ afun='Pred', 1x echild a-node [ afun in {'Sb','Obj'} ] ]</programlisting>
@@ -941,7 +941,7 @@ t-node [ echild{2,2} t-node [ ] ]</programlisting>
       </para>
       <para>The number of occurrences of a subquery can be constrained not only to a single number (0 in our example)
       but to any finite union of bounded or partially unbounded intervals of positive integers;
-      e.g. <literal>0|2..4|6+x</literal> restricts the number of ocurrences
+      e.g. <literal>0|2..4|6+x</literal> restricts the number of occurrences
       to zero, two to four, or six or more, eliminating one and five.
       While the plus sign stands for <emphasis>or more</emphasis>,
       the minus sign means <emphasis>or less</emphasis>, as in <literal>4-x</literal> (occurring four or less times).
@@ -1135,7 +1135,7 @@ t-node [ sons()=0 ]</programlisting>
   and <literal>0</literal> as <guilabel>a</guilabel>.
   </para>
   <para>
-    Alternativelly, type the query in the text form editor
+    Alternatively, type the query in the text form editor
     (opened by pressing <keysym>e</keysym> 
 	or
 	<guibutton>
@@ -1154,7 +1154,7 @@ t-node [ 0x child t-node [ ] ]</programlisting>
 t-node [ rbrothers()=0 ]</programlisting>
     <programlisting># left-most child
 t-node [ lbrothers()=0 ]</programlisting>
-    <programlisting># first leaf node in a subtree of $t (using functinos)
+    <programlisting># first leaf node in a subtree of $t (using functions)
 t-node $t := [
   descendant t-node [ 
     sons()=0,
@@ -1294,7 +1294,7 @@ t-node $antecedent := [
     </para>
     <para>
       PML-TQ further supports a syntax that
-      allows different partitions to befined
+      allows different partitions to defined
       for different group function and also
       let the <literal>give</literal> clause
       operate on all input rows.
@@ -1312,7 +1312,7 @@ t-node $antecedent := [
       extract the syntactic label (<literal>afun</literal>)
       and the part of speech (the first position of the morphological tag)
       from every
-      node on the analytical (morpho-syntactical) layer
+      node on the analytical (morphosyntactical) layer
       of PDT&#160;2.0. Then we apply further filters to
       output in order to obtain the three most frequent parts of speech
       for each <literal>afun</literal>.
@@ -1344,7 +1344,7 @@ a-node $a:= [ ]
       <listitem><para>client interface for remote PML-TQ search server</para></listitem>
       <listitem><para>built-in sequential search engine for local files</para></listitem>
       <listitem><para>visualization of resulting trees and documents</para></listitem>
-      <listitem><para>multiple views for queryies spanning over several layers or trees</para></listitem>
+      <listitem><para>multiple views for queries spanning over several layers or trees</para></listitem>
       <listitem><para>query history (queries stored in a local file)</para></listitem>
     </itemizedlist>
     <para>To use this interface, start by downloading and installing the tree editor TrEd
@@ -1373,7 +1373,7 @@ a-node $a:= [ ]
       check those extensions as well.
       </para></listitem>
       <listitem><para>Press the <guibutton>Install Selected</guibutton> button,
-      wait for the installation to complete and close the extension mananger
+      wait for the installation to complete and close the extension manager
       with the  <guibutton>Close</guibutton> button.</para></listitem>
     </orderedlist>
     <para>See <xref linkend="tutorial"/> for a quick introduction
@@ -1628,7 +1628,7 @@ a-node $a:= [ ]
 	    <row><entry>
 	      <literal><replaceable>TYPE</replaceable> $a := [ order-follows{1,1} <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
 	    </entry>
-	    <entry><para><literal>$b</literal> belongs to the same tree as <literal>$a</literal> and immediatelly follows <literal>$a</literal>
+	    <entry><para><literal>$b</literal> belongs to the same tree as <literal>$a</literal> and immediately follows <literal>$a</literal>
 	    </para></entry>
 	    </row>
 
@@ -1642,14 +1642,14 @@ a-node $a:= [ ]
 	    <row><entry>
 	      <literal><replaceable>TYPE</replaceable> $a := [ order-follows{1,1} <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
 	    </entry>
-	    <entry><para><literal>$b</literal> belongs to the same tree as <literal>$a</literal> and immediatelly precedes <literal>$a</literal>
+	    <entry><para><literal>$b</literal> belongs to the same tree as <literal>$a</literal> and immediately precedes <literal>$a</literal>
 	    </para></entry>
 	    </row>
 
 	    <row><entry>
 	      <literal><replaceable>TYPE</replaceable> $a := [ order-follows{-1,1} <replaceable>TYPE</replaceable> $b:= [ ] ]</literal>
 	    </entry>
-	    <entry><para><literal>$b</literal> belongs to the same tree as <literal>$a</literal> and either immediatelly precedes or immediatelly follows <literal>$a</literal>
+	    <entry><para><literal>$b</literal> belongs to the same tree as <literal>$a</literal> and either immediately precedes or immediately follows <literal>$a</literal>
 	    </para></entry>
 	    </row>
 
@@ -1718,8 +1718,8 @@ a-node $a:= [ ]
 	      </para>
 	      <para>The intended way to translate the selector syntax
 	      to English is to read 
-	      <quote>node of type <replaceable>TYPE</replaceable> that has <replaceable>constraint1</replaceable>,
-	        has <replaceable>constraint2</replaceable>, ... and has <replaceable>constraintN</replaceable></quote>
+	      <quote>node of type <replaceable>TYPE</replaceable> that has <replaceable>constraint-1</replaceable>,
+	        has <replaceable>constraint-2</replaceable>, ... and has <replaceable>constraint-N</replaceable></quote>
 	      </para>
 	      <para>
 		A selector can be used as a constraint 
@@ -1980,9 +1980,9 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	    </para>
 	    <para>For example, in the query
 	    <programlisting>t-node $a := [ sibling{-1,2} t-node $b := [ ] ]</programlisting>
-	    the node <literal>$b</literal> can be either the immediatelly preceding
+	    the node <literal>$b</literal> can be either the immediately preceding
 	    sibling of <literal>$a</literal> or one of the two siblings
-	    immediatelly following <literal>$a</literal>.
+	    immediately following <literal>$a</literal>.
 	    </para>
 	    <para>
 	      In the query
@@ -2043,7 +2043,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 		</para>
 		<para>
 		  In the following query, <literal>$a</literal>
-		  must immediatelly precede <literal>$b</literal>
+		  must immediately precede <literal>$b</literal>
 		  in the total ordering of the tree:
 		  <programlisting>t-node $a := [ order-precedes{,1} t-node $b := [ ] ]</programlisting>
 		  Conversely, in
@@ -2057,11 +2057,11 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 		  in the total ordering of the tree.
 		</para>
 		<para>
-		  Negative distance bound extends the relation in the oposite direction. For example,
+		  Negative distance bound extends the relation in the opposite direction. For example,
 		  in this query:
 		  <programlisting>t-node $a := [ order-precedes{-1,1} t-node $b := [ ] ]</programlisting>
-		  <literal>$a</literal> either immediatelly precedes <literal>$b</literal>
-		  or immediatelly follows <literal>$b</literal>.
+		  <literal>$a</literal> either immediately precedes <literal>$b</literal>
+		  or immediately follows <literal>$b</literal>.
 		</para>
 		</listitem>
 	      </varlistentry>
@@ -2569,7 +2569,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      according to given keys
 	      and produces one output row
 	      for each group; any group function
-	      occuring in the output column expression
+	      occurring in the output column expression
 	      will range over the current group.
 	    </para>
 	    <para>
@@ -2612,7 +2612,7 @@ sort by $3 desc]]></programlisting>
 	      by</literal> clause reorders this output by the
 	      third column in descendant order.
 	      As a result we get 
-	      the frequency table of cooccurrence of 
+	      the frequency table of co-occurrence of 
 	      <literal>afun</literal> attribute values on
 	      an edge in the treebank
 	      with the most frequent <literal>afun</literal> pairs first,
@@ -2654,7 +2654,7 @@ Pred    Adv     24196
 	      retrieves a list frequent word forms
 	      from a treebank. The selective part returns
 	      each node <literal>$n</literal> of the type <literal>a-node</literal>.
-	      For each such node, filter 1 retrieves its lowercased word form
+	      For each such node, filter 1 retrieves its lowercase word form
 	      from the attribute <literal>m/form</literal>
 	      and drops those forms that do not start with a letter.
 	      Filter 2 groups the rows with the same form
@@ -2969,7 +2969,7 @@ Pred    Adv     24196
 	  </inlineequation>
 	  otherwise.
 	  Let <phrase role="math">V<subscript>i</subscript></phrase>
-	  deonte the set 
+	  denote the set 
 	  <phrase role="math">V<subscript>N<subscript>i</subscript>,p<subscript>i</subscript></subscript></phrase>
 	  of atomic values obtained by evaluating the attribute paths
 	  <phrase role="math">p<subscript>i</subscript></phrase>
@@ -3017,7 +3017,7 @@ Pred    Adv     24196
 	  and that <phrase role="math">V<subscript>N,a</subscript></phrase>
 	  is the set of all values of the attribute
 	  <literal>a</literal> for the node <phrase role="math">N</phrase>.
-	  Similary, let 
+	  Similarly, let 
 	  <phrase role="math">V<subscript>M,b/c</subscript></phrase>
 	  be the set of all values of the attribute path
 	  <literal>b/c</literal> evaluated on the node <phrase role="math">M</phrase>
@@ -3152,7 +3152,7 @@ Pred    Adv     24196
 	    <imageobject role="fo"><imagedata fileref="quantifiers_f5.pdf" format="PDF"/></imageobject>
 	  </inlinemediaobject>
 	</inlineequation>
-	which is equvalent to 
+	which is equivalent to 
 	<inlineequation>
 	  <alt role="tex">(\exists x \in V_N)x=x</alt>
 	  <inlinemediaobject>
@@ -3395,7 +3395,7 @@ can be used to formulate universal quantification over values of a list, alt, or
 		column 2 of the input.
 	      </para>
 	    </listitem>
-	    <listitem><para>Partitioning input rows into groups and evaluating group functions over over each group.</para>
+	    <listitem><para>Partitioning input rows into groups and evaluating group functions over each group.</para>
 	    <para>
 	      This method allows one to define
 	      a partition on the input rows into groups that share some key value
@@ -3461,7 +3461,7 @@ can be used to formulate universal quantification over values of a list, alt, or
 	    <para>
 	      Note that there are two types of column references
 	      in the <literal>give...</literal> clause.
-	      Those that occcur within a grouping function
+	      Those that occur within a grouping function
 	      (such as <literal>$2</literal> in <literal>max($2)</literal>)
 	      refer to columns of the rows in the current group.
 	      Those that occur outside a group function,
@@ -3493,7 +3493,7 @@ can be used to formulate universal quantification over values of a list, alt, or
 		The selective part of the query finds t-node <literal>$a</literal> with
 		<literal>t_lemma='#Forn'</literal> which
 		is a technical node governing a flat list
-		of words in a foregin language
+		of words in a foreign language
 		and its child-node <literal>$b</literal>
 		with functor <literal>FPHR</literal> (foreign phrase),
 		which matches any of the words.
@@ -3802,7 +3802,7 @@ ADVS	ACT	13.18%
 	<varlistentry>
 	  <term>file($var?)</term>
 	  <listitem><para>Returns the file name of a document in which the node matched by a given
-	  (or current) selector occurrs.</para></listitem>
+	  (or current) selector occurs.</para></listitem>
 	</varlistentry>
 	<varlistentry>
 	  <term>tree_no($var?)</term>
@@ -3933,7 +3933,7 @@ ADVS	ACT	13.18%
 	</varlistentry>
 	<varlistentry>
 	  <term>tr(string,characters_to_replace,replacement)</term>
-	  <listitem><para>Replaces all occurences of given characters in a string with corresponding characters in the replacement set,
+	  <listitem><para>Replaces all occurrences of given characters in a string with corresponding characters in the replacement set,
 	  that is, replaces all occurrences of the Nth character from <replaceable>characters_to_replace</replaceable> with the Nth character
 	  in the <replaceable>replacement</replaceable>. For example, <literal>tr('122-34','24','ab')</literal> returns the string 
 	  <literal>1aa-b4</literal>.</para></listitem>
@@ -3979,7 +3979,7 @@ ADVS	ACT	13.18%
 	</para>
 	<orderedlist>
 	  <listitem>
-	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable>)</literal>.
+	    <para><literal><replaceable>GROUPFUNCTION</replaceable>(<replaceable>arguments...</replaceable>)</literal>.
 	    If this form is used in the
 	    <literal>give</literal> part of a
 	    <literal>for ... give ...</literal>
@@ -3997,7 +3997,7 @@ ADVS	ACT	13.18%
 	    </para>
 	  </listitem>
 	  <listitem>
-	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable> over <replaceable>columnExp, ...</replaceable>)</literal>.
+	    <para><literal><replaceable>GROUPFUNCTION</replaceable>(<replaceable>arguments...</replaceable> over <replaceable>columnExp, ...</replaceable>)</literal>.
 	    This form creates a temporary partitioning
 	    of the current input according to given column
 	    specifications following the <literal>over</literal> keyword
@@ -4013,13 +4013,13 @@ ADVS	ACT	13.18%
 	    </para>
 	  </listitem>
 	  <listitem>
-	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable> over all)</literal>
+	    <para><literal><replaceable>GROUPFUNCTION</replaceable>(<replaceable>arguments...</replaceable> over all)</literal>
 	    computes its value by considering all input rows (if used in the <literal>give ...</literal> 
 	    clause of a <literal>for ... give ...</literal> filter, this means not just rows in the current group).
 	    </para>
 	  </listitem>
 	  <listitem>
-	    <para><literal><replaceable>func</replaceable>(<replaceable>arguments...</replaceable> over <replaceable>columnExp,...</replaceable> sort by <replaceable>columnRef,...</replaceable> )</literal>
+	    <para><literal><replaceable>GROUPFUNCTION</replaceable>(<replaceable>arguments...</replaceable> over <replaceable>columnExp,...</replaceable> sort by <replaceable>columnRef,...</replaceable> )</literal>
 	    is a variant of the previous grouping that forces an ordering on the rows within a group;
 	    this is useful for the group function <literal>concat()</literal>
 	    and the ranking functions <literal>row_number()</literal>, <literal>rank()</literal>, and <literal>dense_rank()</literal>.

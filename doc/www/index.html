@@ -15,6 +15,8 @@
       of a PML-TQ system for querying linguistically annotated
       treebanks.
     </p>
+    <a href="pmltq_opera.png"><img hspace="5pt" vspace="5pt" src="pmltq_opera_small.png" class="right" alt="PML-TQ in Opera (screenshot)" /></a>
+    <a href="pmltq_tred.png"><img hspace="5pt" vspace="5pt" src="pmltq_tred_small.png" class="right" alt="PML-TQ in TrEd (screenshot)" /></a>
 
     <div class="framed" style="display: table-cell;">
       <p>
@@ -27,7 +29,7 @@
       you can use a Perl-driven client-side PML-TQ search engine,
       that is part of the <b>pmltq</b>
       extension to <a href="http://ufal.mff.cuni.cz/~pajas/tred">TrEd</a>
-      (see section Client below).
+      (see <a href="#client">section about client interfaces</a> below).
       The client-side engine is slower than
       the SQL based version available on this page,
       but does not require any installation, configuration,
@@ -39,9 +41,9 @@
       <a href="http://www.cis.upenn.edu/~treebank/">Penn Treebank 3</a>,
       <a href="http://www.ims.uni-stuttgart.de/projekte/TIGER/TIGERCorpus/">Tiger Corpus</a>,
       and several dependency treebanks from the CoNLL 2009 Shared Task (for CoNLL 2009 ST participants only).
-      Our PML-TQ server can be accessed using a graphical client
-      interface (<a href="http://ufal.mff.cuni.cz/~pajas/tred">TrEd</a>
-      and the <b>pmltq</b> extension, see the section Client below).
+      Our PML-TQ server can be accessed using a web interface
+      or <a href="http://ufal.mff.cuni.cz/~pajas/tred">TrEd</a>
+      (see the section Client below).
       </p>
       <p>Querying using our server <b>requires registration</b>, which you
       can obtain free of charge by sending
@@ -57,10 +59,15 @@
       and provides graphical, command-line, and simple web-based interfaces.
     </p>
     <div>
-    <a href="pmltq_tred.png"><img hspace="5pt" vspace="5pt" src="pmltq_tred_small.png" class="right" alt="screenshot" /></a>
+    <a name="client" />
     <h4>Client</h4>
+    <p>Any web browser with good support for SVG rendering, CSS, and JavaScript
+    can be used as a client to a PML-TQ server (we recomend <a href="http://www.opera.com">Opera</a>).
+    </p>
     <p>
-      A graphical client interface for PML-TQ is part of the tree
+      A fully graphical client interface for PML-TQ 
+      supporting both PML-TQ servers and local searching
+      is part of the tree
       editor <a href="http://ufal.mff.cuni.cz/pajas/~tred">TrEd</a>
       (a GPL-licensed software available separatelly)
       as
