@@ -290,16 +290,36 @@
     <mediaobject>
       <imageobject role="html"><imagedata align="center" fileref="tred_select_search_s.png" format="PNG"/></imageobject>
     </mediaobject>
-    Choose <guilabel>Treebank (server)</guilabel>
-    and then select <guilabel>CREATE NEW CONNECTION</guilabel>.
-    Fill the connection form as follows:
-    for <literal>id</literal> use any ID you like to name this connection configuration
-    with, e.g. PDT-server (the name must start with a letter, must not contain spaces nor any special characters).
-    As an URL, fill the search engine URL (e.g. <literal>http://mysearchserver.org:8082</literal>
-    where <replaceable>mysearchserver.org</replaceable> is the host name or IP address of your
-    PML-TQ search server and <replaceable>8082</replaceable> is the port the search service listens on.
-    Fill in <literal>username</literal> and <literal>password</literal> for the search service
-    that you have received from the service administrator. When done, confirm with <literal>OK</literal>.
+    Choose <guibutton>Treebank (server)</guibutton>;
+    if are doing this for the first time, 
+    you will be asked to fill the connection form:
+    as <literal>url</literal>, fill the search engine URL including port number (e.g. <literal>http://mysearchserver.org:8082</literal> where <replaceable>mysearchserver.org</replaceable> is the host name or IP address of your
+    PML-TQ search service and <replaceable>8082</replaceable> is the port the search service is listening on);
+    fill <literal>username</literal> and <literal>password</literal> 
+    with your credentials for the search service (which you can receive from the administrator of 
+    the PML-TQ search service). When done, confirm with <literal>OK</literal>.
+    TrEd will attempt to contact the search service you have specified
+    and will ask it for a list of treebanks avaiable. Subsequently,
+    you will be asked to select treebanks for which you want to configure a connection.
+    </para>
+    <para>
+      Once your connections are configured, a dialog window
+      with a list of available connections will be offered.
+      To select a connection, simply choose it from the list and press
+      <guibutton>Select</guibutton>.
+      You may also use the buttons
+      <guibutton>Add Service</guibutton>
+      to add/remove connections to other treebanks provided by the
+      server of the selected connection,
+      <guibutton>New URL</guibutton> to create a connection 
+      to a new server, <guibutton>Info</guibutton> to display
+      information about the selected connection
+      (such as name and description of the treebank),
+      <guibutton>Edit</guibutton> to modify
+      the connection data (<literal>url</literal>,
+      <literal>username</literal>, and <literal>password</literal>),
+      and <guibutton>Remove</guibutton> to remove the selected connection
+      from the list.
     </para>
     <para>
       A window with an empty query tree is displayed by TrEd:
