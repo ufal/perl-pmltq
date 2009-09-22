@@ -92,7 +92,7 @@ dt { font-weight: bold }
   background: #f0f0f0;
   border: 1px solid;
   border-color: #d0d0d0 #505050  #606060 #c0c0c0;
-  font: monospace;
+  font-family: monospace;
   font-size: 80%;
   padding: 3px;
 }
@@ -107,7 +107,7 @@ background: #f0f0f0;
 border: 1px solid;
 border-color: #d0d0d0 #505050  #606060 #c0c0c0;
 padding: 0px 2px 0px 2px;
-font: monospace;
+font-family: monospace;
 font-size: 100%;
 padding: 2px 3px 2px 3px;
 }

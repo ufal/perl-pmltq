@@ -58,7 +58,7 @@ code, .programlisting, .literallayout {
 /* obrazky */
 
 div.figure {
-	float: center;
+	text-align: center;
 	/*border-width: thin;
 	border-style: solid;*/
 	margin: 0.5em;
@@ -158,8 +158,29 @@ div.index em a {
 }
 
 .right {
-    border: 0;
+    border: none;
     float: right;
     margin: 0.5em 0 0.5em 1em; 
     clear: right;
 }
+
+.top-links {
+    text-align: center;
+    background: #eeeeee;
+    margin: 0pt 0pt 5pt 0pt;
+    padding: 3pt 5pt 3pt 5pt;
+}
+.top-links a {
+    font-weight: normal;
+    font-size: 90%;
+    margin: 10pt 10pt 15pt 10pt;
+    color: black;
+}
+
+.web-section {
+    margin:  0pt 0pt 0pt 10pt;
+}
+.web-section h3 {
+    margin:  0pt 0pt 0pt -10pt;
+}
+
