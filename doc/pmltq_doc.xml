@@ -2347,7 +2347,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      </imageobject><imageobject role="fo">
 		<imagedata format="PDF" fileref="rail_attributePath.pdf"/>
 	      </imageobject><textobject role="syntax_diagram">
-		<phrase><![CDATA[ attributePath : '*'? (variable '.' )? (XMLNAME | '[]' | index | elementIndex ) + '/' ;
+		<phrase><![CDATA[ attributePath : '*'? (variable '.' )? (XMLNAME | 'content()' | index | elementIndex ) + '/' ;
  index : '[' NUMBER ']';
  elementIndex : XMLNAME index | index XMLNAME; ]]></phrase>
 	      </textobject>
@@ -2385,7 +2385,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 		  </listitem>
 		</varlistentry>
 		<varlistentry>
-		  <term>the string <literal>'[]'</literal></term>
+		  <term>the string <literal>'content()'</literal></term>
 		  <listitem>
 		    <para>used for obtaining the content of a container</para>
 		  </listitem>
@@ -2750,7 +2750,7 @@ Pred    Adv     24196
 	  An attribute path consists of a sequence of 
 	  steps separated by slashes. This sequence can be optionally preceded by a primitive quantifier the
 	  semantics of which is described later in <xref linkend="quantifiers"/>.
-	  Each step is either a name, the string '<literal>[]</literal>',
+	  Each step is either a name, the string '<literal>content()</literal>',
 	  an index, or an element index.
 	</para>
 	<para>
@@ -2811,7 +2811,7 @@ Pred    Adv     24196
 		  <imageobject role="fo"><imagedata fileref="quantifiers_a1.pdf" format="PDF" align="center"/></imageobject>
 		</mediaobject>
 	      </informalequation>
-	      If the step <phrase role="math">S<subscript>n</subscript></phrase> is '<literal>[]</literal>'
+	      If the step <phrase role="math">S<subscript>n</subscript></phrase> is '<literal>content()</literal>'
 	      and  <phrase role="math">t<subscript>n</subscript></phrase> is a container type 
 	      with non-void content (i.e. the container has some content type
 	      declared in the PML schema),  <phrase role="math">V<subscript>n+1</subscript></phrase>
