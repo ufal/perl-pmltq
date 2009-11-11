@@ -2337,7 +2337,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      </para>
 	    </listitem>
 	  </varlistentry>
-	  <varlistentry>
+	  <varlistentry id="attributePath">
 	    <term>attributePath</term>
 	    <listitem><mediaobject id="rail_attributePath">
 	      
@@ -2729,7 +2729,7 @@ Pred    Adv     24196
 	</variablelist>
     </section>
   <section id="attribute_paths">
-	<title>Attribute paths</title>
+	<title>Semantics of attribute paths</title>
 	<para>
 	  Nodes in PML are usually 
 	  attribute-value structures with values that can be
@@ -2741,6 +2741,12 @@ Pred    Adv     24196
 	  complex data structures, starting from the top-level structure 
 	  which is the node itself.
 	  PML-TQ uses attribute paths to describe the route of such a travel.
+	</para>
+	<para>The syntax of an attribute path is 
+	described by the <link linkend="attributePath">attributePath</link>
+	production of the PML-TQ grammar.
+	</para>
+	<para>
 	  In this section we define how attribute paths are evaluated.
 	  (Note: complex queries over nested attribute values
 	  can be performed by combining attribute paths with the <literal>member</literal> selector,
