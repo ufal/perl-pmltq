@@ -1073,7 +1073,7 @@ t-node $N:= [
       </para>
       <para>Using a subquery this can be done as follows:</para>
       <programlisting>t-node [
-  same-tree-as t-node 10-x,
+  10-x same-tree-as t-node [],
   functor='DPHR', # the rest of your query
 ]</programlisting>
       <para>This selects t-nodes with <literal>functor='DPHR'</literal>
