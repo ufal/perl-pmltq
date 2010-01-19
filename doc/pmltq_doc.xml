@@ -3985,6 +3985,30 @@ ADVS	ACT	13.18%
 	    <term>trunc(number,places?)</term>
 	    <listitem><para>Returns a number truncated to a certain number of decimal places (0 if second argument is not specified).</para></listitem>
 	  </varlistentry>
+	  <varlistentry>
+	    <term>exp(number)</term>
+	    <listitem><para>Returns <emphasis>e</emphasis> powered to a given number.</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>ln(number)</term>
+	    <listitem><para>Returns natural logarithm of a given number.</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>power(base?,number)</term>
+	    <listitem><para>Returns base powered to a given number. If base is not specified, the base of 10 is used.</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>log(base?,number)</term>
+	    <listitem><para>Returns logarithm of a given number using a given base (or 10 if base is not specified).</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>sqrt(number)</term>
+	    <listitem><para>Returns the square root of a given number.</para></listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term>abs(number)</term>
+	    <listitem><para>Returns the absolute value of a given number.</para></listitem>
+	  </varlistentry>
 	  <!--
 	      <varlistentry>
 	      <term>percnt(number,places?)</term>
