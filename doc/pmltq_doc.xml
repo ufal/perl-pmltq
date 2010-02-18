@@ -1184,7 +1184,7 @@ t-node $t := [
     <programlisting># first leaf node in a subtree of $t (using a subquery)
 t-node $t := [
   descendant t-node $d := [ sons()=0 ],
-  0x descendant [ depth-first-precedes $d ],
+  0x descendant [ sons()=0, depth-first-precedes $d ],
 ]</programlisting>
     <programlisting># last leaf node in a subtree of $t
 t-node $t := [
