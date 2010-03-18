@@ -1833,11 +1833,11 @@ a-node $a:= [ ]
 	      A constraint is either a 
 	    binary test predicate
 	    (<literal>=</literal>, 
-	    <literal>!=</literal>
+	    <literal>!=</literal>,
 	    <literal>~</literal>, 
 	    <literal>!~</literal>, 
-	    <literal>&lt;</literal>
-	    <literal>&lt;=</literal>
+	    <literal>&lt;</literal>,
+	    <literal>&lt;=</literal>,
 	    <literal>&gt;</literal> etc.) on
 	    expressions (terms),
 	    a node selector, member selector, subquery,
