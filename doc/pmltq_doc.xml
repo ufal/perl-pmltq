@@ -2323,17 +2323,21 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      <literal>-1.0032</literal>) or a string of characters
 	      enclosed in either <literal>"</literal> or
 	      <literal>'</literal>.  Backslash character
-	      <literal>\</literal> can be used as an escape character,
+	      <literal>\</literal> is used as an escape character,
 	      for example to insert a quote or apostrophe.
 	      </para>
 	      <para>
-		For example: both <literal>"Peter's"</literal> and
-	      <literal>'Peter\'s'</literal> both represent the literal
-	      string <literal>Peter's</literal> and
-	      both
-	      <literal>'\\\"\'\n\r'</literal> and
-	      <literal>"\\\"\'\n\r"</literal> represent
-	      the literal five-character string <literal>\"'nr</literal>.
+		For example: <literal>"Peter's"</literal> and
+		<literal>'Peter\'s'</literal> are both literals
+		representing the string
+		<literal>Peter's</literal>. Similarly,
+		<literal>'\\\"\'\n\r\1'</literal> and
+		<literal>"\\\"\'\n\r\1"</literal> are literals
+		representing the five-character string
+		<literal>\"'nr1</literal>.  (Note that
+		<literal>\n</literal> is not currently used for the
+		new-line characters as in many other dialects; this however, may 
+		change in a future version so it is adviced to avoid escaping characters other than quote and apostrophe).
 	      </para>
 	    </listitem>
 	  </varlistentry>
@@ -3923,11 +3927,18 @@ ADVS	ACT	13.18%
 	  and <literal>\3</literal> refer
 	  to the subexpressions <literal>(b(c))</literal>,
 	  <literal>(c)</literal>,
-	  and <literal>(d)</literal>, respectively.
+	  and <literal>(d)</literal>, respectively. 
 	</para>
-	<para>Since backslash (<literal>\</literal>) is used
-	to introduce subexpression references in the replacement string,
-	literal backslash has to be written as <literal>\\</literal>.
+	<para>Note: in PML-TQ string literals, 
+	backslash (<literal>\</literal>) 
+	is used as an escaping character,
+	therfore, if the replacement string
+	is a written as a string literal, 
+	one must use e.g. <literal>\\2</literal> instead of
+	<literal>\2</literal>.
+	Moreover, because of this special use of backslash in the replacement
+	string,	literal backslash has to be written as <literal>\\</literal>,
+	which, in a PML-TQ string literal, becomes <literal>\\\\</literal>.
 	</para>
 	<para>
 	  The optional third argument is a string of flags modifying the behavior of the regular
@@ -3944,7 +3955,7 @@ ADVS	ACT	13.18%
 	    </varlistentry>
 	  </variablelist>
 	  <para>
-	    For example, <literal>substitute('banana ananas','([^n])a','\1@','g')</literal>
+	    For example, <literal>substitute('banana ananas','([^n])a','\\1@','g')</literal>
 	    returns the string <literal>b@nana @nanas</literal>.
 	  </para>
 	  </listitem>
