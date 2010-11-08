@@ -82,13 +82,13 @@
       and their mutual relationships
       (e.g. on the topological configuration in
       the tree structure).
-      It is formed by one or more <firstterm>node selectors</firstterm>.
+      It is formed by one or more <firstterm>node selectors</firstterm>,
       which form the outermost scope of the query.
       Inner scopes of the query are given by nested subqueries as described later.
     </para>
     <para>
       A <firstterm>node selector</firstterm> represents a 
-      node the treebank of a certain type
+      node in the treebank of a certain type
       (in the PML data model,
       the nodes in the treebank annotation can be typed;
       the query can also refer to several annotation layers with different types of nodes)
@@ -131,7 +131,7 @@
       at least one node).
     </para>
     <para>Non-identity rule: Two distinct selectors <emphasis>in the same scope</emphasis> of the query always represent
-    two distinct nodes in each match of the query or sub-query..
+    two distinct nodes in each match of the query or sub-query.
     </para>
     <para>
       Selectors can postulate the following types of <firstterm>constraints</firstterm>:
@@ -218,7 +218,7 @@
     <para>A constraint can also be a boolean combination of other constraints;
     a nested node selector occurring in a boolean combination
     with other nested node selectors or constraints
-    it is considered to be a subquery with at least one occurrence.
+    is considered to be a subquery with at least one occurrence.
     </para>
     <para>
       A PML-TQ query can be visualized as a graph consisting of
@@ -291,7 +291,7 @@
       <imageobject role="html"><imagedata align="center" fileref="tred_select_search_s.png" format="PNG"/></imageobject>
     </mediaobject>
     Choose <guibutton>Treebank (server)</guibutton>;
-    if are doing this for the first time, 
+    if doing this for the first time, 
     you will be asked to fill the connection form:
     as <literal>url</literal>, fill the search engine URL including port number (e.g. <literal>http://mysearchserver.org:8082</literal> where <replaceable>mysearchserver.org</replaceable> is the host name or IP address of your
     PML-TQ search service and <replaceable>8082</replaceable> is the port the search service is listening on);
@@ -638,7 +638,7 @@ t-node $b := [ parent $a ];</programlisting>
 	  <textobject><phrase>Paste</phrase></textobject>
 	</inlinemediaobject>
       </guibutton>
-      to paste it. The press <keysym>Enter</keysym> or double-click the node
+      to paste it. Then press <keysym>Enter</keysym> or double-click the node
       or just the word <literal>"DPHR"</literal> on one of the two nodes
       and change <literal>"DPHR"</literal> to <literal>"CPHR"</literal>.
 	</para>
@@ -722,7 +722,7 @@ t-node $b := [ parent $a ];</programlisting>
 	same-tree-as, same-document-as),
 	ordering relations (depth-first-precedes, depth-first-follows, order-precedes, order-follows).
 	The name of a built-in relation can optionally be followed by a pair of colons <literal>::</literal>
-	in order to distinguish it for PML reference relations
+	in order to distinguish it from PML reference relations
 	described below.
 	</para>
       </section>
@@ -758,26 +758,26 @@ t-node [
   a/lex.rf $B
 ];
 </programlisting>
-      <para>PML references are also used in PDT&#160;2.0 to represent at 
+      <para>PML references are also used in PDT&#160;2.0 to represent 
       textual and grammatical coreference links (attributes <literal>coref_text.rf</literal> and
-      <literal>coref_gram.rf</literal>.
+      <literal>coref_gram.rf</literal>).
       For example, the following query searches for 
-      a grammatical coreference where antecedent
-      precedes the postcedent. The query
-      defines selectors for two tectogrammatical nodes <literal>$ante</literal> (antecedent)
-      and <literal>$post</literal> (postcedent) connected
+      a grammatical coreference where referring node
+      precedes the referred node. The query
+      defines selectors for two tectogrammatical nodes <literal>$referring</literal>
+      and <literal>$referred</literal> connected
       by a grammatical-coreference link <literal>coref_gram.rf</literal>,
       such that
-      the lexical counterpart of <literal>$post</literal>
-      follows that of <literal>$antec</literal>
+      the lexical counterpart of <literal>$referred</literal>
+      follows that of <literal>$referring</literal>
       in the ordering of the a-layer
       (which coincides with the ordering of the original sentence).
       </para>
     <programlisting>
-t-node $ante := [
- a/lex.rf $ante_lex := [],
- coref_gram.rf t-node $post := [
-   a/lex.rf $post_lex [ order-follows $ante_lex ],
+t-node $referring := [
+ a/lex.rf $referring_lex := [],
+ coref_gram.rf t-node $referred := [
+   a/lex.rf $referred_lex := [ order-follows $referring_lex ],
  ]
 ]</programlisting>
       <para>In the last example, the two t-nodes were
@@ -794,10 +794,10 @@ t-node $ante := [
       we put no limits on the length of the chain.
       </para>
       <programlisting>
-t-node $ante := [
- a/lex.rf $ante_lex := [],
- coref_gram.rf{1,} t-node $post := [
-   a/lex.rf $post_lex [ order-follows $ante_lex ],
+t-node $referring := [
+ a/lex.rf $referring_lex := [],
+ coref_gram.rf{1,} t-node $referred := [
+   a/lex.rf $referred_lex := [ order-follows $referring_lex ],
  ]
 ]</programlisting>
       <para>
@@ -829,7 +829,7 @@ t-node $t := [
 	(their name can be followed by a pair of colons <literal>::</literal>
 	in order to distinguish them from a PML reference relation).
 	</para>
-	<para>The current implementation defines two specific for
+	<para>The current implementation defines two relations specific for
 	the PDT&#160;2.0 annotation: <literal>echild</literal> and <literal>eparent</literal>.
 	These relations can be used both on tectogrammatical and analytical layer
 	and represent the effective dependency, rather than 
@@ -1289,18 +1289,18 @@ t-node $n := [ ]
     find out how many grammatical-coreference links can start in one tectogrammatical node,
     we may use the following query:</para>
     <programlisting>
-t-node $antecedent := [
-  coref_gram.rf t-node $postcedent := [  ]
+t-node $referring := [
+  coref_gram.rf t-node $referred := [  ]
 ];
-&gt;&gt;  for $t give count()
+&gt;&gt;  for $referring give count()
 &gt;&gt; max()</programlisting>
     <para>
     The selective part of the query matches every pair of tectogrammatical nodes 
     that are linked by a grammatical-coreference link.
     The first filter groups the resulting pairs of nodes
-    by the first of the nodes (<literal>$antecedent</literal>) and outputs the number
+    by the first of the nodes (<literal>$referring</literal>) and outputs the number
     of pairs in each group; this is the number
-    of grammatical-coreference links starting in the node <literal>$antecedent</literal>.
+    of grammatical-coreference links starting in the node <literal>$referring</literal>.
     The second filter simply computes the maximum of the values returned by the first filter.
     </para>	 
     <para>The <literal>for</literal> clause partitions all 
@@ -1314,7 +1314,7 @@ t-node $antecedent := [
     </para>
     <para>
       PML-TQ further supports a syntax that
-      allows different partitions to defined
+      allows different partitions to be defined
       for different group function and also
       let the <literal>give</literal> clause
       operate on all input rows.
@@ -2470,7 +2470,7 @@ occurrences : ( NUMBER | NUMBER '+' | NUMBER '-' | NUMBER '..' NUMBER ) + '|';
 	      Example:
 	      <programlisting>a-node $p:= [ child a-node [ afun=$p.afun, afun~'^Aux' ] ]</programlisting>
 	      The above query selects
-	      a node its child node (both of type <literal>a-node</literal>)
+	      a node and its child node (both of type <literal>a-node</literal>)
 	      that have the same value of the attribute
 	      <literal>afun</literal>
 	      and the value starts with the substring <literal>Aux</literal>.
@@ -3315,7 +3315,8 @@ Pred    Adv     24196
 	  <literal>bridging</literal> that is a list of
 	  structures with two members, 
 	  <literal>informal-type</literal> (a string value for the type of the anaphora) and
-	  <literal>target.rf</literal> (a PML reference to the anaphora antecedent).
+	  <literal>target.rf</literal> (a PML reference to the
+	  anaphora referred node).
 	  So, each element of the <literal>bridging</literal>
 	  list represents a labeled link to another node.
 	  We might want to ask for nodes with <literal>functor="ACT"</literal> that are pointed to
