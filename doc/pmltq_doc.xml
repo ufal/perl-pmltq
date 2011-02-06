@@ -4650,11 +4650,11 @@ ADVS	ACT	13.18%
   <section>
     <title>Installing PML-TQ server</title>
 
-    <para>To run PML-TQ Servers, you will first need to install an SQL
-    database server. Fully supported are <ulink
+    <para>To run PML-TQ Servers, first you will need to install an SQL
+    database server. <ulink
     url="http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.html">Oracle</ulink>
     10g or 11g and <ulink url="http://www.postgresql.org/">PostgreSQL</ulink>
-    ver. min. 8.4.1.</para>
+    ver. min. 8.4.1are fully supported .</para>
 
     <section>
       <title>Quick start</title>
@@ -4778,8 +4778,8 @@ $EDITOR run/run.conf</programlisting>
 
         <itemizedlist>
           <listitem>
-            <para>Create a new directory for data conversion by copying the
-            <filename>contrib/prepare_data/sample/</filename>
+            <para>Create a new directory for the data conversion by copying
+            the <filename>contrib/prepare_data/sample/</filename>
             directory.<programlisting>mkdir my_treebank_pmltq
 cd  my_treebank_pmltq
 cp -R contrib/prepare_data/sample/*</programlisting></para>
@@ -4790,21 +4790,21 @@ cp -R contrib/prepare_data/sample/*</programlisting></para>
             my_treebank_pmltq (just for convenience and easy
             access)<programlisting>ln -s /path/to/your/treebank/data/in/pml data</programlisting></para>
 
-            <para>Now your directory contains a <filename>bin</filename>
-            directory with set of esential scripts.</para>
+            <para>Your directory now contains a <filename>bin</filename>
+            directory with a set of esential scripts.</para>
 
             <variablelist>
               <varlistentry>
                 <term>config.sh</term>
 
                 <listitem>
-                  <para>This configuration file controls data conversion from
-                  PML to SQL/dumps and loading of the data to the SQL
+                  <para>This configuration file controls the data conversion
+                  from PML to SQL/dumps and loading of the data to the SQL
                   database.</para>
 
                   <para>You will need to configure at least basic treebank
-                  infomation and the database access. See the comments inside
-                  the file.</para>
+                  infomation and the database access. See comments inside the
+                  file.</para>
                 </listitem>
               </varlistentry>
 
@@ -4821,7 +4821,8 @@ cp -R contrib/prepare_data/sample/*</programlisting></para>
                 <term>create_db.sh</term>
 
                 <listitem>
-                  <para>Creates databases according your configuration.</para>
+                  <para>Creates databases according to your
+                  configuration.</para>
                 </listitem>
               </varlistentry>
 
@@ -4829,8 +4830,8 @@ cp -R contrib/prepare_data/sample/*</programlisting></para>
                 <term>load_to_db.sh</term>
 
                 <listitem>
-                  <para>Loads sql dumps to database. You need to convert data
-                  and setup your configuration prior running this
+                  <para>Loads sql dumps to the database. You need to convert
+                  the data and setup your configuration prior running this
                   script.</para>
                 </listitem>
               </varlistentry>
@@ -4840,7 +4841,7 @@ cp -R contrib/prepare_data/sample/*</programlisting></para>
 
                 <listitem>
                   <para>Starts sql command line client (sqlplus or psql)
-                  according your database configuration.</para>
+                  according to your database configuration.</para>
                 </listitem>
               </varlistentry>
 
@@ -4849,7 +4850,7 @@ cp -R contrib/prepare_data/sample/*</programlisting></para>
 
                 <listitem>
                   <para>Generates a fragment of
-                  <filename>pmltq_cgi.conf</filename> for current
+                  <filename>pmltq_cgi.conf</filename> for the current
                   treebank.</para>
                 </listitem>
               </varlistentry>
@@ -4864,7 +4865,7 @@ $EDITOR bin/convert_to_db.sh</programlisting></para>
           </listitem>
 
           <listitem>
-            <para>Run the following script on any machine<programlisting>bin/convert_to_db.sh</programlisting></para>
+            <para>Run the following script on any machine:<programlisting>bin/convert_to_db.sh</programlisting></para>
           </listitem>
         </itemizedlist>
       </section>
@@ -4874,18 +4875,18 @@ $EDITOR bin/convert_to_db.sh</programlisting></para>
 
         <para>The following scripts are supposed to be run on the machine
         running the SQL server or a machine able to access the SQL server via
-        the database command-line client (sqlplus or psql)</para>
+        the database command-line client (sqlplus or psql).</para>
 
         <itemizedlist>
           <listitem>
             <para>Run <filename>create_db.sh</filename> in case you need to
-            create a fresh new database. Beware that this script also deletes
-            any existing data in the database.<programlisting>bin/create_db.sh</programlisting></para>
+            create a fresh new database. Be careful, as this script also
+            deletes any existing data in the database.<programlisting>bin/create_db.sh</programlisting></para>
           </listitem>
 
           <listitem>
-            <para>To load sql dumps into database run following script. Any
-            existing data in the database will be deleted.<programlisting>bin/load_to_db.sh</programlisting></para>
+            <para>Run following script to load sql dumps into the database.
+            Any existing data in the database will be deleted.<programlisting>bin/load_to_db.sh</programlisting></para>
           </listitem>
         </itemizedlist>
       </section>
@@ -4961,7 +4962,8 @@ $EDITOR bin/convert_to_db.sh</programlisting></para>
             <term>&lt;timeout&gt;</term>
 
             <listitem>
-              <para>timeout before search engine give up (in seconds)</para>
+              <para>timeout before the search engine give up (in
+              seconds)</para>
             </listitem>
           </varlistentry>
 
@@ -5027,7 +5029,7 @@ $EDITOR bin/convert_to_db.sh</programlisting></para>
                   <term>&lt;description&gt;</term>
 
                   <listitem>
-                    <para>detailed information about treebank</para>
+                    <para>detailed information about the treebank</para>
                   </listitem>
                 </varlistentry>
 
@@ -5129,15 +5131,13 @@ pdt20_mwe
     <section>
       <title>Setting up print service</title>
 
-      <para>If you want graphics in the WWW interface, you will need Tred and
-      Xvfb installation. For Tred installation follow this <ulink
+      <para>If you want graphics in the WWW interface, Tred and Xvfb
+      installation will be needed. For Tred installation follow this <ulink
       url="http://ufal.mff.cuni.cz/~pajas/tred/ar01s02.html#install-unix">link
-      to Tred Manual</ulink>. Xvfb is basically a part of Xorg system and
-      installing it on a display-less server is something like “installing X
-      without X”. Installation of Xvfb depends on your Linux distribution, use
-      your packaging system or see <ulink
+      to Tred Manual</ulink>. Installation of Xvfb depends on your Linux
+      distribution; use your packaging system or see <ulink
       url="http://www.x.org/wiki/">www.x.org</ulink>.<note>
-          <para>Some Xvfb installations come without
+          <para>Some Xvfb installations are without
           <filename>xvfb-run</filename> script. You can easily get
           <filename>xvfb-run</filename> script from other distributions as
           they are usually the same.</para>
