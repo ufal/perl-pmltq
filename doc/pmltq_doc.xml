@@ -4654,7 +4654,7 @@ ADVS	ACT	13.18%
     database server. <ulink
     url="http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.html">Oracle</ulink>
     10g or 11g and <ulink url="http://www.postgresql.org/">PostgreSQL</ulink>
-    ver. min. 8.4.1are fully supported .</para>
+    ver. min. 8.4.1 are fully supported .</para>
 
     <section>
       <title>Quick start</title>
@@ -4803,7 +4803,7 @@ cp -R contrib/prepare_data/sample/*</programlisting></para>
                   database.</para>
 
                   <para>You will need to configure at least basic treebank
-                  infomation and the database access. See comments inside the
+                  infomation and the database access. See the comments inside the
                   file.</para>
                 </listitem>
               </varlistentry>
