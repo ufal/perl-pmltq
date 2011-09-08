@@ -1982,7 +1982,7 @@ a-node $a:= [ ]
             node matched by the containing selector.</para>
 
             <para>For example, the query <literal>a-node $x := [ descendant
-            a-node [ afun=$x.afun ] ] ]</literal> reads in English as <quote>
+            a-node [ afun=$x.afun ] ]</literal> reads in English as <quote>
             Find a node <literal>$x</literal> of type a-node that has a
             descendant node of type a-node that has <literal>afun</literal>
             equal to <literal>afun</literal> of <literal>$x</literal>.
@@ -2057,10 +2057,12 @@ a-node $a:= [ ]
               </imageobject>
 
               <textobject role="syntax_diagram">
-                <phrase>constraint : ( ('!')? (predicate | relation?
-                nodeSelector | optionalSelector | memberSelector | relation
-                variable | subquery | '(' constraint ')' ) | (constraint
-                ('and' | 'or' | ',' ) constraint)) ;</phrase>
+                <phrase>constraint : ( ('!')? (predicate | relationSelector |
+                optionalSelector | memberSelector | relation
+                variable | subquery | '(' constraint ')' ) | '+'? relationSelector | (constraint
+                ('and' | 'or' | ',' ) constraint)) ;
+                relationSelector : relation? nodeSelector ;
+                </phrase>
               </textobject>
             </mediaobject>
 
@@ -2080,10 +2082,28 @@ a-node $a:= [ ]
             current selector), or a logical combination of any of these.
             However, a node selector used in a complex logical expression is
             treated as a subquery with at least one occurrence.</para>
-
+            
             <para>The intended way of reading a constraint aloud in English in
             the context of a node selector is to precede it with the word
             <quote>has</quote>.</para>
+            
+            <para>
+            By default only distinct nodes are matched by the query. If however the
+            <firstterm>relationSelector</firstterm> is denoted by <literal>+</literal>
+            the matched nodes do not have to be disjoint from the other nodes matched 
+            by the query. This is usefull for printing the whole sentences like in the following
+            example:
+            <programlisting>
+a-node 
+[ afun = 'AuxV', 
+     ancestor a-root $r := 
+     [ + descendant a-node $a := [  ] ] ];
+  >> for $r.id,$a.m/form,$a.ord give $1,$2,$3
+  >> give distinct concat($2, ' ' over $1 sort by $3)</programlisting>
+            This example prints the sentences with an auxiliary verb (afun='AuxV'). The first 
+            matched node won't be among descendants of the root node unless the selector 
+            is denoted by <literal>+</literal>.
+            </para>
           </listitem>
         </varlistentry>
 
