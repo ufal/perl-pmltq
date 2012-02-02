@@ -258,7 +258,7 @@
 
       <para>To start using PML-TQ from the tree editor TrEd, press <keycombo
           action="simul">
-          <keysym>Ctrl</keysym>
+          <keysym>Shift</keysym>
 
           <keysym>F3</keysym>
         </keycombo> or select <menuchoice>
