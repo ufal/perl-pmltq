@@ -4774,8 +4774,9 @@ $EDITOR run/run.conf</programlisting>
             </listitem>
 
             <listitem>
-              <para>start TrEd, press Shift+F3, configure connection, create a
-              query and press Space.</para>
+              <para>start TrEd, press <keycombo action="simul"><keysym>Shift</keysym><keysym>F3</keysym>
+                </keycombo>, configure connection, create a
+                query and press <keysym>Space</keysym>.</para>
             </listitem>
           </itemizedlist>
         </listitem>
