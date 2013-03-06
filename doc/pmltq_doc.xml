@@ -19,7 +19,7 @@
         </textobject>
       </inlinemediaobject> </medialabel></title>
 
-    <subtitle>Documentation for version 0.7.8 (alpha)</subtitle>
+    <subtitle>Documentation for version 0.7.9 (alpha)</subtitle>
   </articleinfo>
 
   <section>
@@ -136,10 +136,10 @@
         </listitem>
 
         <!--
-	<listitem>
-	  <para>directly nested node selectors</para>
-	</listitem>
-	-->
+        <listitem>
+          <para>directly nested node selectors</para>
+        </listitem>
+        -->
 
         <listitem>
           <para>references to other selectors</para>
@@ -217,20 +217,20 @@
     <!--
     <glossary>
       <glossentry>
-	<glossterm>
-	  node selector (query node)
-	  matching node
-	  attribute
-	  node type
-	  relation
-	  variable
-	  subquery
-	  reference
-	  output filter
-	</glossterm>
-	<glossdef>
-	  <para></para>
-	</glossdef>
+        <glossterm>
+          node selector (query node)
+          matching node
+          attribute
+          node type
+          relation
+          variable
+          subquery
+          reference
+          output filter
+        </glossterm>
+        <glossdef>
+          <para></para>
+        </glossdef>
       </glossentry>
     </glossary>
 -->
@@ -775,7 +775,7 @@ a-node $A := [
 
 t-node [
   child t-node [
-    a/lex.rf $A 
+    a/lex.rf $A
   ],
   a/lex.rf $B
 ];
@@ -866,37 +866,37 @@ t-node $t := [
 
         <programlisting>
 # a semantic verb with an ACT(or) and EFF(ect)
-t-node [ 
+t-node [
   gram/sempos='v',
-  echild t-node [ functor='ACT' ], 
+  echild t-node [ functor='ACT' ],
   echild t-node [ functor='EFF' ],
 ]</programlisting>
 
         <programlisting>
 # a t-node with two effective parents (common modifier of coordinated nodes)
-t-node [ 
-  eparent t-node [ ], 
+t-node [
+  eparent t-node [ ],
   eparent t-node [ ],
 ]</programlisting>
 
         <programlisting>
 # a verb with no actant
-t-node $a := [ gram/sempos='v', 
-  ! echild t-node [ functor in { 'ACT','PAT','ADDR','ORIG','EFF' } ] 
+t-node $a := [ gram/sempos='v',
+  ! echild t-node [ functor in { 'ACT','PAT','ADDR','ORIG','EFF' } ]
 ]</programlisting>
 
         <programlisting>
 # reversed effective dependency on a-layer and t-layer
 # excluding numeric constructions
-a-node $A := [ 
+a-node $A := [
   m/tag !~ '^C',
   echild a-node $B := [
-    m/tag !~ '^C' 
+    m/tag !~ '^C'
   ]
 ];
-t-node [ 
-  a/lex.rf $B, 
-  echild t-node [ a/lex.rf $A ] 
+t-node [
+  a/lex.rf $B,
+  echild t-node [ a/lex.rf $A ]
 ];</programlisting>
 
         <para>Just like PML reference relations, specific relations can be
@@ -939,11 +939,11 @@ t-node [ echild{2,2} t-node [ ] ]</programlisting>
       <para>The following example finds a PAT argument and its corresponding
       predicate:</para>
 
-      <programlisting>node $arg := [ 
-  member apreds [ 
-    label = 'PAT', 
-    target.rf node $pred := [ ] 
-  ] 
+      <programlisting>node $arg := [
+  member apreds [
+    label = 'PAT',
+    target.rf node $pred := [ ]
+  ]
 ]</programlisting>
 
       <para>The intermediate <literal>member</literal> selector matches one
@@ -1071,20 +1071,20 @@ t-node [ echild{2,2} t-node [ ] ]</programlisting>
 t-node $N:= [
   # condition <xref linkend="subq-i1" />.
   gram/sempos ~ "^n",
-  functor != "RSTR", 
+  functor != "RSTR",
 
   # conditions <xref linkend="subq-i3" />. and <xref linkend="subq-i4" />.
   descendant{3,} t-node $R := [
-    functor = "RSTR", 
-    # condition <xref linkend="subq-i5" />. 
+    functor = "RSTR",
+    # condition <xref linkend="subq-i5" />.
     0x  t-node [ functor = "RSTR" ]
   ],
 
   # condition <xref linkend="subq-i2" />.
   0x descendant t-node [
-    !functor = "RSTR", 
-    descendant $R 
-  ], 
+    !functor = "RSTR",
+    descendant $R
+  ],
 ];</programlisting>
 
       <para>Note how the condition <xref linkend="subq-i2" />. is expressed:
@@ -1157,7 +1157,7 @@ t-node $N:= [
       trees with at most 10 other t-nodes. Using functions, this can be
       written as</para>
 
-      <programlisting>t-root [ 
+      <programlisting>t-root [
   descendants() &lt;= 10,
   descendant t-node [ functor='DPHR' ]
 ]</programlisting>
@@ -1173,11 +1173,11 @@ t-node $N:= [
       <para>For treebanks that do not have a special node type for the root
       node, we can write e.g.:</para>
 
-      <programlisting>node [ 
+      <programlisting>node [
   functor='DPHR',
-  1x ancestor node [ 
+  1x ancestor node [
     depth() = 0, # the root
-    descendants() &lt;= 10 
+    descendants() &lt;= 10
   ]
 ]</programlisting>
     </section>
@@ -1276,9 +1276,9 @@ t-node [ lbrothers()=0 ]</programlisting>
 
       <programlisting># first leaf node in a subtree of $t (using functions)
 t-node $t := [
-  descendant t-node [ 
+  descendant t-node [
     sons()=0,
-    depth_first_order()-depth()=depth_first_order($t)-depth($t) 
+    depth_first_order()-depth()=depth_first_order($t)-depth($t)
   ]
 ]</programlisting>
 
@@ -1290,7 +1290,7 @@ t-node $t := [
 
       <programlisting># last leaf node in a subtree of $t
 t-node $t := [
-  descendant t-node [ 
+  descendant t-node [
     sons()=0,
     depth_first_order()-depth()=depth_first_order($t)+descendants($t)-1-depth($t)
   ]
@@ -2082,26 +2082,26 @@ a-node $a:= [ ]
             current selector), or a logical combination of any of these.
             However, a node selector used in a complex logical expression is
             treated as a subquery with at least one occurrence.</para>
-            
+
             <para>The intended way of reading a constraint aloud in English in
             the context of a node selector is to precede it with the word
             <quote>has</quote>.</para>
-            
+
             <para>
             By default only distinct nodes are matched by the query. If however the
             <firstterm>relationSelector</firstterm> is denoted by <literal>+</literal>
-            the matched nodes do not have to be disjoint from the other nodes matched 
+            the matched nodes do not have to be disjoint from the other nodes matched
             by the query. This is usefull for printing the whole sentences like in the following
             example:
             <programlisting>
-a-node 
-[ afun = 'AuxV', 
-     ancestor a-root $r := 
+a-node
+[ afun = 'AuxV',
+     ancestor a-root $r :=
      [ + descendant a-node $a := [  ] ] ];
   >> for $r.id,$a.m/form,$a.ord give $1,$2,$3
   >> give distinct concat($2, ' ' over $1 sort by $3)</programlisting>
-            This example prints the sentences with an auxiliary verb (afun='AuxV'). The first 
-            matched node won't be among descendants of the root node unless the selector 
+            This example prints the sentences with an auxiliary verb (afun='AuxV'). The first
+            matched node won't be among descendants of the root node unless the selector
             is denoted by <literal>+</literal>.
             </para>
           </listitem>
@@ -2387,16 +2387,16 @@ a-node
     &lt;structure role="#NODE" name="t-node"&gt;
       ...
       &lt;member name="a"&gt;
-	&lt;structure&gt;
-	  &lt;member name="lex.rf"&gt;
-	    &lt;cdata format="PMLREF"/&gt;
-	  &lt;/member&gt;
-	  &lt;member name="aux.rf"&gt;
-	    &lt;list ordered="0"&gt;
-	      &lt;cdata format="PMLREF"/&gt;
-	    &lt;/list&gt;
-	  &lt;/member&gt;
-	&lt;/structure&gt;
+        &lt;structure&gt;
+          &lt;member name="lex.rf"&gt;
+            &lt;cdata format="PMLREF"/&gt;
+          &lt;/member&gt;
+          &lt;member name="aux.rf"&gt;
+            &lt;list ordered="0"&gt;
+              &lt;cdata format="PMLREF"/&gt;
+            &lt;/list&gt;
+          &lt;/member&gt;
+        &lt;/structure&gt;
       &lt;/member&gt;
       ...
     &lt;/structure&gt;
@@ -2890,11 +2890,11 @@ Pred    Adv     24196
             constraint. For example, the following query <programlisting>a-node $n:= [ ]
 # Filter 1
 &gt;&gt; give lower($n.m/form)
-&gt;&gt; filter $1 ~ '^[a-z]' 
+&gt;&gt; filter $1 ~ '^[a-z]'
 
 # Filter 2
 &gt;&gt; for $1 give $1,count()
-&gt;&gt; filter $2 &gt;= 1000 
+&gt;&gt; filter $2 &gt;= 1000
 
 # Filter 3
 &gt;&gt; give $1,$2 sort by $2 desc</programlisting> retrieves a list frequent
@@ -3665,7 +3665,7 @@ Pred    Adv     24196
       <literal>"CONTRAST"</literal>.</para>
 
       <para>The following query will <emphasis>not work</emphasis>
-      <programlisting>t-node $n := [ 
+      <programlisting>t-node $n := [
   bridging/informal-type = "CONTRAST",
   bridging/target-node.rf t-node [ functor="ACT" ]
 ]</programlisting> The problem with this query is that
@@ -3680,11 +3680,11 @@ Pred    Adv     24196
       <para>In order to be able to say that these list members are the same,
       we have to use the <literal>member</literal> selector:</para>
 
-      <programlisting>t-node $n:= [ 
-  member bridging [ 
-    informal-type = "CONTRAST", 
-    target-node.rf t-node [ functor="ACT" ] 
-  ] 
+      <programlisting>t-node $n:= [
+  member bridging [
+    informal-type = "CONTRAST",
+    target-node.rf t-node [ functor="ACT" ]
+  ]
 ]</programlisting>
 
       <para>This query says that one of the values matched by the attribute
@@ -3769,8 +3769,8 @@ Pred    Adv     24196
 
             <para>For example, consider the following query:</para>
 
-            <programlisting>t-root $r:= [ 
-  descendant t-node $n [] 
+            <programlisting>t-root $r:= [
+  descendant t-node $n []
 ]
 &gt;&gt; $r.id, depth($n)
 &gt;&gt; for $1 give max($2)
@@ -3831,12 +3831,12 @@ Pred    Adv     24196
 
             <programlisting>t-node $a := [
   t_lemma = '#Forn',
-  t-node $b := [ 
-   functor = "FPHR" 
+  t-node $b := [
+   functor = "FPHR"
   ]
 ];
 &gt;&gt; $a.id, distinct concat($b.t_lemma, ' ' over $a sort by $b.deepord )
-	      </programlisting>
+              </programlisting>
 
             <para>The selective part of the query finds t-node
             <literal>$a</literal> with <literal>t_lemma='#Forn'</literal>
@@ -3976,23 +3976,23 @@ Pred    Adv     24196
       <para>The output looks like this (without the ellipses):</para>
 
       <programlisting id="joint_functor_results">
-ACMP	RSTR	54.37%
-ACMP	PAT	10.77%
-ACMP	ACT	10.34%
-ACMP	APP	4.99%
+ACMP    RSTR    54.37%
+ACMP    PAT     10.77%
+ACMP    ACT     10.34%
+ACMP    APP     4.99%
 ...
-ACT	RSTR	49.56%
-ACT	PAT	9.75%
-ACT	APP	8.68%
+ACT     RSTR    49.56%
+ACT     PAT     9.75%
+ACT     APP     8.68%
 ...
-ADDR	RSTR	64.67%
-ADDR	APP	14.74%
-ADDR	PAT	4.24%
-ADDR	ID	3.17%
+ADDR    RSTR    64.67%
+ADDR    APP     14.74%
+ADDR    PAT     4.24%
+ADDR    ID      3.17%
 ...
-ADVS	PRED	48.5%
-ADVS	ACT	13.18%
-ADVS	CM	9.09%
+ADVS    PRED    48.5%
+ADVS    ACT     13.18%
+ADVS    CM      9.09%
 ...</programlisting>
 
       <para>The query just explained can also be rewritten as follows:</para>
@@ -4028,7 +4028,7 @@ t-node $p := [ t-node $c := [  ] ];
       The third filters divides these two values
       and reorders the output using the first functor as
       the primary key and the computed ratio in descending order as the secondary key.
-      Finally, in the last filter, 
+      Finally, in the last filter,
       we convert the ratio to percents
       and rounds it to two decimal points by applying
       the function <literal>percnt($3,2)</literal>
@@ -4066,14 +4066,14 @@ t-node $p := [ echild t-node $c :=  [  ] ];
       ellipsis):</para>
 
       <programlisting>
-ACMP	RSTR	54.37%
-ACMP	PAT	10.77%
-ACT	RSTR	49.56%
-ACT	PAT	9.75%
-ADDR	RSTR	64.67%
-ADDR	APP	14.74%
-ADVS	PRED	48.5%
-ADVS	ACT	13.18%
+ACMP    RSTR    54.37%
+ACMP    PAT     10.77%
+ACT     RSTR    49.56%
+ACT     PAT     9.75%
+ADDR    RSTR    64.67%
+ADDR    APP     14.74%
+ADVS    PRED    48.5%
+ADVS    ACT     13.18%
 ...</programlisting>
     </section>
 
@@ -4461,12 +4461,12 @@ ADVS	ACT	13.18%
           </varlistentry>
 
           <!--
-	      <varlistentry>
-	      <term>percnt(number,places?)</term>
-	      <listitem><para>This is a convenience function, which returns
-	      the same value as <literal>round(100*number,places)</literal>.</para></listitem>
-	      </varlistentry>
-	  -->
+              <varlistentry>
+              <term>percnt(number,places?)</term>
+              <listitem><para>This is a convenience function, which returns
+              the same value as <literal>round(100*number,places)</literal>.</para></listitem>
+              </varlistentry>
+          -->
         </variablelist>
       </section>
 
@@ -5111,12 +5111,12 @@ $EDITOR bin/convert_to_db.sh</programlisting></para>
         <para><programlisting>#
 # Configuration file for run.sh
 #
- 
+
 auth_file="${pmltq_dir}/config/.authorization"
 config_file="${pmltq_dir}/config/pmltq_cgi.conf"
 
 btred_config_file="/path/to/btred.rc"
-tred_dir=/path/to/tred 
+tred_dir=/path/to/tred
 
 # list of print service extensions
 extensions=pdt20,pdt_vallex,ptb,arabic_treebank,hydt
@@ -5129,7 +5129,7 @@ on_print_service_stop="grep_kill '[X]vfb :99'"
 
 # Treebank ports and number of http servers to fork.
 # Format:
-# 
+#
 # CONFIG_ID=PORT,NUMBER_OF_INSTANCES
 #
 # e.g
