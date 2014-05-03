@@ -1,0 +1,417 @@
+package PMLTQ::NG2PMLTQ;
+
+use 5.006;
+use strict;
+use warnings;
+use Carp;
+
+require Exporter;
+import Exporter qw( import );
+
+
+use List::Util qw(first);
+
+=head1 NAME
+
+PMLTQ::NG2PMLTQ -  Converts NetGraph queries to PMLTQ queries
+
+=head1 VERSION
+
+Version 0.01
+
+=cut
+
+our @ISA = qw(Exporter);
+
+our %EXPORT_TAGS = ( 'all' => [ qw(
+  ng2pmltq
+) ] );
+
+our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
+
+our @EXPORT = qw(  );
+
+our $VERSION = '0.01';
+
+
+=head1 SYNOPSIS
+
+
+   use Tree_Query::NG2PMLTQ qw(ng2pmtq);
+   my $pmltq_query_string = ng2pmltq( $netgraph_query_string, { options });
+
+=head1 DESCRIPTION
+
+This module provides the function C<ng2pmltq> which takes a NetGraph
+query and attempts to translate it to an equivalent PMLTQ query.
+
+=head2 EXPORT
+
+None by default. Optionally exports the function C<ng2pmltq>.
+
+=head2 EXPORT TAGS
+
+The tag C<:all> exports the function C<ng2pmltq>.
+
+=head1 SUBROUTINES/METHODS
+
+
+=cut
+
+sub ng2pmltq {
+  local $_=shift;
+  my $opts = shift || {};
+  parse_tree(1,{},$opts);
+}
+
+our $indent = 0;
+sub indent (@) {
+  join('', @_)."\n"." " x (2*$indent);
+}
+sub report {
+  my ($fmt,@args)=@_;
+  return "\n # WARNING: ".sprintf($fmt, @args)."\n";
+}
+sub parse_tree {
+  my ($is_top,$parent_meta,$opts)=@_;
+  local $indent= $is_top ? 0 : $indent;
+  my $result='';
+  while (length) {
+    if (s/^
+	  \[
+	  (
+	    (?:
+	      [^]"\\]+
+	    |
+	      "[^"]*"
+	    |
+	      \\.
+	    | \]\|\[
+	    )*
+	  )
+	  \]
+	 //x) {
+      my $tok = $1;
+      my %meta;
+      my $children='';
+      $indent ++;
+      {
+	$indent ++;
+	if ($tok) {
+	  $children = indent().parse_condition($tok,\%meta,$parent_meta,$opts);
+	}
+	if (s/^\(//) {
+	  if (length $children and $children !~ /(^|[\[(,])\s*$/) {
+	    $children.=indent(',');
+	  }
+	  $children .= parse_tree(0,\%meta,$opts);
+	  $children =~ s/,?\s*$//;
+	  unless (s/^\)//) {
+	    $result.=report(q{missing ')'});
+	  }
+	}
+	$indent --;
+      }
+      if (!$is_top) {
+	if (defined $meta{'_#occurrences'}) {
+	  $result .= $meta{'_#occurrences'}."x ";
+	} elsif (defined $meta{_optional} and $meta{_optional}=~/^\s*(1|yes|true)\s*/) {
+	  $result .= '? ';
+	}
+      }
+      if (defined $meta{hide}) {
+	if ($meta{hide}=~/^\s*(1|yes|true|hide)\s*/) {
+	  if ($is_top) {
+	    $result .= q(a-node );
+	  } elsif (!$parent_meta->{type} and $opts->{type} eq 'a-node'
+		   or ($parent_meta->{type}||'') eq 'a-node') {
+	    $result .= q();
+	  } else {
+	    $result .= q(a/lex.rf|a/aux.rf a-node );
+	  }
+	}
+      } else {
+	if (defined $meta{_transitive}) {
+	  $result .= 'descendant ';
+	}
+	my $type = $meta{type} || $opts->{type};
+	if (defined($type)) {
+	  $result .= $type.' ' #if !defined($parent_meta->{type}) or $parent_meta->{type} ne $type;
+	}
+      }
+      if (defined $meta{_name}) {
+	$result .= '$'.lc($meta{_name}).' := ';
+      }
+      $result .= "[".$children;
+      $indent --;
+      $result .= indent()."]";
+    } elsif (s/^,//) {
+      $result .= indent(',') unless $result =~ /(^|[\[(,])\s*$/;
+    } elsif (s/^([^\[\(\),]+)//) {
+      $result.=report(q(unrecognized sequence '%s'),$1);
+    } elsif (/\)/ and !$is_top) {
+      return $result;
+    } elsif (s/^(.)//) {
+      $result.=report(q(had to skip '%s'),$1);
+    }
+  }
+  return $result;
+}
+
+my @attrs = map { 'UNKNOWN-'.$_ } 1..50;
+
+sub fix {
+  my ($val,$meta,$parent_meta,$opts)=@_;
+  if (!$opts->{'no-fix'}) {
+    $val=~s{^a/}{}g;
+    if ($val =~ /^(?:tag|lemma|form)$/) {
+      $val='m/'.$val;
+    } elsif ($val eq 'token') {
+      $val='m/w/'.$val;
+    } elsif ($val eq 'func') {
+      $val = 'functor';
+    } elsif ($val eq 'tlemma') {
+      $val = 't_lemma';
+    } elsif ($val eq 'm_lemma') {
+      $val = 'lemma';
+    } elsif ($val eq 'AID') {
+      $val = 'id';
+    }
+  }
+  if ($val =~ s/^_#//) {
+    return $val.'()';
+  } elsif ($val eq '_depth') {
+    return 'depth()';
+  }
+  if (!defined($meta->{type})) {
+    if ($val=~/^(?:lemma|tag|ord|form|afun|token)$/) {
+      $meta->{type}='a-node';
+      unless (defined($parent_meta->{type}) and $parent_meta->{type} eq 'a-node') {
+	$meta->{hide}=1;
+      }
+    } elsif ($val=~m{^(?:t_lemma|functor|gram/.*|tfa|deepord)}) {
+      $meta->{type}='t-node';
+    }
+  }
+  return $val;
+}
+
+sub quote {
+  my ($str)=@_;
+  $str=~s/'/\\'/g;
+  return qq('$str');
+}
+
+sub parse_condition {
+  local $_ = shift;
+  my $meta = shift || {};
+  my $parent_meta = shift || {};
+  my $opts = shift || {};
+  my $result = ''; #"### $_\n";
+  my $or = 1 if (/^(?:[^"]|"[^"]*")*\]\|\[/);
+  if ($or) {
+    $indent++;
+    $result .= indent "(";
+  }
+  my $next_attr = $attrs[0];
+  while (length) {
+    if (s/^\]\|\[//) {
+      $result .= indent ' or'
+	unless $result =~ /(^|[\[(,]| or)\s*$/;
+    } elsif (s/^([{}_\/\#[:alnum:].]+)(?=[!]?=|<|>)//) {
+      $next_attr=$1;
+      unless(
+	$next_attr=~s[{([^}.]+)\.([^}.]+)}][
+	  my ($id,$val)=(lc($1),$2);
+	  $val=fix($val,$meta,$parent_meta,$opts);
+	  qq{\$$id.$val}
+	 ]eg or
+	$next_attr=~s[{([^}.]+)\.([^}.]+)\.(\d+)}][
+	  my ($id,$val,$pos)=(lc($1),$2,$3);
+	  $val=fix($val,$meta,$parent_meta,$opts);
+	  $pos-=1;
+	  qq{substr(\$$id.$val,$pos,1)}
+	 ]eg
+       ) {
+	$next_attr=fix($1,$meta,$parent_meta,$opts);
+      }
+    } elsif (s/^,//) {
+      my $next_attr_idx = first { $attrs[$_-1] eq $next_attr } 1..$#attrs;
+      $next_attr = $attrs[$next_attr_idx||0];
+      $result .= indent(',') unless $result =~ /(^|[\[(,]| or)\s*$/;
+    } elsif (s/^((?:!?=|[<>]=?)?)((?:[^\\\]=,"]+|"[^"]*"|\\.)*)(?=[,\]]|$)// and length $2) {
+      my $next_op = $1 || '=';
+      my $vals = $2;
+      if ($next_attr =~ /^(?:_transitive|_optional|_name|hide)$/) {
+	$meta->{$next_attr} = $vals;
+	next;
+      } elsif ($next_attr eq '_#occurrences') {
+	my @vals = sort {$a<=>$b} split /\|/,$vals;
+	my @tests;
+	if ($next_op eq '=') {
+	  @tests = @vals;
+	} elsif ($next_op eq '!=') {
+	  my $prev = shift @vals;
+	  if ($prev>0) {
+	    push @tests,($prev-1)."-";
+	  }
+	  for (@vals) {
+	    next if $prev==$_;
+	    push @tests,($prev+1)."..".($_-1);
+	    $prev=$_;
+	  }
+	  push @tests,($prev+1)."+";
+	} elsif ($next_op eq '<=') {
+	  push @tests, $vals[-1]."-" ;
+	} elsif ($next_op eq '>=') {
+	  push @tests, $vals[0]."+" ;
+	} elsif ($next_op eq '<') {
+	  push @tests, ($vals[-1]-1)."-" ;
+	} elsif ($next_op eq '>') {
+	  push @tests, ($vals[0]+1)."+" ;
+	} else {
+	  warn "Unsupported operator for meta-attribute _#occurrences: $next_op\n";
+	}
+	$meta->{$next_attr} = join '',map { "|" } @tests;
+	next;
+      }
+      my @vals =
+	($vals=~/^"(.*)"$/) ? ($vals) :	split /\|/,$vals;
+      my $neg = $next_op eq '!=' ? 1 : 0;
+      if ($neg) {
+	$result .= q{!};
+	$next_op = '=';
+      }
+      if (@vals>1 and ($next_op eq '=')) {
+	$indent ++;
+	$result .= qq($next_attr in { ).join(',',map quote($_), @vals).qq( } );
+	$indent --;
+      } else {
+	if (@vals>1) {
+	  $result .= "(";
+	  $indent ++;
+	}
+	for my $val (@vals) {
+	  my $op = $next_op;
+	  if ($val=~/^"(.*)"$/) {
+	    $op = '~';
+	    $val=$1;
+	  } else {
+	    if ($opts->{'no-fix'}) {
+	      $val=~s/\.(?![^{}]+})/?/g;
+	    }
+	    if ($val=~/[?*]/) {
+	      $val=~s/([^[:alnum:]_?*])/\\$1/g;
+	      $val=~y/?/./;
+	      $val=~s/\*/.*/g;
+	      $val='^'.$val.'$';
+	      $op = '~'
+	    }
+	  }
+	  $val=quote($val);
+	  $val=~s[{([^}.]+)\.([^}.]+)}][
+	    my ($id,$val)=(lc($1),$2);
+	    $val=fix($val,$meta,$parent_meta,$opts);
+	    qq{'&\$$id.$val&'}
+	   ]eg;
+	  $val=~s[{([^}.]+)\.([^}.]+)\.(\d+)}][
+	    my ($id,$val,$pos)=(lc($1),$2,$3);
+	    $val=fix($val,$meta,$parent_meta,$opts);
+	    qq{'&substr(\$$id.$val,$pos,1)&'}
+	   ]eg;
+	  $val=~s/^  ''&
+                |  &''
+		  $//xg;
+	  $val=~s/&''&/ & /g;
+	  $indent ++;
+	  $result .= qq($next_attr $op $val);
+	  if (@vals>1) {
+	    $result.=' or ';
+	  }
+	  $indent --;
+	}
+	if (@vals>1) {
+	  $result.=')';
+	  $indent --;
+	}
+      }
+    } elsif (s/^(.)//) {
+      my $q = quote($1);
+      $result.=report("had to skip test $q");
+    }
+  }
+  if ($or) {
+    $indent--;
+    $result .= indent().")";
+  }
+  return $result;
+}
+
+
+
+
+=head1 AUTHOR
+
+AUTHOR, C<< <AUTHOR at UFAL> >>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to C<bug-pmltq-pml2base at rt.cpan.org>, or through
+the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=PMLTQ-PML2BASE>.  I will be notified, and then you'll
+automatically be notified of progress on your bug as I make changes.
+
+
+
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc PMLTQ::NG2PMLTQ
+
+
+You can also look for information at:
+
+=over 4
+
+=item * RT: CPAN's request tracker (report bugs here)
+
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=PMLTQ-PML2BASE>
+
+=item * AnnoCPAN: Annotated CPAN documentation
+
+L<http://annocpan.org/dist/PMLTQ-PML2BASE>
+
+=item * CPAN Ratings
+
+L<http://cpanratings.perl.org/d/PMLTQ-PML2BASE>
+
+=item * Search CPAN
+
+L<http://search.cpan.org/dist/PMLTQ-PML2BASE/>
+
+=back
+
+=head1 SEE ALSO
+
+NetGraph - L<http://quest.ms.mff.cuni.cz/netgraph/indexEn.html>
+
+PMLTQ
+
+=head1 ACKNOWLEDGEMENTS
+
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2014 AUTHOR.
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of either: the GNU General Public License as published
+by the Free Software Foundation; or the Artistic License.
+
+See http://dev.perl.org/licenses/ for more information.
+
+
+=cut
+
+1; # End of PMLTQ::NG2PMLTQ
