@@ -61,15 +61,18 @@ use Treex::PML;
 use List::Util qw(first);
 
 BEGIN {
-  Treex::PML::AddResourcePathAsFirst(File::Spec->catfile(${FindBin::RealBin},'resources'));
+  require PMLTQ::CGI;
+  use File::Basename;
+  Treex::PML::AddResourcePathAsFirst(File::Spec->catfile((fileparse($INC{File::Spec->catfile('PMLTQ','CGI.pm')}))[1],'resources'));
   Treex::PML::AddResourcePathAsFirst(grep length, @{$opts->{'resource-dir'}}) if @{$opts->{'resource-dir'}};
 }
 use PMLTQ::CGI;
 use IO::Scalar;
 
 BEGIN {
+  
   PMLTQ::CGI::Configure({
-    'static-dir' => $opts{'static-dir'} || File::Spec->catdir(${FindBin::RealBin},'static'),
+    'static-dir' => $opts{'static-dir'} || File::Spec->catdir((fileparse($INC{File::Spec->catfile('PMLTQ','CGI.pm')}))[1],'static'),
     'config-file' => $opts{'config-file'} || File::Spec->catfile(${FindBin::RealBin},'config','pmltq_cgi.conf'),
     'server' => $opts{'server'},
     'pid-dir' => $opts{'pid-dir'},
