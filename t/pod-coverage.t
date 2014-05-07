@@ -2,6 +2,9 @@ use strict;
 use warnings;
 use Test::More;
 
+plan skip_all => 'set TEST_POD to enable this test (developer only!)'
+  unless $ENV{TEST_POD};
+
 # Ensure a recent version of Test::Pod::Coverage
 my $min_tpc = 1.08;
 eval "use Test::Pod::Coverage $min_tpc";
