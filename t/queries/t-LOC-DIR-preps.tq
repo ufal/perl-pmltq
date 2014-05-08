@@ -1,0 +1,7 @@
+# Předložky vyjadřující LOC a DIR
+t-node 
+[ functor ~ '^LOC|^DIR[1-3]', 
+     a/aux.rf a-node $a := 
+     [ afun = 'AuxP' ] ];
+  >> give match($a.m/lemma,'^[^_`]*')
+  >> for $1 give $1,count() sort by $2 desc,$1

@@ -1,0 +1,3 @@
+a-node $a := 
+[ afun = 'Sb', !m/tag ~ '^N...1' ];
+  >> give $a.id sort by $1

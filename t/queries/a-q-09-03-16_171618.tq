@@ -1,0 +1,4 @@
+a-node $n0 := 
+[ afun != "AuxP", m/tag ~ '^V',  a-node $n1 := 
+     [ m/tag ~ '^[CN]...4', afun != 'Obj' ] ];
+  >> give $n0.id,$n1.id sort by $1,$2

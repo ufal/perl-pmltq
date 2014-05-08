@@ -1,0 +1,6 @@
+t-node $n := 
+[ functor = "MEANS", 
+     0x a/aux.rf a-node $a := 
+     [ afun = "AuxP" ], a/lex.rf a-node $l := [  ] ];
+  >> give substr($l.m/tag ,4,1)
+  >> for $1 give $1,count() sort by $2,$1

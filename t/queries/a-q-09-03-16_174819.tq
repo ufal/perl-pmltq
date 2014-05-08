@@ -1,0 +1,6 @@
+a-node $n0 := 
+[ echild a-node $n1 := 
+     [ afun = "Obj", order-precedes $n3 ], 
+     echild a-node $n3 := 
+     [ afun = "Sb" ] ];
+  >> give $n0.id,$n1.id,$n3.id sort by $1,$2,$3

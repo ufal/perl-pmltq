@@ -1,0 +1,3 @@
+a-node $n := 
+[ m/w/token ~ 'f' ];
+  >> give $n.id sort by $1

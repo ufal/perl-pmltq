@@ -1,0 +1,6 @@
+a-node $n := [  ];
+  >> give lower($n.m/form)
+  >> filter $1 ~ '^[a-z]' 
+  >> for $1 give $1,count()
+  >> filter $2 >= 1000 
+  >> give $1,$2 sort by $2 desc,$1

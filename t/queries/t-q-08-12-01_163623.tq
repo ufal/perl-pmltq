@@ -1,0 +1,3 @@
+t-node $n := 
+[ !length(gram/resultative) > 0 ];
+  >> for $n.gram/resultative give $1,count() sort by $2 desc,$1

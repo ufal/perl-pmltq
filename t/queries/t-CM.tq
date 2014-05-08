@@ -1,0 +1,5 @@
+t-node $n0 := 
+[ 2x ancestor t-node $n1 := 
+     [ nodetype = 'coap', 3+x  t-node $n2 := 
+          [ !is_member = 1, !functor = 'CM' ] ] ];
+  >> give $n0.id sort by $1

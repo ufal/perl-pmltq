@@ -1,0 +1,4 @@
+# chyby v Rcp
+t-node $n0 := 
+[ t_lemma = '#Rcp', !1x coref_gram.rf t-node $n1 := [  ] ];
+  >> give $n0.id sort by $1

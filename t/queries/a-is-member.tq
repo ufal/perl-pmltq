@@ -1,0 +1,8 @@
+# is_member musí mít rodiče Coord nebo Apos (skrz Aux[CP])
+a-node $n0 := 
+[ is_member = 1, 
+     0x ancestor a-node $n1 := 
+     [ !afun ~ 'Aux[CP]', ancestor $coord ], 
+     ancestor a-node $coord := 
+     [ !afun ~ 'Coord|Apos|Aux[CP]' ] ];
+  >> give $n0.id,$coord.id sort by $1,$2

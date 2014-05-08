@@ -1,0 +1,5 @@
+# Slovesa s CPHR
+t-node $n := 
+[ echild t-node 
+     [ functor = 'CPHR' ] ];
+  >> give distinct $n.t_lemma sort by $1

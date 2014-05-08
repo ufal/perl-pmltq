@@ -1,0 +1,3 @@
+a-node $n := 
+[ afun = 'Sb', m/tag ~ '^....[2-7]' ];
+  >> for substr($n.m/tag,4,1) give $1,count() sort by $2,$1

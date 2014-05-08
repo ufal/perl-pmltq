@@ -1,0 +1,5 @@
+# Functors for dative
+t-node $t := 
+[ a/lex.rf a-node 
+     [ m/tag ~ '^....3' ] ];
+  >> for $t.functor give $1,count() sort by $2,$1

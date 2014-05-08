@@ -1,0 +1,8 @@
+t-root $a := [
+ member mwes/[1]annotator [
+ name = 'sidak',
+ member content()/[1]st [
+ lexicon-id = 's##person',
+ ],
+ ],
+]

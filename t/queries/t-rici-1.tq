@@ -1,0 +1,12 @@
+t-node $n0 := 
+[ same-tree-as $ref1, a/lex.rf $ref0 ];
+
+t-node $ref1 := 
+[ a/lex.rf $u ];
+
+a-node $u := 
+[ m/lemma ~ '^upřímně' ];
+
+a-node $ref0 := 
+[ m/lemma ~ '^říci', ord = $u.ord+1 ];
+  >> give $n0.id,$ref1.id,$u.id,$ref0.id sort by $1,$2,$3,$4

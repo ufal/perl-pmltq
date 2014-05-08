@@ -1,0 +1,5 @@
+t-node $t := [  ];
+  >> give $t.functor sort by $1 asc
+  >> give $1,row_number()
+  >> filter $2 > 100 
+  >> give $2,$1

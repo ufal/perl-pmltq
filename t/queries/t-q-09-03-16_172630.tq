@@ -1,0 +1,4 @@
+t-node $n0 := 
+[ functor = "ADDR", !is_generated = 1, a/lex.rf a-node $n1 := 
+     [ m/tag !~ '^....[-3X]' ] ];
+  >> give $n0.id,$n1.id sort by $1,$2

@@ -1,0 +1,7 @@
+# Gramatická koreference do jiné věty
+t-node $ref2 := 
+[ coref_gram.rf $ref1 ];
+
+t-node $ref1 := 
+[ !same-tree-as $ref2 ];
+  >> give $ref1.id,$ref2.id sort by $1,$2

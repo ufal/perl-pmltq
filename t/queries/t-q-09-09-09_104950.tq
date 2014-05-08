@@ -1,0 +1,4 @@
+t-node $t := [  ];
+  >> for $t.functor,$t.t_lemma give $1,$2,count()
+  >> filter ($1 = 'ACT' or $1 = 'PAT' or $1 = 'EFF' or $1 = 'ORIG' or $3 > 30) 
+  >> give $1,$2,$3,row_number(over all sort by $3 desc, $1, $2) sort by $4 desc

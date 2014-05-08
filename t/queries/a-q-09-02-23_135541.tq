@@ -1,0 +1,3 @@
+a-node $n := 
+[ !m/w/token = *m/w/token ];
+  >> give $n.id sort by $1

@@ -1,0 +1,6 @@
+t-node $n1 := 
+[ !is_generated = 1, a/lex.rf $n2 ];
+
+a-node $n2 := 
+[ afun = 'Sb' ];
+  >> for $n1.functor give $1,count() sort by $2,$1

@@ -1,0 +1,2 @@
+t-node $n := [  ];
+  >> give $n.id sort by $1

@@ -1,0 +1,5 @@
+# Četnost stromů podle počtu uzlů
+t-root $r := 
+[ descendant t-node $n := [  ] ];
+  >> for $r give count($n)
+  >> for $1 give $1,count() sort by $2 desc,$1

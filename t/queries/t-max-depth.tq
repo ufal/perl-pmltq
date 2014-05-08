@@ -1,0 +1,3 @@
+# Hloubka nejhlubšího stromu
+t-node [  ];
+  >> give max(depth())

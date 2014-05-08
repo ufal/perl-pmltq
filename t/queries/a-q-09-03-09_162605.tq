@@ -1,0 +1,7 @@
+a-node $v := 
+[ m/tag ~ '^V', echild a-node $c := 
+     [ afun in { "Sb", "Obj" } ] ];
+  >> give $v.id,$c.ord - $v.ord,substr($c.afun,0,1)
+  >> give concat(substr($2,0,1) & $3 over $1 sort by $2)
+  >> give substitute(substitute(substitute(substitute($1, '-','','g'),'[0-9]|$','V'),'[0-9]','','g'),'(.)\\1+','\\1','g')
+  >> for $1 give $1,count() sort by $2,$1

@@ -1,0 +1,15 @@
+t-node $t := 
+[ a/lex.rf $b, 0x a/aux.rf a-node $p := 
+     [ afun = 'AuxP' ] ];
+
+a-node $a := 
+[ m/tag ~ '^V', echild a-node $b := 
+     [ afun = "Obj", m/tag ~ '^....3' ], 
+     echild a-node $c := 
+     [ afun = "Obj", m/tag ~ '^....4' ] ];
+
+t-node $s := 
+[ same-tree-as $t, a/lex.rf $c, 
+     0x a/aux.rf a-node $q := 
+     [ afun = 'AuxP' ] ];
+  >> for $a.m/lemma give $1,count() sort by $2,$1

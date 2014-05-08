@@ -1,0 +1,4 @@
+a-node $a := []
+>> give $a.m/form
+>> filter $1 ~ 'a'
+>> filter $1 ~ 'b'

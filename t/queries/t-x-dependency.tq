@@ -1,0 +1,9 @@
+# Prohozená závislost
+t-node $n0 := 
+[ a/lex.rf $ref1, 
+      t-node $n1 := 
+     [ a/lex.rf $ref0 ] ];
+
+a-node $ref0 := 
+[  a-node $ref1 := [  ] ];
+  >> give distinct $n0.id,$n1.id,$ref0.id,$ref1.id sort by $1,$2,$3,$4
