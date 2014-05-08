@@ -12,6 +12,7 @@ use warnings;
   use constant SCHEMA_ROOT_NAME=>4;
   use constant FILE_QUEUE=>5;
   use constant FIRST_FREE=>6;
+
 =head1 NAME
 
 PMLTQ::Relation::TreexFileIterator
