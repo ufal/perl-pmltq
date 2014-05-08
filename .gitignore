@@ -12,3 +12,5 @@ pod2htm*.tmp
 PMLTQ-PML2BASE-*
 _Parser.pm
 
+/MYMETA.json
+/MYMETA.yml

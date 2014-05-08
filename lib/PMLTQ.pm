@@ -4,9 +4,16 @@ package PMLTQ;
 use strict;
 use warnings;
 
+use File::Basename 'dirname';
+use File::Spec ();
+
 BEGIN {
   our $VERSION = '0.7.10';
 }
+
+my $home = File::Spec->catdir(dirname(__FILE__), __PACKAGE__);
+
+sub home { $home }
 
 =head1 DESCRIPTION
 
