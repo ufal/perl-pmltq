@@ -123,19 +123,19 @@ sub get_schema_names {
 
 sub get_type_decl_for_query_node {
   my ($self,$node)=@_;
-  return $self->get_decl_for(Tree_Query::Common::GetQueryNodeType($node));
+  return $self->get_decl_for(PMLTQ::Common::GetQueryNodeType($node));
 }
 
 sub get_decl_for {
   my ($self,$type)=@_;
-  my $ret = eval { Tree_Query::Common::QueryTypeToDecl($type,$self->get_schemas) };
+  my $ret = eval { PMLTQ::Common::QueryTypeToDecl($type,$self->get_schemas) };
   warn $@ if $@;
   return $ret;
 }
 
 sub get_node_types {
   my ($self,$schema_name)=@_;
-  return [sort map Tree_Query::Common::DeclToQueryType( $_ ), map $_->node_types,
+  return [sort map PMLTQ::Common::DeclToQueryType( $_ ), map $_->node_types,
 	  grep { $schema_name ? ($_->get_root_name eq $schema_name) : 1 }
 	  $self->get_schemas
 	 ];
@@ -148,7 +148,7 @@ sub _find_pmlrf_relations {
   my %relations;
   for my $schema (@schemas) {
     for my $type ($schema->node_types) {
-      my $type_name = Tree_Query::Common::DeclToQueryType($type);
+      my $type_name = PMLTQ::Common::DeclToQueryType($type);
       for my $path ($type->get_paths_to_atoms({ no_nodes=>1, no_childnodes => 1 })) {
 	my $decl = $type->find($path);
 	$decl=$decl->get_content_decl unless $decl->is_atomic;
@@ -190,7 +190,7 @@ sub _find_pmlrf_relations_for_type {
 sub get_pmlrf_relations {
   my ($self,$qnode_or_type)=@_;
   if ($qnode_or_type) {
-    my $type = ref($qnode_or_type) ? Tree_Query::Common::GetQueryNodeType($qnode_or_type,$self) : $qnode_or_type;
+    my $type = ref($qnode_or_type) ? PMLTQ::Common::GetQueryNodeType($qnode_or_type,$self) : $qnode_or_type;
     my $rels = ref($self->{pmlrf_relations_hash}) && $self->{pmlrf_relations_hash}{$type};
     if ($rels) {
       return [ uniq( sort keys %$rels ) ];
@@ -227,7 +227,7 @@ sub get_specific_relations {
 sub get_user_defined_relations {
   my ($self,$qnode_or_type)=@_;
   if ($qnode_or_type) {
-    my $type = ref($qnode_or_type) ? Tree_Query::Common::GetQueryNodeType($qnode_or_type,$self) : $qnode_or_type;
+    my $type = ref($qnode_or_type) ? PMLTQ::Common::GetQueryNodeType($qnode_or_type,$self) : $qnode_or_type;
     return PMLTQ::Relation->relations_for_node_type($type);
   }
   return [

@@ -339,7 +339,7 @@ sub column_spec {
 # EOF
 # 	}
 	unless ($target_id) {
-	  my $target_decl = eval { Tree_Query::Common::QueryTypeToDecl($target_type,$schema,@{$opts{other_schemas}}) };
+	  my $target_decl = eval { PMLTQ::Common::QueryTypeToDecl($target_type,$schema,@{$opts{other_schemas}}) };
 	  warn $@ if $@;
 	  if ($target_decl) {
 	    my $decl_is = $target_decl->get_decl_type;
@@ -1092,7 +1092,7 @@ sub table_name {
     confess("Couldn't determine table name for $decl with parent ".$decl->get_parent_decl."\n");
   }
   $path=~s{^/}{ '/'.$decl->get_schema->get_root_name.'/' }e;
-  $path = Tree_Query::Common::DeclPathToQueryType($path);
+  $path = PMLTQ::Common::DeclPathToQueryType($path);
   return rename_type($path,$no_rename);
 }
 

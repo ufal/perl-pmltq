@@ -83,8 +83,10 @@ use Treex::PML;
 use Treex::PML::Instance;
 use Treex::PML::Schema;
 BEGIN {
+  use File::Basename;
+  use PMLTQ;
   Treex::PML::AddResourcePath(
-			 File::Spec->catfile((fileparse($INC{File::Spec->catfile('PMLTQ','CGI.pm')}))[1],'resources'),
+			 File::Spec->catfile(PMLTQ->home(),'resources'),
 			 File::Spec->catfile(${FindBin::RealBin},'config'),
 			 $ENV{HOME}.'/.tred.d'
 			);

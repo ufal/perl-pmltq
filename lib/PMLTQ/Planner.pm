@@ -60,7 +60,7 @@ sub SeqV { ref($_[0]) ? $_[0]->elements : () }
 sub name_all_query_nodes {
   my ($tree)=@_;
   my @nodes = grep { $_->{'#name'} =~ /^(?:node|subquery)$/ } $tree->descendants;
-  my $max=0;
+  my $max=0;use Devel::StackTrace; print STDERR "--------------------------- STACK @_ \n".Devel::StackTrace->new->as_string."---------------------------\n";
   my %name2node = map {
     my $n=$_->{name};
     $max=$1+1 if $n=~/^n([0-9]+)$/ and $1>=$max;
@@ -96,7 +96,7 @@ sub reversed_rel {
   if ($name eq 'user-defined') {
     $name=$rel->value->{category}.':'.$rel->value->{label};
   }
-  my $rname = Tree_Query::Common::reversed_relation($name,$start_type);
+  my $rname = PMLTQ::Common::reversed_relation($name,$start_type);
   if (defined $rname) {
     my $relv = $rel->value;
     my $revv = Treex::PML::CloneValue($relv);
@@ -140,8 +140,8 @@ sub plan {
     my $n = $query_nodes->[$i];
     my $parent = $n->parent;
     my $p = $node2pos{$parent};
-    if (Tree_Query::Common::IsMemberNode($n)) {
-      while (defined($p) and Tree_Query::Common::IsMemberNode($parent)) {
+    if (PMLTQ::Common::IsMemberNode($n)) {
+      while (defined($p) and PMLTQ::Common::IsMemberNode($parent)) {
 	$parent = $parent->parent;
 	$p = $node2pos{$parent};
       }
@@ -161,7 +161,7 @@ sub plan {
       my $ref = Treex::PML::Factory->createNode();
       $ref->paste_on($parent);
       $ref->{'#name'} = 'ref';
-      Tree_Query::Common::DetermineNodeType($ref);
+      PMLTQ::Common::DetermineNodeType($ref);
       $ref->{relation}=Treex::PML::Factory->createSeq([$rel]);
       $ref->{target} = $n->{name};
     }

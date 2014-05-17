@@ -602,26 +602,26 @@ sub new {
       } elsif ($opts->{iterator}) {
         $iterator = $opts->{iterator}->new($conditions);
       } elsif ($opts->{tree}) {
-        $iterator = TreeIterator->new($conditions,$opts->{tree},$opts->{fsfile});
+        $iterator = PMLTQ::Relation::TreeIterator->new($conditions,$opts->{tree},$opts->{fsfile});
       } elsif ($opts->{fsfile}) {
-        $iterator = FSFileIterator->new($conditions,$opts->{fsfile});
+        $iterator = PMLTQ::Relation::FSFileIterator->new($conditions,$opts->{fsfile});
       } elsif ($opts->{current_filelist}) {
         if ($opts->{particular_trees}) {
-          $iterator = CurrentFilelistTreesIterator->new($conditions);
+          $iterator = PMLTQ::Relation::CurrentFilelistTreesIterator->new($conditions);
     ## TODO: think of better way of recognizing treex documents
   } elsif ($schema_root_name eq 'treex_document') {
-    $iterator = TreexFilelistIterator->new($conditions,$schema_root_name);
+    $iterator = PMLTQ::Relation::TreexFilelistIterator->new($conditions,$schema_root_name);
         } else {
-          $iterator = CurrentFilelistIterator->new($conditions,$schema_root_name);
+          $iterator = PMLTQ::Relation::CurrentFilelistIterator->new($conditions,$schema_root_name);
         }
       } else {
         if ($opts->{particular_trees}) {
-          $iterator = CurrentTreeIterator->new($conditions);
+          $iterator = PMLTQ::Relation::CurrentTreeIterator->new($conditions);
         }
   elsif ($schema_root_name eq 'treex_document') {
-    $iterator = TreexFileIterator->new($conditions,$schema_root_name);
+    $iterator = PMLTQ::Relation::TreexFileIterator->new($conditions,$schema_root_name);
         } else {
-          $iterator = CurrentFileIterator->new($conditions,$schema_root_name);
+          $iterator = PMLTQ::Relation::CurrentFileIterator->new($conditions,$schema_root_name);
         }
       }
     } else {
@@ -767,25 +767,25 @@ sub create_iterator {
   $target_type = join '/',map { ($_ eq '[]' or $_ eq 'content()') ? '#content' : $_ } split /\//, $target_type;
 
   if ($relation eq 'child') {
-    $iterator = ChildnodeIterator->new($conditions);
+    $iterator = PMLTQ::Relation::ChildnodeIterator->new($conditions);
   } elsif ($relation eq 'member') {
-    $iterator = MemberIterator->new($conditions,$target_type);
+    $iterator = PMLTQ::Relation::MemberIterator->new($conditions,$target_type);
   } elsif ($relation eq 'descendant') {
     my ($min,$max)=
       map { (defined($_) and length($_)) ? $_ : undef }
         map { $rel->value->{$_} }
           qw(min_length max_length);
     if (defined($min) or defined($max)) {
-      $iterator = DescendantIteratorWithBoundedDepth->new($conditions,$min,$max);
+      $iterator = PMLTQ::Relation::DescendantIteratorWithBoundedDepth->new($conditions,$min,$max);
     } else {
-      $iterator = DescendantIterator->new($conditions);
+      $iterator = PMLTQ::Relation::DescendantIterator->new($conditions);
     }
   } elsif ($relation eq 'parent') {
-    $iterator = ParentIterator->new($conditions);
+    $iterator = PMLTQ::Relation::ParentIterator->new($conditions);
   } elsif ($relation eq 'same-tree-as') {
-    $iterator = SameTreeIterator->new($conditions);
+    $iterator = PMLTQ::Relation::SameTreeIterator->new($conditions);
   } elsif ($relation eq 'same-document-as') {
-    $iterator = FSFileIterator->new($conditions);
+    $iterator = PMLTQ::Relation::FSFileIterator->new($conditions);
   } elsif ($relation eq 'order-precedes' or $relation eq 'order-follows') {
     my ($attr1,$attr2) =
       map {
@@ -805,7 +805,7 @@ sub create_iterator {
         map { $rel->value->{$_} }
           qw(min_length max_length);
     weaken( my $weak_self = $self );
-    $iterator = OrderIterator->new($conditions,$attr1,$attr2,
+    $iterator = PMLTQ::Relation::OrderIterator->new($conditions,$attr1,$attr2,
                                    (($relation eq 'order-follows') ? -1 : 1),
                                    $min,$max,
                                    sub { $weak_self->_compute_order_span($_[0]) }
@@ -816,9 +816,9 @@ sub create_iterator {
       map { $rel->value->{$_} } qw(min_length max_length);
     my @bounds = _compute_bounds(-1, $min,$max );
     if (@bounds) {
-      $iterator = DepthFirstRangeIterator->new($conditions,@bounds);
+      $iterator = PMLTQ::Relation::DepthFirstRangeIterator->new($conditions,@bounds);
     } else {
-      $iterator = DepthFirstFollowsIterator->new($conditions);
+      $iterator = PMLTQ::Relation::DepthFirstFollowsIterator->new($conditions);
     }
   } elsif ($relation eq 'depth-first-precedes') {
     my ($min,$max)=
@@ -826,9 +826,9 @@ sub create_iterator {
       map { $rel->value->{$_} } qw(min_length max_length);
     my @bounds = _compute_bounds(1, $min,$max );
     if (@bounds) {
-      $iterator = DepthFirstRangeIterator->new($conditions,@bounds);
+      $iterator = PMLTQ::Relation::DepthFirstRangeIterator->new($conditions,@bounds);
     } else {
-      $iterator = DepthFirstPrecedesIterator->new($conditions);
+      $iterator = PMLTQ::Relation::DepthFirstPrecedesIterator->new($conditions);
     }
   } elsif ($relation eq 'ancestor') {
     my ($min,$max)=
@@ -836,9 +836,9 @@ sub create_iterator {
         map { $rel->value->{$_} }
           qw(min_length max_length);
     if (defined($min) or defined($max)) {
-      $iterator = AncestorIteratorWithBoundedDepth->new($conditions,$min,$max);
+      $iterator = PMLTQ::Relation::AncestorIteratorWithBoundedDepth->new($conditions,$min,$max);
     } else {
-      $iterator = AncestorIterator->new($conditions);
+      $iterator = PMLTQ::Relation::AncestorIterator->new($conditions);
     }
   } elsif ($relation eq 'sibling') {
     my ($min,$max)=
@@ -846,9 +846,9 @@ sub create_iterator {
         map { $rel->value->{$_} }
           qw(min_length max_length);
     if (defined($min) or defined($max)) {
-      $iterator = SiblingIteratorWithDistance->new($conditions,$min,$max);
+      $iterator = PMLTQ::Relation::SiblingIteratorWithDistance->new($conditions,$min,$max);
     } else {
-      $iterator = SiblingIterator->new($conditions);
+      $iterator = PMLTQ::Relation::SiblingIterator->new($conditions);
     }
   } elsif ($relation eq 'user-defined') {
     my $label = $rel->value->{label};
@@ -863,7 +863,7 @@ sub create_iterator {
     unless (defined $iterator) {
       if (first { $_ eq $label }
             @{$self->{type_mapper}->get_pmlrf_relations($start_node)}) {
-        $iterator = PMLREFIterator->new($conditions,$label);
+        $iterator = PMLTQ::Relation::PMLREFIterator->new($conditions,$label);
       } else {
         die "user-defined relation '".$label."' unknown or not implemented in BTrEd Search\n"
       }
@@ -873,7 +873,7 @@ sub create_iterator {
       if ($start_node->{'node-type'} ne $target_type) {
         die "Cannot create transitive closure for relation with different start-node and end-node types: '$start_node->{q(node-type)}' -> '$target_type'\n";
       }
-      $iterator = TransitiveIterator->new($iterator,$min,$max);
+      $iterator = PMLTQ::Relation::TransitiveIterator->new($iterator,$min,$max);
     }
   } else {
     die "relation ".$relation." not valid for this node or not yet implemented \n"
@@ -882,7 +882,7 @@ sub create_iterator {
 
   if ($qn->{optional}) {
     print STDERR "iterator: [OPTIONAL]\n" if defined($DEBUG) and $DEBUG > 1;
-    return OptionalIterator->new($iterator);
+    return PMLTQ::Relation::OptionalIterator->new($iterator);
   } else {
     return $iterator;
   }

@@ -63,7 +63,8 @@ use List::Util qw(first);
 BEGIN {
   require PMLTQ::CGI;
   use File::Basename;
-  Treex::PML::AddResourcePathAsFirst(File::Spec->catfile((fileparse($INC{File::Spec->catfile('PMLTQ','CGI.pm')}))[1],'resources'));
+  use PMLTQ;
+  Treex::PML::AddResourcePathAsFirst(File::Spec->catfile(PMLTQ->home(),'resources'));
   Treex::PML::AddResourcePathAsFirst(grep length, @{$opts->{'resource-dir'}}) if @{$opts->{'resource-dir'}};
 }
 use PMLTQ::CGI;

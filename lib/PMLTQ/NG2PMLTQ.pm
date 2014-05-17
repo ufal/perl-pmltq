@@ -37,7 +37,7 @@ our $VERSION = '0.01';
 =head1 SYNOPSIS
 
 
-   use Tree_Query::NG2PMLTQ qw(ng2pmtq);
+   use PMLTQ::NG2PMLTQ qw(ng2pmtq);
    my $pmltq_query_string = ng2pmltq( $netgraph_query_string, { options });
 
 =head1 DESCRIPTION
