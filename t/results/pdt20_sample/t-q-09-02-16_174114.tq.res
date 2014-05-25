@@ -1,0 +1,4 @@
+CPHR	2
+RSTR	6
+PAT	8
+ACT	90

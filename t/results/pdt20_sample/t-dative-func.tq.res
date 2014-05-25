@@ -1,0 +1,5 @@
+BEN	2
+CPR	2
+PAT	2
+ADDR	6
+RSTR	6
