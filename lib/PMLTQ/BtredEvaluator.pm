@@ -431,6 +431,9 @@ sub new {
     });
     PMLTQ::Common::DetermineNodeType($_) for $query_tree->descendants;
   }
+print STDERR "\t",$query_tree,"\n";
+print STDERR "\t",$query_tree->type,"\n";
+print STDERR "\t",$query_tree->type->get_base_type_name,"\n";
 
   my $type = $query_tree->type->get_base_type_name;
   unless ($type eq 'q-query.type' or
@@ -451,7 +454,6 @@ sub new {
     $roots = [$query_tree];
   } else {
     require PMLTQ::Planner;
-
     if ($clone_before_plan) {
       $query_tree=Treex::PML::FSFormat->clone_subtree($query_tree);
     }
@@ -1949,7 +1951,7 @@ sub serialize_conditions {
     }
     $optional = '$matched_nodes->['.$self->{pos2match_pos}[$parent_pos].']';
   }
-  if ($conditions=~/\S/) {
+  if ($conditions and $conditions=~/\S/) {
     if (defined $optional) {
       $conditions='('.$optional.'==$node or '.$conditions.')';
     }

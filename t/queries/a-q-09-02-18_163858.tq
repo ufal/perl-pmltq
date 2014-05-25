@@ -1,6 +1,0 @@
-a-node $v := 
-[ m/tag ~ '^V', echild a-node 
-     [ afun = "Obj", m/tag ~ '^....3' ], 
-     echild a-node $n3 := 
-     [ afun = "Obj", m/tag ~ '^....4' ] ];
-  >> for $v.m/lemma give $1,count() sort by $2,$1

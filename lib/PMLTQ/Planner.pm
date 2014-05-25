@@ -60,12 +60,13 @@ sub SeqV { ref($_[0]) ? $_[0]->elements : () }
 sub name_all_query_nodes {
   my ($tree)=@_;
   my @nodes = grep { $_->{'#name'} =~ /^(?:node|subquery)$/ } $tree->descendants;
-  my $max=0;use Devel::StackTrace; print STDERR "--------------------------- STACK @_ \n".Devel::StackTrace->new->as_string."---------------------------\n";
+  my $max=0;use Devel::StackTrace;
   my %name2node = map {
     my $n=$_->{name};
-    $max=$1+1 if $n=~/^n([0-9]+)$/ and $1>=$max;
+    $max=$1+1 if defined($n) and $n=~/^n([0-9]+)$/ and $1>=$max;
     (defined($n) and length($n)) ? ($n=>$_) : ()
   } @nodes;
+  
   my $name = 'n0';
   for my $node (@nodes) {
     my $n=$node->{name};

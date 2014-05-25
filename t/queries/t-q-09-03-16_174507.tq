@@ -1,6 +1,0 @@
-t-node $n0 := 
-[ functor = "PRED", 0x echild t-node $n1 := 
-     [ functor = "ORIG" ], 
-     echild t-node $n2 := 
-     [ functor = "EFF" ] ];
-  >> give $n0.id,$n2.id sort by $1,$2
