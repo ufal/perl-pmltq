@@ -26,12 +26,18 @@ opendir my $dh, $treebanks_dir or die "Couldn't open dir '$treebanks_dir': $!";
 my @treebanks = grep { !/^\./ } readdir $dh; # all files except the one beginning with dot
 close $dh;
 
+
+
+
 BEGIN {
   my @resources = (
     File::Spec->catfile(PMLTQ->home, 'resources'), # resources for PML-TQ
     glob(File::Spec->catfile($FindBin::RealBin,'treebanks', '*', 'resources')) # Load required resources for all tested treebanks
   );
   Treex::PML::AddResourcePath(@resources);
+
+#$SIG{__WARN__} = sub { use Devel::StackTrace; print STDERR "--------------------------- STACK @_ \n".Devel::StackTrace->new->as_string."---------------------------\n"; die; };
+
 }
 
 sub init_search {
@@ -135,6 +141,7 @@ sub runquery {
 
 sub openFile {
   my ($filename)=@_;
+  print STDERR "OPEN\t$filename\n";
   Treex::PML::AddResourcePath(File::Spec->catfile((File::Basename::fileparse($filename))[1],'..', 'resources'));
   my $fsfile = Treex::PML::Factory->createDocumentFromFile($filename,{backends => TredMacro::Backends()});
   if ($Treex::PML::FSError) {
@@ -163,61 +170,70 @@ my $fsfile = openFile(shift @files);
 
 my $evaluator;
 
-eval {$evaluator = PMLTQ::BtredEvaluator->new($query, {
+eval {
+  $evaluator = PMLTQ::BtredEvaluator->new($query, {
   fsfile => $fsfile,
   # tree => $fsfile->tree(0), # query only a specific tree
   # no_plan => 1, # do not let the planner rewrite my query
                   # in this case, the query must not be a forest!
-});};
+});
+};
 ok($evaluator, "create evaluator ($name) on $treebank");
-warn $@ if $@;
+#warn $@ if $@;
 unless($@)
 {
-binmode STDOUT, ':utf8';
+  binmode STDOUT, ':utf8';
 
-# iterate over several files (or maybe several scattered trees)
-sub next_file {
-  my ($files)=@_;
-  return unless @$files;
-  $fsfile = openFile(shift @$files);
-  # reusing the evaluator for next file
-  my $iter = $evaluator->get_first_iterator;
-  $iter->set_file($fsfile);
-  # $iter->set_tree($fsfile->tree(0)); # if tree searching a specific tree
-  $evaluator->reset(); # prepare for next file
-  return 1
-}
+  # iterate over several files (or maybe several scattered trees)
+  sub next_file {
+    my ($files)=@_;
+    return unless @$files;
+    $fsfile = openFile(shift @$files);
+    # reusing the evaluator for next file
+    my $iter = $evaluator->get_first_iterator;
+    $iter->set_file($fsfile);
+    # $iter->set_tree($fsfile->tree(0)); # if tree searching a specific tree
+    $evaluator->reset(); # prepare for next file
+    return 1
+  }
 
-# running the query and print results
-if ($evaluator->get_filters()) {
-  # query with filters (produces text output)
-
-  ## customize output from the final filter
-  $evaluator->init_filters({
-    init => sub { print("-" x 60, " $name\n") },
-    process_row => sub { my ($self,$row)=@_; print(join("\t",@$row)."\n"); $result.=join("\t",@$row)."\n";},
-    finish => sub { print("-" x 60, "\n"); }
-   });
-  do {{
+  # running the query and print results
+  if ($evaluator->get_filters()) {
+    # query with filters (produces text output)
+    ## customize output from the final filter
+    $evaluator->init_filters({
+      init => sub { 
+        #print("-" x 60, " $name\n") 
+        },
+      process_row => sub { 
+        my ($self,$row)=@_; 
+        #print("RESULT: ",join("\t",@$row)."\n");
+        $result.=join("\t",@$row)."\n"; },
+      finish => sub { 
+        #print("-" x 60, "\n"); 
+        }
+    });
+    do {{
     $evaluator->run_filters while $evaluator->find_next_match(); # feed the filter pipe
-  }} while (next_file(\@files));
-  $evaluator->flush_filters; # flush the pipe
-
-} else {
-    # query without a fitlter (just selects nodes)
+    }} while (next_file(\@files));
+    $evaluator->flush_filters; # flush the pipe
+  } else {
+      # query without a fitlter (just selects nodes)
   do {{
-    while ($evaluator->find_next_match()) {
+      while ($evaluator->find_next_match()) {
       # get whatever data
-
-      ## named query node:
-      # print $evaluator->get_result_node('n')->attr('id')."\n";
-
+    
+        ## named query node:
+        # print $evaluator->get_result_node('n')->attr('id')."\n";
+  
       ## the order of columns may be differnt than the order of query nodes
-      ## since the query can be rewritten by the planner
-      print join("\t", map $_->attr('id'), @{$evaluator->get_results})."\n";
-    }
-  }} while (next_file(\@files));
-}
+        ## since the query can be rewritten by the planner
+        #print join("\t", map $_->attr('id'), @{$evaluator->get_results})."\n";
+        $result.=join("\t", map $_->attr('id'), @{$evaluator->get_results})."\n";
+        
+      }
+    }} while (next_file(\@files));
+  }
 }
 print STDERR File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res"),"\n";
   open my $fh, '<:utf8', File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res") or die "Can't open result file: $name.res\n";
@@ -270,7 +286,7 @@ for my $treebank (@treebanks) {
     #map {`export TREDLIB=/opt/tred/tredlib; perl /opt/pmltq/engine/contrib/pmltq_nobtred.pl -f $qfile  $_`} @files;
     #die "Use contrib/pmltq_nobtred.pl to run queries";
     #my $evaluator = init_search($query, );
-    my @files = glob(File::Spec->catfile($treebanks_dir, $treebank, 'data', "*$layer.gz"));
+    my @files = glob(File::Spec->catfile($treebanks_dir, $treebank, 'data', "*.$layer.gz"));
     open my $fh, '<:utf8', $query->get_id() || die "Cannot open query file ".$query->get_id().": $!\n";
     local $/;
     $query = <$fh>;

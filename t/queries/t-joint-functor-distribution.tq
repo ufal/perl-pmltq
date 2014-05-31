@@ -1,5 +1,0 @@
-# Které dvojice funktorů nejčastěji stojí na efektivní hraně
-t-node $p := 
-[ echild t-node $c := [  ] ];
-  >> for $p.functor,$c.functor give $1,$2,ratio(count() over $1) sort by $1,$3 desc,$2
-  >> give $1,$2,percnt($3,2)
