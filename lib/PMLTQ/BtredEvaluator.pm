@@ -454,8 +454,8 @@ sub new {
 =xx    
     if ($clone_before_plan) {
       use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 3;print Dumper $query_tree;
-      $query_tree=Treex::PML::Factory->createFSFormat()->clone_subtree($query_tree);
-      #$query_tree=Treex::PML::FSFormat->clone_subtree($query_tree);
+      #$query_tree=Treex::PML::Factory->createFSFormat()->clone_subtree($query_tree); ???????
+      $query_tree=Treex::PML::FSFormat->clone_subtree($query_tree);
     }
 =cut    
     @query_nodes=PMLTQ::Common::FilterQueryNodes($query_tree); # same order as @orig_nodes

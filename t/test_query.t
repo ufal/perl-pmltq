@@ -36,7 +36,8 @@ BEGIN {
   );
   Treex::PML::AddResourcePath(@resources);
 
-#$SIG{__WARN__} = sub { use Devel::StackTrace; print STDERR "--------------------------- STACK @_ \n".Devel::StackTrace->new->as_string."---------------------------\n"; die; };
+$SIG{__WARN__} = sub { use Devel::StackTrace; print STDERR "--------------------------- STACK @_ \n".Devel::StackTrace->new->as_string."---------------------------\n";  };
+#$SIG{__DIE__} = sub { use Devel::StackTrace; print STDERR "--------------------------- STACK @_ \n".Devel::StackTrace->new->as_string."---------------------------\n";  die;};
 
 }
 
@@ -99,8 +100,7 @@ sub runquery {
 	 #$RealBin.'/../libs/pml-base',
 	 #$RealBin.'/../libs/pmltq',
 	 $RealBin.'/../lib', ## PMLTQ
-	 ((do { chomp($ENV{TREDLIB}||=`btred -q --lib`); 1 } && $ENV{TREDLIB} && -d $ENV{TREDLIB}) ? $ENV{TREDLIB} :
-	   die "Please set the TREDLIB environment variable to point to tred/tredlib!\n")
+	 #((do { chomp($ENV{TREDLIB}||=`btred -q --lib`); 1 } && $ENV{TREDLIB} && -d $ENV{TREDLIB}) ? $ENV{TREDLIB} : die "Please set the TREDLIB environment variable to point to tred/tredlib!\n")
 	);
 
   use Treex::PML;
@@ -108,11 +108,103 @@ sub runquery {
   Treex::PML::UseBackends(qw(Storable PMLBackend PMLTransformBackend));
 
   {
+    package Tred::File;
+    sub get_secondary_files {
+    my ($fsfile) = @_;
+
+    # is probably the same as Treex::PML::Document->relatedDocuments()
+    # a reference to a list of pairs (id, URL)
+    my $requires = $fsfile->metaData('fs-require');
+    my @secondary;
+    if ($requires) {
+        foreach my $req (@$requires) {
+            my $id = $req->[0];
+            my $req_fs
+                = ref( $fsfile->appData('ref') )
+                ? $fsfile->appData('ref')->{$id}
+                : undef;
+            if ( UNIVERSAL::DOES::does( $req_fs, 'Treex::PML::Document' ) ) {
+                push( @secondary, $req_fs );
+            }
+        }
+    }
+    return uniq(@secondary);
+    }  
+  }
+  {
     package TredMacro;
+
     ### DOIMPLEMENTOVAT POTŘEBNÉ METODY
-    use TrEd::Basics;
-    use TrEd::MacroAPI::Default;
+    #use TrEd::Basics;
+    #use TrEd::MacroAPI::Default;
     no warnings qw(redefine);
+
+    sub Backends {
+      return ();
+    }
+    
+    sub GetSecondaryFiles {
+      my ($fsfile) = @_;
+      $fsfile ||= CurrentFile(); ### TODO ???
+      return
+          exists(&TrEd::File::get_secondary_files) 
+          ? TrEd::File::get_secondary_files($fsfile)
+          : ();
+    }
+    sub CurrentFile {
+      shift if !ref $_[0];
+      my $win = shift || $grp;
+      my ($package, $filename, $line) = caller;
+      # print "CurrentFile: win=$win called from $package $line ($filename )\n";
+      if ($win) {
+        return $win->{FSFile};
+      }
+    }
+    sub ThisAddress {
+      my ( $f, $i, $n, $id ) = &LocateNode;
+      if ( $i == 0 and $id ) {
+        return $f . '#' . $id;
+      }
+      else {
+        return $f . '##' . $i . '.' . $n;
+      }
+    }
+    
+    sub LocateNode {
+      my $node
+        = ref( $_[0] ) ? $_[0]
+        : @_           ? confess("Cannot get position of an undefined node")
+        :                $this;
+      my $fsfile = ref( $_[1] ) ? $_[1] : CurrentFile();
+      return unless ref $node;
+      my $tree = $node->root;  
+      if ( $fsfile == CurrentFile() and $tree == $root ) { ## $root is not initialized !!!
+        return ( FileName(), CurrentTreeNumber() + 1, GetNodeIndex($node) );
+      }
+      else {
+        my $i = 1;
+        foreach my $t ( $fsfile->trees ) {
+            if ( $t == $tree ) {
+                return ( $fsfile->filename, $i, GetNodeIndex($node) );
+            }
+            $i++;
+        }
+        my $type = $node->type;
+        my ($id_attr) = $type && $type->find_members_by_role('#ID');
+        return ( $fsfile->filename, 0, GetNodeIndex($node),
+            $id_attr && $node->{ $id_attr->get_name } );
+      }
+    }
+    
+    sub GetNodeIndex {
+      my $node = ref( $_[0] ) ? $_[0] : $this;
+      my $i = -1;
+      while ($node) {
+        $node = $node->previous();
+        $i++;
+      }
+      return $i;
+    }
     sub DetermineNodeType {
       my ($node)=@_;
       Treex::PML::Document->determine_node_type($node);
@@ -145,8 +237,8 @@ sub runquery {
 sub openFile {
   my $filename=shift;
   Treex::PML::AddResourcePath(File::Spec->catfile((File::Basename::fileparse($filename))[1],'..', 'resources'));
-  print "OPENING FILE\t$filename\n";
-  print STDERR "BACKEND:*",TredMacro::Backends(),"*\n",@{Treex::PML::Factory->createDocumentFromFile($filename,{backends => TredMacro::Backends()})},"\n";
+  #print "OPENING FILE\t$filename\n";
+  #print STDERR "BACKEND:*",TredMacro::Backends(),"*\n",@{Treex::PML::Factory->createDocumentFromFile($filename,{backends => TredMacro::Backends()})},"\n";
   my $fsfile = Treex::PML::Factory->createDocumentFromFile($filename,{backends => TredMacro::Backends()});
   if ($Treex::PML::FSError) {
     die "Error loading file $filename: $Treex::PML::FSError ($!)\n";
@@ -183,7 +275,7 @@ eval {
 });
 };
 ok($evaluator, "create evaluator ($name) on $treebank");
-#warn $@ if $@;
+warn $@ if $@;
 #die;
 unless($@)
 {
@@ -257,7 +349,7 @@ print File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res"),"\
   print join("\n" , map {"$a[$_]\t$b[$_]"} (0 .. $#a));
 =cut  
   ok($result eq $string, "query evaluation ($name) on $treebank");
-
+#print STDERR "CONTINUE:";<>;
 }
 
 ################
@@ -306,9 +398,9 @@ for my $treebank (@treebanks) {
     #die "Use contrib/pmltq_nobtred.pl to run queries";
     #my $evaluator = init_search($query, );
     my @files = glob(File::Spec->catfile($treebanks_dir, $treebank, 'data', "*.$layer.gz"));
-    #open my $fh, '<:utf8', $query->get_id() || die "Cannot open query file ".$query->get_id().": $!\n";
-    #local $/;
-    #$query = <$fh>;
+    open my $fh, '<:utf8', $query->get_id() || die "Cannot open query file ".$query->get_id().": $!\n";
+    local $/;
+    $query = <$fh>;
     ###$query = PMLTQ::Common::parse_query($query);
     runquery($query,$treebank,basename($qfile),@files);# if $qfile =~ m/$ENV{XXX}/;
     #die if $qfile =~ m/$ENV{XXX}/;
