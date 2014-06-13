@@ -1166,6 +1166,7 @@ sub compute_expression_data_type_pt {
     } elsif ($pt=~/^\$/) {
       my $var = $pt; $var=~s/^\$//;
       if ($var =~ /^[1-9][0-9]*$/) {
+	use Data::Dumper;$Data::Dumper::Deparse = 1;print STDERR "COLUMN_TYPES: \$opts->{column_types}=", Dumper($opts->{column_types}),"\$var=$var\n";
 	return $opts->{column_types}[$var - 1];
       } elsif ($var eq '$') {
 	return UNIVERSAL::DOES::does($self,'PMLTQ::SQLEvaluator') ? COL_NUMERIC :  COL_UNKNOWN;

@@ -69,7 +69,7 @@ print "QUERY: $query\n";
   return PMLTQ::BtredEvaluator->new($query, {
     #type_mapper => PMLTQ::TypeMapper->new({file=>$filename}),
     fsfile => $fsfile,
-    plan => 1,
+    #plan => 0,
   });
 }
 
@@ -79,7 +79,7 @@ print "QUERY: $query\n";
 
 
 
-#############x
+#############
 
 sub runquery {
   my $query = shift;
@@ -92,7 +92,9 @@ sub runquery {
   # Code to provide stuff required from btred
   #####################
   use FindBin qw($RealBin);
-  use lib (#$RealBin.'/../libs/fslib',
+  
+  
+  use lib (#$RealBin.'/../libs/fslib', ### MOŽNÁ ZKUSIT CELÉ ZAKOMENTOVAT
          '/opt/pmltq/engine/libs/fslib',
 	 #$RealBin.'/../libs/pml-base',
 	 #$RealBin.'/../libs/pmltq',
@@ -107,6 +109,7 @@ sub runquery {
 
   {
     package TredMacro;
+    ### DOIMPLEMENTOVAT POTŘEBNÉ METODY
     use TrEd::Basics;
     use TrEd::MacroAPI::Default;
     no warnings qw(redefine);
@@ -140,9 +143,10 @@ sub runquery {
 # open a data file and related files on lower layers
 
 sub openFile {
-  my ($filename)=@_;
-  print STDERR "OPEN\t$filename\n";
+  my $filename=shift;
   Treex::PML::AddResourcePath(File::Spec->catfile((File::Basename::fileparse($filename))[1],'..', 'resources'));
+  print "OPENING FILE\t$filename\n";
+  print STDERR "BACKEND:*",TredMacro::Backends(),"*\n",@{Treex::PML::Factory->createDocumentFromFile($filename,{backends => TredMacro::Backends()})},"\n";
   my $fsfile = Treex::PML::Factory->createDocumentFromFile($filename,{backends => TredMacro::Backends()});
   if ($Treex::PML::FSError) {
     die "Error loading file $filename: $Treex::PML::FSError ($!)\n";
@@ -180,6 +184,7 @@ eval {
 };
 ok($evaluator, "create evaluator ($name) on $treebank");
 #warn $@ if $@;
+#die;
 unless($@)
 {
   binmode STDOUT, ':utf8';
@@ -206,6 +211,8 @@ unless($@)
         #print("-" x 60, " $name\n") 
         },
       process_row => sub { 
+        #use warnings;
+        #use strict 'refs';
         my ($self,$row)=@_; 
         #print("RESULT: ",join("\t",@$row)."\n");
         $result.=join("\t",@$row)."\n"; },
@@ -235,9 +242,20 @@ unless($@)
     }} while (next_file(\@files));
   }
 }
-print STDERR File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res"),"\n";
+print File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res"),"\n";
   open my $fh, '<:utf8', File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res") or die "Can't open result file: $name.res\n";
+  local $/=undef;
   my $string = <$fh>;
+  print "         RESULT: '",sprintf("%20.20s",$result),"'\n";
+  print "EXPECTED RESULT: '",sprintf("%20.20s",$string),"'\n";
+=xxx  
+  my @a=split("\n",$result);
+  my @b=split("\n",$string);
+  print "A=",@a,"\n";
+  print "B=",@b,"\n";
+  
+  print join("\n" , map {"$a[$_]\t$b[$_]"} (0 .. $#a));
+=cut  
   ok($result eq $string, "query evaluation ($name) on $treebank");
 
 }
@@ -280,6 +298,7 @@ for my $file (@files) {
 for my $treebank (@treebanks) {
   
   for my $query ($doc->trees) {
+    # PŘÍMO DOTAZ VRAZIT DO EVALUATORU
     print "QUERY:\t",$query->get_id(),"\n";
     my $qfile = $query->get_id();
     my ($layer) = basename($qfile) =~ m/^(.)/;
@@ -287,10 +306,12 @@ for my $treebank (@treebanks) {
     #die "Use contrib/pmltq_nobtred.pl to run queries";
     #my $evaluator = init_search($query, );
     my @files = glob(File::Spec->catfile($treebanks_dir, $treebank, 'data', "*.$layer.gz"));
-    open my $fh, '<:utf8', $query->get_id() || die "Cannot open query file ".$query->get_id().": $!\n";
-    local $/;
-    $query = <$fh>;
-    runquery($query,$treebank,basename($qfile),@files);
+    #open my $fh, '<:utf8', $query->get_id() || die "Cannot open query file ".$query->get_id().": $!\n";
+    #local $/;
+    #$query = <$fh>;
+    ###$query = PMLTQ::Common::parse_query($query);
+    runquery($query,$treebank,basename($qfile),@files);# if $qfile =~ m/$ENV{XXX}/;
+    #die if $qfile =~ m/$ENV{XXX}/;
   }
 }
 

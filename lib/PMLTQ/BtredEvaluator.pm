@@ -431,9 +431,6 @@ sub new {
     });
     PMLTQ::Common::DetermineNodeType($_) for $query_tree->descendants;
   }
-print STDERR "\t",$query_tree,"\n";
-print STDERR "\t",$query_tree->type,"\n";
-print STDERR "\t",$query_tree->type->get_base_type_name,"\n";
 
   my $type = $query_tree->type->get_base_type_name;
   unless ($type eq 'q-query.type' or
@@ -454,9 +451,13 @@ print STDERR "\t",$query_tree->type->get_base_type_name,"\n";
     $roots = [$query_tree];
   } else {
     require PMLTQ::Planner;
+=xx    
     if ($clone_before_plan) {
-      $query_tree=Treex::PML::FSFormat->clone_subtree($query_tree);
+      use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 3;print Dumper $query_tree;
+      $query_tree=Treex::PML::Factory->createFSFormat()->clone_subtree($query_tree);
+      #$query_tree=Treex::PML::FSFormat->clone_subtree($query_tree);
     }
+=cut    
     @query_nodes=PMLTQ::Common::FilterQueryNodes($query_tree); # same order as @orig_nodes
     %orig2query = map { $orig_nodes[$_] => $query_nodes[$_] } 0..$#orig_nodes;
     PMLTQ::Planner::name_all_query_nodes($query_tree); # need for planning
@@ -607,7 +608,7 @@ print STDERR "\t",$query_tree->type->get_base_type_name,"\n";
         $iterator = PMLTQ::Relation::TreeIterator->new($conditions,$opts->{tree},$opts->{fsfile});
       } elsif ($opts->{fsfile}) {
         $iterator = PMLTQ::Relation::FSFileIterator->new($conditions,$opts->{fsfile});
-      } elsif ($opts->{current_filelist}) {
+      } elsif ($opts->{current_filelist}) {    ## 
         if ($opts->{particular_trees}) {
           $iterator = PMLTQ::Relation::CurrentFilelistTreesIterator->new($conditions);
     ## TODO: think of better way of recognizing treex documents
@@ -899,6 +900,7 @@ sub serialize_filters {
   my @filters;
   for my $f (PMLTQ::Common::merge_filters_2($filters)) {
     $opts->{filter_id} = "filter_".scalar(@filters);
+use Data::Dumper;$Data::Dumper::Deparse = 1;print STDERR "serialize_filterS COLUMN_TYPES: \$opts->{column_types}=", Dumper($opts->{column_types})," FILTER_ID=$opts->{filter_id}\n";  
     push @filters, $self->serialize_filter($f,$opts); # can return multiple filters
   }
   for my $filter (@filters) {
@@ -1307,6 +1309,7 @@ sub _code_from_template {
 
 sub serialize_filter {
   my ($self, $filter, $opts)=@_;
+  	use Data::Dumper;$Data::Dumper::Deparse = 1;print STDERR "serialize_filter COLUMN_TYPES: \$opts->{column_types}=", Dumper($opts->{column_types}),"\n";
 
   # $filter->{group-by}
   # $filter->{distinct}
@@ -1356,6 +1359,7 @@ sub serialize_filter {
 
   use Data::Dumper;
   # print STDERR Dumper({having=>$having});
+
   my $having_exp = ref($having) && $self->serialize_element({
     %$opts,
     name=>'and',
@@ -2063,14 +2067,18 @@ sub serialize_test {
   } else {
     $condition='('.$left.' '.$operator.' '.$right.')';
   }
+  use Devel::StackTrace; print STDERR "--------------------------- STACK @_ \n".Devel::StackTrace->new->as_string."---------------------------\n";
+  print STDERR "CONDITION:  $condition\tleft_type=$left_type\tright_type=$right_type\n";
   return $condition;
 }
 
 sub serialize_element {
   my ($self,$opts)=@_;
+  	use Data::Dumper;$Data::Dumper::Deparse = 1;print STDERR "serialize_element COLUMN_TYPES: \$opts->{column_types}=", Dumper($opts->{column_types}),"\n";
+
   my ($name,$node)=map {$opts->{$_}} qw(name condition);
   my $pos = $opts->{query_pos};
-  my $match_pos = $self->{pos2match_pos}[$pos];
+  my $match_pos = $self->{pos2match_pos}[$pos]; #WARN Use of uninitialized value $pos in array element (same bug is in original implementation)
   if ($name eq 'test') {
     my %depends_on;
     my $foreach = [];
@@ -2078,6 +2086,8 @@ sub serialize_element {
     my $condition;
     if ($opts->{output_filter}) { #  and $opts->{output_filter_where_clause}
       my ($left_pt, $right_pt) = map PMLTQ::Common::parse_column_expression($node->{$_}), qw(a b);
+print STDERR "LEFT_PT: $left_pt\n";      
+print STDERR "RIGHT_PT: $right_pt\n";      
       ($left_type,$right_type)=map $self->compute_expression_data_type_pt($_,$opts), ($left_pt,$right_pt);
       $left = $self->serialize_expression_pt($left_pt,
                                       {%$opts,
@@ -2144,7 +2154,7 @@ sub serialize_element {
     my $target_pos = Treex::PML::Index($self->{pos2match_pos},$target_match_pos);
     if (defined $target_pos) {
       # target node in the same sub-query
-      if ($target_pos<=$pos) {
+      if ($target_pos<=$pos) { #WARN Use of uninitialized value $pos in numeric le (<=)
         return $condition;
       } elsif ($target_pos>$pos) {
         $opts->{recompute_condition}[$target_match_pos]{$pos}=1;
