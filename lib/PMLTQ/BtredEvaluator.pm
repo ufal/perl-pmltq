@@ -411,7 +411,7 @@ sub new {
     if ($opts->{fsfile}) {
       $self->{type_mapper}=PMLTQ::TypeMapper->new({fsfile=>$opts->{fsfile}});
     } elsif ($opts->{current_filelist} or $opts->{current_filelist_trees}) {
-      $self->{type_mapper}=$self->{type_mapper}=PMLTQ::TypeMapper->new({filelist=>TredMacro::GetCurrentFileList()});
+      $self->{type_mapper}=PMLTQ::TypeMapper->new({filelist=>TredMacro::GetCurrentFileList()});
     } elsif ($opts->{tree} or $opts->{iterator}) {
       croak(__PACKAGE__."->new: missing required option: type_mapper");
     } else {
@@ -608,7 +608,7 @@ sub new {
         $iterator = PMLTQ::Relation::TreeIterator->new($conditions,$opts->{tree},$opts->{fsfile});
       } elsif ($opts->{fsfile}) {
         $iterator = PMLTQ::Relation::FSFileIterator->new($conditions,$opts->{fsfile});
-      } elsif ($opts->{current_filelist}) {    ## 
+      } elsif ($opts->{current_filelist}) {
         if ($opts->{particular_trees}) {
           $iterator = PMLTQ::Relation::CurrentFilelistTreesIterator->new($conditions);
     ## TODO: think of better way of recognizing treex documents

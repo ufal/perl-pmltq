@@ -16,6 +16,8 @@ use File::Spec ();
 use File::Basename;
 use FindBin;
 
+my $tmp = 0;
+
 $PMLTQ::BtredEvaluator::DEBUG//=0;
 
 # list of available user defined relations (this should be compiled automatically based on tred extensions)
@@ -36,7 +38,7 @@ BEGIN {
   );
   Treex::PML::AddResourcePath(@resources);
 
-$SIG{__WARN__} = sub { use Devel::StackTrace; print STDERR "--------------------------- STACK @_ \n".Devel::StackTrace->new->as_string."---------------------------\n";  };
+#$SIG{__WARN__} = sub { use Devel::StackTrace; print STDERR "--------------------------- STACK @_ \n".Devel::StackTrace->new->as_string."---------------------------\n";  };
 #$SIG{__DIE__} = sub { use Devel::StackTrace; print STDERR "--------------------------- STACK @_ \n".Devel::StackTrace->new->as_string."---------------------------\n";  die;};
 
 }
@@ -96,7 +98,7 @@ sub runquery {
   
   
   use lib (#$RealBin.'/../libs/fslib', ### MOŽNÁ ZKUSIT CELÉ ZAKOMENTOVAT
-         '/opt/pmltq/engine/libs/fslib',
+         #'/opt/pmltq/engine/libs/fslib',
 	 #$RealBin.'/../libs/pml-base',
 	 #$RealBin.'/../libs/pmltq',
 	 $RealBin.'/../lib', ## PMLTQ
@@ -110,13 +112,13 @@ sub runquery {
   {
     package Tred::File;
     sub get_secondary_files {
-    my ($fsfile) = @_;
+      my ($fsfile) = @_;
 
-    # is probably the same as Treex::PML::Document->relatedDocuments()
-    # a reference to a list of pairs (id, URL)
-    my $requires = $fsfile->metaData('fs-require');
-    my @secondary;
-    if ($requires) {
+      # is probably the same as Treex::PML::Document->relatedDocuments()
+      # a reference to a list of pairs (id, URL)
+      my $requires = $fsfile->metaData('fs-require');
+      my @secondary;
+      if ($requires) {
         foreach my $req (@$requires) {
             my $id = $req->[0];
             my $req_fs
@@ -127,40 +129,56 @@ sub runquery {
                 push( @secondary, $req_fs );
             }
         }
-    }
-    return uniq(@secondary);
+      }
+      return uniq(@secondary);
     }  
   }
+  
   {
     package TredMacro;
 
     ### DOIMPLEMENTOVAT POTŘEBNÉ METODY
+    #use lib ('/home/matyas/Documents/UFAL/PMLTQ/tredlib');
     #use TrEd::Basics;
     #use TrEd::MacroAPI::Default;
-    no warnings qw(redefine);
-
-    sub Backends {
-      return ();
+    #no warnings qw(redefine);
+    sub reset {
+      print STDERR "RESETTING!!!\n";
+      #$grp = undef;
+      #$this = undef;
+      #$root = undef;
     }
     
+    sub Backends {
+      print STDERR "\t\tBackends\t\tCALL:\t",join(" ",caller),"\n";
+      return ();
+    }
+
     sub GetSecondaryFiles {
       my ($fsfile) = @_;
+      print STDERR "\t\tGetSecondaryFiles (@$fsfile)\t\tCALL:\t",join(" ",caller),"\n";
+      use Devel::StackTrace; print STDERR "--------------------------- STACK @_ \n".Devel::StackTrace->new->as_string."---------------------------\n";
+      
       $fsfile ||= CurrentFile(); ### TODO ???
       return
           exists(&TrEd::File::get_secondary_files) 
           ? TrEd::File::get_secondary_files($fsfile)
           : ();
     }
+=x    
     sub CurrentFile {
       shift if !ref $_[0];
+      print STDERR "\t\tCurrentFile\t\tCALL:\t",join(" ",caller),"\n";
       my $win = shift || $grp;
-      my ($package, $filename, $line) = caller;
-      # print "CurrentFile: win=$win called from $package $line ($filename )\n";
       if ($win) {
         return $win->{FSFile};
       }
     }
+=cut
+
+=x    
     sub ThisAddress {
+      print STDERR "\t\tThisAddress\t\tCALL:\t",join(" ",caller),"\n";
       my ( $f, $i, $n, $id ) = &LocateNode;
       if ( $i == 0 and $id ) {
         return $f . '#' . $id;
@@ -169,8 +187,10 @@ sub runquery {
         return $f . '##' . $i . '.' . $n;
       }
     }
-    
+=cut
+=x    
     sub LocateNode {
+      print STDERR "\t\tLocateNode\t\tCALL:\t",join(" ",caller),"\n";
       my $node
         = ref( $_[0] ) ? $_[0]
         : @_           ? confess("Cannot get position of an undefined node")
@@ -195,8 +215,10 @@ sub runquery {
             $id_attr && $node->{ $id_attr->get_name } );
       }
     }
-    
+=cut
+=x    
     sub GetNodeIndex {
+      print STDERR "\t\tGetNodeIndex\t\tCALL:\t",join(" ",caller),"\n";
       my $node = ref( $_[0] ) ? $_[0] : $this;
       my $i = -1;
       while ($node) {
@@ -205,10 +227,15 @@ sub runquery {
       }
       return $i;
     }
+=cut
+=x
     sub DetermineNodeType {
       my ($node)=@_;
+      print STDERR "\t\tDetermineNodeType\t\tCALL:\t",join(" ",caller),"\n";
       Treex::PML::Document->determine_node_type($node);
-    }
+    }  
+=cut
+
   }
   
   {
@@ -231,13 +258,14 @@ sub runquery {
   package main;
   use utf8;
 
+
 #####################################################
 # open a data file and related files on lower layers
 
 sub openFile {
   my $filename=shift;
   Treex::PML::AddResourcePath(File::Spec->catfile((File::Basename::fileparse($filename))[1],'..', 'resources'));
-  #print "OPENING FILE\t$filename\n";
+  print "OPENING FILE\t$filename\n";
   #print STDERR "BACKEND:*",TredMacro::Backends(),"*\n",@{Treex::PML::Factory->createDocumentFromFile($filename,{backends => TredMacro::Backends()})},"\n";
   my $fsfile = Treex::PML::Factory->createDocumentFromFile($filename,{backends => TredMacro::Backends()});
   if ($Treex::PML::FSError) {
@@ -258,7 +286,7 @@ sub openFile {
   }
   return $fsfile;
 }
-my $fsfile = openFile(shift @files);
+my $fsfile = openFile(shift @files); ###############################################
 
 #################################################
 #
@@ -269,12 +297,15 @@ my $evaluator;
 eval {
   $evaluator = PMLTQ::BtredEvaluator->new($query, {
   fsfile => $fsfile,
+  #current_filelist => shift @files ###############################################
   # tree => $fsfile->tree(0), # query only a specific tree
   # no_plan => 1, # do not let the planner rewrite my query
                   # in this case, the query must not be a forest!
 });
 };
 ok($evaluator, "create evaluator ($name) on $treebank");
+
+use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 2;print STDERR "####", Dumper $evaluator->get_first_iterator;
 warn $@ if $@;
 #die;
 unless($@)
@@ -284,11 +315,18 @@ unless($@)
   # iterate over several files (or maybe several scattered trees)
   sub next_file {
     my ($files)=@_;
+    print STDERR "NEXT FILE=========================== @$files\n";
     return unless @$files;
     $fsfile = openFile(shift @$files);
     # reusing the evaluator for next file
+    
     my $iter = $evaluator->get_first_iterator;
+use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 3;print STDERR Dumper $iter;
+
     $iter->set_file($fsfile);
+    print STDERR "ITERATOR: $iter\n";
+use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 3;print STDERR Dumper $iter;
+
     # $iter->set_tree($fsfile->tree(0)); # if tree searching a specific tree
     $evaluator->reset(); # prepare for next file
     return 1
@@ -313,9 +351,23 @@ unless($@)
         }
     });
     do {{
+open (MYFILE, ">evaluator$tmp.txt"); $tmp++;
+binmode(MYFILE, ":utf8");
+use Data::Dumper;$Data::Dumper::Deparse = 1;print MYFILE Dumper $evaluator;
+print  MYFILE "-"x30 ,"\n";
+print MYFILE Dumper %TredMacro::;
+print  MYFILE "-"x30 ,"\n";
+print MYFILE Dumper %main::;
+close (MYFILE); 
+      print STDERR "RUNNING\n";
     $evaluator->run_filters while $evaluator->find_next_match(); # feed the filter pipe
+
     }} while (next_file(\@files));
+
     $evaluator->flush_filters; # flush the pipe
+    
+
+ 
   } else {
       # query without a fitlter (just selects nodes)
   do {{
@@ -349,7 +401,13 @@ print File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res"),"\
   print join("\n" , map {"$a[$_]\t$b[$_]"} (0 .. $#a));
 =cut  
   ok($result eq $string, "query evaluation ($name) on $treebank");
-#print STDERR "CONTINUE:";<>;
+print STDERR $TredMacro::grp,"<<<\n";
+
+
+  TredMacro::reset();
+print STDERR "CONTINUE:";<>;
+
+
 }
 
 ################
@@ -384,6 +442,16 @@ for my $file (@files) {
   $result->set_attr('id', $file);
   
   $doc->append_tree($result); ## every tree contains one query
+  
+############
+$result = PMLTQ::Common::parse_query($string);
+
+  $query_name = basename($file);
+  $query_name=~s/\.\w+$//;
+
+  $result->set_attr('id', $file);
+  
+  $doc->append_tree($result); ## every tree contains one query  
 }
 
 
@@ -398,11 +466,15 @@ for my $treebank (@treebanks) {
     #die "Use contrib/pmltq_nobtred.pl to run queries";
     #my $evaluator = init_search($query, );
     my @files = glob(File::Spec->catfile($treebanks_dir, $treebank, 'data', "*.$layer.gz"));
-    open my $fh, '<:utf8', $query->get_id() || die "Cannot open query file ".$query->get_id().": $!\n";
-    local $/;
-    $query = <$fh>;
+    #my @files = glob(File::Spec->catfile($treebanks_dir, $treebank, 'data', "filelist"));
+    #open my $fh, '<:utf8', $query->get_id() || die "Cannot open query file ".$query->get_id().": $!\n";
+    #local $/;
+    #$query = <$fh>;
     ###$query = PMLTQ::Common::parse_query($query);
+    next if $qfile =~ m/a-bug/;
     runquery($query,$treebank,basename($qfile),@files);# if $qfile =~ m/$ENV{XXX}/;
+    
+
     #die if $qfile =~ m/$ENV{XXX}/;
   }
 }
