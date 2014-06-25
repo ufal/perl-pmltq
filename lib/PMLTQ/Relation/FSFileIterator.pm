@@ -45,7 +45,6 @@ sub new {
   }
   sub start  {
     my ($self,undef,$fsfile)=@_;
-    print STDERR "FSFileIterator::start \n";
     $self->[TREE_NO]=0;
     if ($fsfile) {
       $self->[FILE]=$fsfile;
@@ -57,8 +56,6 @@ sub new {
   }
   sub next {
     my ($self)=@_;
-print STDERR ".";
-print STDERR $self->[TREE_NO] if $self->[TREE_NO] >= 50;
     my $conditions=$self->[CONDITIONS];
     my $n=$self->[NODE];
     my $fsfile=$self->[FILE];

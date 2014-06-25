@@ -143,22 +143,17 @@ sub runquery {
     #use TrEd::MacroAPI::Default;
     #no warnings qw(redefine);
     sub reset {
-      print STDERR "RESETTING!!!\n";
       #$grp = undef;
       #$this = undef;
       #$root = undef;
     }
     
     sub Backends {
-      print STDERR "\t\tBackends\t\tCALL:\t",join(" ",caller),"\n";
       return ();
     }
 
     sub GetSecondaryFiles {
       my ($fsfile) = @_;
-      print STDERR "\t\tGetSecondaryFiles (@$fsfile)\t\tCALL:\t",join(" ",caller),"\n";
-      use Devel::StackTrace; print STDERR "--------------------------- STACK @_ \n".Devel::StackTrace->new->as_string."---------------------------\n";
-      
       $fsfile ||= CurrentFile(); ### TODO ???
       return
           exists(&TrEd::File::get_secondary_files) 
@@ -265,8 +260,6 @@ sub runquery {
 sub openFile {
   my $filename=shift;
   Treex::PML::AddResourcePath(File::Spec->catfile((File::Basename::fileparse($filename))[1],'..', 'resources'));
-  print "OPENING FILE\t$filename\n";
-  #print STDERR "BACKEND:*",TredMacro::Backends(),"*\n",@{Treex::PML::Factory->createDocumentFromFile($filename,{backends => TredMacro::Backends()})},"\n";
   my $fsfile = Treex::PML::Factory->createDocumentFromFile($filename,{backends => TredMacro::Backends()});
   if ($Treex::PML::FSError) {
     die "Error loading file $filename: $Treex::PML::FSError ($!)\n";
@@ -314,27 +307,13 @@ unless($@)
   # iterate over several files (or maybe several scattered trees)
   sub next_file {
     my ($evaluator,$files)=@_;
-    print STDERR "NEXT FILE=========================== @$files\n";
     return unless @$files;
-    print STDERR "iterator Before open \t",  defined($evaluator->{'iterators'})?join(",",map {$_->[1]->[6]->count()} @{$evaluator->{'iterators'}}) : "-","\n";
     $fsfile = openFile(shift @$files);
     # reusing the evaluator for next file
-
-          print STDERR "iterator Before \t",  defined($evaluator->{'iterators'})?join(",",map {$_->[1]->[6]->count()} @{$evaluator->{'iterators'}}) : "-","\n";
-
     my $iter = $evaluator->get_first_iterator;
 
     $iter->set_file($fsfile);
-    print STDERR "iterator After \t",  defined($evaluator->{'iterators'})?join(",",map {$_->[1]->[6]->count()} @{$evaluator->{'iterators'}}) : "-","\n";
-
-#    print STDERR "ITERATOR: $iter\n";
-#use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 3;print STDERR Dumper $iter;
-
-    # $iter->set_tree($fsfile->tree(0)); # if tree searching a specific tree
     $evaluator->reset(); # prepare for next file
-###    use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 2;print STDERR "####", Dumper $evaluator->get_first_iterator;
-print STDERR "iterator After Reset \t",  defined($evaluator->{'iterators'})?join(",",map {$_->[1]->[6]->count()} @{$evaluator->{'iterators'}}) : "-","\n";
-
     return 1
   }
 
@@ -358,24 +337,7 @@ print STDERR "iterator After Reset \t",  defined($evaluator->{'iterators'})?join
         }
     });
     do {{
-
-open (MYFILE, ">evaluator$tmp.txt"); $tmp++;
-binmode(MYFILE, ":utf8");
-use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 10;print MYFILE Dumper $evaluator;
-print  MYFILE "-"x30 ,"\n";
-print MYFILE Dumper %TredMacro::;
-print  MYFILE "-"x30 ,"\n";
-print MYFILE Dumper %main::;
-close (MYFILE); 
-      print STDERR "\t\t\tRUNNING CYCLE\n";
-      print STDERR "result_file\t",  defined($evaluator->{'result_files'})?join(",",map {$_->[6]->count()} @{$evaluator->{'result_files'}}) : "-","\n";
-      print STDERR "iterators  \t",  defined($evaluator->{'iterators'})?join(",",map {$_->[1]->[6]->count()} @{$evaluator->{'iterators'}}) : "-","\n";
-      print STDERR "fsfile     \t", $evaluator->{'type_mapper'}->{'fsfile'}->[6]->count(),"\n";<>;
-      
-      print STDERR "!! START iterators  \t",  defined($evaluator->{'iterators'})?join(",",map {$_->[1]->[6]->count()} @{$evaluator->{'iterators'}}) : "-","\n";
     $evaluator->run_filters while $evaluator->find_next_match(); # feed the filter pipe
-      print STDERR "!! END   iterators  \t",  defined($evaluator->{'iterators'})?join(",",map {$_->[1]->[6]->count()} @{$evaluator->{'iterators'}}) : "-","\n";
-
     }} while (next_file($evaluator,\@files));
 
     $evaluator->flush_filters; # flush the pipe
@@ -415,11 +377,7 @@ print File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res"),"\
   print join("\n" , map {"$a[$_]\t$b[$_]"} (0 .. $#a));
 =cut  
   ok($result eq $string, "query evaluation ($name) on $treebank");
-print STDERR $TredMacro::grp,"<<<\n";
-
-
   TredMacro::reset();
-print STDERR "CONTINUE:";<>;
 
 
 }
@@ -456,16 +414,6 @@ for my $file (@files) {
   $result->set_attr('id', $file);
   
   $doc->append_tree($result); ## every tree contains one query
-  
-############
-$result = PMLTQ::Common::parse_query($string);
-
-  $query_name = basename($file);
-  $query_name=~s/\.\w+$//;
-
-  $result->set_attr('id', $file);
-  
-  $doc->append_tree($result); ## every tree contains one query  
 }
 
 
@@ -485,7 +433,6 @@ for my $treebank (@treebanks) {
     #local $/;
     #$query = <$fh>;
     ###$query = PMLTQ::Common::parse_query($query);
-    next if $qfile =~ m/a-bug/;
     runquery($query,$treebank,basename($qfile),@files);# if $qfile =~ m/$ENV{XXX}/;
     
 

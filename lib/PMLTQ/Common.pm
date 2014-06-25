@@ -1042,6 +1042,7 @@ sub compute_expression_data_type {
 }
 
 sub compute_expression_data_type_pt {
+	## BUG in numeric comparison (it create expression with string equation when reference like $[0-9]+ is used)
   my ($self,$pt,$opts)=@_;
   if (ref $pt) {
     my ($type) = @$pt;
@@ -1166,9 +1167,8 @@ sub compute_expression_data_type_pt {
     } elsif ($pt=~/^\$/) {
       my $var = $pt; $var=~s/^\$//;
       if ($var =~ /^[1-9][0-9]*$/) {
-	use Data::Dumper;$Data::Dumper::Deparse = 1;print STDERR "COLUMN_TYPES: \$opts->{column_types}=", Dumper($opts->{column_types}),"\$var=$var\n";
 	return $opts->{column_types}[$var - 1];
-      } elsif ($var eq '$') {
+      } elsif ($var eq '$') { # this cause BUGGY behaviour
 	return UNIVERSAL::DOES::does($self,'PMLTQ::SQLEvaluator') ? COL_NUMERIC :  COL_UNKNOWN;
       } else {
 	return UNIVERSAL::DOES::does($self,'PMLTQ::SQLEvaluator') ? COL_NUMERIC :  COL_UNKNOWN;

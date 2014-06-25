@@ -2064,14 +2064,11 @@ sub serialize_test {
   } else {
     $condition='('.$left.' '.$operator.' '.$right.')';
   }
-  use Devel::StackTrace; print STDERR "--------------------------- STACK @_ \n".Devel::StackTrace->new->as_string."---------------------------\n";
-  print STDERR "CONDITION:  $condition\tleft_type=$left_type\tright_type=$right_type\n";
   return $condition;
 }
 
 sub serialize_element {
   my ($self,$opts)=@_;
-  	use Data::Dumper;$Data::Dumper::Deparse = 1;print STDERR "serialize_element COLUMN_TYPES: \$opts->{column_types}=", Dumper($opts->{column_types}),"\n";
 
   my ($name,$node)=map {$opts->{$_}} qw(name condition);
   my $pos = $opts->{query_pos};
@@ -2083,8 +2080,6 @@ sub serialize_element {
     my $condition;
     if ($opts->{output_filter}) { #  and $opts->{output_filter_where_clause}
       my ($left_pt, $right_pt) = map PMLTQ::Common::parse_column_expression($node->{$_}), qw(a b);
-print STDERR "LEFT_PT: $left_pt\n";      
-print STDERR "RIGHT_PT: $right_pt\n";      
       ($left_type,$right_type)=map $self->compute_expression_data_type_pt($_,$opts), ($left_pt,$right_pt);
       $left = $self->serialize_expression_pt($left_pt,
                                       {%$opts,
