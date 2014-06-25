@@ -900,7 +900,6 @@ sub serialize_filters {
   my @filters;
   for my $f (PMLTQ::Common::merge_filters_2($filters)) {
     $opts->{filter_id} = "filter_".scalar(@filters);
-use Data::Dumper;$Data::Dumper::Deparse = 1;print STDERR "serialize_filterS COLUMN_TYPES: \$opts->{column_types}=", Dumper($opts->{column_types})," FILTER_ID=$opts->{filter_id}\n";  
     push @filters, $self->serialize_filter($f,$opts); # can return multiple filters
   }
   for my $filter (@filters) {
@@ -1309,8 +1308,6 @@ sub _code_from_template {
 
 sub serialize_filter {
   my ($self, $filter, $opts)=@_;
-  	use Data::Dumper;$Data::Dumper::Deparse = 1;print STDERR "serialize_filter COLUMN_TYPES: \$opts->{column_types}=", Dumper($opts->{column_types}),"\n";
-
   # $filter->{group-by}
   # $filter->{distinct}
   # $filter->{return}

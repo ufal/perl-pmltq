@@ -305,7 +305,6 @@ eval {
 };
 ok($evaluator, "create evaluator ($name) on $treebank");
 
-use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 2;print STDERR "####", Dumper $evaluator->get_first_iterator;
 warn $@ if $@;
 #die;
 unless($@)
@@ -314,21 +313,28 @@ unless($@)
 
   # iterate over several files (or maybe several scattered trees)
   sub next_file {
-    my ($files)=@_;
+    my ($evaluator,$files)=@_;
     print STDERR "NEXT FILE=========================== @$files\n";
     return unless @$files;
+    print STDERR "iterator Before open \t",  defined($evaluator->{'iterators'})?join(",",map {$_->[1]->[6]->count()} @{$evaluator->{'iterators'}}) : "-","\n";
     $fsfile = openFile(shift @$files);
     # reusing the evaluator for next file
-    
+
+          print STDERR "iterator Before \t",  defined($evaluator->{'iterators'})?join(",",map {$_->[1]->[6]->count()} @{$evaluator->{'iterators'}}) : "-","\n";
+
     my $iter = $evaluator->get_first_iterator;
-use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 3;print STDERR Dumper $iter;
 
     $iter->set_file($fsfile);
-    print STDERR "ITERATOR: $iter\n";
-use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 3;print STDERR Dumper $iter;
+    print STDERR "iterator After \t",  defined($evaluator->{'iterators'})?join(",",map {$_->[1]->[6]->count()} @{$evaluator->{'iterators'}}) : "-","\n";
+
+#    print STDERR "ITERATOR: $iter\n";
+#use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 3;print STDERR Dumper $iter;
 
     # $iter->set_tree($fsfile->tree(0)); # if tree searching a specific tree
     $evaluator->reset(); # prepare for next file
+###    use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 2;print STDERR "####", Dumper $evaluator->get_first_iterator;
+print STDERR "iterator After Reset \t",  defined($evaluator->{'iterators'})?join(",",map {$_->[1]->[6]->count()} @{$evaluator->{'iterators'}}) : "-","\n";
+
     return 1
   }
 
@@ -339,6 +345,7 @@ use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 3;print ST
     $evaluator->init_filters({
       init => sub { 
         #print("-" x 60, " $name\n") 
+        
         },
       process_row => sub { 
         #use warnings;
@@ -351,18 +358,25 @@ use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 3;print ST
         }
     });
     do {{
+
 open (MYFILE, ">evaluator$tmp.txt"); $tmp++;
 binmode(MYFILE, ":utf8");
-use Data::Dumper;$Data::Dumper::Deparse = 1;print MYFILE Dumper $evaluator;
+use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 10;print MYFILE Dumper $evaluator;
 print  MYFILE "-"x30 ,"\n";
 print MYFILE Dumper %TredMacro::;
 print  MYFILE "-"x30 ,"\n";
 print MYFILE Dumper %main::;
 close (MYFILE); 
-      print STDERR "RUNNING\n";
+      print STDERR "\t\t\tRUNNING CYCLE\n";
+      print STDERR "result_file\t",  defined($evaluator->{'result_files'})?join(",",map {$_->[6]->count()} @{$evaluator->{'result_files'}}) : "-","\n";
+      print STDERR "iterators  \t",  defined($evaluator->{'iterators'})?join(",",map {$_->[1]->[6]->count()} @{$evaluator->{'iterators'}}) : "-","\n";
+      print STDERR "fsfile     \t", $evaluator->{'type_mapper'}->{'fsfile'}->[6]->count(),"\n";<>;
+      
+      print STDERR "!! START iterators  \t",  defined($evaluator->{'iterators'})?join(",",map {$_->[1]->[6]->count()} @{$evaluator->{'iterators'}}) : "-","\n";
     $evaluator->run_filters while $evaluator->find_next_match(); # feed the filter pipe
+      print STDERR "!! END   iterators  \t",  defined($evaluator->{'iterators'})?join(",",map {$_->[1]->[6]->count()} @{$evaluator->{'iterators'}}) : "-","\n";
 
-    }} while (next_file(\@files));
+    }} while (next_file($evaluator,\@files));
 
     $evaluator->flush_filters; # flush the pipe
     
@@ -383,7 +397,7 @@ close (MYFILE);
         $result.=join("\t", map $_->attr('id'), @{$evaluator->get_results})."\n";
         
       }
-    }} while (next_file(\@files));
+    }} while (next_file($evaluator,\@files));
   }
 }
 print File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res"),"\n";
