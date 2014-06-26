@@ -43,6 +43,8 @@ $SIG{__WARN__} = sub { use Devel::StackTrace; print STDERR "--------------------
 
 }
 
+=XXX
+# NOT used
 sub init_search {
   my ($query, $filename) = @_;
   open my $fh, '<:utf8', $query->get_id() || die "Cannot open query file ".$query->get_id().": $!\n";
@@ -75,11 +77,7 @@ print "QUERY: $query\n";
     #plan => 0,
   });
 }
-
-
-
-
-
+=cut
 
 
 #############
@@ -91,12 +89,7 @@ sub runquery {
   my @files = @_;  
   my $result="";
 
-  #####################
-  # Code to provide stuff required from btred
-  #####################
   use FindBin qw($RealBin);
-  
-  
   use lib (#$RealBin.'/../libs/fslib', ### MOŽNÁ ZKUSIT CELÉ ZAKOMENTOVAT
          #'/opt/pmltq/engine/libs/fslib',
 	 #$RealBin.'/../libs/pml-base',
@@ -110,11 +103,8 @@ sub runquery {
   use Treex::PML;
   Treex::PML::AddResourcePath(File::Spec->catfile(PMLTQ->home, 'resources'),map {File::Spec->catfile((fileparse($_))[1],'..', 'resources')} @files);
   Treex::PML::UseBackends(qw(Storable PMLBackend PMLTransformBackend));
-
-  
   use Tred::File;  
   use TredMacro;
-  
   {
     package PML;
     sub Schema {
@@ -126,130 +116,78 @@ sub runquery {
       return $h && $id && $h->{$id};
     }
   }
-
   use PMLTQ::TypeMapper;
   use PMLTQ::BtredEvaluator;
-
   #####################
-
   package main;
   use utf8;
+  use TestPMLTQ;
+  
+  my $fsfile = TestPMLTQ::openFile(shift @files); ###############################################
 
-
-#####################################################
-# open a data file and related files on lower layers
-
-sub openFile {
-  my $filename=shift;
-  Treex::PML::AddResourcePath(File::Spec->catfile((File::Basename::fileparse($filename))[1],'..', 'resources'));
-  my $fsfile = Treex::PML::Factory->createDocumentFromFile($filename,{backends => TredMacro::Backends()});
-  if ($Treex::PML::FSError) {
-    die "Error loading file $filename: $Treex::PML::FSError ($!)\n";
-  }
-  my $requires = $fsfile->metaData('fs-require');
-  if ($requires) {
-    for my $req (@$requires) {
-      my $req_filename = $req->[1]->abs($fsfile->URL);
-      my $secondary = $fsfile->appData('ref');
-      unless ($secondary) {
-	$secondary = {};
-	$fsfile->changeAppData('ref',$secondary);
-      }
-      my $sf = openFile($req_filename,$fsfile);
-      $secondary->{$req->[0]}=$sf;
-    }
-  }
-  return $fsfile;
-}
-my $fsfile = openFile(shift @files); ###############################################
-
-#################################################
-#
-# Compile query and initialize the query enginge
-
-my $evaluator;
-
-eval {
-  $evaluator = PMLTQ::BtredEvaluator->new($query, {
-  fsfile => $fsfile,
-  #current_filelist => shift @files ###############################################
-  # tree => $fsfile->tree(0), # query only a specific tree
-  # no_plan => 1, # do not let the planner rewrite my query
+  #################################################
+  #
+  # Compile query and initialize the query enginge
+  my $evaluator;
+  eval {
+    $evaluator = PMLTQ::BtredEvaluator->new($query, {
+    fsfile => $fsfile,
+    #current_filelist => shift @files ###############################################
+    # tree => $fsfile->tree(0), # query only a specific tree
+    # no_plan => 1, # do not let the planner rewrite my query
                   # in this case, the query must not be a forest!
-});
-};
-ok($evaluator, "create evaluator ($name) on $treebank");
-
-warn $@ if $@;
-#die;
-unless($@)
-{
-  binmode STDOUT, ':utf8';
-
-  # iterate over several files (or maybe several scattered trees)
-  sub next_file {
-    my ($evaluator,$files)=@_;
-    return unless @$files;
-    $fsfile = openFile(shift @$files);
-    # reusing the evaluator for next file
-    my $iter = $evaluator->get_first_iterator;
-
-    $iter->set_file($fsfile);
-    $evaluator->reset(); # prepare for next file
-    return 1
-  }
-
-  # running the query and print results
-  if ($evaluator->get_filters()) {
-    # query with filters (produces text output)
-    ## customize output from the final filter
-    $evaluator->init_filters({
-      init => sub { 
-        #print("-" x 60, " $name\n") 
-        
-        },
-      process_row => sub { 
-        #use warnings;
-        #use strict 'refs';
-        my ($self,$row)=@_; 
-        #print("RESULT: ",join("\t",@$row)."\n");
-        $result.=join("\t",@$row)."\n"; },
-      finish => sub { 
-        #print("-" x 60, "\n"); 
-        }
     });
-    do {{
-    $evaluator->run_filters while $evaluator->find_next_match(); # feed the filter pipe
-    }} while (next_file($evaluator,\@files));
-
-    $evaluator->flush_filters; # flush the pipe
-    
-
- 
-  } else {
+  };
+  ok($evaluator, "create evaluator ($name) on $treebank");
+  warn $@ if $@;
+  #die;
+  unless($@)
+  {
+    binmode STDOUT, ':utf8';
+    # running the query and print results
+    if ($evaluator->get_filters()) {
+      # query with filters (produces text output)
+      ## customize output from the final filter
+      $evaluator->init_filters({
+        init => sub { 
+          #print("-" x 60, " $name\n") 
+        },
+        process_row => sub { 
+          #use warnings;
+          #use strict 'refs';
+          my ($self,$row)=@_; 
+          #print("RESULT: ",join("\t",@$row)."\n");
+          $result.=join("\t",@$row)."\n"; },
+        finish => sub { 
+          #print("-" x 60, "\n"); 
+        }
+      });
+      do {{
+        $evaluator->run_filters while $evaluator->find_next_match(); # feed the filter pipe
+      }} while (TestPMLTQ::next_file($evaluator,\@files));
+      $evaluator->flush_filters; # flush the pipe
+    } else {
       # query without a fitlter (just selects nodes)
-  do {{
-      while ($evaluator->find_next_match()) {
-      # get whatever data
-    
+      do {{
+        while ($evaluator->find_next_match()) {
+        # get whatever data
         ## named query node:
         # print $evaluator->get_result_node('n')->attr('id')."\n";
-  
-      ## the order of columns may be differnt than the order of query nodes
+        ## the order of columns may be differnt than the order of query nodes
         ## since the query can be rewritten by the planner
         #print join("\t", map $_->attr('id'), @{$evaluator->get_results})."\n";
         $result.=join("\t", map $_->attr('id'), @{$evaluator->get_results})."\n";
         
-      }
-    }} while (next_file($evaluator,\@files));
+        }
+      }} while (TestPMLTQ::next_file($evaluator,\@files));
+    }
   }
-}
-print File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res"),"\n";
+  print STDERR File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res"),"\n";
   open my $fh, '<:utf8', File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res") or die "Can't open result file: $name.res\n";
   local $/=undef;
-  my $string = <$fh>;
+  my $expected = <$fh>;
   print "         RESULT: '",sprintf("%20.20s",$result),"'\n";
-  print "EXPECTED RESULT: '",sprintf("%20.20s",$string),"'\n";
+  print "EXPECTED RESULT: '",sprintf("%20.20s",$expected),"'\n";
 =xxx  
   my @a=split("\n",$result);
   my @b=split("\n",$string);
@@ -258,19 +196,11 @@ print File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res"),"\
   
   print join("\n" , map {"$a[$_]\t$b[$_]"} (0 .. $#a));
 =cut  
-  die unless ok($result eq $string, "query evaluation ($name) on $treebank");
-  
+  die unless ok($result eq $expected, "query evaluation ($name) on $treebank");
   TredMacro::reset();
-
-
 }
 
 ################
-
-
-
-
-
 # TEST GRAMMAR PARSER
 
 my $doc = Treex::PML::Factory->createDocument('queries.pml');
@@ -282,7 +212,6 @@ $doc->changeMetaData('pml_root', Treex::PML::Factory->createStructure);
 
 my @files = glob(File::Spec->catfile($FindBin::RealBin, 'queries', '*.tq'));
 
-#=xx
 for my $file (@files) {
   local $/;
   undef $/;
@@ -298,25 +227,6 @@ for my $file (@files) {
   $result->set_attr('id', $file);
   
   $doc->append_tree($result); ## every tree contains one query
-}
-#=cut
-
-{# tmp
-  local $/;
-  undef $/;
-  my $file = "/home/matyas/Documents/UFAL/PMLTQ/REP/pmltq-core/t/queries/t-x-dependency.tq";
-  open my $fh, '<:utf8', $file or die "Can't open file: '$file'\n";
-  my $string = <$fh>;
-  my $result = PMLTQ::Common::parse_query($string);
-
-  my $query_name = basename($file);
-  $query_name=~s/\.\w+$//;
-  ok($result, "parsing query '$query_name'");
-
-  $result->set_attr('id', $file);
-  
-  $doc->append_tree($result); ## every tree contains one query
-  
 }
 
 for my $treebank (@treebanks) {
@@ -343,17 +253,8 @@ for my $treebank (@treebanks) {
     close(MYFILE);
     runquery($string_query,$treebank,basename($qfile),@files);# if $qfile =~ m/$ENV{XXX}/;
 #<>;    
-
     #die if $qfile =~ m/$ENV{XXX}/;
   }
 }
 
 done_testing();
-
-
-
-
-
-
-
-

@@ -1,5 +1,9 @@
 package TredMacro;
 
+  #####################
+  # Code to provide stuff required from btred
+  #####################
+
 ### DOIMPLEMENTOVAT POTŘEBNÉ METODY
 #use lib ('/home/matyas/Documents/UFAL/PMLTQ/tredlib');
 #use TrEd::Basics;
