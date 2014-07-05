@@ -139,6 +139,14 @@ sub runquery {
     });
   };
   ok($evaluator, "create evaluator ($name) on $treebank");
+  
+  open(MYFILE,">>pml_queries/".$name.".pml");
+    print MYFILE "=pmltq\n$string_query\n=cut\n";
+    use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 100;
+    print MYFILE "#SERIALIZED FILTER:\n", Dumper $evaluator->{filter};
+    print MYFILE "#SERIALIZED FILTER!S!:\n", Dumper $evaluator->{filters};
+    close(MYFILE);
+    
   warn $@ if $@;
   #die;
   unless($@)
@@ -196,7 +204,7 @@ sub runquery {
   
   print join("\n" , map {"$a[$_]\t$b[$_]"} (0 .. $#a));
 =cut  
-  die unless ok($result eq $expected, "query evaluation ($name) on $treebank");
+  <> unless ok($result eq $expected, "query evaluation ($name) on $treebank");
   TredMacro::reset();
 }
 
@@ -249,7 +257,7 @@ for my $treebank (@treebanks) {
     
     open(MYFILE,">pml_queries/".basename($qfile).".pml");
     print MYFILE "=pmltq\n$string_query\n=cut\n";
-    use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 10;print MYFILE "#DECODED:\n", Dumper $query;
+    use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 100;print MYFILE "#DECODED:\n", Dumper $query;
     close(MYFILE);
     runquery($string_query,$treebank,basename($qfile),@files);# if $qfile =~ m/$ENV{XXX}/;
 #<>;    
