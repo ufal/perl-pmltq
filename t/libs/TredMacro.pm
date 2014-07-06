@@ -7,7 +7,7 @@ package TredMacro;
 ### DOIMPLEMENTOVAT POTŘEBNÉ METODY
 #use lib ('/home/matyas/Documents/UFAL/PMLTQ/tredlib');
 #use TrEd::Basics;
-#use TrEd::MacroAPI::Default;
+use TrEd::MacroAPI::Default;
 #no warnings qw(redefine);
 sub reset {
   #$grp = undef;
@@ -90,12 +90,12 @@ sub GetNodeIndex {
   return $i;
 }
 
-=x
+
 sub DetermineNodeType {
   my ($node)=@_;
   print STDERR "\t\tDetermineNodeType\t\tCALL:\t",join(" ",caller),"\n";
   Treex::PML::Document->determine_node_type($node);
 }  
-=cut
+
 
 1;

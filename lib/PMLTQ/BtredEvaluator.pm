@@ -425,6 +425,7 @@ sub new {
   if (ref($query_tree)) {
     $clone_before_plan = 1;
   } else {
+print STDERR "\n**************************************\nTYPE MAPPER:".$self->{type_mapper}."\n";    
     $query_tree = PMLTQ::Common::parse_query($query_tree,{
       user_defined_relations => $self->{type_mapper}->get_user_defined_relations(),
       pmlrf_relations => $self->{type_mapper}->get_pmlrf_relations(),

@@ -8,13 +8,53 @@ plan skip_all => 'set TEST_QUERY to enable this test (developer only!)'
   unless $ENV{TEST_QUERY};
 
 use PMLTQ;
-use Treex::PML;
-use PMLTQ::BtredEvaluator;
-use PMLTQ::TypeMapper;
-use PMLTQ::Common;
 use File::Spec ();
 use File::Basename;
-use FindBin;
+use FindBin qw($RealBin);
+use lib (#$RealBin.'/../libs/fslib', ### MOŽNÁ ZKUSIT CELÉ ZAKOMENTOVAT
+         #'/opt/pmltq/engine/libs/fslib',
+	 #$RealBin.'/../libs/pml-base',
+	 #$RealBin.'/../libs/pmltq',
+	 $RealBin.'/../lib', ## PMLTQ
+	 $RealBin.'/libs', ## PMLTQ
+	 
+#	((do { chomp($ENV{TREDLIB}||=`btred -q --lib`); 1 } && $ENV{TREDLIB} && -d $ENV{TREDLIB}) ? $ENV{TREDLIB} : die "Please set the TREDLIB environment variable to point to tred/tredlib!\n")
+	);
+=x
+{
+  package TredMacro;
+#  use TrEd::Basics;
+  use TrEd::MacroAPI::Default;
+#  no warnings qw(redefine);
+  sub DetermineNodeType {
+    my ($node)=@_;
+    Treex::PML::Document->determine_node_type($node);
+  }
+}
+=cut
+use TredMacro;
+use PMLTQ::TypeMapper;
+use PMLTQ::BtredEvaluator;
+  
+use Treex::PML;
+Treex::PML::UseBackends(qw(Storable PMLBackend PMLTransformBackend));
+{
+  package PML;
+  sub Schema {
+    &Treex::PML::Document::schema; #    &TrEd::Basics::fileSchema;
+  }
+  sub GetNodeByID {
+    my ($id,$fsfile)=@_;
+    my $h = $fsfile->appData('id-hash');
+    return $h && $id && $h->{$id};
+  }
+}
+#####################
+package main;
+use utf8;
+use lib (	 $RealBin.'/libs');
+use TestPMLTQ;
+
 
 my $tmp = 0;
 
@@ -82,46 +122,18 @@ print "QUERY: $query\n";
 
 #############
 
+
+
 sub runquery {
   my $query = shift;
   my $treebank = shift;
   my $name = shift;
   my @files = @_;  
   my $result="";
-
-  use FindBin qw($RealBin);
-  use lib (#$RealBin.'/../libs/fslib', ### MOŽNÁ ZKUSIT CELÉ ZAKOMENTOVAT
-         #'/opt/pmltq/engine/libs/fslib',
-	 #$RealBin.'/../libs/pml-base',
-	 #$RealBin.'/../libs/pmltq',
-	 $RealBin.'/../lib', ## PMLTQ
-	 $RealBin.'/libs', ## PMLTQ
-	 
-	 #((do { chomp($ENV{TREDLIB}||=`btred -q --lib`); 1 } && $ENV{TREDLIB} && -d $ENV{TREDLIB}) ? $ENV{TREDLIB} : die "Please set the TREDLIB environment variable to point to tred/tredlib!\n")
-	);
-
-  use Treex::PML;
   Treex::PML::AddResourcePath(File::Spec->catfile(PMLTQ->home, 'resources'),map {File::Spec->catfile((fileparse($_))[1],'..', 'resources')} @files);
-  Treex::PML::UseBackends(qw(Storable PMLBackend PMLTransformBackend));
-  use Tred::File;  
-  use TredMacro;
-  {
-    package PML;
-    sub Schema {
-      &Treex::PML::Document::schema; #    &TrEd::Basics::fileSchema;
-    }
-    sub GetNodeByID {
-      my ($id,$fsfile)=@_;
-      my $h = $fsfile->appData('id-hash');
-      return $h && $id && $h->{$id};
-    }
-  }
-  use PMLTQ::TypeMapper;
-  use PMLTQ::BtredEvaluator;
-  #####################
-  package main;
-  use utf8;
-  use TestPMLTQ;
+
+	
+  
   
   my $fsfile = TestPMLTQ::openFile(shift @files); ###############################################
 
@@ -139,7 +151,7 @@ sub runquery {
     });
   };
   ok($evaluator, "create evaluator ($name) on $treebank");
-  
+    
   open(MYFILE,">>pml_queries/".$name.".pml");
     print MYFILE "=pmltq\n$string_query\n=cut\n";
     use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 100;
@@ -205,7 +217,7 @@ sub runquery {
   print join("\n" , map {"$a[$_]\t$b[$_]"} (0 .. $#a));
 =cut  
   <> unless ok($result eq $expected, "query evaluation ($name) on $treebank");
-  TredMacro::reset();
+  #TredMacro::reset();
 }
 
 ################
@@ -220,6 +232,7 @@ $doc->changeMetaData('pml_root', Treex::PML::Factory->createStructure);
 
 my @files = glob(File::Spec->catfile($FindBin::RealBin, 'queries', '*.tq'));
 
+# @files = glob(File::Spec->catfile($FindBin::RealBin, 'queries', 't-dative*.tq')); ####################################
 for my $file (@files) {
   local $/;
   undef $/;
@@ -232,7 +245,13 @@ for my $file (@files) {
   $query_name=~s/\.\w+$//;
   ok($result, "parsing query '$query_name'");
 
+  open(MYFILE,">pml_queries/".basename($file).".pml");
+  print MYFILE "=pmltq\n$string\n=cut\n";
+  use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 100;print MYFILE "#DECODED:\n", Dumper PMLTQ::Common::parse_query($string);
+  close(MYFILE);
+    
   $result->set_attr('id', $file);
+
   
   $doc->append_tree($result); ## every tree contains one query
 }
@@ -255,10 +274,7 @@ for my $treebank (@treebanks) {
     ###$query = PMLTQ::Common::parse_query($query);
     #use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 10;print STDERR "QUERY:-----------\n", Dumper $query;
     
-    open(MYFILE,">pml_queries/".basename($qfile).".pml");
-    print MYFILE "=pmltq\n$string_query\n=cut\n";
-    use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 100;print MYFILE "#DECODED:\n", Dumper $query;
-    close(MYFILE);
+   
     runquery($string_query,$treebank,basename($qfile),@files);# if $qfile =~ m/$ENV{XXX}/;
 #<>;    
     #die if $qfile =~ m/$ENV{XXX}/;
