@@ -1,14 +1,8 @@
-## This was macro file for Tred (tred.def)  -*-cperl-*-
-## author: Petr Pajas
-## $Id: tred.def 4547 2011-01-06 23:35:45Z fabip4am $
-
 package TredMacro;
-
 {
   package TrEd::File;
   sub get_secondary_files {
     my ($fsfile) = @_;
-    print STDERR "RUN: get_secondary_files $fsfile\n";
     # is probably the same as Treex::PML::Document->relatedDocuments()
     # a reference to a list of pairs (id, URL)
     my $requires = $fsfile->metaData('fs-require');
@@ -32,20 +26,18 @@ package TredMacro;
     return ();
   }    
   #######################################################################################
-# Usage         : uniq(@array)
-# Purpose       : Remove duplicit elements from array
-# Returns       : Array without repeating elements
-# Parameters    : array @arr  -- array to be uniqued
-# Throws        : no exception
-# Comments      : Preserves type and order of elements, as suggested by Perl best practices
-sub uniq {
-
+  # Usage         : uniq(@array)
+  # Purpose       : Remove duplicit elements from array
+  # Returns       : Array without repeating elements
+  # Parameters    : array @arr  -- array to be uniqued
+  # Throws        : no exception
+  # Comments      : Preserves type and order of elements, as suggested by Perl best practices
+  sub uniq {
     # seen -- track keys already seen elements
     my %seen;
-
     # return only those not yet seen
     return grep { !( $seen{$_}++ ) } @_;
-}
+  }
 }
 
 =item C<GetSecondaryFiles($fsfile?)>
@@ -103,7 +95,5 @@ sub ThisAddress {
         return $f . '##' . $i . '.' . $n;
     }
 }
-
-
 
 1;
