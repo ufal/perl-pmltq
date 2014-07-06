@@ -18,7 +18,6 @@ PMLTQ::TypeMapper
 Version 0.01
 
 =cut
-print STDERR "&&&&&&&&&&&&&&&&&&&&&&&&&&&&";
 our $VERSION = '0.01';
 BEGIN { # TredMacro should work in TrEd 2.0
     eval {

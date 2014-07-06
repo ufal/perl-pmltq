@@ -20,18 +20,6 @@ use lib (#$RealBin.'/../libs/fslib', ### MOŽNÁ ZKUSIT CELÉ ZAKOMENTOVAT
 	 
 #	((do { chomp($ENV{TREDLIB}||=`btred -q --lib`); 1 } && $ENV{TREDLIB} && -d $ENV{TREDLIB}) ? $ENV{TREDLIB} : die "Please set the TREDLIB environment variable to point to tred/tredlib!\n")
 	);
-=x
-{
-  package TredMacro;
-#  use TrEd::Basics;
-  use TrEd::MacroAPI::Default;
-#  no warnings qw(redefine);
-  sub DetermineNodeType {
-    my ($node)=@_;
-    Treex::PML::Document->determine_node_type($node);
-  }
-}
-=cut
 use TredMacro;
 use PMLTQ::TypeMapper;
 use PMLTQ::BtredEvaluator;
@@ -78,46 +66,10 @@ BEGIN {
   );
   Treex::PML::AddResourcePath(@resources);
 
-$SIG{__WARN__} = sub { use Devel::StackTrace; print STDERR "--------------------------- STACK @_ \n".Devel::StackTrace->new->as_string."---------------------------\n";  };
+#$SIG{__WARN__} = sub { use Devel::StackTrace; print STDERR "--------------------------- STACK @_ \n".Devel::StackTrace->new->as_string."---------------------------\n";  };
 #$SIG{__DIE__} = sub { use Devel::StackTrace; print STDERR "--------------------------- STACK @_ \n".Devel::StackTrace->new->as_string."---------------------------\n";  die;};
 
 }
-
-=XXX
-# NOT used
-sub init_search {
-  my ($query, $filename) = @_;
-  open my $fh, '<:utf8', $query->get_id() || die "Cannot open query file ".$query->get_id().": $!\n";
-  local $/;
-  $query = <$fh>;
-print "QUERY: $query\n";  
-  print "loading document $filename\n";
-  my $fsfile = Treex::PML::Factory->createDocumentFromFile($filename,{backends => TredMacro::Backends()});
-  if ($Treex::PML::FSError) {
-    die "Error loading file $filename: $Treex::PML::FSError ($!)\n";
-  }
-  print "document loaded\n";
-  my $requires = $fsfile->metaData('fs-require');
-  if ($requires) {
-    for my $req (@$requires) {
-      my $req_filename = $req->[1]->abs($fsfile->URL);
-      my $secondary = $fsfile->appData('ref');
-      unless ($secondary) {
-	$secondary = {};
-	$fsfile->changeAppData('ref',$secondary);
-      }
-      my $sf = openFile($req_filename,$fsfile);
-      $secondary->{$req->[0]}=$sf;
-    }
-  }
-  #$PMLTQ::BtredEvaluator::DEBUG=5;
-  return PMLTQ::BtredEvaluator->new($query, {
-    #type_mapper => PMLTQ::TypeMapper->new({file=>$filename}),
-    fsfile => $fsfile,
-    #plan => 0,
-  });
-}
-=cut
 
 
 #############
@@ -151,16 +103,6 @@ sub runquery {
     });
   };
   ok($evaluator, "create evaluator ($name) on $treebank");
-    
-  open(MYFILE,">>pml_queries/".$name.".pml");
-    print MYFILE "=pmltq\n$string_query\n=cut\n";
-    use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 100;
-    print MYFILE "#SERIALIZED FILTER:\n", Dumper $evaluator->{filter};
-    print MYFILE "#SERIALIZED FILTER!S!:\n", Dumper $evaluator->{filters};
-    close(MYFILE);
-    
-  warn $@ if $@;
-  #die;
   unless($@)
   {
     binmode STDOUT, ':utf8';
@@ -202,22 +144,7 @@ sub runquery {
       }} while (TestPMLTQ::next_file($evaluator,\@files));
     }
   }
-  print STDERR File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res"),"\n";
-  open my $fh, '<:utf8', File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res") or die "Can't open result file: $name.res\n";
-  local $/=undef;
-  my $expected = <$fh>;
-  print "         RESULT: '",sprintf("%20.20s",$result),"'\n";
-  print "EXPECTED RESULT: '",sprintf("%20.20s",$expected),"'\n";
-=xxx  
-  my @a=split("\n",$result);
-  my @b=split("\n",$string);
-  print "A=",@a,"\n";
-  print "B=",@b,"\n";
-  
-  print join("\n" , map {"$a[$_]\t$b[$_]"} (0 .. $#a));
-=cut  
-  <> unless ok($result eq $expected, "query evaluation ($name) on $treebank");
-  #TredMacro::reset();
+  ok($result eq $expected, "query evaluation ($name) on $treebank");
 }
 
 ################
@@ -244,15 +171,7 @@ for my $file (@files) {
   my $query_name = basename($file);
   $query_name=~s/\.\w+$//;
   ok($result, "parsing query '$query_name'");
-
-  open(MYFILE,">pml_queries/".basename($file).".pml");
-  print MYFILE "=pmltq\n$string\n=cut\n";
-  use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 100;print MYFILE "#DECODED:\n", Dumper PMLTQ::Common::parse_query($string);
-  close(MYFILE);
-    
   $result->set_attr('id', $file);
-
-  
   $doc->append_tree($result); ## every tree contains one query
 }
 
@@ -260,24 +179,13 @@ for my $treebank (@treebanks) {
   
   for my $query ($doc->trees) {
     # PŘÍMO DOTAZ VRAZIT DO EVALUATORU
-    print "QUERY:\t",$query->get_id(),"\n";
     my $qfile = $query->get_id();
     my ($layer) = basename($qfile) =~ m/^(.)/;
-    #map {`export TREDLIB=/opt/tred/tredlib; perl /opt/pmltq/engine/contrib/pmltq_nobtred.pl -f $qfile  $_`} @files;
-    #die "Use contrib/pmltq_nobtred.pl to run queries";
-    #my $evaluator = init_search($query, );
     my @files = glob(File::Spec->catfile($treebanks_dir, $treebank, 'data', "*.$layer.gz"));
-    #my @files = glob(File::Spec->catfile($treebanks_dir, $treebank, 'data', "filelist"));
     open my $fh, '<:utf8', $query->get_id() || die "Cannot open query file ".$query->get_id().": $!\n";
     local $/;
     my $string_query = <$fh>;
-    ###$query = PMLTQ::Common::parse_query($query);
-    #use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 10;print STDERR "QUERY:-----------\n", Dumper $query;
-    
-   
     runquery($string_query,$treebank,basename($qfile),@files);# if $qfile =~ m/$ENV{XXX}/;
-#<>;    
-    #die if $qfile =~ m/$ENV{XXX}/;
   }
 }
 

@@ -29,30 +29,41 @@ sub GetSecondaryFiles {
 }
 
 sub CurrentFile {
+  return;
+=xx  
   shift if !ref $_[0];
-  print STDERR "\t\tCurrentFile\t\tCALL:\t",join(" ",caller),"\n";
   my $win = shift || $grp;
   if ($win) {
     return $win->{FSFile};
   }
+=cut  
 }
 
+=item C<ThisAddress(node?,fsfile?)>
 
+Return a given node's address string in a form of
+filename#tree_no.index (tree_no starts from 1 to reflect TrEd's UI
+convention).  If the correct tree number could not be determined (the
+node does not belong to any top-level tree in the file) and the node
+has an ID, the address is returned in the form filename#ID.
+
+If C<node> is not given, C<$this> is assumed. Should the node be from a
+different file than the current one, the second argument must specify
+the corresponding L<Treex::PML::Document|http://search.cpan.org/dist/Treex-PML/lib/Treex/PML/Document.pm> object.
+
+=cut
 
 sub ThisAddress {
-  print STDERR "\t\tThisAddress\t\tCALL:\t",join(" ",caller),"\n";
-  my ( $f, $i, $n, $id ) = &LocateNode;
-  if ( $i == 0 and $id ) {
-    return $f . '#' . $id;
-  }
-  else {
-    return $f . '##' . $i . '.' . $n;
-  }
+    my ( $f, $i, $n, $id ) = &LocateNode;
+    if ( $i == 0 and $id ) {
+        return $f . '#' . $id;
+    }
+    else {
+        return $f . '##' . $i . '.' . $n;
+    }
 }
-
    
 sub LocateNode {
-  print STDERR "\t\tLocateNode\t\tCALL:\t",join(" ",caller),"\n";
   my $node
     = ref( $_[0] ) ? $_[0]
     : @_           ? confess("Cannot get position of an undefined node")
@@ -80,7 +91,6 @@ sub LocateNode {
 
 
 sub GetNodeIndex {
-  print STDERR "\t\tGetNodeIndex\t\tCALL:\t",join(" ",caller),"\n";
   my $node = ref( $_[0] ) ? $_[0] : $this;
   my $i = -1;
   while ($node) {
@@ -93,7 +103,6 @@ sub GetNodeIndex {
 
 sub DetermineNodeType {
   my ($node)=@_;
-  print STDERR "\t\tDetermineNodeType\t\tCALL:\t",join(" ",caller),"\n";
   Treex::PML::Document->determine_node_type($node);
 }  
 
