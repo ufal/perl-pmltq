@@ -6,6 +6,7 @@ use Test::More;
 plan skip_all => 'set TEST_QUERY to enable this test (developer only!)'
   unless $ENV{TEST_QUERY};
 
+use File::Basename;
 use FindBin qw($RealBin);
 use lib ($RealBin.'/../lib', ## PMLTQ
 	 $RealBin.'/libs', 
@@ -47,19 +48,24 @@ for my $treebank (@treebanks) {
   print STDERR "TREEBANK: $treebank\n";
   my $evaluator = TestPMLTQ::init_sql_evaluator($treebank,$configs);
   for my $query_file (glob(File::Spec->catfile($FindBin::RealBin, 'queries', '*.tq'))) {
+    my $name = basename($query_file);
     local $/;
     undef $/;
     open my $fh, '<:utf8', $query_file or die "Can't open file: '$query_file'\n";
     my $query = <$fh>;
     my $result;
     eval{$result = TestPMLTQ::run_sql_query($query,$query_file,$evaluator)};
-    my $query_name = basename($query_file);
-    ok(defined($result)  , "evaluation ($query_name) on $treebank");
-    #use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 3;print STDERR "RESULT:-----------\n", Dumper $result;
-    #print STDERR "@$result";
-    print STDERR map {join("\t",@$_)."\n"} @$result;
-    <>;
+    print STDERR "##############$@\n" if $@;
+    ok(defined($result)  , "evaluationable ($name) on $treebank");
+    my @rows = @$result;
+    my $res="";
+    $res .= join("\t",@$_)."\n" for (@rows);
+    open my $fh, '<:utf8', File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res") or die "Can't open result file: ".File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res")."\n";
+    local $/=undef;
+    my $expected = <$fh>;
+    ok(defined($result) && $res eq $expected, "query evaluation ($name) on $treebank");
   }
+  $evaluator->{dbi}->disconnect();
 }  
 
 
