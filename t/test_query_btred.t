@@ -53,7 +53,7 @@ $PMLTQ::user_defined = '\b(?:echild|eparent|a/lex.rf\|a/aux.rf|a/lex.rf|a/aux.rf
 
 my $treebanks_dir = File::Spec->catdir($FindBin::RealBin,'treebanks');
 opendir my $dh, $treebanks_dir or die "Couldn't open dir '$treebanks_dir': $!";
-my @treebanks = grep { !/^\./ } readdir $dh; # all files except the one beginning with dot
+my @treebanks = grep { !/^\./ and !/\.conf$/  } readdir $dh; # all files except the one beginning with dot and ending with .conf
 close $dh;
 
 
@@ -143,7 +143,10 @@ sub runquery {
         }
       }} while (TestPMLTQ::next_file($evaluator,\@files));
     }
-  }
+  }	
+  open my $fh, '<:utf8', File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res") or die "Can't open result file: $name.res\n";
+  local $/=undef;
+  my $expected = <$fh>;
   ok($result eq $expected, "query evaluation ($name) on $treebank");
 }
 
@@ -185,6 +188,7 @@ for my $treebank (@treebanks) {
     open my $fh, '<:utf8', $query->get_id() || die "Cannot open query file ".$query->get_id().": $!\n";
     local $/;
     my $string_query = <$fh>;
+    
     runquery($string_query,$treebank,basename($qfile),@files);# if $qfile =~ m/$ENV{XXX}/;
   }
 }
