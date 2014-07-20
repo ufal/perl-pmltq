@@ -5,7 +5,7 @@ use FindBin;
 use lib $FindBin::RealBin;
 use constant LIBS => $FindBin::RealBin.'/libs/';
 use lib map LIBS.$_, qw( fslib pml-base pmltq );
-use PML2BASE;
+use PMLTQ::PML2BASE;
 
 use Treex::PML;
 
@@ -72,7 +72,7 @@ print STDERR "Resource paths:",join(",",Treex::PML::ResourcePath()),"\n" if $opt
 
 Treex::PML::UseBackends(qw(Storable PMLBackend PMLTransformBackend));
 
-$opts{syntax}||='oracle'; $PML2BASE::opts{$_} = $opts{$_} for grep
+$opts{syntax}||='oracle'; $PMLTQ::PML2BASE::opts{$_} = $opts{$_} for grep
   defined($opts{$_}), qw{
 
   syntax ref data-dir default prefix related-schema rename-type debug
@@ -82,7 +82,7 @@ $opts{syntax}||='oracle'; $PML2BASE::opts{$_} = $opts{$_} for grep
 
  };
 
-PML2BASE::init();
+PMLTQ::PML2BASE::init();
 
 my $no_finish;
 for my $f (@ARGV) {
@@ -91,21 +91,21 @@ for my $f (@ARGV) {
     my $schema = Treex::PML::Factory->createPMLSchema({filename=>$f});
     if ($opts{'list-ref'}) {
       $no_finish=1;
-      my $ref=PML2BASE::complete_schema_pmlref_list($schema);
+      my $ref=PMLTQ::PML2BASE::complete_schema_pmlref_list($schema);
       print $schema->get_root_name,"=(\n";
       for (sort keys %{$ref}) {
 	print "  -r $_=$ref->{$_} \n";
       }
       print ")\n";
     } else {
-      PML2BASE::convert_schema($schema,\%opts);
-      PML2BASE::dump_typemap();
+      PMLTQ::PML2BASE::convert_schema($schema,\%opts);
+      PMLTQ::PML2BASE::dump_typemap();
     }
   } else {
-      PML2BASE::fs2base(Treex::PML::Factory->createDocumentFromFile($f));
+      PMLTQ::PML2BASE::fs2base(Treex::PML::Factory->createDocumentFromFile($f));
   }
 }
-PML2BASE::finish() unless $no_finish;
+PMLTQ::PML2BASE::finish() unless $no_finish;
 
 
 __END__
