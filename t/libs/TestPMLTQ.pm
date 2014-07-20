@@ -55,6 +55,7 @@ sub init_sql_evaluator {
   my $id = shift;
   my $configs = shift;
   $conf = first { $_->{id} eq $id } map $_->value, grep $_->name eq 'dbi', PMLTQ::Common::SeqV($configs);
+  return unless $conf;
   my $evaluator = PMLTQ::SQLEvaluator->new(undef,{
         connect => $conf,
         #debug=>$DEBUG,

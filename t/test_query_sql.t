@@ -45,7 +45,6 @@ my $configs = TestPMLTQ::read_sql_conf($conf_file);
 my @treebanks = qw/pdt20_sample_small/;
 
 for my $treebank (@treebanks) {
-  print STDERR "TREEBANK: $treebank\n";
   my $evaluator = TestPMLTQ::init_sql_evaluator($treebank,$configs);
   for my $query_file (glob(File::Spec->catfile($FindBin::RealBin, 'queries', '*.tq'))) {
     my $name = basename($query_file);
@@ -55,7 +54,6 @@ for my $treebank (@treebanks) {
     my $query = <$fh>;
     my $result;
     eval{$result = TestPMLTQ::run_sql_query($query,$query_file,$evaluator)};
-    print STDERR "##############$@\n" if $@;
     ok(defined($result)  , "evaluationable ($name) on $treebank");
     my @rows = @$result;
     my $res="";
@@ -67,7 +65,4 @@ for my $treebank (@treebanks) {
   }
   $evaluator->{dbi}->disconnect();
 }  
-
-
-
 done_testing();
