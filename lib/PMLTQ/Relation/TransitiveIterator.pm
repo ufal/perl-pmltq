@@ -3,202 +3,123 @@ package PMLTQ::Relation::TransitiveIterator;
 use 5.006;
 use strict;
 use warnings;
+
 use base qw(PMLTQ::Relation::Iterator);
-  use constant CONDITIONS=>0;
-  use constant ITERATOR=>1;
-  use constant MIN=>2;
-  use constant MAX=>3;
-  use constant ITER_STACK=>4;
-  use constant SEEN=>5;
-  use constant FILE=>6;
-  use constant DEPTH=>7;
-  use constant FOUND=>8;
-  use Carp;
-  
-=head1 NAME
+use constant CONDITIONS=>0;
+use constant ITERATOR=>1;
+use constant MIN=>2;
+use constant MAX=>3;
+use constant ITER_STACK=>4;
+use constant SEEN=>5;
+use constant FILE=>6;
+use constant DEPTH=>7;
+use constant FOUND=>8;
+use Carp;
 
-PMLTQ::Relation::TransitiveIterator
-
-=head1 VERSION
-
-Version 0.01
-
-=cut
-
-our $VERSION = '0.01';
 our $DEBUG; ### newly added
 
-=head1 SYNOPSIS
-
-=head1 EXPORT
-
-=head1 SUBROUTINES/METHODS
-
-=cut
-
-
 sub new {
-    my ($class,$iterator,$min,$max)=@_;
-    confess "usage: $class->new(\$iterator,\$min,\$max)" unless UNIVERSAL::DOES::does($iterator,'PMLTQ::Relation::Iterator');
-    $min||=1;
-    my $conditions = $iterator->conditions;
-    $iterator->set_conditions(sub{1});
-    warn "blessed $iterator,$min,$max,0.\n" if $DEBUG;
-    return bless [$conditions,$iterator,$min,$max,0],$class;
-  }
-  sub clone {
-    my ($self)=@_;
-    return bless [$self->[CONDITIONS],$self->[ITERATOR],$self->[MIN],$self->[MAX]], ref($self);
-  }
-  sub start  {
-    my ($self,$parent,$fsfile)=@_;
-    $self->[FILE]=$fsfile;
-    my $conditions = $self->[CONDITIONS];
-    my $seen = $self->[SEEN]={};
-    my $iter = $self->[ITERATOR]->clone();
-    my $iterators = $self->[ITER_STACK]=[ $iter ];
-    my $n = $iter->start($parent,$fsfile);
-    $seen->{$n}=1;
-    $self->[DEPTH] = 1;
-    my $found = $self->[FOUND]={};
-    warn "START $parent->{id},".($n?$n->{id}:q//).".\n" if $DEBUG;
-    $found->{$n}=1 if $conditions->($n, $iter->file);
-    return $self->[MIN]<=1 && scalar(keys %$found) > 0 ? $n : $self->next;
-  }
-  sub next {
-    my ($self)=@_;
-    my $depth = $self->[DEPTH];
-    my $found = $self->[FOUND];
-    return if $depth<1;
-    my $seen = $self->[SEEN];
-    my $conditions = $self->[CONDITIONS];
-    my $iterators = $self->[ITER_STACK];
-    my $iter = $iterators->[-1];
-    my $min = $self->[MIN];
-    my $max = $self->[MAX];
-    my $n = $iter->node;
-    warn "NEXT: $min,$max: $n->{id} (depth $depth)\n" if $DEBUG;
-    while ($n) {
-      if (!$max or $depth<$max) {
-        # prolong the iteratator (depth first)
-        my $new_it = $self->[ITERATOR]->clone();
-        my $new_n = $new_it->start($n,$self->[FILE]);
-        $new_n = $new_it->next while ($new_n and $seen->{$new_n});
-        warn "NEWN $n->{id}" if $DEBUG;
-        if ($new_n) {
-          push @$iterators, $new_it;
-          $n = $new_n;
-          $seen->{$n}=1;
-          $iter = $new_it;
-          $depth ++;
-          $found->{$n}=1 if $conditions->($new_n, $new_it->file);
-          next if scalar(keys %$found)<$min;
-          last;
-        }
+  my ($class,$iterator,$min,$max)=@_;
+  confess "usage: $class->new(\$iterator,\$min,\$max)" unless UNIVERSAL::DOES::does($iterator,'PMLTQ::Relation::Iterator');
+  $min||=1;
+  my $conditions = $iterator->conditions;
+  $iterator->set_conditions(sub{1});
+  warn "blessed $iterator,$min,$max,0.\n" if $DEBUG;
+  return bless [$conditions,$iterator,$min,$max,0],$class;
+}
+sub clone {
+  my ($self)=@_;
+  return bless [$self->[CONDITIONS],$self->[ITERATOR],$self->[MIN],$self->[MAX]], ref($self);
+}
+sub start  {
+  my ($self,$parent,$fsfile)=@_;
+  $self->[FILE]=$fsfile;
+  my $conditions = $self->[CONDITIONS];
+  my $seen = $self->[SEEN]={};
+  my $iter = $self->[ITERATOR]->clone();
+  my $iterators = $self->[ITER_STACK]=[ $iter ];
+  my $n = $iter->start($parent,$fsfile);
+  $seen->{$n}=1;
+  $self->[DEPTH] = 1;
+  my $found = $self->[FOUND]={};
+  warn "START $parent->{id},".($n?$n->{id}:q//).".\n" if $DEBUG;
+  $found->{$n}=1 if $conditions->($n, $iter->file);
+  return $self->[MIN]<=1 && scalar(keys %$found) > 0 ? $n : $self->next;
+}
+sub next {
+  my ($self)=@_;
+  my $depth = $self->[DEPTH];
+  my $found = $self->[FOUND];
+  return if $depth<1;
+  my $seen = $self->[SEEN];
+  my $conditions = $self->[CONDITIONS];
+  my $iterators = $self->[ITER_STACK];
+  my $iter = $iterators->[-1];
+  my $min = $self->[MIN];
+  my $max = $self->[MAX];
+  my $n = $iter->node;
+  warn "NEXT: $min,$max: $n->{id} (depth $depth)\n" if $DEBUG;
+  while ($n) {
+    if (!$max or $depth<$max) {
+      # prolong the iteratator (depth first)
+      my $new_it = $self->[ITERATOR]->clone();
+      my $new_n = $new_it->start($n,$self->[FILE]);
+      $new_n = $new_it->next while ($new_n and $seen->{$new_n});
+      warn "NEWN $n->{id}" if $DEBUG;
+      if ($new_n) {
+        push @$iterators, $new_it;
+        $n = $new_n;
+        $seen->{$n}=1;
+        $iter = $new_it;
+        $depth ++;
+        $found->{$n}=1 if $conditions->($new_n, $new_it->file);
+        next if scalar(keys %$found)<$min;
+        last;
       }
-      # continue top-level iterator (go breadth)
-      delete $seen->{$n};
+    }
+    # continue top-level iterator (go breadth)
+    delete $seen->{$n};
+    $n = $iter->next;
+    $n = $n->next while ($n and $seen->{$n});
+    while (!$n and $depth>1) {
+      pop @$iterators; # drop current iterator
+      $depth --;
+      $iter = $iterators->[-1]; # current top-level iterator
+      delete $seen->{ $iter->node };
+      delete $found->{ $iter->node };
       $n = $iter->next;
       $n = $n->next while ($n and $seen->{$n});
-      while (!$n and $depth>1) {
-        pop @$iterators; # drop current iterator
-        $depth --;
-        $iter = $iterators->[-1]; # current top-level iterator
-        delete $seen->{ $iter->node };
-        delete $found->{ $iter->node };
-        $n = $iter->next;
-        $n = $n->next while ($n and $seen->{$n});
-      }
-      $seen->{$n}=1 if $n;
-      last unless (scalar(keys %$found)<$min and
-                   scalar(keys %$found)>=1); # prolong if found but not long enough
     }
-    $self->[DEPTH]=$depth;
-    warn 'NEXT RETURN ',$n?$n->{id}:'empty',".\n" if $DEBUG;
-    return $n;
+    $seen->{$n}=1 if $n;
+    last unless (scalar(keys %$found)<$min and
+                 scalar(keys %$found)>=1); # prolong if found but not long enough
   }
-  sub node {
-    my ($self)=@_;
-    if ($self->[DEPTH]>0) {
-      return $self->[ITER_STACK][-1]->node;
-    } else {
-      return undef;
-    }
+  $self->[DEPTH]=$depth;
+  warn 'NEXT RETURN ',$n?$n->{id}:'empty',".\n" if $DEBUG;
+  return $n;
+}
+sub node {
+  my ($self)=@_;
+  if ($self->[DEPTH]>0) {
+    return $self->[ITER_STACK][-1]->node;
+  } else {
+    return undef;
   }
-  sub file {
-    my ($self)=@_;
-    if ($self->[DEPTH]>0) {
-      return $self->[ITER_STACK][-1]->file;
-    } else {
-      return undef;
-    }
+}
+sub file {
+  my ($self)=@_;
+  if ($self->[DEPTH]>0) {
+    return $self->[ITER_STACK][-1]->file;
+  } else {
+    return undef;
   }
-  sub reset {
-    my ($self)=@_;
-    $self->[FILE]=undef;
-    $self->[ITER_STACK]=undef;
-    $self->[DEPTH]=undef;
-    $self->[SEEN]=undef;
-  }
-
-
-=head1 AUTHOR
-
-AUTHOR, C<< <AUTHOR at UFAL> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to C<bug-pmltq-pml2base at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=PMLTQ-PML2BASE>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
-
-
-
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc PMLTQ::Relation::TransitiveIterator
-
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker (report bugs here)
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=PMLTQ-PML2BASE>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/PMLTQ-PML2BASE>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/PMLTQ-PML2BASE>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/PMLTQ-PML2BASE/>
-
-=back
-
-
-=head1 ACKNOWLEDGEMENTS
-
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright 2014 AUTHOR.
-
-This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
-
-See http://dev.perl.org/licenses/ for more information.
-
-
-=cut
+}
+sub reset {
+  my ($self)=@_;
+  $self->[FILE]=undef;
+  $self->[ITER_STACK]=undef;
+  $self->[DEPTH]=undef;
+  $self->[SEEN]=undef;
+}
 
 1; # End of PMLTQ::Relation::TransitiveIterator
