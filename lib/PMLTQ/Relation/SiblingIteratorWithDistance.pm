@@ -111,3 +111,13 @@ sub reset {
 }
 
 1; # End of PMLTQ::Relation::SiblingIteratorWithDistance
+
+__END__
+
+=pod
+
+=head1 NAME
+
+PMLTQ::Relation::SiblingIteratorWithDistance
+
+=cut

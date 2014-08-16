@@ -50,3 +50,13 @@ sub get_node_list  {
 }
 
 1; # End of PMLTQ::Relation::PMLREFIterator
+
+__END__
+
+=pod
+
+=head1 NAME
+
+PMLTQ::Relation::PMLREFIterator
+
+=cut

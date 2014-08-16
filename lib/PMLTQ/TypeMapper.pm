@@ -252,4 +252,12 @@ sub get_relation_target_type {
 
 1; # End of PMLTQ::TypeMapper
 
+=pod
+
+=head1 NAME
+
+PMLTQ::TypeMapper - Helper methods for PML::Schema, relations and PML::Node types
+
+=cut
+
 __END__

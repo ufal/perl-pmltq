@@ -80,3 +80,13 @@ sub reset {
 }
 
 1; # End of PMLTQ::Relation::DescendantIteratorWithBoundedDepth
+
+__END__
+
+=pod
+
+=head1 NAME
+
+PMLTQ::Relation::DescendantIteratorWithBoundedDepth
+
+=cut

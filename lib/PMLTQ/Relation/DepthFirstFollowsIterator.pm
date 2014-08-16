@@ -41,3 +41,13 @@ sub reset {
 }
 
 1; # End of PMLTQ::Relation::DepthFirstFollowsIterator
+
+__END__
+
+=pod
+
+=head1 NAME
+
+PMLTQ::Relation::DepthFirstFollowsIterator
+
+=cut

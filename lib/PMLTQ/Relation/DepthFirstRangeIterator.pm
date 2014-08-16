@@ -16,17 +16,6 @@ use constant NODE=>6;
 use constant FILE=>7;
 use constant START=>8;
 
-=head1 SYNOPSIS
-
-This iterator returns nodes preceding the start node
-if their depth-first-order distance from it falls into the range [-LMAX,-LMIN]
-and following the start node in their depth-first-order distance from
-it falls into the range [RMIN,RMAX]; note that the arguments for LMIN,LMAX
-must be negative values.
-For example, given (LMIN,LMAX,RMIN,RMAX) = (-1,-3,1,4), the iterator returns
-first three nodes preceding and first four nodes following the start node
-
-=cut
 
 sub new  {
   my ($class,$conditions,$lmin,$lmax,$rmin,$rmax)=@_;
@@ -135,3 +124,23 @@ sub reset {
 }
 
 1; # End of PMLTQ::Relation::DepthFirstRangeIterator
+
+__END__
+
+=pod
+
+=head1 NAME
+
+PMLTQ::Relation::DepthFirstRangeIterator
+
+=head1 SYNOPSIS
+
+This iterator returns nodes preceding the start node
+if their depth-first-order distance from it falls into the range [-LMAX,-LMIN]
+and following the start node in their depth-first-order distance from
+it falls into the range [RMIN,RMAX]; note that the arguments for LMIN,LMAX
+must be negative values.
+For example, given (LMIN,LMAX,RMIN,RMAX) = (-1,-3,1,4), the iterator returns
+first three nodes preceding and first four nodes following the start node
+
+=cut

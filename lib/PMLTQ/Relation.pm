@@ -9,7 +9,6 @@ use Carp;
 use File::Spec;
 use File::Glob qw(:glob);
 
-our $VERSION = '0.01';
 my %user_defined;
 my %start_to_target_type_map;
 
@@ -71,6 +70,12 @@ sub test_code {
 
 __END__
 
+=pod
+
+=head1 NAME
+
+PMLTQ::Relation - Base class for all Relations standard or user defined
+
 =for comment # autoloading of relation modules
 for my $dir (@INC) {
   next if ref $dir;
@@ -87,3 +92,5 @@ for my $dir (@INC) {
     }
   }
 }
+
+=cut

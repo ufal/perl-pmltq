@@ -89,7 +89,6 @@ BEGIN {
 
   our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} },  @{ $EXPORT_TAGS{'tredmacro'} } );
   our @EXPORT = qw(  );
-  our $VERSION = '0.01';
 }				# BEGIN
 
 
@@ -1182,3 +1181,13 @@ sub NewQueryDocument {
 }
 
 1; # End of PMLTQ::Common
+
+__END__
+
+=pod
+
+=head1 NAME
+
+PMLTQ::Common - Helper functions mainly for PML manipulations
+
+=cut

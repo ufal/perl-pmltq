@@ -52,3 +52,13 @@ sub start_file {
 }
 
 1; # End of PMLTQ::Relation::SimpleListIterator
+
+__END__
+
+=pod
+
+=head1 NAME
+
+PMLTQ::Relation::SimpleListIterator
+
+=cut

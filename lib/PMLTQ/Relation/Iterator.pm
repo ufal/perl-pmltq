@@ -31,3 +31,13 @@ sub node {}
 sub reset {}
 
 1; # End of PMLTQ::Relation::Iterator
+
+__END__
+
+=pod
+
+=head1 NAME
+
+PMLTQ::Relation::Iterator
+
+=cut

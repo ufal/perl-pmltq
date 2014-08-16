@@ -278,6 +278,12 @@ sub plan {
 
 __END__
 
+=pod
+
+=head1 NAME
+
+PMLTQ::Planner - Optimalizing search trees for BtredEvaluator
+
 =encoding UTF-8
 
 =head1 DESCRIPTION
@@ -285,3 +291,5 @@ __END__
 This module provides a simple query planning for BtredEvaluator and
 can also be used to transform a query-forest to a query-tree (if
 possible). We use directed MST to find a spanning tree.
+
+=cut

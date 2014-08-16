@@ -50,3 +50,13 @@ sub reset {
 }
 
 1; # End of PMLTQ::Relation::OptionalIterator
+
+__END__
+
+=pod
+
+=head1 NAME
+
+PMLTQ::Relation::OptionalIterator
+
+=cut

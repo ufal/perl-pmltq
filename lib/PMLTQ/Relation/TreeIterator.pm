@@ -54,3 +54,13 @@ sub reset {
 }
 
 1; # End of PMLTQ::Relation::TreeIterator
+
+__END__
+
+=pod
+
+=head1 NAME
+
+PMLTQ::Relation::TreeIterator
+
+=cut

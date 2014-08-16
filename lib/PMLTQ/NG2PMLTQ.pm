@@ -344,3 +344,5 @@ None by default. Optionally exports the function C<ng2pmltq>.
 =head2 EXPORT TAGS
 
 The tag C<:all> exports the function C<ng2pmltq>.
+
+=cut

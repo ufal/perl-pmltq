@@ -72,3 +72,13 @@ sub reset {
 }
 
 1; # End of PMLTQ::Relation::CurrentFileIterator
+
+__END__
+
+=pod
+
+=head1 NAME
+
+PMLTQ::Relation::CurrentFileIterator
+
+=cut

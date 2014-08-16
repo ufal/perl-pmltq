@@ -123,3 +123,13 @@ sub reset {
 }
 
 1; # End of PMLTQ::Relation::TransitiveIterator
+
+__END__
+
+=pod
+
+=head1 NAME
+
+PMLTQ::Relation::TransitiveIterator
+
+=cut

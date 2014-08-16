@@ -33,3 +33,13 @@ sub next {
 }
 
 1; # End of PMLTQ::Relation::TreexFilelistIterator
+
+__END__
+
+=pod
+
+=head1 NAME
+
+PMLTQ::Relation::TreexFilelistIterator
+
+=cut

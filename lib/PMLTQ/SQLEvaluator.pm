@@ -2968,4 +2968,16 @@ sub cmp_subquery_scope {
 
 1; # End of PMLTQ::SQLEvaluator
 
+=pod
+
+=head1 NAME
+
+PMLTQ::SQLEvaluator - SQL evaluator of PML-TQ queries which can use PostreSQL or Oracle as a backend
+
+=head1 VERSION
+
+version 0.3
+
+=cut
+
 __END__

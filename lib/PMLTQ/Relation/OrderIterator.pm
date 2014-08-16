@@ -67,3 +67,13 @@ sub get_node_list  {
 }
 
 1; # End of PMLTQ::Relation::OrderIterator
+
+__END__
+
+=pod
+
+=head1 NAME
+
+PMLTQ::Relation::OrderIterator
+
+=cut

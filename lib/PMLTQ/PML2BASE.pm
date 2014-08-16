@@ -1533,21 +1533,27 @@ __END__
 
 =pod
 
+=head1 NAME
+
+PMLTQ::PML2BASE - Convert from PML to SQL
+
 =encoding UTF-8
 
 =head1 SYNOPSIS
 
-use Treex::PML::Instance;
-use PML2BASE;
+    use Treex::PML::Instance;
+    use PML2BASE;
 
-PML2BASE::init();
-for my $file (@pml_files) {
-  PML2BASE::fs2base( Treex::PML::Instance->load({ filename=>$file })->convert_to_fsfile );
-}
-PML2BASE::finish();
+    PML2BASE::init();
+    for my $file (@pml_files) {
+      PML2BASE::fs2base( Treex::PML::Instance->load({ filename=>$file })->convert_to_fsfile );
+    }
+    PML2BASE::finish();
 
 =head1 DESCRIPTION
 
 This module contans functions that generate SQL schema and data
 loaders for a given set of PML documents that adher to
 a common PML schema.
+
+=cut

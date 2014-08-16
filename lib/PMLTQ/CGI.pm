@@ -1,5 +1,6 @@
 # -*- mode: cperl; coding: utf-8; -*-
 package PMLTQ::CGI;
+
 # ABSTRACT: [DEPRECATED] This is html fronted for SQLEvaluator and is currently being replaced by PMLTQ::Server
 
 use 5.006;
@@ -2389,18 +2390,18 @@ PMLTQ::CGI - [DEPRECATED] This is html fronted for SQLEvaluator and is currently
 
 =head1 SYNOPSIS
 
-   use PMLTQ::CGI;
-   PMLTQ::CGI::Configure({
+    use PMLTQ::CGI;
+    PMLTQ::CGI::Configure({
      # options
-   });
+    });
 
-   my $cgi = CGI->new();
-   ...
-   if ($request eq 'query') {
+    my $cgi = CGI->new();
+    ...
+    if ($request eq 'query') {
      resp_query($cgi);
-   } elsif ($request eq 'svg') {
+    } elsif ($request eq 'svg') {
      resp_svg($cgi);
-   } elsif ...
+    } elsif ...
 
 =head1 DESCRIPTION
 
@@ -2937,3 +2938,5 @@ For format=html, returns the same information in a small HTML
 document.
 
 =back
+
+=cut

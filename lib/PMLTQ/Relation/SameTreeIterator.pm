@@ -21,3 +21,13 @@ sub start  {
 }
 
 1; # End of PMLTQ::Relation::SameTreeIterator
+
+__END__
+
+=pod
+
+=head1 NAME
+
+PMLTQ::Relation::SameTreeIterator
+
+=cut

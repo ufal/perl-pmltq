@@ -3221,6 +3221,10 @@ __END__
 
 =pod
 
+=head1 NAME
+
+PMLTQ::BtredEvaluator - Pure perl evaluator of PML-TQ queries based on headless implementation of TrEd called Btred
+
 =head1 IMPLEMENTATION
 
 1. find in the query graph an oriented sceleton tree, possibly using
@@ -3319,13 +3323,11 @@ do {
   }
 }
 
-=xx
+=xx 
     if ($clone_before_plan) {
       use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 3;print Dumper $query_tree;
       #$query_tree=Treex::PML::Factory->createFSFormat()->clone_subtree($query_tree); ???????
       $query_tree=Treex::PML::FSFormat->clone_subtree($query_tree);
     }
-
-
 
 =cut

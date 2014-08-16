@@ -45,3 +45,13 @@ sub reset {
 }
 
 1; # End of PMLTQ::Relation::DescendantIterator
+
+__END__
+
+=pod
+
+=head1 NAME
+
+PMLTQ::Relation::DescendantIterator
+
+=cut

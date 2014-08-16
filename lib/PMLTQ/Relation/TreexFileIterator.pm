@@ -76,3 +76,17 @@ sub next {
 }
 
 1; # End of PMLTQ::Relation::TreexFileIterator
+
+__END__
+
+=pod
+
+=head1 NAME
+
+PMLTQ::Relation::TreexFileIterator
+
+=head1 VERSION
+
+version 0.01
+
+=cut

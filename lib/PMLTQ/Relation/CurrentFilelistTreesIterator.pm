@@ -44,3 +44,13 @@ sub reset {
 }
 
 1; # End of PMLTQ::Relation::CurrentFilelistTreesIterator
+
+__END__
+
+=pod
+
+=head1 NAME
+
+PMLTQ::Relation::CurrentFilelistTreesIterator
+
+=cut

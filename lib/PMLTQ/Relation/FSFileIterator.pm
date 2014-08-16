@@ -60,3 +60,13 @@ sub reset {
 }
 
 1; # End of PMLTQ::Relation::FSFileIterator
+
+__END__
+
+=pod
+
+=head1 NAME
+
+PMLTQ::Relation::FSFileIterator
+
+=cut

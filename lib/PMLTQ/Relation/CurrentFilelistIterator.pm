@@ -34,3 +34,13 @@ sub next {
   }
 
 1; # End of PMLTQ::Relation::CurrentFilelistIterator
+
+__END__
+
+=pod
+
+=head1 NAME
+
+PMLTQ::Relation::CurrentFilelistIterator
+
+=cut
