@@ -1,11 +1,12 @@
 package PMLTQ::SQLEvaluator;
 
+# ABSTRACT: SQL evaluator of PML-TQ queries which can use PostreSQL or Oracle as a backend
+
 use 5.006;
 use strict;
 use warnings;
 our $SEPARATE_TREES=0;
 
-# pajas@ufal.ms.mff.cuni.cz          01 èec 2008
 use Benchmark;
 use Carp;
 
@@ -33,15 +34,6 @@ use constant PREFER_LEFT_JOINS => {
 use constant USE_PLANNER => 'never'; #'forests'; # 'always', 'never', 'forests'
 use PMLTQ::Planner;
 
-=head1 NAME
-
-PMLTQ::SQLEvaluator
-
-=head1 VERSION
-
-Version 0.3
-
-=cut
 
 our $VERSION = '0.3';
 our $MIN_CLIENT_VERSION = '0.2';
@@ -50,29 +42,6 @@ our $ALLOW_MISPLACED_PG_JOIN = 1;
 # BEGIN { import TredMacro qw(first SeqV AltV ListV) }
 
 
-=head1 SYNOPSIS
-
-   use PMLTQ::SQLEvaluator;
-   blah blah blah
-
-=head1 DESCRIPTION
-
-Stub documentation for PMLTQ::SQLEvaluator,
-created by template.el.
-
-It looks like the author of the extension was negligent
-enough to leave the stub unedited.
-
-
-=head1 EXPORT
-
-None by default.
-
-
-=head1 SUBROUTINES/METHODS
-
-
-=cut
 
 
 sub check_client_version {
@@ -2997,76 +2966,6 @@ sub cmp_subquery_scope {
   return PMLTQ::Common::cmp_subquery_scope($src,$target);
 }
 
-
-
-
-
-
-=head1 AUTHOR
-
-AUTHOR, C<< <AUTHOR at UFAL> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to C<bug-pmltq-pml2base at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=PMLTQ-PML2BASE>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
-
-
-
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc PMLTQ::SQLEvaluator
-
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker (report bugs here)
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=PMLTQ-PML2BASE>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/PMLTQ-PML2BASE>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/PMLTQ-PML2BASE>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/PMLTQ-PML2BASE/>
-
-=back
-
-=head1 SEE ALSO
-
-Mention other useful documentation such as the documentation of
-related modules or operating system documentation (such as man pages
-in UNIX), or any relevant external documentation such as RFCs or
-standards.
-
-If you have a mailing list set up for your module, mention it here.
-
-If you have a web site set up for your module, mention it here.
-
-=head1 ACKNOWLEDGEMENTS
-
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright 2014 AUTHOR.
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.2 or,
-at your option, any later version of Perl 5 you may have available.
-
-
-=cut
-
 1; # End of PMLTQ::SQLEvaluator
+
+__END__

@@ -1,5 +1,7 @@
 package PMLTQ::PML2BASE;
 
+# ABSTRACT: Convert from PML to SQL
+
 use 5.006;
 use strict;
 use warnings;
@@ -12,7 +14,6 @@ use Carp;
 # $SIG{__WARN__} = sub { Carp::cluck(@_); };
 
 use constant MAX_NAME_LENGTH => 16;
-
 
 use constant HYBRID=>1;        # create both separate node table and node table with attributes
 use constant NO_TREE_TABLE=>2; # don't create one common common node table for all node types
@@ -77,51 +78,12 @@ use List::Util qw(max first);
 use Cwd;
 use Carp;
 
-=head1 NAME
-
-PMLTQ::PML2BASE
-
-=head1 VERSION
-
-Version 0.1
-
-=cut
-
-our $VERSION = '0.1';
-
-
-=head1 SYNOPSIS
-
-use Treex::PML::Instance;
-use PML2BASE;
-
-PML2BASE::init();
-for my $file (@pml_files) {
-  PML2BASE::fs2base( Treex::PML::Instance->load({ filename=>$file })->convert_to_fsfile );
-}
-PML2BASE::finish();
-
-=head1 DESCRIPTION
-
-This module contans functions that generate SQL schema and data
-loaders for a given set of PML documents that adher to
-a common PML schema.
-
-
-=head1 EXPORT
-=cut
 my ($file_table,$root_name,$schema,$references_table,%schema,%fh,%orig_name,%seen_ref_schema,
     $node_table,$index_id,$last_type_no,$tree_no,$filename,
     $idx,$node_idx, $last_tree_no, %pmlref_target_info
    );
 
 our %opts;
-
-=head1 SUBROUTINES/METHODS
-
-
-
-=cut
 
 sub init {
   $idx = $opts{'init-idx'} || 0;
@@ -1518,7 +1480,7 @@ EOF
       for my $desc (values %schema) {
 	for my $col (@{$desc->{colspec}}) {
 	  my ($c,$t)=@$col;
-	  if ($t=~/ (FOREIGN KEY) (.*)$/) {
+	  if ($t = m/ (FOREIGN KEY) (.*)$/) {
 	    $fh{'#POST_SQL'}->print(qq{ALTER TABLE "$desc->{table}" ADD $1("$c") $2;\n});
 	  }
 	}
@@ -1564,60 +1526,28 @@ EOF
 
 
 
-=head1 AUTHOR
-
-AUTHOR, C<< <AUTHOR at UFAL> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to C<bug-pmltq-pml2base at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=PMLTQ-PML2BASE>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
-
-
-
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc PMLTQ::PML2BASE
-
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker (report bugs here)
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=PMLTQ-PML2BASE>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/PMLTQ-PML2BASE>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/PMLTQ-PML2BASE>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/PMLTQ-PML2BASE/>
-
-=back
-
-
-=head1 ACKNOWLEDGEMENTS
-
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright 2014 AUTHOR.
-
-This program is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.2 or,
-at your option, any later version of Perl 5 you may have available.
-
-=cut
 
 1; # End of PMLTQ::PML2BASE
+
+__END__
+
+=pod
+
+=encoding UTF-8
+
+=head1 SYNOPSIS
+
+use Treex::PML::Instance;
+use PML2BASE;
+
+PML2BASE::init();
+for my $file (@pml_files) {
+  PML2BASE::fs2base( Treex::PML::Instance->load({ filename=>$file })->convert_to_fsfile );
+}
+PML2BASE::finish();
+
+=head1 DESCRIPTION
+
+This module contans functions that generate SQL schema and data
+loaders for a given set of PML documents that adher to
+a common PML schema.

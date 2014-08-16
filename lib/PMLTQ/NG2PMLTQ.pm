@@ -1,5 +1,7 @@
 package PMLTQ::NG2PMLTQ;
 
+# ABSTRACT: [DEPRECATED] Conversion functions from NetGraph to PML-TQ
+
 use 5.006;
 use strict;
 use warnings;
@@ -8,18 +10,7 @@ use Carp;
 require Exporter;
 import Exporter qw( import );
 
-
 use List::Util qw(first);
-
-=head1 NAME
-
-PMLTQ::NG2PMLTQ -  Converts NetGraph queries to PMLTQ queries
-
-=head1 VERSION
-
-Version 0.01
-
-=cut
 
 our @ISA = qw(Exporter);
 
@@ -30,33 +21,6 @@ our %EXPORT_TAGS = ( 'all' => [ qw(
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 
 our @EXPORT = qw(  );
-
-our $VERSION = '0.01';
-
-
-=head1 SYNOPSIS
-
-
-   use PMLTQ::NG2PMLTQ qw(ng2pmtq);
-   my $pmltq_query_string = ng2pmltq( $netgraph_query_string, { options });
-
-=head1 DESCRIPTION
-
-This module provides the function C<ng2pmltq> which takes a NetGraph
-query and attempts to translate it to an equivalent PMLTQ query.
-
-=head2 EXPORT
-
-None by default. Optionally exports the function C<ng2pmltq>.
-
-=head2 EXPORT TAGS
-
-The tag C<:all> exports the function C<ng2pmltq>.
-
-=head1 SUBROUTINES/METHODS
-
-
-=cut
 
 sub ng2pmltq {
   local $_=shift;
@@ -77,7 +41,7 @@ sub parse_tree {
   local $indent= $is_top ? 0 : $indent;
   my $result='';
   while (length) {
-    if (s/^
+    if ( s/^
 	  \[
 	  (
 	    (?:
@@ -350,68 +314,33 @@ sub parse_condition {
 
 
 
-=head1 AUTHOR
-
-AUTHOR, C<< <AUTHOR at UFAL> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to C<bug-pmltq-pml2base at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=PMLTQ-PML2BASE>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
-
-
-
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc PMLTQ::NG2PMLTQ
-
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker (report bugs here)
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=PMLTQ-PML2BASE>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/PMLTQ-PML2BASE>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/PMLTQ-PML2BASE>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/PMLTQ-PML2BASE/>
-
-=back
-
-=head1 SEE ALSO
-
-NetGraph - L<http://quest.ms.mff.cuni.cz/netgraph/indexEn.html>
-
-PMLTQ
-
-=head1 ACKNOWLEDGEMENTS
-
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright 2014 AUTHOR.
-
-This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
-
-See http://dev.perl.org/licenses/ for more information.
-
-
-=cut
 
 1; # End of PMLTQ::NG2PMLTQ
+
+__END__
+
+=pod
+
+=head1 NAME
+
+PMLTQ::NG2PMLTQ - [DEPRECATED] Conversion functions from NetGraph to PML-TQ
+
+=encoding UTF-8
+
+=head1 SYNOPSIS
+
+   use PMLTQ::NG2PMLTQ qw(ng2pmtq);
+   my $pmltq_query_string = ng2pmltq( $netgraph_query_string, { options });
+
+=head1 DESCRIPTION
+
+This module provides the function C<ng2pmltq> which takes a NetGraph
+query and attempts to translate it to an equivalent PMLTQ query.
+
+=head2 EXPORT
+
+None by default. Optionally exports the function C<ng2pmltq>.
+
+=head2 EXPORT TAGS
+
+The tag C<:all> exports the function C<ng2pmltq>.

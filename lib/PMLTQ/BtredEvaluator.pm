@@ -1,5 +1,7 @@
 package PMLTQ::BtredEvaluator;
 
+# ABSTRACT: Pure perl evaluator of PML-TQ queries based on headless implementation of TrEd called Btred
+
 use 5.006;
 use strict;
 use warnings;
@@ -14,66 +16,38 @@ use if $ENV{TREEX_EXTENSION}, 'Treex::Core::Document';
 
 use PMLTQ::Common qw(:constants first min max uniq ListV AltV SeqV compute_column_data_type compute_expression_data_type compute_expression_data_type_pt);
 
-=head1 NAME
+use PMLTQ::Relation::FSFileIterator;
+use PMLTQ::Relation::CurrentFileIterator;
+use PMLTQ::Relation::CurrentFileIterator;
+use PMLTQ::Relation::TreexFileIterator;
+use PMLTQ::Relation::CurrentFilelistIterator;
+use PMLTQ::Relation::TreexFilelistIterator;
+use PMLTQ::Relation::CurrentTreeIterator;
+use PMLTQ::Relation::CurrentFilelistTreesIterator;
+use PMLTQ::Relation::TreeIterator;
+use PMLTQ::Relation::SameTreeIterator;
+use PMLTQ::Relation::TransitiveIterator;
+use PMLTQ::Relation::OptionalIterator;
+use PMLTQ::Relation::ChildnodeIterator;
+use PMLTQ::Relation::DepthFirstPrecedesIterator;
+use PMLTQ::Relation::DepthFirstFollowsIterator;
+use PMLTQ::Relation::DepthFirstRangeIterator;
+use PMLTQ::Relation::DescendantIterator;
+use PMLTQ::Relation::DescendantIteratorWithBoundedDepth;
+use PMLTQ::Relation::ParentIterator;
+use PMLTQ::Relation::AncestorIterator;
+use PMLTQ::Relation::AncestorIteratorWithBoundedDepth;
+use PMLTQ::Relation::SiblingIterator;
+use PMLTQ::Relation::SiblingIteratorWithDistance;
+use PMLTQ::Relation::PMLREFIterator;
+use PMLTQ::Relation::MemberIterator;
+use PMLTQ::Relation::OrderIterator;
 
-PMLTQ::BtredEvaluator
-
-=head1 VERSION
-
-Version 0.01
-
-=cut
-
-our $VERSION = '0.01';
 our $STOP;
 our $PROGRESS;
 our $DEBUG = $ENV{PMLTQ_DEBUG};
 our $DEBUGGER = $ENV{IN_DEBUGGER}; # set when using a debugger, this will save subroutines as files
 our $ALL_SUBQUERIES_LAST=0;
-
-=head1 SYNOPSIS
-
-
-=head1 EXPORT
-
-=head1 SUBROUTINES/METHODS
-
-
-=cut
-
-=head1 TODO
-
-the code generated from the if() function should read instead (for
-both node constraint and filter code)
-
-if (
-  do {
-    # compute condition (using several nested foreach loops if needed)
-    $reslt
-  }) {
-  # condition where if() is replaced by IF_TRUE
-} else {
-  # condition where if() is replaced by IF_FALSE
-}
-
-# or:
-
-do {
-  my @varX =
-  do {
-    # compute condition (using several nested foreach loops if needed)
-    $reslt
-  }) ? do {
-    # all IF_TRUE values
-  } : do {
-    # all IF_FALSE values
-  };
-  foreach $varX (@varX) {
-    # ...
-  }
-}
-
-=cut
 
 sub round {
   my ($num, $digits)=@_;
@@ -303,7 +277,6 @@ sub _compute_order_span {
     return $attr;
   };
 
-
   #
   # The following is a simple DFS with updating parent's span on the way up
   # we do not enter subtrees of ordered nodes, since the spans of
@@ -451,13 +424,6 @@ sub new {
     $roots = [$query_tree];
   } else {
     require PMLTQ::Planner;
-=xx    
-    if ($clone_before_plan) {
-      use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 3;print Dumper $query_tree;
-      #$query_tree=Treex::PML::Factory->createFSFormat()->clone_subtree($query_tree); ???????
-      $query_tree=Treex::PML::FSFormat->clone_subtree($query_tree);
-    }
-=cut    
     @query_nodes=PMLTQ::Common::FilterQueryNodes($query_tree); # same order as @orig_nodes
     %orig2query = map { $orig_nodes[$_] => $query_nodes[$_] } 0..$#orig_nodes;
     PMLTQ::Planner::name_all_query_nodes($query_tree); # need for planning
@@ -3249,97 +3215,13 @@ sub plan_query {
   PMLTQ::Planner::plan(\@query_nodes,$query_tree);
 }
 
-use PMLTQ::Relation::FSFileIterator;
-use PMLTQ::Relation::CurrentFileIterator;
-use PMLTQ::Relation::CurrentFileIterator;
-use PMLTQ::Relation::TreexFileIterator;
-use PMLTQ::Relation::CurrentFilelistIterator;
-use PMLTQ::Relation::TreexFilelistIterator;
-use PMLTQ::Relation::CurrentTreeIterator;
-use PMLTQ::Relation::CurrentFilelistTreesIterator;
-use PMLTQ::Relation::TreeIterator;
-use PMLTQ::Relation::SameTreeIterator;
-use PMLTQ::Relation::TransitiveIterator;
-use PMLTQ::Relation::OptionalIterator;
-use PMLTQ::Relation::ChildnodeIterator;
-use PMLTQ::Relation::DepthFirstPrecedesIterator;
-use PMLTQ::Relation::DepthFirstFollowsIterator;
-use PMLTQ::Relation::DepthFirstRangeIterator;
-use PMLTQ::Relation::DescendantIterator;
-use PMLTQ::Relation::DescendantIteratorWithBoundedDepth;
-use PMLTQ::Relation::ParentIterator;
-use PMLTQ::Relation::AncestorIterator;
-use PMLTQ::Relation::AncestorIteratorWithBoundedDepth;
-use PMLTQ::Relation::SiblingIterator;
-use PMLTQ::Relation::SiblingIteratorWithDistance;
-use PMLTQ::Relation::PMLREFIterator;
-use PMLTQ::Relation::MemberIterator;
-use PMLTQ::Relation::OrderIterator;
- 
+1; # End of PMLTQ::BtredEvaluator
 
+__END__
 
+=pod
 
-=head1 AUTHOR
-
-AUTHOR, C<< <AUTHOR at UFAL> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to C<bug-pmltq-pml2base at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=PMLTQ-PML2BASE>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
-
-
-
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc PMLTQ::BtredEvaluator
-
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker (report bugs here)
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=PMLTQ-PML2BASE>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/PMLTQ-PML2BASE>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/PMLTQ-PML2BASE>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/PMLTQ-PML2BASE/>
-
-=back
-
-
-=head1 ACKNOWLEDGEMENTS
-
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright 2014 AUTHOR.
-
-This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
-
-See http://dev.perl.org/licenses/ for more information.
-
-
-=cut
-
-=for comment
- comment on implementation on top of btred search engine
+=head1 IMPLEMENTATION
 
 1. find in the query graph an oriented sceleton tree, possibly using
 Kruskal and some weighting rules favoring easy to follow types of
@@ -3405,7 +3287,45 @@ The relation predicates from these sub-queries to the out-side trees
 are treated as predicate relations in complex relations and are only
 resolved as soon as all required query nodes are matched.
 
+=head1 TODO
+
+the code generated from the if() function should read instead (for
+both node constraint and filter code)
+
+if (
+  do {
+    # compute condition (using several nested foreach loops if needed)
+    $reslt
+  }) {
+  # condition where if() is replaced by IF_TRUE
+} else {
+  # condition where if() is replaced by IF_FALSE
+}
+
+# or:
+
+do {
+  my @varX =
+  do {
+    # compute condition (using several nested foreach loops if needed)
+    $reslt
+  }) ? do {
+    # all IF_TRUE values
+  } : do {
+    # all IF_FALSE values
+  };
+  foreach $varX (@varX) {
+    # ...
+  }
+}
+
+=xx
+    if ($clone_before_plan) {
+      use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 3;print Dumper $query_tree;
+      #$query_tree=Treex::PML::Factory->createFSFormat()->clone_subtree($query_tree); ???????
+      $query_tree=Treex::PML::FSFormat->clone_subtree($query_tree);
+    }
+
+
+
 =cut
-
-
-1; # End of PMLTQ::BtredEvaluator

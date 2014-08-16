@@ -1,5 +1,6 @@
 # -*- mode: cperl; coding: utf-8; -*-
 package PMLTQ::CGI;
+# ABSTRACT: [DEPRECATED] This is html fronted for SQLEvaluator and is currently being replaced by PMLTQ::Server
 
 use 5.006;
 use strict;
@@ -24,141 +25,6 @@ use HTTP::Request;
 use File::Temp;
 use JSON;
 use YAML ();
-
-=head1 NAME
-
-PMLTQ::CGI - REST interface to the PML-TQ SQL-driven engine
-
-=head1 VERSION
-
-Version 0.01
-
-=cut
-
-our $VERSION = '0.01';
-
-
-=head1 SYNOPSIS
-
-   use PMLTQ::CGI;
-   PMLTQ::CGI::Configure({
-     # options
-   });
-
-   my $cgi = CGI->new();
-   ...
-   if ($request eq 'query') {
-     resp_query($cgi);
-   } elsif ($request eq 'svg') {
-     resp_svg($cgi);
-   } elsif ...
-
-=head1 DESCRIPTION
-
-This module is intended to be used in a FastCGI or Net::HTTPServer
-environment (see pmltq_http). It implements a REST web service and a
-web application to the PML-TQ engine driven by an SQL database
-(PMLTQ::SQLEvaluator).
-
-
-=head1 EXPORT
-
-=head1 SUBROUTINES/METHODS
-
-=cut
-
-=head1 WEB SERVICE
-
-Individual types of request are implemented by the resp_* family of
-functions, which all assume a CGI-like object as their first and only
-argument.
-
-The web service uses URLs of the form
-
-  http(s)://<host>:<port>/<method_prefix><method_name>?<arguments>
-
-or
-
-  http(s)://<host>:<port>/<method_prefix><method_name>/<resource-path>?<arguments>
-
-where method_prefix is an optional path prefix, typically empty (see
-method-prefix configuration option).
-
-It is up to the HTTP server to do both user authentication and
-authorization to the individual web service methods.
-
-=head1 WEB APPLICATION
-
-Individual types of request are implemented by a wrapper app() function,
-whose first argument is a reference to a corresponding resp_* function
-(see L</WEB SERVICE>) and the second argument is a CGI-like object.
-
-The web service uses URLs of the form
-
-  http(s)://<host>:<port>/<app_prefix>/<method_prefix><method_name>?<arguments>
-
-or
-
-  http(s)://<host>:<port>/<app_prefix>/<method_prefix><method_name>/<resource-path>?<arguments>
-
-where <app_prefix> is 'app' by default.
-
-=head1 AUTHENTICATION AND AUTHORIZATION
-
-The authorization to the web application depends on the HTTP server to
-do both autentication and authorization for all the web service
-requests and also the <app_prefix>/<method_prefix>login web application request.  It
-is not required to do authorization for other <app_prefix>/<method_prefix>* requests.
-
-The autentication and authorization data are stored in the <auth-file>
-configuration file, which contains user names, unencrypted passwords
-(optional), and server-ID based access lists for each user.
-
-The HTTP server may use the auth() method provided by this module in
-order to obtain a password stored in the <auth-file> (this is what
-pmltq_http does). Alternatively, the passwords can be stored
-in the server's configuration, e,g. the .htaccess file, and the
-<auth-file> can be used just for authorization.
-
-Each web application method (<app_prefix>/<method_prefix>*) first checks the user and
-session ID arguments (u and s) for validity and consults <auth-file>
-in order to determine if the user is authorized for the running
-instance.  If the session is valid and the user authorized, the
-request is performed. Otherwise the client is redirected to the
-<app_prefix>/<method_prefix>login request.
-
-The HTTP server should be configured so as to require HTTP password
-authentication for the <app_prefix>/<method_prefix>login request. If the HTTP server
-authorizes the client for the <app_prefix>/<method_prefix>login request, a new
-session is created for the user and the client is redirected to the
-web application start page (<app_prefix>/<method_prefix>form).
-
-Updates to the <auth-file> apply immediately without needing to
-restart the service.
-
-Each line in the <auth-file> may have one the following forms (empty and invalid lines are ignored):
-
-# <comment>
-<username> : : <authorization>
-<username>: <password>
-<username>: <password> : <authorization>
-
-where <authorization> is a comma-separated list of server IDs (see the
-C<server> configuration option). If the list is preceded by the minus
-(-) sign, the user is authorized this service unless the server ID is
-present in the list.  If this list is preceded by the plus (+) sign or
-no sign at all, the user is authorized to connect to this service, if
-and only if the server ID is present in the list. If the list
-<authorization> list is not present, the user is authorized to connect
-to any service.
-
-The information about other services is also used when responding to
-the method L<"/other">, which returns basic information about other
-running instances (sharing the same <pid-dir> and <auth-file>, but
-typically running on different ports or using different prefixes) and
-whether the current user is authorized to use them or not.
-
-=cut
 
 my $ua = LWP::UserAgent->new;
 $ua->agent("Tree_Query_CGI/1.0 ");
@@ -193,90 +59,6 @@ my $ga_tracking_domain;
 
 use vars qw($PAST_QUERIES_SCRIPT);
 
-=head1 INITIALIZATION
-
-The module is initialized using a call to the Configure() function:
-
-  PMLTQ::CGI::Configure({...options...});
-
-In a forking FastCGI or Net::HTTPServer implementation, this
-configuration is typically called just once prior to forking, so as
-only one PID file is created for this service (even if the service is
-handled by several forked instances).
-
-The configuration options are:
-
-=over 5
-
-=item static-dir => $dirname
-
-Directory from which static content is to be served.
-
-=item config-file => $filename
-
-PML-TQ configuration file (in the PML format described by the pmltq_cgi_conf_schema.xml schema.
-
-=item server => $conf_id
-
-ID of the server configuration in the configuration file (see above).
-
-=item pid-dir => $dirname
-
-Directory where to store a PID file containing basic information about
-this running instance (to be used by other instances in order to
-provide a list of available services).
-
-This directory is also used to create user session files which may be
-reused by other running services as well to provide a single-login
-access to a family of related PML-TQ services.
-
-=item port => $port_number
-
-Port number of this instance. This information is stored into a PID
-file and can be used by other running instances in order to determine
-the correct URL for the service provided by this instance.
-
-=item query-log-dir => $dirname
-
-Directory where individual user's queries are logged. The content of
-this directory is also used to retrieve previous user's queries.
-
-=item auth-file => $filename
-
-Path to a file containing user access configuration (note that
-cooperation with the HTTP server is required), see L<"AUTHENTICATION AND AUTHORIZATION">.
-
-=item tmp-dir => $dirname
-
-A directory to use for temporary files.
-
-=item google-translate => $bool
-
-Add Google Translator service to the Toolbar of the sentence displayed
-with the result tree.
-
-=item ms-translate => $api_key
-
-Add Microsoft Bing Translator service to the Toolbar of the sentence
-displayed with the result tree. The argument must be a valid API key
-issued from Microsoft for the host that runs this HTTP service.
-
-=item method-prefix => $path_prefix
-
-Optional path to be used as a prefix to all method parts in the
-URLs. It is not recommended to use this parameter. If you must, make
-sure you add a trailing /. If set to foo/, the path part of the URL
-for the web service method 'query' (for example), will have the form of
-'foo/query'. The corresponding web application path will be
-'app/foo/query'.
-
-=item debug => $bool
-
-If true, the service logs some extra debugging information into the error log (STDERR).
-
-=back
-
-=cut
 
 
 sub Configure {
@@ -411,19 +193,6 @@ sub update_auth_info {
   }
 }
 
-=head1 FUNCTIONS
-
-=over 5
-
-=item auth($unused,$user)
-
-This helper function is designed for use with the RegisterAuth method
-of Net::HTTPServer. It retrieves password for a given user from the
-<auth-file> and returns ("401","") if user not found or not authorized
-to access this service instance (server ID), and
-("200",$unencrypted_password) otherwise.
-
-=cut
 
 # this method returns (401,"") for unknown user
 # and (200,$password) for a known user.
@@ -660,21 +429,6 @@ sub redirect {
   return 303;
 }
 
-=item app($resp_sub, $cgi)
-
-This function is intended as a wrapper for the requests handlers when
-called from the L<WEB APPLICATION>. It calls $resp_sub if valid
-authorized username and session-id were passed in the s and u
-parameters of the request, otherwise redirects the client to the URL
-of the login request.
-
-Requests handled by this function accept the following additional
-parameters:
-
-  s - sessionID
-  u - username
-
-=cut
 
 sub app {
   my $callback=shift;
@@ -690,27 +444,6 @@ sub app {
   }
 }
 
-=item resp_login($cgi)
-
-This method implements response to the
-<app_prefix>/<method_prefix>login request. The request is assumed to
-be be protected by a HTTP authorization and should only be used in
-connection with the WEB APPLICATION.
-
-It checks that a valid session file exists for the user exists in the
-pid_dir and creates a new one (pruning all invalid or expired session
-files for the user). Then it redirects the user to the L<"/form"> method
-(providing a user name and session-id in the u and s arguments).
-
-Note: this function does not implement authorization or
-authentication. It just creates a session for any user to which the
-HTTP server granted access to the login request; the HTTP server is
-responsible for granting access to authenticated users only and
-session validity checking mechanisms used by the app() function
-implementing the WEB APPLICATION are responsible for particular
-instance authorization based on the <auth-file> data.
-
-=cut
 
 sub resp_login {
   my ($cgi)=@_;
@@ -740,7 +473,7 @@ sub resp_login {
     print $fh ("$$\t$user\t".localtime()."\n");
     close $fh;
   }
-  return redirect($cgi,qq{form},{u=>$user,s=>$session_id});
+  return redirect($cgi,qq{form},{u=>$user,s => $session_id});
 }
 
 sub session_id_string_ok {
@@ -797,15 +530,6 @@ sub is_anonymous {
     return !logged_in($cgi) and $conf->{anonymous_access};
 }
 
-
-=item resp_root($cgi)
-
-This function is used to implement a request to the base URL (/).
-It redirects to <app-prefix>/form if a valid username and session-id is
-passed in the s and u URL parameters, otherwise redirects to <app-prefix>/login.
-
-=cut
-
 sub resp_root {
   my ($cgi)=@_;
   if (session_ok($cgi) or $conf->{anonymous_access}) {
@@ -815,62 +539,6 @@ sub resp_root {
   }
 }
 
-=item resp_<method>($cgi)
-
-This family of functions implements individual types of WEB SERVICE
-requests described below.  For the WEB APPLICATION, they should be
-called through the app() function documented above.
-
-=cut
-=back
-
-
-=head1 WEB APPLICATION API
-
-The web application API is the same as that for the web service,
-described below, except that
-
-  s - sessionID
-  u - username
-
-
-=head1 WEB SERVICE API
-
-All methods of the web service accept both GET and POST requests; in
-the latter case, parameters can be passed both as URL parameters or as
-data.  In both cases, the parameters must be encoded using th
-C<application/x-www-form-urlencoded> format.
-
-NOTE: we write method names as C</METHOD>, omitting any
-<method_prefix> specified in the configuration and adding a leading
-slash (to indicate that we are describing the REST web service API
-rather than Perl API).  However, if a request method A returns
-(possibly embedded in some HTML code) an URL to a method B on this
-instance, the returned URL has the form of a relative ( C<B> ) rather
-than absolute URL ( C</B> ), so if the original method was invoked
-e.g. as http://foo.bar:8082/app/A, the browser will reslove the
-returned URL to http://foo.bar:8082/app/B.
-
-=over 5
-
-=item /about
-
-Parameters:
-
-        format - html|json|text
-  extended - 0|1
-
-Returns information about this instance:
-
-        id       - ID
-        service  - base URL (hostname)
-        title    - full name
-        abstract - short description
-        moreinfo - a web URL with more information about the treebank database
-        featured - popularity index
-
-=cut
-
 sub resp_about {
   my ($cgi)=@_;
   my $ext = $cgi->param('extended')?1:0;
@@ -878,29 +546,6 @@ sub resp_about {
   _dump_all_info($cgi) if $ext;
   return 200;
 }
-
-
-=item /other
-
-Parameters:
-
-        format - html|json|text
-
-Returns information about other known PML-TQ services (sharing the same
-<pid-dir> and <auth-file>, but typically running on different ports or
-using different app or method prefixes):
-
-        id       - ID
-        service  - base URL (hostname)
-        port     - port
-        title    - full name
-        abstract - short description
-        moreinfo - a web URL with more information about the treebank database
-        access   - true if the user is authorized to use the instance
-        featured - popularity index
-
-=cut
-
 
 sub resp_other_services {
     my ($cgi)=@_;
@@ -998,28 +643,6 @@ sub _js_escape_string {
   return $str;
 }
 
-=item /past_queries
-
-Parameters:
-
-  format - html|json|text
-  cb     - a string (typically JavaScript function name)
-  first  - first query to return
-  max    - max number of queries to return
-
-Returns a list of users past queries. If format='json', the result is
-an array of arrays (pairs), each of which consists of the time they
-were last run (in seconds since UNIX epoch) and the query. If C<cb> is
-passed, the JSON array is wrapped into a Javacript function whose name
-was passed in C<cb>.
-
-If format='text' the queries are returned as plain text, separated
-only by two empty lines.
-
-The options C<first> and C<max> can be used to obtain only partial
-lists. For format='html', max defaults to 50.
-
-=cut
 
 sub resp_past_queries {
   my ($cgi)=@_;
@@ -1476,14 +1099,6 @@ EOF
   return $ret;
 }
 
-=item /form
-
-Parameters: none
-
-Returns HTML with an empty PML-TQ query form, introduction and a few
-query examples generated for the actual treebank.
-
-=cut
 
 sub resp_form {
   my $cgi  = shift;             # CGI.pm object
@@ -1533,49 +1148,6 @@ sub _error_html {
             $cgi->h2($head), $cgi->font({-size => -1}, $message));
 }
 
-=item /query
-
-Parameters:
-
-        format          - html|text
-        query           - string query in the PML-TQ syntax
-        limit           - maximum number of results to return for node queries
-        row_limit       - maximum number of results for filter queries
-        timeout         - timeout in seconds
-        query_submit    - name of the submit button (if contains the substring 'w/o',
-                          the query is evaluated ignoring output filters, if any)
-
-For queries returning nodes the output contains for each match a tuple
-of so called node handles of the matching nodes is returned.  The
-tuple is ordered in the depth-first order of nesting of node selectors
-in the query. The handles can be passed to methods such as /node and
-/svg.
-
-If format=text, the output consists of zero or more lines, each line
-consisting of TAB-separated columns. For queries with output filter,
-the columns are the values computed by the last filter, for queries
-returning nodes they are the node handles (so each line encodes the
-tuple of node handles as described above).  In this case, the header
-'Pmltq-returns-nodes' indicates whether the query returned nodes
-(value 1) or output filter results (value 0).
-
-If format=html, the output is a web application page showing the query
-and the results. The web page depends on CSS styleheets and JavaScript
-code from the /static folder (i.e. it generates /static callbacks to
-this service). Most of the web-page functionality is implemented in
-the JavaScript file C<static/js/results.js>. Tree results are encoded
-as node indexes in a JavaScript variable of the output web page and
-the browser performs callback /svg requests to this service in order
-to obtain a SVG rendering of the mathing tree.
-
-[Node handles: For ordinary nodes, the handle has the form X/T or
-X/T@I where X is an integer (internal database index of the
-corresponding record), T is the name of the PML type of the node and
-the optional I value is the PML ID of the matched node (if
-available). For member objects (matching the member relation) the
-handle has the form X//T.]
-
-=cut
 
 sub resp_query {
   my $cgi  = shift;             # CGI.pm object
@@ -1808,16 +1380,6 @@ sub _report_error {
   return 500;
 }
 
-=item /query_svg
-
-Parameters:
-
-        query           - string query in the PML-TQ syntax
-
-Returns an SVG document with the mime-type C<image/svg+xml> rendering
-a graphical representation of the input PML-TQ query.
-
-=cut
 
 sub resp_query_svg {
   my ($cgi)=@_;
@@ -1854,27 +1416,6 @@ sub resp_query_svg {
   return $res->code;
 }
 
-=item /svg
-
-Parameters:
-
-        nodes           - a node handle (or a |-separated list of node handles)
-        tree_no         - tree number
-
-Returns an SVG document with the mime-type C<image/svg+xml> rendering
-a tree.
-
-If C<tree_no> is less or equal 0 or not specified, the rendered tree
-is the tree containing the node corresponding to the given node handle.
-
-If C<tree_no> is a positive integer N, the returned SVG is a rendering
-of Nth tree in the document containing the node corresponding to the
-given node handle.
-
-Currently, if C<nodes> contains a |-separated list of node handles,
-only the first handle in the list is used.
-
-=cut
 
 sub resp_svg {
   my ($cgi)=@_;
@@ -1923,33 +1464,6 @@ sub resp_svg {
   return $res->code;
 }
 
-=item /n2q
-
-Parameters:
-
-        format          - json|text
-        ids             - a |-separated list of PML node IDs
-        cb              - a string (typically JavaScript function name)
-        vars            - comma separated list of reserved selector names
-
-Locates given nodes by their IDs in the database and suggests a PML-TQ
-query that cover this set of nodes as one of its matches (the query
-restricts the nodes based on most of their attributes and their mutual
-relationships). The returned query is formatted and indented so that
-there is e.g. at most one attribute test per line, tests for technical
-attributes (such as ID or order) are commented out, etc.  The query
-also does not use any variable listed in the vars list.
-
-The output for the text format is simply the query. For the json
-format it is either a JavaScript string literal with the 'text/x-json'
-mime-type, or, if the C<cb> parameter was set, the output has the
-'text/javascript' mime-type and consists of the string literal wrapped
-into a function call to the function whose name was passed in
-C<cb>. For example, if the resulting query was 'a-node $a:= []' and
-'show' was passed in C<cb>, the the JavaScript code show('a-node $a:=
-[]').
-
-=cut
 
 
 sub resp_n2q {
@@ -2098,15 +1612,6 @@ sub resolve_data_path {
   return $path;
 }
 
-=item /data/<path>
-
-Parameters: none
-
-Verifies that <path> is a (relative) path of a PML document in the
-database (or related, e.g. a PML schema) and if so, returns the
-document indicating 'application/octet-stream' as mime-type.
-
-=cut
 
 
 sub resp_data {
@@ -2168,15 +1673,6 @@ sub resp_favicon {
   }
 }
 
-=item /static/<path>
-
-Parameters: none
-
-Returns the content of <static-dir>/<path> guessing the mime-type
-based on the file extension, where <static-dir> is a pre-configured
-directory for static content.
-
-=cut
 
 my $mt = MIME::Types->new;
 sub resp_static {
@@ -2196,21 +1692,6 @@ sub resp_static {
   }
 }
 
-=item /node
-
-Parameters:
-
-        idx - a node handle
-        format - html|text
-
-Resolves a given node handle (see L<"/query">) into a relative URL which
-points to the /data/<path> method and can be used to retrieve the
-document containing a given node. Usually, a fragment identifier is
-appended to the URL consisting either of the ID of the node or has the
-form N.M where N is the tree number and M is the depth-first order of
-the node in the tree.
-
-=cut
 
 sub resp_node {
   my $cgi  = shift;             # CGI.pm object
@@ -2242,16 +1723,6 @@ sub resp_node {
   }
 }
 
-=item /schema
-
-Parameters:
-
-        name - name of the annotation layer (root element)
-
-Returns a PML schema for the particular annotation layer. The schema
-(layer) is identified by the root name.
-
-=cut
 
 sub resp_schema {
   my $cgi  = shift;             # CGI.pm object
@@ -2289,17 +1760,6 @@ sub resp_schema {
   }
 }
 
-=item /type
-
-Parameters:
-
-        type    - PML type name
-        format  - html|text
-
-Returns a PML schema of the annotation layer which declares nodes of a
-given type.
-
-=cut
 
 sub resp_type {
   my $cgi  = shift;             # CGI.pm object
@@ -2328,18 +1788,6 @@ sub resp_type {
   return 200;
 }
 
-=item /nodetypes
-
-Parameters:
-
-        format  - html|text
-        layer   - name of the annotation layer (root element)
-
-Returns a list of node types available the given annotation layer or
-on all layers if C<layer> is not given. In 'text' format the types are
-returned one per line.
-
-=cut
 
 sub resp_nodetypes {
   my $cgi  = shift;             # CGI.pm object
@@ -2369,18 +1817,6 @@ sub resp_nodetypes {
   return 200;
 }
 
-=item /relations
-
-Parameters:
-
-        format   - html|text
-        type     - node type
-        category - implementation|pmlrf|both
-
-Returns a list of specific (i.e. implementation-defined or PMLREF-based or both)
-PML-TQ relations that can start at a node of the given type (or any node if type not given).
-
-=cut
 
 sub resp_relations {
   my $cgi  = shift;             # CGI.pm object
@@ -2415,25 +1851,6 @@ sub resp_relations {
   return 200;
 }
 
-=item /relation_target_types
-
-Parameters:
-
-        format   - html|text
-        type     - node type
-        category - implementation|pmlrf|both
-
-Returns target-node types for specific (implementation-defined or
-PMLREF-based or both) PML-TQ relations that can start at a node of the
-given type (or any node if type is not given).
-
-The output for format='text' is one or more line, each consisting of a
-TAB-separated triplet C<ST>, C<REL>, C<TT> where C<ST> is the source
-node type (same as C<type> if specified), C<REL> is the name of the
-PML-TQ relation, and C<TT> is a possible PML node type of a target node
-that can be in the relation C<R> with nodes of type C<ST>.
-
-=cut
 
 sub resp_relation_target_types {
   my $cgi  = shift;             # CGI.pm object
@@ -2502,26 +1919,6 @@ sub resp_relation_target_types {
   return 200;
 }
 
-=item /version
-
-Parameters:
-
-        format           - html|text
-        client_version   - version string
-
-Checks compatibility of this version to the client version.
-
-For format=text, returns the string COMPATIBLE (in cases that
-compatible client version string was passed) or INCOMPATIBLE
-(otherwise) and on the next line the version of the underlying
-PMLTQ::SQLEvaluator.
-
-For format=html, returns the same information in a small HTML
-document.
-
-=back
-
-=cut
 
 
 sub resp_version {
@@ -2978,71 +2375,565 @@ Similarly, <literal>1x</literal> stands for `exactly one', <literal>3+x</literal
 @
 }
 
+1; # End of PMLTQ::CGI
 
+__END__
 
+=pod
 
-=head1 AUTHOR
+=head1 NAME
 
-AUTHOR, C<< <AUTHOR at UFAL> >>
+PMLTQ::CGI - [DEPRECATED] This is html fronted for SQLEvaluator and is currently being replaced by PMLTQ::Server
 
-=head1 BUGS
+=encoding UTF-8
 
-Please report any bugs or feature requests to C<bug-pmltq-pml2base at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=PMLTQ-PML2BASE>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
+=head1 SYNOPSIS
 
+   use PMLTQ::CGI;
+   PMLTQ::CGI::Configure({
+     # options
+   });
 
+   my $cgi = CGI->new();
+   ...
+   if ($request eq 'query') {
+     resp_query($cgi);
+   } elsif ($request eq 'svg') {
+     resp_svg($cgi);
+   } elsif ...
 
+=head1 DESCRIPTION
 
-=head1 SUPPORT
+This module is intended to be used in a FastCGI or Net::HTTPServer
+environment (see pmltq_http). It implements a REST web service and a
+web application to the PML-TQ engine driven by an SQL database
+(PMLTQ::SQLEvaluator).
 
-You can find documentation for this module with the perldoc command.
+=head1 WEB SERVICE
 
-    perldoc PMLTQ::CGI
+Individual types of request are implemented by the resp_* family of
+functions, which all assume a CGI-like object as their first and only
+argument.
 
+The web service uses URLs of the form
 
-You can also look for information at:
+  http(s)://<host>:<port>/<method_prefix><method_name>?<arguments>
 
-=over 4
+or
 
-=item * RT: CPAN's request tracker (report bugs here)
+  http(s)://<host>:<port>/<method_prefix><method_name>/<resource-path>?<arguments>
 
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=PMLTQ-PML2BASE>
+where method_prefix is an optional path prefix, typically empty (see
+method-prefix configuration option).
 
-=item * AnnoCPAN: Annotated CPAN documentation
+It is up to the HTTP server to do both user authentication and
+authorization to the individual web service methods.
 
-L<http://annocpan.org/dist/PMLTQ-PML2BASE>
+=head1 WEB APPLICATION
 
-=item * CPAN Ratings
+Individual types of request are implemented by a wrapper app() function,
+whose first argument is a reference to a corresponding resp_* function
+(see L</WEB SERVICE>) and the second argument is a CGI-like object.
 
-L<http://cpanratings.perl.org/d/PMLTQ-PML2BASE>
+The web service uses URLs of the form
 
-=item * Search CPAN
+  http(s)://<host>:<port>/<app_prefix>/<method_prefix><method_name>?<arguments>
 
-L<http://search.cpan.org/dist/PMLTQ-PML2BASE/>
+or
+
+  http(s)://<host>:<port>/<app_prefix>/<method_prefix><method_name>/<resource-path>?<arguments>
+
+where <app_prefix> is 'app' by default.
+
+=head1 AUTHENTICATION AND AUTHORIZATION
+
+The authorization to the web application depends on the HTTP server to
+do both autentication and authorization for all the web service
+requests and also the <app_prefix>/<method_prefix>login web application request.  It
+is not required to do authorization for other <app_prefix>/<method_prefix>* requests.
+
+The autentication and authorization data are stored in the <auth-file>
+configuration file, which contains user names, unencrypted passwords
+(optional), and server-ID based access lists for each user.
+
+The HTTP server may use the auth() method provided by this module in
+order to obtain a password stored in the <auth-file> (this is what
+pmltq_http does). Alternatively, the passwords can be stored
+in the server's configuration, e,g. the .htaccess file, and the
+<auth-file> can be used just for authorization.
+
+Each web application method (<app_prefix>/<method_prefix>*) first checks the user and
+session ID arguments (u and s) for validity and consults <auth-file>
+in order to determine if the user is authorized for the running
+instance.  If the session is valid and the user authorized, the
+request is performed. Otherwise the client is redirected to the
+<app_prefix>/<method_prefix>login request.
+
+The HTTP server should be configured so as to require HTTP password
+authentication for the <app_prefix>/<method_prefix>login request. If the HTTP server
+authorizes the client for the <app_prefix>/<method_prefix>login request, a new
+session is created for the user and the client is redirected to the
+web application start page (<app_prefix>/<method_prefix>form).
+
+Updates to the <auth-file> apply immediately without needing to
+restart the service.
+
+Each line in the <auth-file> may have one the following forms (empty and invalid lines are ignored):
+
+# <comment>
+<username> : : <authorization>
+<username>: <password>
+<username>: <password> : <authorization>
+
+where <authorization> is a comma-separated list of server IDs (see the
+C<server> configuration option). If the list is preceded by the minus
+(-) sign, the user is authorized this service unless the server ID is
+present in the list.  If this list is preceded by the plus (+) sign or
+no sign at all, the user is authorized to connect to this service, if
+and only if the server ID is present in the list. If the list
+<authorization> list is not present, the user is authorized to connect
+to any service.
+
+The information about other services is also used when responding to
+the method L<"/other">, which returns basic information about other
+running instances (sharing the same <pid-dir> and <auth-file>, but
+typically running on different ports or using different prefixes) and
+whether the current user is authorized to use them or not.
+
+=head1 INITIALIZATION
+
+The module is initialized using a call to the Configure() function:
+
+  PMLTQ::CGI::Configure({...options...});
+
+In a forking FastCGI or Net::HTTPServer implementation, this
+configuration is typically called just once prior to forking, so as
+only one PID file is created for this service (even if the service is
+handled by several forked instances).
+
+The configuration options are:
+
+=over 5
+
+=item static-dir => $dirname
+
+Directory from which static content is to be served.
+
+=item config-file => $filename
+
+PML-TQ configuration file (in the PML format described by the pmltq_cgi_conf_schema.xml schema.
+
+=item server => $conf_id
+
+ID of the server configuration in the configuration file (see above).
+
+=item pid-dir => $dirname
+
+Directory where to store a PID file containing basic information about
+this running instance (to be used by other instances in order to
+provide a list of available services).
+
+This directory is also used to create user session files which may be
+reused by other running services as well to provide a single-login
+access to a family of related PML-TQ services.
+
+=item port => $port_number
+
+Port number of this instance. This information is stored into a PID
+file and can be used by other running instances in order to determine
+the correct URL for the service provided by this instance.
+
+=item query-log-dir => $dirname
+
+Directory where individual user's queries are logged. The content of
+this directory is also used to retrieve previous user's queries.
+
+=item auth-file => $filename
+
+Path to a file containing user access configuration (note that
+cooperation with the HTTP server is required), see L<"AUTHENTICATION AND AUTHORIZATION">.
+
+=item tmp-dir => $dirname
+
+A directory to use for temporary files.
+
+=item google-translate => $bool
+
+Add Google Translator service to the Toolbar of the sentence displayed
+with the result tree.
+
+=item ms-translate => $api_key
+
+Add Microsoft Bing Translator service to the Toolbar of the sentence
+displayed with the result tree. The argument must be a valid API key
+issued from Microsoft for the host that runs this HTTP service.
+
+=item method-prefix => $path_prefix
+
+Optional path to be used as a prefix to all method parts in the
+URLs. It is not recommended to use this parameter. If you must, make
+sure you add a trailing /. If set to foo/, the path part of the URL
+for the web service method 'query' (for example), will have the form of
+'foo/query'. The corresponding web application path will be
+'app/foo/query'.
+
+=item debug => $bool
+
+If true, the service logs some extra debugging information into the error log (STDERR).
 
 =back
 
-=head1 SEE ALSO
+=head1 FUNCTIONS
 
-PML-TQ homepage L<http://ufal.mff.cuni.cz/~pajas/pmltq>, the
-documentation and source code of C<pmltq_http> for PMLTQ::CGI
-usage example.
+=over 5
 
-=head1 ACKNOWLEDGEMENTS
+=item auth($unused,$user)
 
+This helper function is designed for use with the RegisterAuth method
+of Net::HTTPServer. It retrieves password for a given user from the
+<auth-file> and returns ("401","") if user not found or not authorized
+to access this service instance (server ID), and
+("200",$unencrypted_password) otherwise.
 
-=head1 LICENSE AND COPYRIGHT
+=item app($resp_sub, $cgi)
 
-Copyright 2014 AUTHOR.
+This function is intended as a wrapper for the requests handlers when
+called from the L<WEB APPLICATION>. It calls $resp_sub if valid
+authorized username and session-id were passed in the s and u
+parameters of the request, otherwise redirects the client to the URL
+of the login request.
 
-This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
+Requests handled by this function accept the following additional
+parameters:
 
-See http://dev.perl.org/licenses/ for more information.
+  s - sessionID
+  u - username
 
+=item resp_login($cgi)
 
-=cut
+This method implements response to the
+<app_prefix>/<method_prefix>login request. The request is assumed to
+be be protected by a HTTP authorization and should only be used in
+connection with the WEB APPLICATION.
 
-1; # End of PMLTQ::CGI
+It checks that a valid session file exists for the user exists in the
+pid_dir and creates a new one (pruning all invalid or expired session
+files for the user). Then it redirects the user to the L<"/form"> method
+(providing a user name and session-id in the u and s arguments).
+
+Note: this function does not implement authorization or
+authentication. It just creates a session for any user to which the
+HTTP server granted access to the login request; the HTTP server is
+responsible for granting access to authenticated users only and
+session validity checking mechanisms used by the app() function
+implementing the WEB APPLICATION are responsible for particular
+instance authorization based on the <auth-file> data.
+
+=item resp_root($cgi)
+
+This function is used to implement a request to the base URL (/).
+It redirects to <app-prefix>/form if a valid username and session-id is
+passed in the s and u URL parameters, otherwise redirects to <app-prefix>/login.
+
+=item resp_<method>($cgi)
+
+This family of functions implements individual types of WEB SERVICE
+requests described below.  For the WEB APPLICATION, they should be
+called through the app() function documented above.
+
+=back
+
+=head1 WEB APPLICATION API
+
+The web application API is the same as that for the web service,
+described below, except that
+
+  s - sessionID
+  u - username
+
+=head1 WEB SERVICE API
+
+All methods of the web service accept both GET and POST requests; in
+the latter case, parameters can be passed both as URL parameters or as
+data.  In both cases, the parameters must be encoded using th
+C<application/x-www-form-urlencoded> format.
+
+NOTE: we write method names as C</METHOD>, omitting any
+<method_prefix> specified in the configuration and adding a leading
+slash (to indicate that we are describing the REST web service API
+rather than Perl API).  However, if a request method A returns
+(possibly embedded in some HTML code) an URL to a method B on this
+instance, the returned URL has the form of a relative ( C<B> ) rather
+than absolute URL ( C</B> ), so if the original method was invoked
+e.g. as http://foo.bar:8082/app/A, the browser will reslove the
+returned URL to http://foo.bar:8082/app/B.
+
+=over 5
+
+=item /about
+
+Parameters:
+
+        format - html|json|text
+  extended - 0|1
+
+Returns information about this instance:
+
+        id       - ID
+        service  - base URL (hostname)
+        title    - full name
+        abstract - short description
+        moreinfo - a web URL with more information about the treebank database
+        featured - popularity index
+
+=item /other
+
+Parameters:
+
+        format - html|json|text
+
+Returns information about other known PML-TQ services (sharing the same
+<pid-dir> and <auth-file>, but typically running on different ports or
+using different app or method prefixes):
+
+        id       - ID
+        service  - base URL (hostname)
+        port     - port
+        title    - full name
+        abstract - short description
+        moreinfo - a web URL with more information about the treebank database
+        access   - true if the user is authorized to use the instance
+        featured - popularity index
+
+=item /past_queries
+
+Parameters:
+
+  format - html|json|text
+  cb     - a string (typically JavaScript function name)
+  first  - first query to return
+  max    - max number of queries to return
+
+Returns a list of users past queries. If format='json', the result is
+an array of arrays (pairs), each of which consists of the time they
+were last run (in seconds since UNIX epoch) and the query. If C<cb> is
+passed, the JSON array is wrapped into a Javacript function whose name
+was passed in C<cb>.
+
+If format='text' the queries are returned as plain text, separated
+only by two empty lines.
+
+The options C<first> and C<max> can be used to obtain only partial
+lists. For format='html', max defaults to 50.
+
+=item /form
+
+Parameters: none
+
+Returns HTML with an empty PML-TQ query form, introduction and a few
+query examples generated for the actual treebank.
+
+=item /query
+
+Parameters:
+
+        format          - html|text
+        query           - string query in the PML-TQ syntax
+        limit           - maximum number of results to return for node queries
+        row_limit       - maximum number of results for filter queries
+        timeout         - timeout in seconds
+        query_submit    - name of the submit button (if contains the substring 'w/o',
+                          the query is evaluated ignoring output filters, if any)
+
+For queries returning nodes the output contains for each match a tuple
+of so called node handles of the matching nodes is returned.  The
+tuple is ordered in the depth-first order of nesting of node selectors
+in the query. The handles can be passed to methods such as /node and
+/svg.
+
+If format=text, the output consists of zero or more lines, each line
+consisting of TAB-separated columns. For queries with output filter,
+the columns are the values computed by the last filter, for queries
+returning nodes they are the node handles (so each line encodes the
+tuple of node handles as described above).  In this case, the header
+'Pmltq-returns-nodes' indicates whether the query returned nodes
+(value 1) or output filter results (value 0).
+
+If format=html, the output is a web application page showing the query
+and the results. The web page depends on CSS styleheets and JavaScript
+code from the /static folder (i.e. it generates /static callbacks to
+this service). Most of the web-page functionality is implemented in
+the JavaScript file C<static/js/results.js>. Tree results are encoded
+as node indexes in a JavaScript variable of the output web page and
+the browser performs callback /svg requests to this service in order
+to obtain a SVG rendering of the mathing tree.
+
+[Node handles: For ordinary nodes, the handle has the form X/T or
+X/T@I where X is an integer (internal database index of the
+corresponding record), T is the name of the PML type of the node and
+the optional I value is the PML ID of the matched node (if
+available). For member objects (matching the member relation) the
+handle has the form X//T.]
+
+=item /query_svg
+
+Parameters:
+
+        query           - string query in the PML-TQ syntax
+
+Returns an SVG document with the mime-type C<image/svg+xml> rendering
+a graphical representation of the input PML-TQ query.
+
+=item /svg
+
+Parameters:
+
+        nodes           - a node handle (or a |-separated list of node handles)
+        tree_no         - tree number
+
+Returns an SVG document with the mime-type C<image/svg+xml> rendering
+a tree.
+
+If C<tree_no> is less or equal 0 or not specified, the rendered tree
+is the tree containing the node corresponding to the given node handle.
+
+If C<tree_no> is a positive integer N, the returned SVG is a rendering
+of Nth tree in the document containing the node corresponding to the
+given node handle.
+
+Currently, if C<nodes> contains a |-separated list of node handles,
+only the first handle in the list is used.
+
+=item /n2q
+
+Parameters:
+
+        format          - json|text
+        ids             - a |-separated list of PML node IDs
+        cb              - a string (typically JavaScript function name)
+        vars            - comma separated list of reserved selector names
+
+Locates given nodes by their IDs in the database and suggests a PML-TQ
+query that cover this set of nodes as one of its matches (the query
+restricts the nodes based on most of their attributes and their mutual
+relationships). The returned query is formatted and indented so that
+there is e.g. at most one attribute test per line, tests for technical
+attributes (such as ID or order) are commented out, etc.  The query
+also does not use any variable listed in the vars list.
+
+The output for the text format is simply the query. For the json
+format it is either a JavaScript string literal with the 'text/x-json'
+mime-type, or, if the C<cb> parameter was set, the output has the
+'text/javascript' mime-type and consists of the string literal wrapped
+into a function call to the function whose name was passed in
+C<cb>. For example, if the resulting query was 'a-node $a:= []' and
+'show' was passed in C<cb>, the the JavaScript code show('a-node $a:=
+[]').
+
+=item /data/<path>
+
+Parameters: none
+
+Verifies that <path> is a (relative) path of a PML document in the
+database (or related, e.g. a PML schema) and if so, returns the
+document indicating 'application/octet-stream' as mime-type.
+
+=item /static/<path>
+
+Parameters: none
+
+Returns the content of <static-dir>/<path> guessing the mime-type
+based on the file extension, where <static-dir> is a pre-configured
+directory for static content.
+
+=item /node
+
+Parameters:
+
+        idx - a node handle
+        format - html|text
+
+Resolves a given node handle (see L<"/query">) into a relative URL which
+points to the /data/<path> method and can be used to retrieve the
+document containing a given node. Usually, a fragment identifier is
+appended to the URL consisting either of the ID of the node or has the
+form N.M where N is the tree number and M is the depth-first order of
+the node in the tree.
+
+=item /schema
+
+Parameters:
+
+        name - name of the annotation layer (root element)
+
+Returns a PML schema for the particular annotation layer. The schema
+(layer) is identified by the root name.
+
+=item /type
+
+Parameters:
+
+        type    - PML type name
+        format  - html|text
+
+Returns a PML schema of the annotation layer which declares nodes of a
+given type.
+
+=item /nodetypes
+
+Parameters:
+
+        format  - html|text
+        layer   - name of the annotation layer (root element)
+
+Returns a list of node types available the given annotation layer or
+on all layers if C<layer> is not given. In 'text' format the types are
+returned one per line.
+
+=item /relations
+
+Parameters:
+
+        format   - html|text
+        type     - node type
+        category - implementation|pmlrf|both
+
+Returns a list of specific (i.e. implementation-defined or PMLREF-based or both)
+PML-TQ relations that can start at a node of the given type (or any node if type not given).
+
+=item /relation_target_types
+
+Parameters:
+
+        format   - html|text
+        type     - node type
+        category - implementation|pmlrf|both
+
+Returns target-node types for specific (implementation-defined or
+PMLREF-based or both) PML-TQ relations that can start at a node of the
+given type (or any node if type is not given).
+
+The output for format='text' is one or more line, each consisting of a
+TAB-separated triplet C<ST>, C<REL>, C<TT> where C<ST> is the source
+node type (same as C<type> if specified), C<REL> is the name of the
+PML-TQ relation, and C<TT> is a possible PML node type of a target node
+that can be in the relation C<R> with nodes of type C<ST>.
+
+=item /version
+
+Parameters:
+
+        format           - html|text
+        client_version   - version string
+
+Checks compatibility of this version to the client version.
+
+For format=text, returns the string COMPATIBLE (in cases that
+compatible client version string was passed) or INCOMPATIBLE
+(otherwise) and on the next line the version of the underlying
+PMLTQ::SQLEvaluator.
+
+For format=html, returns the same information in a small HTML
+document.
+
+=back
