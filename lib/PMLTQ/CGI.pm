@@ -280,10 +280,10 @@ sub _print_service_info {
                               $_->{title},
                                      $cgi->a({class=>"show",
                                                onClick=>"document.getElementById('hh$i').setAttribute('class','hs'); return false;"
-                                              },"»"),
+                                              },"ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ»"),
                             $cgi->a({class=>"hide",
                                                onClick=>"document.getElementById('hh$i').setAttribute('class','hh'); return false;"
-                                              },"«")),
+                                              },"ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ«")),
                                       $cgi->div({ -class => 'hbody' },
                                                 $cgi->div({ -class => 'abstract' },
                                                           $cgi->p($_->{abstract}),
@@ -2310,7 +2310,7 @@ by clicking the logo.
       See the <span class="guimenu">Attributes</span> menu for the list of attributes for each node type.
     </p>
     <p>Other <b>node properties</b>, such as number of sons, descendants, siblings, etc.
-    can be obtained using functions (see <span class="guimenu">Funcions</span> » <span class="guimenuitem">Node Properties</span>).
+    can be obtained using functions (see <span class="guimenu">Funcions</span> ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ» <span class="guimenuitem">Node Properties</span>).
     In fact, <b>complex expressions</b> can be used on left and right hand side of
     the comparison operators in constraints; see the menus
     <span class="guimenu">Operators</span> and
@@ -2385,6 +2385,10 @@ __END__
 =head1 NAME
 
 PMLTQ::CGI - [DEPRECATED] This is html fronted for SQLEvaluator and is currently being replaced by PMLTQ::Server
+
+=head1 VERSION
+
+version v0.7.10
 
 =encoding UTF-8
 
@@ -2938,5 +2942,30 @@ For format=html, returns the same information in a small HTML
 document.
 
 =back
+
+=head1 AUTHORS
+
+=over 4
+
+=item *
+
+Petr Pajas <pajas@ufal.mff.cuni.cz>
+
+=item *
+
+Jan Štěpánek <stepanek@ufal.mff.cuni.cz>
+
+=item *
+
+Michal Sedlák <sedlak@ufal.mff.cuni.cz>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2008-2014 by Institute of Formal and Applied Linguistics (http://ufal.mff.cuni.cz).
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
 =cut
