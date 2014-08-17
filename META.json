@@ -1,0 +1,41 @@
+{
+   "abstract" : "Query engine and query language for trees in PML format also know as PML-TQ",
+   "author" : [
+      "Petr Pajas <pajas@ufal.mff.cuni.cz>",
+      "Jan Štěpánek <stepanek@ufal.mff.cuni.cz>",
+      "Michal Sedlák <sedlak@ufal.mff.cuni.cz>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "ExtUtils::MakeMaker version 6.66, CPAN::Meta::Converter version 2.141170",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "PMLTQ",
+   "no_index" : {
+      "directory" : [
+         "t",
+         "inc"
+      ],
+      "file" : [
+         "PMLTQ/Grammar.pm"
+      ]
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "mailto" : "pmltq@ufal.mff.cuni.cz",
+         "web" : "https://github.com/ufal/perl-pmltq/issues"
+      },
+      "homepage" : "http://ufal.mff.cuni.cz/pmltq/",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/ufal/perl-pmltq-server.git",
+         "web" : "https://github.com/ufal/perl-pmltq"
+      }
+   },
+   "version" : "v0.7.10"
+}

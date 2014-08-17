@@ -4,6 +4,10 @@ use strict;
 use warnings;
 use ExtUtils::MakeMaker 6.46;
 
+my $preop =
+    'perldoc -uT $(VERSION_FROM) | tee $(DISTVNAME)/README.pod > README.pod;' .
+    'pod2text -u README.pod | tee $(DISTVNAME)/README > README';
+
 WriteMakefile(
     NAME                => 'PMLTQ',
     AUTHOR              => [
@@ -34,7 +38,7 @@ WriteMakefile(
         },
       },
     },
-    dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
+    dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', PREOP => $preop },
     clean               => { FILES => 'PMLTQ-*' },
 );
 #sudo rm -rf /usr/local/share/perl/5.14.2/PMLTQ/
