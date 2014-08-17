@@ -280,10 +280,10 @@ sub _print_service_info {
                               $_->{title},
                                      $cgi->a({class=>"show",
                                                onClick=>"document.getElementById('hh$i').setAttribute('class','hs'); return false;"
-                                              },"ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ»"),
+                                             },"&raquo;"),
                             $cgi->a({class=>"hide",
                                                onClick=>"document.getElementById('hh$i').setAttribute('class','hh'); return false;"
-                                              },"ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ«")),
+                                             },"&laquo;")),
                                       $cgi->div({ -class => 'hbody' },
                                                 $cgi->div({ -class => 'abstract' },
                                                           $cgi->p($_->{abstract}),
@@ -2310,7 +2310,7 @@ by clicking the logo.
       See the <span class="guimenu">Attributes</span> menu for the list of attributes for each node type.
     </p>
     <p>Other <b>node properties</b>, such as number of sons, descendants, siblings, etc.
-    can be obtained using functions (see <span class="guimenu">Funcions</span> ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ» <span class="guimenuitem">Node Properties</span>).
+    can be obtained using functions (see <span class="guimenu">Funcions</span> &raquo; <span class="guimenuitem">Node Properties</span>).
     In fact, <b>complex expressions</b> can be used on left and right hand side of
     the comparison operators in constraints; see the menus
     <span class="guimenu">Operators</span> and
