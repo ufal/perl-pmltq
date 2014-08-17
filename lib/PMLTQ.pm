@@ -1,6 +1,6 @@
 package PMLTQ;
 
-# ABSTRACT: Query engine and query language for trees in PML
+# ABSTRACT: Query engine and query language for trees in PML format
 
 use strict;
 use warnings;
@@ -24,7 +24,7 @@ __END__
 
 =head1 NAME
 
-PMLTQ - Query engine and query language for trees in PML
+PMLTQ - Query engine and query language for trees in PML format
 
 =head1 VERSION
 
@@ -37,6 +37,15 @@ version 0.7.10
 This is an implementation of a PML-TQ search engine (CGI module) and a
 command-line client. A graphical client for PML-TQ is part of the tree editor
 TrEd (http://ufal.mff.cuni.cz/tred).
+
+INSTALLATION
+
+To install the module, run the following commands:
+
+    perl Makefile.PL
+    make
+    make test
+    make install
 
 =head1 AUTHORS
 
