@@ -80,7 +80,12 @@
       </member>
       <member name="documentation">
         <list ordered="1">
-          <cdata format="anyURI"/>
+          <container>
+            <attribute name="title" required="1">
+              <cdata format="any"/>
+            </attribute>
+            <cdata format="anyURI"/>
+          </container>
         </list>
       </member>
       <member name="sources">
