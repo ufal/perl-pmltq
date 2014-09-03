@@ -1,0 +1,164 @@
+---
+abstract: 'Query engine and query language for trees in PML format'
+author:
+  - 'Petr Pajas <pajas@ufal.mff.cuni.cz>'
+  - 'Jan Štěpánek <stepanek@ufal.mff.cuni.cz>'
+  - 'Michal Sedlák <sedlak@ufal.mff.cuni.cz>'
+build_requires:
+  File::Spec: '0'
+  IO::Handle: '0'
+  IPC::Open3: '0'
+  Module::Build: '0.28'
+  Test::More: '0.88'
+configure_requires:
+  Module::Build: '0.28'
+dynamic_config: 0
+generated_by: 'Dist::Zilla version 5.020, CPAN::Meta::Converter version 2.141170'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: '1.4'
+name: PMLTQ
+no_index:
+  file:
+    - lib/PMLTQ/_Parser.pm
+provides:
+  PMLTQ:
+    file: lib/PMLTQ.pm
+    version: v0.8.0
+  PMLTQ::BtredEvaluator:
+    file: lib/PMLTQ/BtredEvaluator.pm
+    version: v0.8.0
+  PMLTQ::CGI:
+    file: lib/PMLTQ/CGI.pm
+    version: v0.8.0
+  PMLTQ::Common:
+    file: lib/PMLTQ/Common.pm
+    version: v0.8.0
+  PMLTQ::Grammar:
+    file: lib/PMLTQ/Grammar.pm
+    version: v0.8.0
+  PMLTQ::NG2PMLTQ:
+    file: lib/PMLTQ/NG2PMLTQ.pm
+    version: v0.8.0
+  PMLTQ::PML2BASE:
+    file: lib/PMLTQ/PML2BASE.pm
+    version: v0.8.0
+  PMLTQ::ParserError:
+    file: lib/PMLTQ/ParserError.pm
+    version: v0.8.0
+  PMLTQ::Planner:
+    file: lib/PMLTQ/Planner.pm
+    version: v0.8.0
+  PMLTQ::Relation:
+    file: lib/PMLTQ/Relation.pm
+    version: v0.8.0
+  PMLTQ::Relation::AncestorIterator:
+    file: lib/PMLTQ/Relation/AncestorIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::AncestorIteratorWithBoundedDepth:
+    file: lib/PMLTQ/Relation/AncestorIteratorWithBoundedDepth.pm
+    version: v0.8.0
+  PMLTQ::Relation::ChildnodeIterator:
+    file: lib/PMLTQ/Relation/ChildnodeIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::CurrentFileIterator:
+    file: lib/PMLTQ/Relation/CurrentFileIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::CurrentFilelistIterator:
+    file: lib/PMLTQ/Relation/CurrentFilelistIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::CurrentFilelistTreesIterator:
+    file: lib/PMLTQ/Relation/CurrentFilelistTreesIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::CurrentTreeIterator:
+    file: lib/PMLTQ/Relation/CurrentTreeIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::DepthFirstFollowsIterator:
+    file: lib/PMLTQ/Relation/DepthFirstFollowsIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::DepthFirstPrecedesIterator:
+    file: lib/PMLTQ/Relation/DepthFirstPrecedesIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::DepthFirstRangeIterator:
+    file: lib/PMLTQ/Relation/DepthFirstRangeIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::DescendantIterator:
+    file: lib/PMLTQ/Relation/DescendantIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::DescendantIteratorWithBoundedDepth:
+    file: lib/PMLTQ/Relation/DescendantIteratorWithBoundedDepth.pm
+    version: v0.8.0
+  PMLTQ::Relation::FSFileIterator:
+    file: lib/PMLTQ/Relation/FSFileIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::Iterator:
+    file: lib/PMLTQ/Relation/Iterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::MemberIterator:
+    file: lib/PMLTQ/Relation/MemberIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::OptionalIterator:
+    file: lib/PMLTQ/Relation/OptionalIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::OrderIterator:
+    file: lib/PMLTQ/Relation/OrderIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::PMLREFIterator:
+    file: lib/PMLTQ/Relation/PMLREFIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::ParentIterator:
+    file: lib/PMLTQ/Relation/ParentIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::SameTreeIterator:
+    file: lib/PMLTQ/Relation/SameTreeIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::SiblingIterator:
+    file: lib/PMLTQ/Relation/SiblingIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::SiblingIteratorWithDistance:
+    file: lib/PMLTQ/Relation/SiblingIteratorWithDistance.pm
+    version: v0.8.0
+  PMLTQ::Relation::SimpleListIterator:
+    file: lib/PMLTQ/Relation/SimpleListIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::TransitiveIterator:
+    file: lib/PMLTQ/Relation/TransitiveIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::TreeIterator:
+    file: lib/PMLTQ/Relation/TreeIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::TreexFileIterator:
+    file: lib/PMLTQ/Relation/TreexFileIterator.pm
+    version: v0.8.0
+  PMLTQ::Relation::TreexFilelistIterator:
+    file: lib/PMLTQ/Relation/TreexFilelistIterator.pm
+    version: v0.8.0
+  PMLTQ::SQLEvaluator:
+    file: lib/PMLTQ/SQLEvaluator.pm
+    version: v0.8.0
+  PMLTQ::TypeMapper:
+    file: lib/PMLTQ/TypeMapper.pm
+    version: v0.8.0
+recommends:
+  DBD::Oracle: '0'
+  DBD::Pg: v2.19.3
+  HTTP::Request::AsCGI: '1.2'
+  HTTP::Server::Simple::CGI: '0.44'
+  Net::HTTPServer: v1.1.1
+requires:
+  Benchmark: '1.12'
+  Digest::MD5: '2.51'
+  Graph: '0.96'
+  Graph::ChuLiuEdmonds: '0.06'
+  IO::Scalar: '2.110'
+  JSON: '2.90'
+  MIME::Types: '2.04'
+  Time::HiRes: '1.97'
+  Treex::PML: '2.17'
+  YAML: '0.88'
+resources:
+  homepage: http://ufal.mff.cuni.cz/pmltq/
+  repository: https://github.com/ufal/perl-pmltq.git
+version: 0.8.0
+x_authority: cpan:MICHALS
