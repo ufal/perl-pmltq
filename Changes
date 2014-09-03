@@ -1,8 +1,6 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
- First refactored release
-
  [API CHANGES]
 
  [BUG FIXES]
@@ -10,12 +8,18 @@ Revision history for {{$dist->name}}
  [DOCUMENTATION]
 
  [ENHANCEMENTS]
+
+0.8.0
+ - Released: 2014-09-03 18:22:11 UTC
+ - First refactored release
+
+ [ENHANCEMENTS]
  - namespace changed from Tree_Query to PMLTQ
  - btred iterators refactored and moved to separate files
 
- [NEW FEATURES]
-
  [STATISTICS]
+ - code churn: 54 files changed, 739 insertions(+), 2362 deletions(-)
 
 0.7.10
- Last release before refactoring
+ - Last release before refactoring
+
