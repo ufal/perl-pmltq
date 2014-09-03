@@ -15,6 +15,22 @@ my %start_to_target_type_map;
 use PMLTQ::Relation::SimpleListIterator;
 use PMLTQ::Relation::Iterator;
 
+# for my $dir (@INC) {
+#   next if ref $dir;
+#   for my $module (glob(File::Spec->catfile($dir,'PMLTQ','Relation','*.pm'))) {
+#     my $return = do $module;
+#     unless ($return) {
+#       if ($@) {
+#   warn "Failed to load PMLTQ::Relation submodule $module: $@\n";
+#       } elsif (!defined $return) {
+#   warn "Failed to compile PMLTQ::Relation submodule $module: $!\n";
+#       } elsif (!$return) {
+#   warn "PMLTQ::Relation submodule $module did not return a true value.\n";
+#       }
+#     }
+#   }
+# }
+
 sub import {
   my $class=shift;
   for my $def (@_) {
@@ -67,59 +83,3 @@ sub test_code {
 }
 
 1; # End of PMLTQ::Relation
-
-__END__
-
-=pod
-
-=head1 NAME
-
-PMLTQ::Relation - Base class for all Relations standard or user defined
-
-=head1 VERSION
-
-version v0.7.10
-
-=for comment # autoloading of relation modules
-for my $dir (@INC) {
-  next if ref $dir;
-  for my $module (glob(File::Spec->catfile($dir,'PMLTQ','Relation','*.pm'))) {
-    my $return = do $module;
-    unless ($return) {
-      if ($@) {
-	warn "Failed to load PMLTQ::Relation submodule $module: $@\n";
-      } elsif (!defined $return) {
-	warn "Failed to compile PMLTQ::Relation submodule $module: $!\n";
-      } elsif (!$return) {
-	warn "PMLTQ::Relation submodule $module did not return a true value.\n";
-      }
-    }
-  }
-}
-
-=head1 AUTHORS
-
-=over 4
-
-=item *
-
-Petr Pajas <pajas@ufal.mff.cuni.cz>
-
-=item *
-
-Jan Štěpánek <stepanek@ufal.mff.cuni.cz>
-
-=item *
-
-Michal Sedlák <sedlak@ufal.mff.cuni.cz>
-
-=back
-
-=head1 COPYRIGHT AND LICENSE
-
-This software is copyright (c) 2008-2014 by Institute of Formal and Applied Linguistics (http://ufal.mff.cuni.cz).
-
-This is free software; you can redistribute it and/or modify it under
-the same terms as the Perl 5 programming language system itself.
-
-=cut

@@ -1,4 +1,139 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
+
+# ABSTRACT: HTTP daemon for PML-TQ (PML Tree Query) queries
+
+=head1 SYNOPSIS
+
+pmltq_http [options]
+
+or
+  pmltq_http -u          for usage
+  pmltq_http -h          for help
+  pmltq_http --man       for the manual page
+  pmltq_http --version   for version
+
+=head1 DESCRIPTION
+
+B<pmltq_http> starts a small HTTP daemon that provieds HTTP(s)
+interface to PML-TQ queries over a SQL query engine.
+
+Optional parameters can specify which SQL database configuration and
+SSL keys to use. If the SSL keys are not found, the daemon runs in a
+non-SSL mode.
+
+Note: the daemon binds to all interfaces!
+
+The URLs for client requests are:
+
+  http://localhost:8082/form
+  ...
+
+
+=head1 OPTIONS
+
+=over 5
+
+=item B<--port> number
+
+Specify the port to listen on. Defaults to 8082.
+
+=item B<--log|-l> log_file
+
+Specify path to a log file (defualt is to print log on STDOUT).
+
+=item B<--query-log-dir|-d> log_dir
+
+Specify path to a directory where to log user queries (default is
+.pmltq_cgi_log in the current directory).
+
+=item B<--ssl_ca> filename
+
+Path to the SSL ca file. Defaults to config/server.ca.
+
+=item B<--ssl_cert> SSL_cert_file
+
+Path to the SSL cert file. Defaults to config/server.cert.
+
+=item B<--ssl_key> SSL key file
+
+Path to the SSL key file. Defaults to config/server.key.
+
+=item B<--config-file|-c> filename
+
+Specify a configuration file. The configuration file is a XML file (in
+fact, a PML instance conforming to the treebase_conf_schema.xml) that
+lists available SQL engine configurations. If this option is not
+provided, B<pmltq> attempts to find a file named treebase.conf in the
+resource paths (namely in config/ sub-directory and in ~/.tred.d).
+
+=item B<--server|-s> id
+
+ID of the server configuration in the configuration file (see above).
+
+=item B<--single|-S>
+
+Operate in single-server mode (default is pre-forking mode).
+
+=item B<--forking|-f> number
+
+Operate in pre-forking mode, starting given number of servers. This is
+default mode (with 5 servers).
+
+=item B<--resource-dir|-Z> dirname
+
+Directory to search for resource files. These files can be served even
+if not in the database and can be queried by base file name or even
+with arbitrary directory preceding the base filename. Do not put any
+sensitive files to the resource path!
+
+=item   B<--auth-file> filename
+
+Path to a file containing user access configuration. Updates to this
+file are applied immediately without the need to restart the server.
+
+Records (lines) in this file may have the following format:
+
+# <comment>
+
+<username>: <password>
+
+<username>: <password> : <authorization>
+
+where <authorization> is a comma-separated list of server IDs (see
+--server). If the list is preceded by the minus (-) sign, the user is
+authorized this service unless the server ID is present in the list.
+If this list is preceded by the plus (+) sign or no sign at all, the
+user is authorized to connect to this service, if and only if the
+server ID is present in the list. If the list <authorization> list is
+not present, the user is authorized to connect to any service.
+
+The information about other services is be used to serve requests
+about other running instances.
+
+=item B<--debug|-D>
+
+Print some extended information (e.g. evaluation benchmarks).
+
+=item B<--usage|-u>
+
+Print a brief help message on usage and exits.
+
+=item B<--help|-h>
+
+Prints the help page and exits.
+
+=item B<--man>
+
+Displays the help as manual page.
+
+=item B<--version>
+
+Print program version.
+
+=back
+
+=cut
+
 
 our $VERSION = '0.6';
 use Getopt::Long;
@@ -218,157 +353,3 @@ sub auth {
 $server->Start;
 
 $server->Process;
-
-__END__
-
-=head1 NAME
-
-pmltq_http - HTTP daemon for PML-TQ (PML Tree Query) queries
-
-=head1 SYNOPSIS
-
-pmltq_http [options]
-
-or
-  pmltq_http -u          for usage
-  pmltq_http -h          for help
-  pmltq_http --man       for the manual page
-  pmltq_http --version   for version
-
-=head1 DESCRIPTION
-
-B<pmltq_http> starts a small HTTP daemon that provieds HTTP(s)
-interface to PML-TQ queries over a SQL query engine.
-
-Optional parameters can specify which SQL database configuration and
-SSL keys to use. If the SSL keys are not found, the daemon runs in a
-non-SSL mode.
-
-Note: the daemon binds to all interfaces!
-
-The URLs for client requests are:
-
-  http://localhost:8082/form
-  ...
-
-
-=head1 OPTIONS
-
-=over 5
-
-=item	B<--port> number
-
-Specify the port to listen on. Defaults to 8082.
-
-=item	B<--log|-l> log_file
-
-Specify path to a log file (defualt is to print log on STDOUT).
-
-=item	B<--query-log-dir|-d> log_dir
-
-Specify path to a directory where to log user queries (default is
-.pmltq_cgi_log in the current directory).
-
-=item	B<--ssl_ca> filename
-
-Path to the SSL ca file. Defaults to config/server.ca.
-
-=item	B<--ssl_cert> SSL_cert_file
-
-Path to the SSL cert file. Defaults to config/server.cert.
-
-=item	B<--ssl_key> SSL key file
-
-Path to the SSL key file. Defaults to config/server.key.
-
-=item	B<--config-file|-c> filename
-
-Specify a configuration file. The configuration file is a XML file (in
-fact, a PML instance conforming to the treebase_conf_schema.xml) that
-lists available SQL engine configurations. If this option is not
-provided, B<pmltq> attempts to find a file named treebase.conf in the
-resource paths (namely in config/ sub-directory and in ~/.tred.d).
-
-=item	B<--server|-s> id
-
-ID of the server configuration in the configuration file (see above).
-
-=item	B<--single|-S>
-
-Operate in single-server mode (default is pre-forking mode).
-
-=item	B<--forking|-f> number
-
-Operate in pre-forking mode, starting given number of servers. This is
-default mode (with 5 servers).
-
-=item	B<--resource-dir|-Z> dirname
-
-Directory to search for resource files. These files can be served even
-if not in the database and can be queried by base file name or even
-with arbitrary directory preceding the base filename. Do not put any
-sensitive files to the resource path!
-
-=item   B<--auth-file> filename
-
-Path to a file containing user access configuration. Updates to this
-file are applied immediately without the need to restart the server.
-
-Records (lines) in this file may have the following format:
-
-# <comment>
-
-<username>: <password>
-
-<username>: <password> : <authorization>
-
-where <authorization> is a comma-separated list of server IDs (see
---server). If the list is preceded by the minus (-) sign, the user is
-authorized this service unless the server ID is present in the list.
-If this list is preceded by the plus (+) sign or no sign at all, the
-user is authorized to connect to this service, if and only if the
-server ID is present in the list. If the list <authorization> list is
-not present, the user is authorized to connect to any service.
-
-The information about other services is be used to serve requests
-about other running instances.
-
-=item	B<--debug|-D>
-
-Print some extended information (e.g. evaluation benchmarks).
-
-=item B<--usage|-u>
-
-Print a brief help message on usage and exits.
-
-=item B<--help|-h>
-
-Prints the help page and exits.
-
-=item B<--man>
-
-Displays the help as manual page.
-
-=item B<--version>
-
-Print program version.
-
-=back
-
-=head1 AUTHOR
-
-Petr Pajas, E<lt>pajas@sup.ms.mff.cuni.czE<gt>
-
-=head1 COPYRIGHT AND LICENSE
-
-Copyright (C) 2008 by Petr Pajas
-
-This program is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.2 or,
-at your option, any later version of Perl 5 you may have available.
-
-=head1 BUGS
-
-None reported... yet.
-
-=cut

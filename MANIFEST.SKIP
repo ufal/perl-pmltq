@@ -1,0 +1,5 @@
+^dist.ini
+^MANIFEST.SKIP
+^\.gitignore
+^\.git
+^\.build

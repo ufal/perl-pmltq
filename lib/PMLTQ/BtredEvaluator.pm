@@ -3219,16 +3219,6 @@ sub plan_query {
 
 __END__
 
-=pod
-
-=head1 NAME
-
-PMLTQ::BtredEvaluator - Pure perl evaluator of PML-TQ queries based on headless implementation of TrEd called Btred
-
-=head1 VERSION
-
-version v0.7.10
-
 =head1 IMPLEMENTATION
 
 1. find in the query graph an oriented sceleton tree, possibly using
@@ -3327,36 +3317,8 @@ do {
   }
 }
 
-=xx 
-    if ($clone_before_plan) {
-      use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 3;print Dumper $query_tree;
-      #$query_tree=Treex::PML::Factory->createFSFormat()->clone_subtree($query_tree); ???????
-      $query_tree=Treex::PML::FSFormat->clone_subtree($query_tree);
-    }
-
-=head1 AUTHORS
-
-=over 4
-
-=item *
-
-Petr Pajas <pajas@ufal.mff.cuni.cz>
-
-=item *
-
-Jan Štěpánek <stepanek@ufal.mff.cuni.cz>
-
-=item *
-
-Michal Sedlák <sedlak@ufal.mff.cuni.cz>
-
-=back
-
-=head1 COPYRIGHT AND LICENSE
-
-This software is copyright (c) 2008-2014 by Institute of Formal and Applied Linguistics (http://ufal.mff.cuni.cz).
-
-This is free software; you can redistribute it and/or modify it under
-the same terms as the Perl 5 programming language system itself.
-
-=cut
+if ($clone_before_plan) {
+  use Data::Dumper;$Data::Dumper::Deparse = 1;$Data::Dumper::Maxdepth = 3;print Dumper $query_tree;
+  #$query_tree=Treex::PML::Factory->createFSFormat()->clone_subtree($query_tree); ???????
+  $query_tree=Treex::PML::FSFormat->clone_subtree($query_tree);
+}

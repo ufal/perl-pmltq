@@ -2,6 +2,14 @@ package PMLTQ::PML2BASE;
 
 # ABSTRACT: Convert from PML to SQL
 
+=head1 DESCRIPTION
+
+This module contans functions that generate SQL schema and data
+loaders for a given set of PML documents that adher to
+a common PML schema.
+
+=cut
+
 use 5.006;
 use strict;
 use warnings;
@@ -1528,61 +1536,3 @@ EOF
 
 
 1; # End of PMLTQ::PML2BASE
-
-__END__
-
-=pod
-
-=head1 NAME
-
-PMLTQ::PML2BASE - Convert from PML to SQL
-
-=head1 VERSION
-
-version v0.7.10
-
-=encoding UTF-8
-
-=head1 SYNOPSIS
-
-    use Treex::PML::Instance;
-    use PML2BASE;
-
-    PML2BASE::init();
-    for my $file (@pml_files) {
-      PML2BASE::fs2base( Treex::PML::Instance->load({ filename=>$file })->convert_to_fsfile );
-    }
-    PML2BASE::finish();
-
-=head1 DESCRIPTION
-
-This module contans functions that generate SQL schema and data
-loaders for a given set of PML documents that adher to
-a common PML schema.
-
-=head1 AUTHORS
-
-=over 4
-
-=item *
-
-Petr Pajas <pajas@ufal.mff.cuni.cz>
-
-=item *
-
-Jan Štěpánek <stepanek@ufal.mff.cuni.cz>
-
-=item *
-
-Michal Sedlák <sedlak@ufal.mff.cuni.cz>
-
-=back
-
-=head1 COPYRIGHT AND LICENSE
-
-This software is copyright (c) 2008-2014 by Institute of Formal and Applied Linguistics (http://ufal.mff.cuni.cz).
-
-This is free software; you can redistribute it and/or modify it under
-the same terms as the Perl 5 programming language system itself.
-
-=cut

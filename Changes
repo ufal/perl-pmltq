@@ -1,3 +1,21 @@
-Revision history for PMLTQ
+Revision history for {{$dist->name}}
 
+{{$NEXT}}
+ First refactored release
 
+ [API CHANGES]
+
+ [BUG FIXES]
+
+ [DOCUMENTATION]
+
+ [ENHANCEMENTS]
+ - namespace changed from Tree_Query to PMLTQ
+ - btred iterators refactored and moved to separate files
+
+ [NEW FEATURES]
+
+ [STATISTICS]
+
+0.7.10
+ Last release before refactoring

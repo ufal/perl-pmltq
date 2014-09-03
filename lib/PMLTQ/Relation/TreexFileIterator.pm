@@ -1,5 +1,7 @@
 package PMLTQ::Relation::TreexFileIterator;
 
+# ABSTRACT: Same as L<PMLTQ::Relation::FileIterator> but for Treex files
+
 use 5.006;
 use strict;
 use warnings;
@@ -8,7 +10,6 @@ use base qw(PMLTQ::Relation::CurrentFileIterator);
 use constant TREES=>PMLTQ::Relation::CurrentFileIterator::FIRST_FREE;
 use constant TREEX_DOC=>PMLTQ::Relation::CurrentFileIterator::FIRST_FREE+1;
 
-our $VERSION = '0.01';
 our $PROGRESS; ### newly added
 our $STOP; ### newly added
 
@@ -77,41 +78,3 @@ sub next {
 
 1; # End of PMLTQ::Relation::TreexFileIterator
 
-__END__
-
-=pod
-
-=head1 NAME
-
-PMLTQ::Relation::TreexFileIterator
-
-=head1 VERSION
-
-version 0.01
-
-=head1 AUTHORS
-
-=over 4
-
-=item *
-
-Petr Pajas <pajas@ufal.mff.cuni.cz>
-
-=item *
-
-Jan Štěpánek <stepanek@ufal.mff.cuni.cz>
-
-=item *
-
-Michal Sedlák <sedlak@ufal.mff.cuni.cz>
-
-=back
-
-=head1 COPYRIGHT AND LICENSE
-
-This software is copyright (c) 2008-2014 by Institute of Formal and Applied Linguistics (http://ufal.mff.cuni.cz).
-
-This is free software; you can redistribute it and/or modify it under
-the same terms as the Perl 5 programming language system itself.
-
-=cut

@@ -1,6 +1,29 @@
 #!/usr/bin/env perl
 # pml2base.pl     pajas@ufal.ms.mff.cuni.cz     2008/06/05 10:42:56
 
+# ABSTRACT Script to convert PML to SQL
+
+=head1 SYNOPSIS
+
+pml2base.pl [--syntax|-s oracle|postgres]
+            [--path|-P resource_path ]*
+            [--data-dir|-d data-dir ]
+            [--rename-type|-t from=to ]
+            [--ref|-r path=[root:]node_type ]
+            *.pml
+
+or
+
+pml2base.pl [--help|-h | --usage|-u | --man | --version|-V]
+
+=head1 DESCRIPTION
+
+Converts PML instances to SQL for use with PML-TQ.
+
+The data dumps and SQL scripts are generated in the current directory.
+
+=cut
+
 use FindBin;
 use lib $FindBin::RealBin;
 use constant LIBS => $FindBin::RealBin.'/libs/';
@@ -106,47 +129,3 @@ for my $f (@ARGV) {
   }
 }
 PMLTQ::PML2BASE::finish() unless $no_finish;
-
-
-__END__
-
-=head1 NAME
-
-pml2base.pl - convert PML files to SQL for PML-TQ
-
-=head1 SYNOPSIS
-
-pml2base.pl [--syntax|-s oracle|postgres]
-            [--path|-P resource_path ]*
-            [--data-dir|-d data-dir ]
-            [--rename-type|-t from=to ]
-            [--ref|-r path=[root:]node_type ]
-            *.pml
-
-or
-
-pml2base.pl [--help|-h | --usage|-u | --man | --version|-V]
-
-=head1 DESCRIPTION
-
-Converts PML instances to SQL for use with PML-TQ.
-
-The data dumps and SQL scripts are generated in the current directory.
-
-=head1 AUTHOR
-
-Petr Pajas, E<lt>pajas@stain.ms.mff.cuni.czE<gt>
-
-=head1 COPYRIGHT AND LICENSE
-
-Copyright (C) 2008 by Petr Pajas
-
-This program is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.2 or,
-at your option, any later version of Perl 5 you may have available.
-
-=head1 BUGS
-
-None reported... yet.
-
-=cut
