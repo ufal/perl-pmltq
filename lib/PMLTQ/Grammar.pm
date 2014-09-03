@@ -13,10 +13,12 @@ sub grammar {
 
 __DATA__
 {
+  no warnings 'uninitialized'; # suppress uninitialized warnings
+  # TODO: find solution for this so we can have warnings on
   $skip = '\s*(?:[#][^\n]*\s*)*';
 
   {
-    package Treex::PML::TreeQuery::ParserError;
+    package PMLTQ::ParserError;
     use UNIVERSAL::DOES;
     use overload '""' => \&as_text;
     sub new {
@@ -85,6 +87,7 @@ __DATA__
   } 
   BEGIN {
   no strict qw(refs);
+  no warnings 'redefine';
   foreach my $r (qw(query selectors filters node test expression flat_expression
           conditions column_expression)) {
     my $rule=$r;
