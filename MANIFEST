@@ -176,4 +176,3 @@ t/treebanks/pdt20_sample_small/resources/mdata_schema.xml
 t/treebanks/pdt20_sample_small/resources/tdata_schema.xml
 t/treebanks/pdt20_sample_small/resources/wdata_schema.xml
 t/treebanks/sql.conf
-xt/release/unused-vars.t
