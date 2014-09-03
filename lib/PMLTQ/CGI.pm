@@ -527,7 +527,7 @@ sub logged_in {
 
 sub is_anonymous {
     my ($cgi)=@_;
-    return !logged_in($cgi) and $conf->{anonymous_access};
+    return !logged_in($cgi) && $conf->{anonymous_access};
 }
 
 sub resp_root {

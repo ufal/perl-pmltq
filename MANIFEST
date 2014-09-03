@@ -72,7 +72,6 @@ script/pml2base
 script/pmltq
 script/pmltq_http
 t/00-compile.t
-t/00-load.t
 t/000-report-versions-tiny.t
 t/boilerplate.t
 t/libs/TestPMLTQ.pm
