@@ -20,10 +20,22 @@ WriteMakefile(
     LICENSE             => 'perl',
     EXE_FILES => ['script/pmltq', 'script/pmltq_http', 'script/pml2base'],  ### A reference to an array of executable files. The files will be copied to the INST_EXE directory. A make realclean command will delete them from there again
     PREREQ_PM => {
+        'Benchmark' => 0,
+        'DBD::Pg' => 0,
+        'Digest::MD5' => 0,
+        'Graph' => 0,
+        'Graph::ChuLiuEdmonds' => 0,
+        'JSON' => 0,
+        'LWP::UserAgent' => 0,
+        'MIME::Types' => 0,
+        'Time::HiRes' => 0,
+        'Treex::PML' => 0,
+    },
+    TEST_REQUIRES => {
         'Test::More' => 0,
     },
     META_MERGE        => {
-      no_index => { file => ['PMLTQ/Grammar.pm']},
+      no_index => { file => ['PMLTQ/_Parser.pm']},
       'meta-spec' => { version => 2 },
       resources => {
         homepage    => 'http://ufal.mff.cuni.cz/pmltq/',

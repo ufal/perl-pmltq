@@ -1332,7 +1332,7 @@ sub fs2base {
 
   ## little hack for treex files
   if (is_treex_document($fs)) {
-      use Treex::Core::Document;
+      require Treex::Core::Document;
       Treex::Core::Document->new({pmldoc => $fs}); ## rebless all nodes
       $opts{is_treex}=1;
       print "Converting to Treex document\n";

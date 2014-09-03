@@ -1,11 +1,12 @@
 #!perl -T
 
-use Test::More tests => 41;
+use Test::More tests => 42;
 
 BEGIN {
     use_ok( 'PMLTQ' ) || print "Bail out!\n";
     use_ok( 'PMLTQ::PML2BASE' ) || print "Bail out!\n";
     use_ok( 'PMLTQ::Grammar' ) || print "Bail out!\n";
+    use_ok( 'PMLTQ::_Parser' ) || print "Bail out!\n";
     use_ok( 'PMLTQ::ParserError' ) || print "Bail out!\n";
     use_ok( 'PMLTQ::Grammar' ) || print "Bail out!\n";
     use_ok( 'PMLTQ::SQLEvaluator' ) || print "Bail out!\n";

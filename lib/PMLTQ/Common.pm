@@ -921,8 +921,8 @@ my $parser;
 sub query_parser {
     return $parser if defined $parser;
     eval {
-        require PMLTQ::Grammar;
-        $parser = PMLTQ::Grammar->new();
+        require PMLTQ::_Parser;
+        $parser = PMLTQ::_Parser->new();
         1;
     } and return $parser;
 
