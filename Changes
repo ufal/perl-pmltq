@@ -9,6 +9,15 @@ Revision history for {{$dist->name}}
 
  [ENHANCEMENTS]
 
+0.8.2
+ - Released: 2014-09-10 12:00:06 UTC
+
+ [BUG FIXES]
+ - Removed forgotten use of Devel::StackTrace
+
+ [STATISTICS]
+ - code churn: 1 file changed, 1 insertion(+), 1 deletion(-)
+
 0.8.1
  - Released: 2014-09-10 11:40:34 UTC
 
