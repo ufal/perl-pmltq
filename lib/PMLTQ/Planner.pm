@@ -48,7 +48,7 @@ sub SeqV { ref($_[0]) ? $_[0]->elements : () }
 sub name_all_query_nodes {
   my ($tree)=@_;
   my @nodes = grep { $_->{'#name'} =~ /^(?:node|subquery)$/ } $tree->descendants;
-  my $max=0;use Devel::StackTrace;
+  my $max=0;
   my %name2node = map {
     my $n=$_->{name};
     $max=$1+1 if defined($n) and $n=~/^n([0-9]+)$/ and $1>=$max;
