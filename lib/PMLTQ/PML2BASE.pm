@@ -1,14 +1,10 @@
 package PMLTQ::PML2BASE;
-
+BEGIN {
+  $PMLTQ::PML2BASE::AUTHORITY = 'cpan:MICHALS';
+}
+$PMLTQ::PML2BASE::VERSION = '0.8.1';
 # ABSTRACT: Convert from PML to SQL
 
-=head1 DESCRIPTION
-
-This module contans functions that generate SQL schema and data
-loaders for a given set of PML documents that adher to
-a common PML schema.
-
-=cut
 
 use 5.006;
 use strict;
@@ -1536,3 +1532,50 @@ EOF
 
 
 1; # End of PMLTQ::PML2BASE
+
+__END__
+
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+PMLTQ::PML2BASE - Convert from PML to SQL
+
+=head1 VERSION
+
+version 0.8.1
+
+=head1 DESCRIPTION
+
+This module contans functions that generate SQL schema and data
+loaders for a given set of PML documents that adher to
+a common PML schema.
+
+=head1 AUTHORS
+
+=over 4
+
+=item *
+
+Petr Pajas <pajas@ufal.mff.cuni.cz>
+
+=item *
+
+Jan Štěpánek <stepanek@ufal.mff.cuni.cz>
+
+=item *
+
+Michal Sedlák <sedlak@ufal.mff.cuni.cz>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2014 by Institute of Formal and Applied Linguistics (http://ufal.mff.cuni.cz).
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
