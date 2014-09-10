@@ -1,5 +1,8 @@
 package PMLTQ::CGI;
-
+BEGIN {
+  $PMLTQ::CGI::AUTHORITY = 'cpan:MICHALS';
+}
+$PMLTQ::CGI::VERSION = '0.8.2';
 # ABSTRACT: [DEPRECATED] This is html fronted for SQLEvaluator and is currently being replaced by PMLTQ::Server
 
 use 5.006;
@@ -2383,6 +2386,14 @@ __END__
 
 =encoding UTF-8
 
+=head1 NAME
+
+PMLTQ::CGI - [DEPRECATED] This is html fronted for SQLEvaluator and is currently being replaced by PMLTQ::Server
+
+=head1 VERSION
+
+version 0.8.2
+
 =head1 SYNOPSIS
 
     use PMLTQ::CGI;
@@ -2931,5 +2942,32 @@ PMLTQ::SQLEvaluator.
 
 For format=html, returns the same information in a small HTML
 document.
+
+=cut
+
+=head1 AUTHORS
+
+=over 4
+
+=item *
+
+Petr Pajas <pajas@ufal.mff.cuni.cz>
+
+=item *
+
+Jan Štěpánek <stepanek@ufal.mff.cuni.cz>
+
+=item *
+
+Michal Sedlák <sedlak@ufal.mff.cuni.cz>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2014 by Institute of Formal and Applied Linguistics (http://ufal.mff.cuni.cz).
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
 =cut

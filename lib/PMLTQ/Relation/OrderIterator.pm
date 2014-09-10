@@ -1,5 +1,8 @@
 package PMLTQ::Relation::OrderIterator;
-
+BEGIN {
+  $PMLTQ::Relation::OrderIterator::AUTHORITY = 'cpan:MICHALS';
+}
+$PMLTQ::Relation::OrderIterator::VERSION = '0.8.2';
 # ABSTRACT: Interates nodes based on their order
 
 use 5.006;
@@ -69,3 +72,44 @@ sub get_node_list  {
 }
 
 1; # End of PMLTQ::Relation::OrderIterator
+
+__END__
+
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+PMLTQ::Relation::OrderIterator - Interates nodes based on their order
+
+=head1 VERSION
+
+version 0.8.2
+
+=head1 AUTHORS
+
+=over 4
+
+=item *
+
+Petr Pajas <pajas@ufal.mff.cuni.cz>
+
+=item *
+
+Jan Štěpánek <stepanek@ufal.mff.cuni.cz>
+
+=item *
+
+Michal Sedlák <sedlak@ufal.mff.cuni.cz>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2014 by Institute of Formal and Applied Linguistics (http://ufal.mff.cuni.cz).
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
