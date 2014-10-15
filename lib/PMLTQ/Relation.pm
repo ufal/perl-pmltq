@@ -8,28 +8,14 @@ use warnings;
 use Carp;
 use File::Spec;
 use File::Glob qw(:glob);
+use PMLTQ::Loader;
 
 my %user_defined;
 my %start_to_target_type_map;
 
-use PMLTQ::Relation::SimpleListIterator;
-use PMLTQ::Relation::Iterator;
+our @RELATIONS = PMLTQ::Loader->search('PMLTQ::Relation');
 
-# for my $dir (@INC) {
-#   next if ref $dir;
-#   for my $module (glob(File::Spec->catfile($dir,'PMLTQ','Relation','*.pm'))) {
-#     my $return = do $module;
-#     unless ($return) {
-#       if ($@) {
-#   warn "Failed to load PMLTQ::Relation submodule $module: $@\n";
-#       } elsif (!defined $return) {
-#   warn "Failed to compile PMLTQ::Relation submodule $module: $!\n";
-#       } elsif (!$return) {
-#   warn "PMLTQ::Relation submodule $module did not return a true value.\n";
-#       }
-#     }
-#   }
-# }
+PMLTQ::Loader->load($_) for (@RELATIONS);
 
 sub import {
   my $class=shift;

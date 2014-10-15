@@ -16,33 +16,6 @@ use if $ENV{TREEX_EXTENSION}, 'Treex::Core::Document';
 
 use PMLTQ::Common qw(:constants first min max uniq ListV AltV SeqV compute_column_data_type compute_expression_data_type compute_expression_data_type_pt);
 
-use PMLTQ::Relation::FSFileIterator;
-use PMLTQ::Relation::CurrentFileIterator;
-use PMLTQ::Relation::CurrentFileIterator;
-use PMLTQ::Relation::TreexFileIterator;
-use PMLTQ::Relation::CurrentFilelistIterator;
-use PMLTQ::Relation::TreexFilelistIterator;
-use PMLTQ::Relation::CurrentTreeIterator;
-use PMLTQ::Relation::CurrentFilelistTreesIterator;
-use PMLTQ::Relation::TreeIterator;
-use PMLTQ::Relation::SameTreeIterator;
-use PMLTQ::Relation::TransitiveIterator;
-use PMLTQ::Relation::OptionalIterator;
-use PMLTQ::Relation::ChildnodeIterator;
-use PMLTQ::Relation::DepthFirstPrecedesIterator;
-use PMLTQ::Relation::DepthFirstFollowsIterator;
-use PMLTQ::Relation::DepthFirstRangeIterator;
-use PMLTQ::Relation::DescendantIterator;
-use PMLTQ::Relation::DescendantIteratorWithBoundedDepth;
-use PMLTQ::Relation::ParentIterator;
-use PMLTQ::Relation::AncestorIterator;
-use PMLTQ::Relation::AncestorIteratorWithBoundedDepth;
-use PMLTQ::Relation::SiblingIterator;
-use PMLTQ::Relation::SiblingIteratorWithDistance;
-use PMLTQ::Relation::PMLREFIterator;
-use PMLTQ::Relation::MemberIterator;
-use PMLTQ::Relation::OrderIterator;
-
 our $STOP;
 our $PROGRESS;
 our $DEBUG = $ENV{PMLTQ_DEBUG};
