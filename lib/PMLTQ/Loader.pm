@@ -1,6 +1,21 @@
 package PMLTQ::Loader;
 
-# Module loader for L<PMLTQ::Relation|PMLTQ::Relation>s inspired by L<Mojo::Loader>
+# ABSTRACT: Module loader for L<PMLTQ::Relation|PMLTQ::Relation>s inspired by L<Mojo::Loader>
+
+=head1 SYNOPSIS
+
+  use PMLTQ::Loader;
+  for my $module (PMLTQ::Loader->search('PMLTQ::Relation')) {
+    print "Loading module: '$module'\n";
+    PMLTQ::Loader->load($module);
+  }
+
+=head1 DESCRIPTION
+
+L<PMLTQ::Loader|PMLTQ::Loader> is a class loader and a part of the module
+framework allowing users to define their own PML-TQ relations.
+
+=cut
 
 use strict;
 use warnings;
