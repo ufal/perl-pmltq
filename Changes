@@ -8,6 +8,7 @@ Revision history for {{$dist->name}}
  [DOCUMENTATION]
 
  [ENHANCEMENTS]
+ - Add Loader to load our and user defined relations
 
 0.8.2
  - Released: 2014-09-10 12:00:06 UTC

@@ -13,6 +13,7 @@ lib/PMLTQ/BtredEvaluator.pm
 lib/PMLTQ/CGI.pm
 lib/PMLTQ/Common.pm
 lib/PMLTQ/Grammar.pm
+lib/PMLTQ/Loader.pm
 lib/PMLTQ/NG2PMLTQ.pm
 lib/PMLTQ/PML2BASE.pm
 lib/PMLTQ/ParserError.pm
