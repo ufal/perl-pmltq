@@ -184,6 +184,9 @@ use warnings;
 use strict;
 $|=1;
 
+use PMLTQ;
+our $VERSION = $PMLTQ::VERSION;
+
 use Getopt::Long;
 use Pod::Usage;
 Getopt::Long::Configure ("bundling");
@@ -251,15 +254,12 @@ use FindBin;
 use Cwd;
 use File::Spec;
 
-use lib (glob(File::Spec->catfile(${FindBin::RealBin},'libs','*','')));
 use Treex::PML;
 use Treex::PML::Instance;
 use Treex::PML::Schema;
 BEGIN {
-  use File::Basename;
-  use PMLTQ;
   Treex::PML::AddResourcePath(
-			 File::Spec->catfile(PMLTQ->home(),'resources'),
+			 PMLTQ->resources_dir,
 			 File::Spec->catfile(${FindBin::RealBin},'config'),
 			 $ENV{HOME}.'/.tred.d'
 			);
