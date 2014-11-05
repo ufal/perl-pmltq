@@ -1,14 +1,11 @@
 package PMLTQ::Planner;
+our $AUTHORITY = 'cpan:MICHALS';
+{
+  $PMLTQ::Planner::VERSION = '0.8.3';
+}
 
 # ABSTRACT: Optimalizing search trees for BtredEvaluator
 
-=head1 DESCRIPTION
-
-This module provides a simple query planning for BtredEvaluator and
-can also be used to transform a query-forest to a query-tree (if
-possible). We use directed MST to find a spanning tree.
-
-=cut
 
 use 5.006;
 use strict;
@@ -283,3 +280,50 @@ sub plan {
 }
 
 1;
+
+__END__
+
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+PMLTQ::Planner - Optimalizing search trees for BtredEvaluator
+
+=head1 VERSION
+
+version 0.8.3
+
+=head1 DESCRIPTION
+
+This module provides a simple query planning for BtredEvaluator and
+can also be used to transform a query-forest to a query-tree (if
+possible). We use directed MST to find a spanning tree.
+
+=head1 AUTHORS
+
+=over 4
+
+=item *
+
+Petr Pajas <pajas@ufal.mff.cuni.cz>
+
+=item *
+
+Jan Štěpánek <stepanek@ufal.mff.cuni.cz>
+
+=item *
+
+Michal Sedlák <sedlak@ufal.mff.cuni.cz>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2014 by Institute of Formal and Applied Linguistics (http://ufal.mff.cuni.cz).
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
