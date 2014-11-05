@@ -4,6 +4,15 @@ Revision history for {{$dist->name}}
  [API CHANGES]
 
  [BUG FIXES]
+
+ [DOCUMENTATION]
+
+ [ENHANCEMENTS]
+
+0.8.3
+ - Released: 2014-11-05 11:12:31 UTC
+
+ [BUG FIXES]
  - Remove buggy pmltq_http (replaced by pmltq-server)
 
  [DOCUMENTATION]
@@ -12,6 +21,9 @@ Revision history for {{$dist->name}}
  [ENHANCEMENTS]
  - Add Loader to load ours and user defined relations
  - Move static files to share directory
+
+ [STATISTICS]
+ - code churn: 50 files changed, 3267 insertions(+), 3581 deletions(-)
 
 0.8.2
  - Released: 2014-09-10 12:00:06 UTC
