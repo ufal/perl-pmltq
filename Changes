@@ -6,9 +6,11 @@ Revision history for {{$dist->name}}
  [BUG FIXES]
 
  [DOCUMENTATION]
+ - Improved documentation of PMLTQ::Loader
 
  [ENHANCEMENTS]
- - Add Loader to load our and user defined relations
+ - Add Loader to load ours and user defined relations
+ - Move static files to share directory
 
 0.8.2
  - Released: 2014-09-10 12:00:06 UTC
