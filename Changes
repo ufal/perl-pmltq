@@ -4,6 +4,7 @@ Revision history for {{$dist->name}}
  [API CHANGES]
 
  [BUG FIXES]
+ - Remove buggy pmltq_http (replaced by pmltq-server)
 
  [DOCUMENTATION]
  - Improved documentation of PMLTQ::Loader

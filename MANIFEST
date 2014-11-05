@@ -51,7 +51,6 @@ lib/PMLTQ/TypeMapper.pm
 lib/PMLTQ/_Parser.pm
 script/pml2base
 script/pmltq
-script/pmltq_http
 share/resources/pmltq_cgi_conf_schema.xml
 share/resources/tree_query_schema.xml
 share/sql/delete_all_ora.sql
