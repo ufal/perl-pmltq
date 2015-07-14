@@ -5,22 +5,27 @@
 
 =head1 SYNOPSIS
 
-  pmltq [--server <URL_or_server_ID> ] [ <options> ] [ --stdin | --query-file <filename> | --query <query> | <query> ]
-  pmltq --btred [ <options> ] [ --stdin | --query-file <filename> | --query <query> ] [ -l <filelist> |  <file(s)> ]
-  pmltq --ntred [ <options> ] [ --stdin | --query-file <filename> | --query <query> ] [ -l <filelist> |  <file(s)> ]
-  pmltq --jtred [ <options> ] [ --stdin | --query-file <filename> | --query <query> ] [ -l <filelist> |  <file(s)> ]
+  pmltq <command> [<args>]
 
 or
 
-  pmltq [options] [ --print-servers|-P | --node-types | --relations ]
+  pmltq -P               for a list of configured connections
+  pmltq -u               for usage
+  pmltq -h <commandlist> for help
+  pmltq --man            for the manual page
+  pmltq --version        for version
 
-or
+  Available pmltq commands
+    convert
+    delete
+    help
+    initdb
+    load
+    man
+    query
+    verify
+    version
 
-  pmltq -P           for a list of configured connections
-  pmltq -u           for usage
-  pmltq -h           for help
-  pmltq --man        for the manual page
-  pmltq --version    for version
 
 =head1 DESCRIPTION
 
@@ -30,6 +35,72 @@ cluster) to evaluate the query. The results are printed to the
 standard output.
 
 =head1 OPTIONS
+
+=over 5
+
+=item B<--print-servers|-P>
+
+Print list of configured query server connections and exit. If a HTTP
+service is specified using the --server option, the service is
+contacted to provide a list of all other public PML-TQ services
+running on the same server for which the user is authorized.
+
+=item B<--usage|-u>
+
+Print a brief help message on usage and exits.
+
+=item B<--help|-h <commandlist>>
+
+Prints the help page and exits.
+
+=item B<--man>
+
+Displays the help as manual page.
+
+=item B<--version>
+
+Print program version.
+
+=back
+
+=head1 COMMANDS
+
+=head2 convert
+
+=head2 delete
+
+  pmltq delete <treebank_config>
+
+Delete the treebank from database.
+
+=head2 help
+
+=head2 initdb
+
+  pmltq initdb <treebank_config>
+
+Initialize empty database.
+
+=head2 load
+
+  pmltq load <treebank_config> <sql_dir>
+
+Load treebank to database
+
+=head2 man
+
+=head2 query
+
+  pmltq query [--server <URL_or_server_ID> ] [ <options> ] [ --stdin | --query-file <filename> | --query <query> | <query> ]
+  pmltq query --btred [ <options> ] [ --stdin | --query-file <filename> | --query <query> ] [ -l <filelist> |  <file(s)> ]
+  pmltq query --ntred [ <options> ] [ --stdin | --query-file <filename> | --query <query> ] [ -l <filelist> |  <file(s)> ]
+  pmltq query --jtred [ <options> ] [ --stdin | --query-file <filename> | --query <query> ] [ -l <filelist> |  <file(s)> ]
+
+or
+
+  pmltq [options] [ --print-servers|-P | --node-types | --relations ]
+
+=head3 options
 
 =over 5
 
@@ -139,13 +210,6 @@ resource paths (namely in ~/.tred.d).
 
 List available node types and exit.
 
-=item B<--print-servers|-P>
-
-Print list of configured query server connections and exit. If a HTTP
-service is specified using the --server option, the service is
-contacted to provide a list of all other public PML-TQ services
-running on the same server for which the user is authorized.
-
 =item B<--netgraph-query|-N> type_name
 
 Assume the query is in NetGraph syntax and translate it to PMLTQ,
@@ -155,23 +219,19 @@ using a given node type as the default type.
 
 Print some extended information (e.g. evaluation benchmarks).
 
-=item B<--usage|-u>
+=back
 
-Print a brief help message on usage and exits.
+=head2 verify
 
-=item B<--help|-h>
+  pmltq verify <treebank_config>
 
-Prints the help page and exits.
+Check if database exists and that it contains some data
 
-=item B<--man>
+=head2 version
 
-Displays the help as manual page.
-
-=item B<--version>
+  pmltq version
 
 Print program version.
-
-=back
 
 =cut
 
@@ -190,8 +250,15 @@ our $VERSION = $PMLTQ::VERSION;
 use Getopt::Long;
 use Pod::Usage;
 Getopt::Long::Configure ("bundling");
+my %commands = map { $_=>1 } qw/convert delete help initdb load man query verify version/;
+my $command = 'help';
 my %opts;
-GetOptions(\%opts,
+if (exists $commands{$ARGV[0]}) {
+  $command = shift;
+} 
+
+if ($command eq 'query') {
+  GetOptions(\%opts,
 	'debug|D',
 	'server|s=s',
 	'command|c=s',
@@ -230,17 +297,20 @@ GetOptions(\%opts,
 	'timeout|t=i',
 
 	'quiet|q',
-	'help|h',
+	'help|h=s@',
 	'usage|u',
         'version|V',
 	'man',
        ) or $opts{usage}=1;
+}
 
 if ($opts{usage}) {
   pod2usage(-msg => 'pmltq');
 }
-if ($opts{help}) {
-  pod2usage(-exitstatus => 0, -verbose => 1);
+if ($opts{help} || $command eq 'help') {
+  $opts{help} ||= [];
+  my @command_list = grep {exists $commands{$_}} (@{$opts{help}}, @ARGV);
+  pod2usage(-exitstatus => 0, @command_list ? (-sections => [map {"COMMANDS/$_"} @command_list], -verbose => 99) : (-verbose => 1) );
 }
 if ($opts{man}) {
   pod2usage(-exitstatus => 0, -verbose => 2);
