@@ -67,6 +67,10 @@ Print program version.
 
 =head2 convert
 
+  pmltq convert <treebank_config> <sql_dir>
+
+Convert from PML to SQL
+
 =head2 delete
 
   pmltq delete <treebank_config>
@@ -312,13 +316,30 @@ if ($opts{help} || $command eq 'help') {
   my @command_list = grep {exists $commands{$_}} (@{$opts{help}}, @ARGV);
   pod2usage(-exitstatus => 0, @command_list ? (-sections => [map {"COMMANDS/$_"} @command_list], -verbose => 99) : (-verbose => 1) );
 }
-if ($opts{man}) {
+if ($opts{man} || $command eq 'man') {
   pod2usage(-exitstatus => 0, -verbose => 2);
 }
-if ($opts{version}) {
+if ($opts{version} || $command eq 'version') {
   print "$VERSION\n";
   exit;
 }
+
+if ($command eq 'convert') {
+  cmd_convert(@ARGV);
+  exit;
+} elsif ($command eq 'delete') {
+  cmd_delete(@ARGV);
+  exit;
+} elsif ($command eq 'initdb') {
+  cmd_initdb(@ARGV);
+  exit;
+} elsif ($command eq 'load') {
+  cmd_load(@ARGV);
+  exit;
+} elsif ($command eq 'verify') {
+  cmd_verify(@ARGV);
+  exit;
+} 
 
 use FindBin;
 use Cwd;
@@ -353,14 +374,16 @@ my $extension_dir =
   File::Spec->catfile($ENV{HOME},'.tred.d','extensions', 'pmltq');
 Treex::PML::AddResourcePath(File::Spec->catfile($extension_dir,'resources'));
 
-if ($opts{ntred}) {
-  ntred_search();
-} elsif ($opts{jtred}) {
-  jtred_search();
-} elsif ($opts{btred}) {
-  btred_search();
-} else {
-  pmltq_http_search();
+if ($command eq 'query') {
+  if ($opts{ntred}) {
+    ntred_search();
+  } elsif ($opts{jtred}) {
+    jtred_search();
+  } elsif ($opts{btred}) {
+    btred_search();
+  } else {
+    pmltq_http_search();
+  }
 }
 
 my %auth;
@@ -816,4 +839,29 @@ sub apply_filter {
     $filter->{process_row}->($filter,[split /\t/,$_]);
   }
   $filter->{finish}->($filter) if $filter;
+}
+
+
+sub cmd_convert {
+  print STDERR "not implemented\n";
+}
+
+
+sub cmd_delete {
+  print STDERR "not implemented\n";
+}
+
+
+sub cmd_initdb {
+  print STDERR "not implemented\n";
+}
+  
+
+sub cmd_load {
+  print STDERR "not implemented\n";
+}
+
+
+sub cmd_verify {
+  print STDERR "not implemented\n";
 }
