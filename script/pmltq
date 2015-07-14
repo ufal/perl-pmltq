@@ -253,7 +253,9 @@ our $VERSION = $PMLTQ::VERSION;
 
 use Getopt::Long;
 use Pod::Usage;
+use YAML qw(LoadFile);
 Getopt::Long::Configure ("bundling");
+my $invalid_param_n = "Invalid number of parameters !!! \n";
 my %commands = map { $_=>1 } qw/convert delete help initdb load man query verify version/;
 my $command = 'help';
 my %opts;
@@ -325,18 +327,24 @@ if ($opts{version} || $command eq 'version') {
 }
 
 if ($command eq 'convert') {
+  pod2usage(-exitstatus => 1, -sections => ["COMMANDS/$command"], -verbose => 99, -msg => $invalid_param_n) unless @ARGV == 2;
+  my $conf = load_config($ARGV[0]);
   cmd_convert(@ARGV);
   exit;
 } elsif ($command eq 'delete') {
+  pod2usage(-exitstatus => 1, -sections => ["COMMANDS/$command"], -verbose => 99, -msg => $invalid_param_n) unless @ARGV == 1;
   cmd_delete(@ARGV);
   exit;
 } elsif ($command eq 'initdb') {
+  pod2usage(-exitstatus => 1, -sections => ["COMMANDS/$command"], -verbose => 99, -msg => $invalid_param_n) unless @ARGV == 1;
   cmd_initdb(@ARGV);
   exit;
 } elsif ($command eq 'load') {
+  pod2usage(-exitstatus => 1, -sections => ["COMMANDS/$command"], -verbose => 99, -msg => $invalid_param_n) unless @ARGV == 2;
   cmd_load(@ARGV);
   exit;
 } elsif ($command eq 'verify') {
+  pod2usage(-exitstatus => 1, -sections => ["COMMANDS/$command"], -verbose => 99, -msg => $invalid_param_n) unless @ARGV == 1;
   cmd_verify(@ARGV);
   exit;
 } 
@@ -839,6 +847,22 @@ sub apply_filter {
     $filter->{process_row}->($filter,[split /\t/,$_]);
   }
   $filter->{finish}->($filter) if $filter;
+}
+
+sub load_config {
+  my $config_file = shift;
+  my $data;
+  eval {$data = LoadFile($config_file)};
+  if ($@ && $@ =~ m/YAML_LOAD_ERR/) {
+    print STDERR "unable to load config file '$config_file'\n";
+  } elsif ($@ && $@ =~ m/YAML_PARSE_ERR/) {
+    $@ =~ s/\n.*//g;
+    print STDERR "unable to parse config file '$config_file'\n\t$@\n";
+  } elsif (! $data) {
+    print STDERR "unable to open config file '$config_file'\n";
+  }
+  exit unless $data;
+  return $data;
 }
 
 
