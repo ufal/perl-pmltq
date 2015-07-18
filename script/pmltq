@@ -252,6 +252,7 @@ use PMLTQ;
 our $VERSION = $PMLTQ::VERSION;
 
 use DBI;
+use FindBin qw($RealBin);
 
 use Getopt::Long;
 use Pod::Usage;
@@ -871,12 +872,12 @@ sub load_config {
 
 sub db_connect {
   my $config = shift;
-  print STDERR join(" ",%{$config->{db}});
+  my $dbname = shift || $config->{db}->{name};
   die "Database driver ".$config->{db}->{driver}." is not supported !!!\n" unless $config->{db}->{driver} eq 'Pg';
-  my $dbh = DBI->connect("DBI:".$config->{db}->{driver}.":dbname=".$config->{db}->{name}.";host=".$config->{db}->{host}.";port=".$config->{db}->{port}, 
+  my $dbh = DBI->connect("DBI:".$config->{db}->{driver}.":dbname=$dbname;host=".$config->{db}->{host}.";port=".$config->{db}->{port}, 
     $config->{db}->{user}, 
     $config->{db}->{password}, 
-    { RaiseError => 1, PrintError => 1, mysql_enable_utf8 => 1 }) or die "$error_msg{connection}\n$DBI::errstr";
+    { RaiseError => 1, PrintError => 0, mysql_enable_utf8 => 1 }) or die "$error_msg{connection}\n$DBI::errstr";
   return $dbh;
 }
 
@@ -891,23 +892,28 @@ sub cmd_convert {
 
 
 sub cmd_delete {
-  print STDERR "not implemented\n";
+  my $config = load_config(shift);
+  my $dbh = db_connect($config,'postgres');
+  $dbh->do("DROP DATABASE ".$config->{db}->{name});
+  db_disconnect($dbh);
 }
 
 
 sub cmd_initdb {
   my $config = load_config(shift);
-  my $dbh = db_connect($config);
-  for my $file (qw/init_postgres.sql pml2base_init_pg.sql/) {
-    my $sqlfile = '../share/sql/$file';
+  my $dbh = db_connect($config,'postgres');
+  $dbh->do("CREATE DATABASE ".$config->{db}->{name});  
+  $dbh = db_connect($config);
+  for my $file (qw/init_postgres.sql pml2base_init-pg.sql/) {
+    my $sqlfile = "$RealBin/../share/sql/$file";
     my $sql = do {
         open my $fh, '<', $sqlfile or die "Can't open $sqlfile: $!";
         local $/;
         <$fh>
       };
-    $dbh->do("BEGIN $sql END;");
+    $dbh->do($sql);
   }
-  print STDERR "not implemented\n";
+  db_disconnect($dbh);
 }
   
 
