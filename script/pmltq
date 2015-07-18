@@ -251,11 +251,14 @@ $|=1;
 use PMLTQ;
 our $VERSION = $PMLTQ::VERSION;
 
+use DBI;
+
 use Getopt::Long;
 use Pod::Usage;
-use YAML qw(LoadFile);
+use YAML::Tiny;
 Getopt::Long::Configure ("bundling");
-my $invalid_param_n = "Invalid number of parameters !!! \n";
+my %error_msg = (invalid_param_n => "Invalid number of parameters !!! \n", connection => "Unable to connect to database !!!\n");
+
 my %commands = map { $_=>1 } qw/convert delete help initdb load man query verify version/;
 my $command = 'help';
 my %opts;
@@ -327,24 +330,24 @@ if ($opts{version} || $command eq 'version') {
 }
 
 if ($command eq 'convert') {
-  pod2usage(-exitstatus => 1, -sections => ["COMMANDS/$command"], -verbose => 99, -msg => $invalid_param_n) unless @ARGV == 2;
+  pod2usage(-exitstatus => 1, -sections => ["COMMANDS/$command"], -verbose => 99, -msg => $error_msg{invalid_param_n}) unless @ARGV == 2;
   my $conf = load_config($ARGV[0]);
   cmd_convert(@ARGV);
   exit;
 } elsif ($command eq 'delete') {
-  pod2usage(-exitstatus => 1, -sections => ["COMMANDS/$command"], -verbose => 99, -msg => $invalid_param_n) unless @ARGV == 1;
+  pod2usage(-exitstatus => 1, -sections => ["COMMANDS/$command"], -verbose => 99, -msg => $error_msg{invalid_param_n}) unless @ARGV == 1;
   cmd_delete(@ARGV);
   exit;
 } elsif ($command eq 'initdb') {
-  pod2usage(-exitstatus => 1, -sections => ["COMMANDS/$command"], -verbose => 99, -msg => $invalid_param_n) unless @ARGV == 1;
+  pod2usage(-exitstatus => 1, -sections => ["COMMANDS/$command"], -verbose => 99, -msg => $error_msg{invalid_param_n}) unless @ARGV == 1;
   cmd_initdb(@ARGV);
   exit;
 } elsif ($command eq 'load') {
-  pod2usage(-exitstatus => 1, -sections => ["COMMANDS/$command"], -verbose => 99, -msg => $invalid_param_n) unless @ARGV == 2;
+  pod2usage(-exitstatus => 1, -sections => ["COMMANDS/$command"], -verbose => 99, -msg => $error_msg{invalid_param_n}) unless @ARGV == 2;
   cmd_load(@ARGV);
   exit;
 } elsif ($command eq 'verify') {
-  pod2usage(-exitstatus => 1, -sections => ["COMMANDS/$command"], -verbose => 99, -msg => $invalid_param_n) unless @ARGV == 1;
+  pod2usage(-exitstatus => 1, -sections => ["COMMANDS/$command"], -verbose => 99, -msg => $error_msg{invalid_param_n}) unless @ARGV == 1;
   cmd_verify(@ARGV);
   exit;
 } 
@@ -852,7 +855,7 @@ sub apply_filter {
 sub load_config {
   my $config_file = shift;
   my $data;
-  eval {$data = LoadFile($config_file)};
+  eval {$data = YAML::Tiny->read($config_file)};
   if ($@ && $@ =~ m/YAML_LOAD_ERR/) {
     print STDERR "unable to load config file '$config_file'\n";
   } elsif ($@ && $@ =~ m/YAML_PARSE_ERR/) {
@@ -862,9 +865,25 @@ sub load_config {
     print STDERR "unable to open config file '$config_file'\n";
   }
   exit unless $data;
-  return $data;
+  $data->[0]->{db}->{driver} ||= 'Pg';
+  return $data->[0];
 }
 
+sub db_connect {
+  my $config = shift;
+  print STDERR join(" ",%{$config->{db}});
+  die "Database driver ".$config->{db}->{driver}." is not supported !!!\n" unless $config->{db}->{driver} eq 'Pg';
+  my $dbh = DBI->connect("DBI:".$config->{db}->{driver}.":dbname=".$config->{db}->{name}.";host=".$config->{db}->{host}.";port=".$config->{db}->{port}, 
+    $config->{db}->{user}, 
+    $config->{db}->{password}, 
+    { RaiseError => 1, PrintError => 1, mysql_enable_utf8 => 1 }) or die "$error_msg{connection}\n$DBI::errstr";
+  return $dbh;
+}
+
+sub db_disconnect {
+  my $dbh = shift;
+  $dbh->disconnect();
+}
 
 sub cmd_convert {
   print STDERR "not implemented\n";
@@ -877,6 +896,17 @@ sub cmd_delete {
 
 
 sub cmd_initdb {
+  my $config = load_config(shift);
+  my $dbh = db_connect($config);
+  for my $file (qw/init_postgres.sql pml2base_init_pg.sql/) {
+    my $sqlfile = '../share/sql/$file';
+    my $sql = do {
+        open my $fh, '<', $sqlfile or die "Can't open $sqlfile: $!";
+        local $/;
+        <$fh>
+      };
+    $dbh->do("BEGIN $sql END;");
+  }
   print STDERR "not implemented\n";
 }
   
