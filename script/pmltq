@@ -907,7 +907,7 @@ sub cmd_convert {
   $PMLTQ::PML2BASE::opts{'resource-dir'} = $config->{resources};
   $PMLTQ::PML2BASE::opts{'syntax'} = 'postgres';
   $PMLTQ::PML2BASE::opts{'data-dir'} = $config->{data_dir};
-  $PMLTQ::PML2BASE::opts{'prefix'} = $sqldir.'/';
+  $PMLTQ::PML2BASE::opts{'output-dir'} = $sqldir;
     for my $file (glob(File::Spec->catfile($config->{data_dir}, $layer->{data}))) {
       print STDERR "$file\n";
       my $fsfile = Treex::PML::Factory->createDocumentFromFile($file);

@@ -398,9 +398,9 @@ sub to_filename {
   $ext ||= 'dump';
   $tab=~s{/}{_0}g;
   if ($tab=~s/__#/__1/s) {
-    return $tab.'.'.$ext;
+    return get_full_path($tab.'.'.$ext);
   } else {
-    return $root_name.'__'.$tab.'.'.$ext;
+    return get_full_path($root_name.'__'.$tab.'.'.$ext);
   }
 }
 sub table2filename {
@@ -411,7 +411,7 @@ sub table2filename {
   } else {
     $ext ||= 'dump';
     $tab=~s{/}{_0}g;
-    return $root_name.'__type_'.$tab.'.'.$ext;
+    return get_full_path($root_name.'__type_'.$tab.'.'.$ext);
   }
 }
 
@@ -881,7 +881,7 @@ sub dump_schema {
     my $schema_dump = "${root_name}__schema.dump";
     my $blob;
     $schema->write({string=>\$blob});
-    open(my $fh, '>', $schema_dump);
+    open(my $fh, '>', get_full_path($schema_dump));
     my $r=$root_name;
 
     s{(\\|\n|\r|\^)}{\\$1}g for $r,$filename,$data_dir,$blob;
@@ -892,7 +892,7 @@ sub dump_schema {
 	       $blob
 	      );
     close $fh;
-    my $ctl = "${root_name}__pml_init.ctl";
+    my $ctl = get_full_path("${root_name}__pml_init.ctl");
     open $fh, ($append ? '>>' : '>'), $ctl;
     print $fh <<"EOF";
 \\echo Loading PML meta-table
@@ -904,7 +904,7 @@ EOF
   } elsif (lc($opts{syntax}) eq 'oracle') {
     my $schema_dump = $root_name."__schema.pml";
     $schema->write({filename=>$schema_dump});
-    my $ctl = $root_name."__pml_init.ctl";
+    my $ctl = get_full_path($root_name."__pml_init.ctl");
     open my $fh, '>', $ctl;
     print $fh <<"EOF";
 LOAD DATA CHARACTERSET UTF8 LENGTH SEMANTICS CHAR
@@ -1532,6 +1532,9 @@ EOF
 }
 
 
+sub get_full_path {
+  return exists $opts{'output-dir'} ? File::Spec->catfile($opts{'output-dir'},shift) : shift;
+}
 
 
 
