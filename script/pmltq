@@ -247,8 +247,14 @@ use open ':std';
 use warnings;
 use strict;
 $|=1;
+use FindBin;
+
+use lib ($FindBin::RealBin.'/../lib', ## PMLTQ
+  );
 
 use PMLTQ;
+use PMLTQ::PML2BASE;
+use Treex::PML;
 our $VERSION = $PMLTQ::VERSION;
 
 use DBI;
@@ -257,6 +263,8 @@ use FindBin qw($RealBin);
 use Getopt::Long;
 use Pod::Usage;
 use YAML::Tiny;
+use File::Path qw( make_path );
+
 Getopt::Long::Configure ("bundling");
 my %error_msg = (invalid_param_n => "Invalid number of parameters !!! \n", connection => "Unable to connect to database !!!\n");
 
@@ -353,7 +361,6 @@ if ($command eq 'convert') {
   exit;
 } 
 
-use FindBin;
 use Cwd;
 use File::Spec;
 
@@ -887,7 +894,30 @@ sub db_disconnect {
 }
 
 sub cmd_convert {
-  print STDERR "not implemented\n";
+  my $config = load_config(shift);
+  my $sqldir = shift;
+  if(!-d $sqldir) {
+    make_path($sqldir) or die "Unable to create directory $sqldir\n";
+  }
+  Treex::PML::AddResourcePath($config->{resources});
+  for my $layer (@{$config->{layers}}) {
+    print STDERR "Converting data for layer $layer->{name}\n";
+    PMLTQ::PML2BASE::init();
+  $PMLTQ::PML2BASE::opts{'no-secondary-files'} = 1;
+  $PMLTQ::PML2BASE::opts{'resource-dir'} = $config->{resources};
+  $PMLTQ::PML2BASE::opts{'syntax'} = 'postgres';
+  $PMLTQ::PML2BASE::opts{'data-dir'} = $config->{data_dir};
+  $PMLTQ::PML2BASE::opts{'prefix'} = $sqldir.'/';
+    for my $file (glob(File::Spec->catfile($config->{data_dir}, $layer->{data}))) {
+      print STDERR "$file\n";
+      my $fsfile = Treex::PML::Factory->createDocumentFromFile($file);
+      if ($Treex::PML::FSError) {
+        die "Error loading file $file: $Treex::PML::FSError ($!)\n";
+      }
+      PMLTQ::PML2BASE::fs2base($fsfile);
+    }
+    PMLTQ::PML2BASE::finish();
+  }  
 }
 
 
