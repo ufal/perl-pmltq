@@ -260,6 +260,7 @@ our $VERSION = $PMLTQ::VERSION;
 use DBI;
 use FindBin qw($RealBin);
 
+use IO::Handle;
 use Getopt::Long;
 use Pod::Usage;
 use YAML::Tiny;
@@ -271,6 +272,7 @@ my %error_msg = (invalid_param_n => "Invalid number of parameters !!! \n", conne
 my %commands = map { $_=>1 } qw/convert delete help initdb load man query verify version/;
 my $command = 'help';
 my %opts;
+my $dbh;
 if (exists $commands{$ARGV[0]}) {
   $command = shift;
 } 
@@ -881,16 +883,16 @@ sub db_connect {
   my $config = shift;
   my $dbname = shift || $config->{db}->{name};
   die "Database driver ".$config->{db}->{driver}." is not supported !!!\n" unless $config->{db}->{driver} eq 'Pg';
-  my $dbh = DBI->connect("DBI:".$config->{db}->{driver}.":dbname=$dbname;host=".$config->{db}->{host}.";port=".$config->{db}->{port}, 
+  my $dbh_ = DBI->connect("DBI:".$config->{db}->{driver}.":dbname=$dbname;host=".$config->{db}->{host}.";port=".$config->{db}->{port}, 
     $config->{db}->{user}, 
     $config->{db}->{password}, 
-    { RaiseError => 1, PrintError => 0, mysql_enable_utf8 => 1 }) or die "$error_msg{connection}\n$DBI::errstr";
-  return $dbh;
+    { RaiseError => 0, PrintError => 1, mysql_enable_utf8 => 1 }) or die "$error_msg{connection}\n$DBI::errstr";
+  return $dbh_;
 }
 
 sub db_disconnect {
-  my $dbh = shift;
-  $dbh->disconnect();
+  my $dbh_ = shift;
+  $dbh_->disconnect();
 }
 
 sub cmd_convert {
@@ -903,11 +905,12 @@ sub cmd_convert {
   for my $layer (@{$config->{layers}}) {
     print STDERR "Converting data for layer $layer->{name}\n";
     PMLTQ::PML2BASE::init();
-  $PMLTQ::PML2BASE::opts{'no-secondary-files'} = 1;
-  $PMLTQ::PML2BASE::opts{'resource-dir'} = $config->{resources};
-  $PMLTQ::PML2BASE::opts{'syntax'} = 'postgres';
-  $PMLTQ::PML2BASE::opts{'data-dir'} = $config->{data_dir};
-  $PMLTQ::PML2BASE::opts{'output-dir'} = $sqldir;
+    $PMLTQ::PML2BASE::opts{'no-secondary-files'} = 1;
+    $PMLTQ::PML2BASE::opts{'resource-dir'} = $config->{resources};
+    $PMLTQ::PML2BASE::opts{'syntax'} = 'postgres';
+    $PMLTQ::PML2BASE::opts{'loader'} = 'file_list'; # SH
+    $PMLTQ::PML2BASE::opts{'data-dir'} = $config->{data_dir};
+    $PMLTQ::PML2BASE::opts{'output-dir'} = $sqldir;
     for my $file (glob(File::Spec->catfile($config->{data_dir}, $layer->{data}))) {
       print STDERR "$file\n";
       my $fsfile = Treex::PML::Factory->createDocumentFromFile($file);
@@ -917,13 +920,13 @@ sub cmd_convert {
       PMLTQ::PML2BASE::fs2base($fsfile);
     }
     PMLTQ::PML2BASE::finish();
-  }  
+  }
 }
 
 
 sub cmd_delete {
   my $config = load_config(shift);
-  my $dbh = db_connect($config,'postgres');
+  $dbh = db_connect($config,'postgres');
   $dbh->do("DROP DATABASE ".$config->{db}->{name});
   db_disconnect($dbh);
 }
@@ -931,17 +934,12 @@ sub cmd_delete {
 
 sub cmd_initdb {
   my $config = load_config(shift);
-  my $dbh = db_connect($config,'postgres');
+  $dbh = db_connect($config,'postgres');
   $dbh->do("CREATE DATABASE ".$config->{db}->{name});
   $dbh = db_connect($config);
   for my $file (qw/init_postgres.sql pml2base_init-pg.sql/) {
     my $sqlfile = "$RealBin/../share/sql/$file";
-    my $sql = do {
-        open my $fh, '<', $sqlfile or die "Can't open $sqlfile: $!";
-        local $/;
-        <$fh>
-      };
-    $dbh->do($sql);
+    
   }
   db_disconnect($dbh);
 }
@@ -949,12 +947,28 @@ sub cmd_initdb {
 
 sub cmd_load {
   print STDERR "not implemented\n";
+  my $config = load_config(shift);
+  my $sqldir = shift;
+  if(!-d $sqldir) {
+    die "Directory $sqldir does not exist\n";
+  }
+  $dbh = db_connect($config,'postgres');
+  for my $layer (@{$config->{layers}}) {
+    my $listfile = "$sqldir$layer->{name}__init.list";
+    open my $fh, '<', $listfile or die "Can't open $listfile: $!";
+    for my $file (<$fh>) {
+      $file =~ s/\n$//;
+      next unless $file;
+      run_sql_from_file($file,$sqldir);
+    }
+    ###$dbh->do($sql);
+  }
+  db_disconnect($dbh);
 }
 
 
 sub cmd_verify {
   my $config = load_config(shift);
-  my $dbh;
   eval { $dbh = db_connect($config)};
   die "Database ".$config->{db}->{name}." does not exist !!!\n" if $@;
   print "Database ".$config->{db}->{name}." exists\n";
@@ -963,4 +977,27 @@ sub cmd_verify {
     print "Table $table contains ".$dbh->do("SELECT COUNT(*) FROM $table")." rows\n";
   }
   db_disconnect($dbh);
+}
+
+sub run_sql_from_file {
+  my $file = shift;
+  my $dir = shift;
+  my $sql = do {
+      open my $fh, '<', "$dir/$file" or die "Can't open $dir/$file: $!";
+      local $/;
+      <$fh>
+    };
+  if($file =~ m/.ctl/ && $sql =~ m/(COPY .*? FROM *?["'].*?["'])/g ) {
+    die "more copy commands than one in file is not supported" if @_ > 1;
+    $sql =~ s/(COPY .*? FROM) *?["'](.*?)["']/$1 STDIN/;
+    my $dump_file = "$dir/$2";
+    print STDERR "="x50,"COPY FROM : $dump_file\n";
+    open INPUT,  '<', $dump_file  or die "Can't open $dump_file mentioned in $file: $!"; # copy (COPY ... FROM ...;) without superuser privileges hack
+    STDIN->fdopen( \*INPUT,  'r' ) or die $!;
+    $dbh->do($sql);
+    
+  } else {
+    print STDERR "RUNNING SQL FROM $file\n$sql\n\n";
+    $dbh->do($sql);
+  }
 }
