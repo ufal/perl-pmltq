@@ -398,9 +398,9 @@ sub to_filename {
   $ext ||= 'dump';
   $tab=~s{/}{_0}g;
   if ($tab=~s/__#/__1/s) {
-    return get_full_path($tab.'.'.$ext);
+    return $tab.'.'.$ext;
   } else {
-    return get_full_path($root_name.'__'.$tab.'.'.$ext);
+    return $root_name.'__'.$tab.'.'.$ext;
   }
 }
 sub table2filename {
@@ -411,7 +411,7 @@ sub table2filename {
   } else {
     $ext ||= 'dump';
     $tab=~s{/}{_0}g;
-    return get_full_path($root_name.'__type_'.$tab.'.'.$ext);
+    return $root_name.'__type_'.$tab.'.'.$ext;
   }
 }
 
@@ -485,17 +485,20 @@ sub convert_schema {
   $file_table = $root_name."__#files";
   $references_table = $root_name."__#references";
   my $pmlref_table = $root_name."__#pmlref_map";
-  open $fh{'#INIT_SH'},'>',to_filename("init",'sh') || die "$!";
+  $opts{loader} //= 'SH';
+  die "driver $opts{driver} and loader $opts{loader} is not supported" if $opts{loader} eq 'file_list' && ! $opts{driver} eq 'postgres';
+  open $fh{'#INIT_SH'},'>',get_full_path(to_filename("init",'sh')) || die "$!" if $opts{loader} eq 'SH'; 
+  open $fh{'#INIT_LIST'},'>',get_full_path(to_filename("init",'list')) || die "$!" if $opts{loader} eq 'file_list'; 
   unless ($opts{'no-schema'}) {
-    open $fh{'#INIT_SQL'},'>',to_filename("init",'sql')  || die "$!";
-    open $fh{'#DELETE_SQL'},'>',to_filename("delete",'sql')  || die "$!";
+    open $fh{'#INIT_SQL'},'>',get_full_path(to_filename("init",'sql'))  || die "$!";
+    open $fh{'#DELETE_SQL'},'>',get_full_path(to_filename("delete",'sql'))  || die "$!";
   }
   unless ($opts{'no-schema'} and !$opts{'incremental'}) {
-    open $fh{'#POST_SQL'},'>',to_filename("postprocess",'sql')  || die "$!";
+    open $fh{'#POST_SQL'},'>',get_full_path(to_filename("postprocess",'sql'))  || die "$!";
   }
-  open $fh{'#FILE_TABLE'},'>',to_filename($file_table)  || die "$!";
-  open $fh{'#REFFILE_TABLE'},'>',to_filename($references_table)  || die "$!";
-  open $fh{$node_table},'>',to_filename($node_table)  || die "$!";
+  open $fh{'#FILE_TABLE'},'>',get_full_path(to_filename($file_table))  || die "$!";
+  open $fh{'#REFFILE_TABLE'},'>',get_full_path(to_filename($references_table))  || die "$!";
+  open $fh{$node_table},'>',get_full_path(to_filename($node_table))  || die "$!";
 
   my ($db_cmd,$ldr_cmd,$extra_flags);
   $extra_flags='';
@@ -512,7 +515,7 @@ sub convert_schema {
   if ($opts{'schema'} and !$opts{'incremental'}) {
     $extra_flags.=' --init|--finish'
   }
-
+  if(exists $fh{'#INIT_SH'}) {
   $fh{'#INIT_SH'}->print(<<"EOF");
 #!/bin/bash
 
@@ -553,10 +556,11 @@ if [ -z $db ]; then
 fi
 
 EOF
-
+  }
 
   if (lc($opts{syntax}) eq 'postgres') {
-    $fh{'#INIT_SH'}->print(<<'EOF');
+    if(exists $fh{'#INIT_SH'}) {
+      $fh{'#INIT_SH'}->print(<<'EOF');
     sql_files=""
     export PGUSER=$user
     export PGDATABASE=$db
@@ -586,6 +590,7 @@ EOP
       echo "Finished!"
     }
 EOF
+    }
   } elsif (lc($opts{syntax}) eq 'oracle') {
     $fh{'#INIT_SH'}->print(<<'EOF');
     ora_login="${user}";
@@ -651,9 +656,11 @@ EOF
   }
 
   if ($opts{'schema'} and !$opts{'incremental'}) {
-    $fh{'#INIT_SH'}->print(<<'EOF');
+    if(exists $fh{'#INIT_SH'}) {
+      $fh{'#INIT_SH'}->print(<<'EOF');
 if [ "@${task}" = "@--init" ]; then
 EOF
+    }
   }
 
   $schema{$node_table} = {
@@ -685,8 +692,13 @@ EOF
 
 
   unless ($opts{'no-schema'}) {
-    $fh{'#INIT_SH'}->print(mkload(to_filename("delete",'sql'),{quiet=>1}));
-    $fh{'#INIT_SH'}->print(mkload(to_filename("init",'sql')));
+    if(exists $fh{'#INIT_SH'}) {
+      $fh{'#INIT_SH'}->print(mkload(to_filename("delete",'sql'),{quiet=>1}));
+      $fh{'#INIT_SH'}->print(mkload(to_filename("init",'sql')));
+    } elsif(exists $fh{'#INIT_LIST'}) {
+      $fh{'#INIT_LIST'}->print(to_filename("delete",'sql')."\n");
+      $fh{'#INIT_LIST'}->print(to_filename("init",'sql')."\n");
+    }
     dump_schema($schema);
     for my $decl ($schema->node_types) {
       my $tab = table_name($decl,1);
@@ -825,7 +837,7 @@ EOF
         $schema{$desc->{table}}=$desc;
         unless ($opts{schema}) {
           my $fn = table2filename($desc->{table});
-          open $fh{$desc->{table}},'>',$fn or  die "Cannot open '$fn' for writing: $!";
+          open $fh{$desc->{table}},'>',get_full_path($fn) or  die "Cannot open '$fn' for writing: $!";
         }
       }
     });
@@ -892,14 +904,24 @@ sub dump_schema {
                $blob
               );
     close $fh;
-    my $ctl = get_full_path("${root_name}__pml_init.ctl");
-    open $fh, ($append ? '>>' : '>'), $ctl;
-    print $fh <<"EOF";
+    my $ctl = "${root_name}__pml_init.ctl";
+    open $fh, ($append ? '>>' : '>'), get_full_path($ctl);
+
+    
+    if(exists $fh{'#INIT_SH'}) {
+      print $fh <<"EOF";
 \\echo Loading PML meta-table
 \\copy "#PML" ("root", "schema_file", "data_dir", "flags", "schema") from '$schema_dump' delimiter '^'
 EOF
-    close $fh;
-    $fh{'#INIT_SH'}->print(mkdataload($ctl));
+      close $fh;
+      $fh{'#INIT_SH'}->print(mkdataload($ctl));
+    } elsif(exists $fh{'#INIT_LIST'}) {
+      print $fh <<"EOF";
+COPY "#PML" ("root", "schema_file", "data_dir", "flags", "schema") FROM '$schema_dump' DELIMITER '^'
+EOF
+      close $fh;
+      $fh{'#INIT_LIST'}->print("$ctl\n");
+    }
     #print $fh{'#INIT_SH'}(qq{sleep 0.2; echo quit | sqlldr SILENT=ALL USERID="\$login" CONTROL="$ctl"\n});
   } elsif (lc($opts{syntax}) eq 'oracle') {
     my $schema_dump = $root_name."__schema.pml";
@@ -931,11 +953,11 @@ EOF
     $schema->write({filename=>$schema_pml});
     my $fh;
     my $r=$root_name;
-    open $fh, '>', $schema_dump;
+    open $fh, '>', get_full_path($schema_dump);
     print $fh qq{$r,$filename,$data_dir,$schema_pml\n};
     close $fh;
     my $ctl = to_filename("pml_init",'ctl');
-    open $fh, '>', $ctl;
+    open $fh, '>', get_full_path($ctl);
     print $fh <<"EOF";
 IMPORT FROM  '$schema_dump' OF DEL LOBS FROM '.'
 COMMITCOUNT 400 INSERT INTO "#PML";
@@ -1444,12 +1466,16 @@ sub finish {
       my $t = $desc->{table};
       my $dump = table2filename($t);
       my $ctl=table2filename($t,'ctl');
-      open LOAD_SQL,'>',$ctl;
+      open LOAD_SQL,'>',get_full_path($ctl);
       my $replace = $opts{'no-schema'} ? "APPEND" : "REPLACE";
       if (lc($opts{syntax}) eq 'postgres') {
         my $cols = join ',', map { qq{"$_->[0]"} } @{$desc->{colspec}};
-        print LOAD_SQL qq{\\echo Loading data to table "$t"\n};
-        print LOAD_SQL qq{\\copy "$t" ($cols) from '$dump'\n};
+        if($opts{'loader'} eq 'SH') {
+          print LOAD_SQL qq{\\echo Loading data to table "$t"\n};
+          print LOAD_SQL qq{\\copy "$t" ($cols) from '$dump'\n};
+        } if($opts{'loader'} eq 'file_list') {
+          print LOAD_SQL qq{COPY "$t" ($cols) FROM '$dump'\n};
+        }
       } elsif (lc($opts{syntax}) eq 'oracle') {
         my $cols = join ',', map { qq{"$_->[0]"}
                                      .( $_->[1]=~/STRING/ ? q{CHAR(}.(($desc->{col}{$_->[0]}||0) || 1).q{)} : '')
@@ -1472,18 +1498,34 @@ EOF
           print LOAD_SQL qq{IMPORT FROM '$dump' OF DEL MODIFIED BY COLDELX09 COMMITCOUNT 400 $replace INTO "$t";\n};
         }
       close LOAD_SQL;
-      $fh{'#INIT_SH'}->print(mkdataload($ctl));
+      if(exists $fh{'#INIT_SH'}) {
+        $fh{'#INIT_SH'}->print(mkdataload($ctl));
+        } elsif(exists $fh{'#INIT_LIST'}) {
+          $fh{'#INIT_LIST'}->print("$ctl\n");
+        }
     }
   }
   if ($opts{'no-schema'}) {
     if ($opts{incremental}) {
-      $fh{'#INIT_SH'}->print(mkload(to_filename("postprocess",'sql')));
+      if(exists $fh{'#INIT_SH'}) {
+        $fh{'#INIT_SH'}->print(mkload(to_filename("postprocess",'sql')));
+      } elsif(exists $fh{'#INIT_LIST'}) {
+        $fh{'#INIT_LIST'}->print(to_filename("postprocess",'sql')."\n");
+      }
     }
   } else {
     if ($opts{'schema'}  and !$opts{'incremental'}) {
-      $fh{'#INIT_SH'}->print(q(elif [ "@${task}" = "@--finish" ]; then)."\n");
+      if(exists $fh{'#INIT_SH'}) {
+        $fh{'#INIT_SH'}->print(q(elif [ "@${task}" = "@--finish" ]; then)."\n");
+        } elsif(exists $fh{'#INIT_LIST'}) {
+          ###TODO
+        }
     }
-    $fh{'#INIT_SH'}->print(mkload(to_filename("postprocess",'sql')));
+    if(exists $fh{'#INIT_SH'}) {
+      $fh{'#INIT_SH'}->print(mkload(to_filename("postprocess",'sql')));
+    } elsif(exists $fh{'#INIT_LIST'}) {
+      $fh{'#INIT_LIST'}->print(to_filename("postprocess",'sql')."\n");
+    }
     unless ($opts{incremental}) {
       for my $desc (values %schema) {
         for my $col (@{$desc->{colspec}}) {
@@ -1504,18 +1546,24 @@ EOF
       $fh{'#POST_SQL'}->print(qq{EXECUTE DBMS_STATS.GATHER_SCHEMA_STATS(NULL,DBMS_STATS.AUTO_SAMPLE_SIZE);\n});
     }
     if ($opts{'schema'} and !$opts{'incremental'}) {
-      $fh{'#INIT_SH'}->print(q(fi)."\n");
+      if(exists $fh{'#INIT_SH'}) {
+        $fh{'#INIT_SH'}->print(q(fi)."\n");
+        } elsif(exists $fh{'#INIT_LIST'}) {
+          ###TODO
+        }
     }
   }
-  $fh{'#INIT_SH'}->print(qq{\nfinish;\n});
+  if(exists $fh{'#INIT_SH'}) {
+    $fh{'#INIT_SH'}->print(qq{\nfinish;\n});
+  }
 
   if ($opts{'dump-idx'}) {
-    open my $fh, '>', $opts{'dump-idx'};
+    open my $fh, '>', get_full_path($opts{'dump-idx'});
       print $fh "$idx\t$node_idx\n";
     close $fh;
   }
   if ($opts{'dump-col-info'}) {
-    open my $fh, '>:utf8', $opts{'dump-col-info'};
+    open my $fh, '>:utf8', get_full_path($opts{'dump-col-info'});
     foreach my $table (keys %schema) {
       if ($schema{$table}{col}) {
         foreach my $column (keys %{$schema{$table}{col}}) {
