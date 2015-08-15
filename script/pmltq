@@ -911,6 +911,7 @@ sub cmd_convert {
     $PMLTQ::PML2BASE::opts{'loader'} = 'file_list'; # SH
     $PMLTQ::PML2BASE::opts{'data-dir'} = $config->{data_dir};
     $PMLTQ::PML2BASE::opts{'output-dir'} = $sqldir;
+    $PMLTQ::PML2BASE::opts{'debug'} = 1;
     for my $file (glob(File::Spec->catfile($config->{data_dir}, $layer->{data}))) {
       print STDERR "$file\n";
       my $fsfile = Treex::PML::Factory->createDocumentFromFile($file);
@@ -919,8 +920,8 @@ sub cmd_convert {
       }
       PMLTQ::PML2BASE::fs2base($fsfile);
     }
-    PMLTQ::PML2BASE::finish();
   }
+# PMLTQ::PML2BASE::finish();
 }
 
 

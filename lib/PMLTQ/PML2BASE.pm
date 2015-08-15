@@ -1262,6 +1262,7 @@ sub dump_data_desc {
           ."expected: ".join(',',@columns)."\n"
             if keys %d;
     } else {
+      print join(" ",keys %fh),"\n";
       die "Error: didn't find any filehandle for table $table\n";
     }
   }
@@ -1581,7 +1582,9 @@ EOF
 
 
 sub get_full_path {
-  return exists $opts{'output-dir'} ? File::Spec->catfile($opts{'output-dir'},shift) : shift;
+  my $file = shift;
+  print STDERR "get_full_path($file)",[caller]->[0],"\n";
+  return exists $opts{'output-dir'} ? File::Spec->catfile($opts{'output-dir'},$file) : $file;
 }
 
 
