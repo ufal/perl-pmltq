@@ -1492,10 +1492,10 @@ sub finish {
       my $replace = $opts{'no-schema'} ? "APPEND" : "REPLACE";
       if (lc($opts{syntax}) eq 'postgres') {
         my $cols = join ',', map { qq{"$_->[0]"} } @{$desc->{colspec}};
-        if($opts{'loader'} eq 'SH') {
+        if(exists $fh{'#INIT_SH'}) {
           print LOAD_SQL qq{\\echo Loading data to table "$t"\n};
           print LOAD_SQL qq{\\copy "$t" ($cols) from '$dump'\n};
-        } if($opts{'loader'} eq 'file_list') {
+        } elsif( exists $fh{'#INIT_LIST'}) {
           print LOAD_SQL qq{COPY "$t" ($cols) FROM '$dump'\n};
         }
       } elsif (lc($opts{syntax}) eq 'oracle') {
@@ -1518,13 +1518,13 @@ TRAILING NULLCOLS
 EOF
       } elsif (lc($opts{syntax}) eq 'db2') {
           print LOAD_SQL qq{IMPORT FROM '$dump' OF DEL MODIFIED BY COLDELX09 COMMITCOUNT 400 $replace INTO "$t";\n};
-        }
+      }
       close LOAD_SQL;
       if(exists $fh{'#INIT_SH'}) {
         $fh{'#INIT_SH'}->print(mkdataload($ctl));
-        } elsif(exists $fh{'#INIT_LIST'}) {
-          $fh{'#INIT_LIST'}->print("$ctl\n");
-        }
+      } elsif(exists $fh{'#INIT_LIST'}) {
+        $fh{'#INIT_LIST'}->print("$ctl\n");
+      }
     }
   }
   if ($opts{'no-schema'}) {

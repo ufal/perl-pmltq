@@ -920,9 +920,9 @@ sub cmd_convert {
       }
       PMLTQ::PML2BASE::fs2base($fsfile);
     }
+    PMLTQ::PML2BASE::finish();
     PMLTQ::PML2BASE::destroy();
   }
-  #PMLTQ::PML2BASE::finish();
 }
 
 
@@ -948,13 +948,13 @@ sub cmd_initdb {
   
 
 sub cmd_load {
-  print STDERR "not implemented\n";
-  my $config = load_config(shift);
+  my $conf = shift;
+  my $config = load_config($conf);
   my $sqldir = shift;
   if(!-d $sqldir) {
     die "Directory $sqldir does not exist\n";
   }
-  $dbh = db_connect($config,'postgres');
+  $dbh = db_connect($config);
   for my $layer (@{$config->{layers}}) {
     my $listfile = "$sqldir$layer->{name}__init.list";
     open my $fh, '<', $listfile or die "Can't open $listfile: $!";
@@ -996,13 +996,21 @@ sub run_sql_from_file {
     die "more copy commands than one in file is not supported" if @_ > 1;
     $sql =~ s/(COPY .*? FROM) *?["'](.*?)["']/$1 STDIN/;
     my $dump_file = "$dir/$2";
-    print STDERR "="x50,"COPY FROM : $dump_file\n";
-    open INPUT,  '<', $dump_file  or die "Can't open $dump_file mentioned in $file: $!"; # copy (COPY ... FROM ...;) without superuser privileges hack
-    STDIN->fdopen( \*INPUT,  'r' ) or die $!;
-    $dbh->do($sql);
-    
+    my $data = do {
+        open my $fh, '<', "$dump_file" or die "Can't open $dump_file: $!";
+        local $/;
+        <$fh>
+      };
+    eval {
+      $dbh->do($sql);
+      $dbh->pg_putcopydata("$_\n") for (split(/\n/,$data));
+      $dbh->pg_putcopyend();
+    };
+    warn $@ if $@;
   } else {
-    print STDERR "RUNNING SQL FROM $file\n$sql\n\n";
-    $dbh->do($sql);
+    print STDERR "RUNNING SQL FROM $file\n";
+    for my $s (split(/;\s*\n/, $sql)) {
+      $dbh->do("$s;");
+    }
   }
 }
