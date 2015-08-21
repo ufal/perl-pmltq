@@ -260,7 +260,6 @@ our $VERSION = $PMLTQ::VERSION;
 use DBI;
 use FindBin qw($RealBin);
 
-use IO::Handle;
 use Getopt::Long;
 use Pod::Usage;
 use YAML::Tiny;
