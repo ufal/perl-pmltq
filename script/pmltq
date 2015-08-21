@@ -976,7 +976,9 @@ sub cmd_verify {
   print "Database ".$config->{db}->{name}." exists\n";
   my @tables = map {s/^public\.//;$_} grep {m/^public\./} $dbh->tables();
   for my $table (@tables) {
-    print "Table $table contains ".$dbh->do("SELECT COUNT(*) FROM $table")." rows\n";
+    my $sth = $dbh->prepare("SELECT * FROM $table");
+    $sth->execute;
+    print "Table $table contains ".$sth->rows." rows\n";
   }
   db_disconnect($dbh);
 }
