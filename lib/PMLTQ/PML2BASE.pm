@@ -114,6 +114,27 @@ sub init {
   $opts{'data-dir'}||='';
 }
 
+sub destroy {
+  undef $file_table;
+  undef $root_name;
+  undef $schema;
+  undef $references_table;
+  undef %schema;
+  undef %fh;
+  undef %orig_name;
+  undef %seen_ref_schema;
+  undef $node_table;
+  undef $index_id;
+  undef $last_type_no;
+  undef $tree_no;
+  undef $filename;
+  undef $idx;
+  undef $node_idx;
+  undef $last_tree_no;
+  undef %pmlref_target_info;
+  undef %opts;
+}
+
 sub varchar {
   my ($l,$non_ascii)=@_;
   if (lc($opts{syntax}) eq 'oracle') {
@@ -1583,7 +1604,7 @@ EOF
 
 sub get_full_path {
   my $file = shift;
-  print STDERR "get_full_path($file)",[caller]->[0],"\n";
+  print STDERR "get_full_path($file) ",[caller]->[2]," \n";
   return exists $opts{'output-dir'} ? File::Spec->catfile($opts{'output-dir'},$file) : $file;
 }
 
