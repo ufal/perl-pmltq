@@ -885,7 +885,7 @@ sub db_connect {
   my $dbh_ = DBI->connect("DBI:".$config->{db}->{driver}.":dbname=$dbname;host=".$config->{db}->{host}.";port=".$config->{db}->{port}, 
     $config->{db}->{user}, 
     $config->{db}->{password}, 
-    { RaiseError => 0, PrintError => 1, mysql_enable_utf8 => 1 }) or die "$error_msg{connection}\n$DBI::errstr";
+    { RaiseError => 1, PrintError => 1, mysql_enable_utf8 => 1 }) or die "$error_msg{connection}\n$DBI::errstr";
   return $dbh_;
 }
 
@@ -900,6 +900,7 @@ sub cmd_convert {
   if(!-d $sqldir) {
     make_path($sqldir) or die "Unable to create directory $sqldir\n";
   }
+  load_tred_macros();
   Treex::PML::AddResourcePath($config->{resources});
   for my $layer (@{$config->{layers}}) {
     print STDERR "==== Converting data for layer $layer->{name}\n";
@@ -911,13 +912,26 @@ sub cmd_convert {
     $PMLTQ::PML2BASE::opts{'data-dir'} = $config->{data_dir};
     $PMLTQ::PML2BASE::opts{'output-dir'} = $sqldir;
     #$PMLTQ::PML2BASE::opts{'debug'} = 1;
+
+    # converting schema from pml2base.btred
+    # PMLTQ::PML2BASE::convert_schema(Treex::PML::Factory->createPMLSchema({filename=>$opts{schema},use_resources=>1}),
+    #                       {%opts, # $opts{ref} contains references
+    #                        ($opts{'no-eparents'}&&$opts{'no-a-rf'}) ? () : (for_schema => \&mk_extra_tables),
+    #                       });
+    # PMLTQ::PML2BASE::dump_typemap();
+    # end of converting schema
+
+
     for my $file (glob(File::Spec->catfile($config->{data_dir}, $layer->{data}))) {
       print STDERR "$file\n";
       my $fsfile = Treex::PML::Factory->createDocumentFromFile($file);
       if ($Treex::PML::FSError) {
         die "Error loading file $file: $Treex::PML::FSError ($!)\n";
       }
-      PMLTQ::PML2BASE::fs2base($fsfile);
+      PMLTQ::PML2BASE::fs2base($fsfile, {
+                      # for_each_tree => \&dump_eparent, ## TODO: not for all treebanks !!!
+                      # for_schema => \&mk_extra_tables  ##
+                    });
     }
     PMLTQ::PML2BASE::finish();
     PMLTQ::PML2BASE::destroy();
@@ -1009,7 +1023,181 @@ sub run_sql_from_file {
   } else {
     print STDERR "RUNNING SQL FROM $file\n";
     for my $s (split(/;\s*\n/, $sql)) {
-      $dbh->do("$s;");
+      eval {$dbh->do("$s;");};
     }
   }
+}
+
+
+#####
+sub load_tred_macros {
+  use File::Which;
+  my $tred_path = which('start_tred');
+  $tred_path = readlink $tred_path;
+  print STDERR "##########\t\t\t$tred_path\n\n";
+  print STDERR join(" ",File::Spec->splitdir($tred_path)),"\n\n";
+  my @path = File::Spec->splitdir($tred_path);
+  pop @path; # removing start_tred
+  pop @path; # removing bin
+  my $rb = File::Spec->catdir(@path);
+  print STDERR ">> $rb\n";
+  my $libDir;
+  if (exists $ENV{TREDHOME}) {
+    $libDir=$ENV{TREDHOME};
+  } elsif (-d "$rb/tredlib") {
+    $libDir="$rb/tredlib";
+  } elsif (-d "$rb/../lib/tredlib") {
+    $libDir="$rb/../lib/tredlib";
+  } elsif (-d "$rb/../lib/tred") {
+    $libDir="$rb/../lib/tred";
+  }
+
+  if (-d $libDir) {
+    unshift @INC,$libDir;
+  }
+
+
+}
+
+=x
+# user defined relations from pml2base.btred
+
+sub mk_extra_tables {
+  mk_eparent_table(@_) unless $opts{'no-eparents'};
+  mk_a_rf_table(@_) unless $opts{'no-a-rf'};
+}
+
+sub mk_a_rf_table {
+  my ($schema,$desc,$fh)=@_;
+  my $name = $schema->get_root_name;
+  my $table_name = PMLTQ::PML2BASE::rename_type($name);
+  unless ($opts{'no-schema'}) {
+    if ($name =~ /^tdata/) {
+      $fh->{'#INIT_SQL'}->print(<<"EOF");
+CREATE TABLE "${table_name}__#a_rf" ("#idx" INT, "#value" INT);
+CREATE INDEX "#Ui_${table_name}_a_rf0" ON "${table_name}__#a_rf" ("#idx");
+CREATE INDEX "#Ui_${table_name}_a_rf1" ON "${table_name}__#a_rf" ("#value");
+INSERT INTO "#PML_USR_REL" VALUES('a/lex.rf|a/aux.rf',NULL,'t-node','a-node','${table_name}__#a_rf');
+EOF
+
+      $fh->{'#DELETE_SQL'}->print(<<"EOF");
+DROP TABLE "${table_name}__#a_rf";
+DELETE FROM "#PML_USR_REL" WHERE "tbl"='${table_name}__#a_rf';
+EOF
+      $fh->{'#POST_SQL'}->print(<<"EOF");
+INSERT INTO "${table_name}__#a_rf"
+  SELECT t."#idx" AS "#idx", a."lex" AS "#value"
+    FROM "t-node" t JOIN "t-a" a ON a."#idx"=t."a"
+  UNION
+  SELECT t."#idx" AS "#idx", aux."#value" AS "#value"
+    FROM "t-node" t JOIN "t-a" a ON a."#idx"=t."a" JOIN "t-a/aux.rf" aux ON aux."#idx"=a."aux.rf"
+  UNION
+  SELECT r."#idx" AS "#idx", r."atree" FROM "t-root" r;
+EOF
+    }
+  }
+}
+
+sub mk_eparent_table {
+    my ($schema,$desc,$fh)=@_;
+    my $name = $schema->get_root_name;
+    my @tables;
+    my $table_name = PMLTQ::PML2BASE::rename_type($name.'__#eparents');
+    print "mk_eparent_table\n";
+
+    if ($name eq 'treex_document') {
+        ## init tables for both tdata and adata because
+        ## treex_documents contains all trees in one document
+        my $adata_c_table = PML2BASE::rename_type($name.'__adata#eparents_c');
+        my $adata_table = PML2BASE::rename_type($name.'__adata#eparents');
+        my $tdata_table = PML2BASE::rename_type($name.'__tdata#eparents');
+        unless ($opts{'no-schema'}) {
+            $fh->{'#INIT_SQL'}->print(<<"EOF");
+INSERT INTO "#PML_USR_REL" VALUES('eparentC','echildC','a-node','a-node','${adata_c_table}');
+INSERT INTO "#PML_USR_REL" VALUES('eparent','echild','a-node','a-node','${adata_table}');
+INSERT INTO "#PML_USR_REL" VALUES('eparent','echild','t-node','t-node','${tdata_table}');
+EOF
+            $fh->{'#DELETE_SQL'}->print(<<"EOF");
+DELETE FROM "#PML_USR_REL" WHERE "tbl"='${adata_table}';
+DELETE FROM "#PML_USR_REL" WHERE "tbl"='${tdata_table}';
+EOF
+        }
+
+        @tables = ($adata_table, $tdata_table, $adata_c_table);
+
+    } else {
+        @tables = ($table_name);
+
+        unless ($opts{'no-schema'}) {
+            my $node_type;
+            if ($name =~ /^tdata/) {
+                $node_type = 't-node';
+            } elsif ($name =~ /^adata/) {
+                $node_type = 'a-node';
+            }
+
+            if ($node_type) {
+                my $node_table  = PMLTQ::PML2BASE::rename_type($node_type);
+                $fh->{'#INIT_SQL'}->print(<<"EOF");
+INSERT INTO "#PML_USR_REL" VALUES('eparent','echild','${node_type}','${node_type}','${table_name}');
+EOF
+                $fh->{'#DELETE_SQL'}->print(<<"EOF");
+DELETE FROM "#PML_USR_REL" WHERE "tbl"='${table_name}';
+EOF
+            }
+        }
+
+    }
+
+    for my $table (@tables) {
+        $desc->{$table} = {
+            table => $table,
+            colspec => [
+                ['#idx','INT'],
+                ['#value','INT'],
+            ],
+            index => ["#idx","#value"]
+        };
+        open $fh->{$table},'>',PMLTQ::PML2BASE::to_filename($table);
+    }
+}
+
+sub dump_eparent {
+    my ($tree,$hash,$fh)=@_;
+    my $name = $tree->type->get_schema->get_root_name;
+    my $table_name = PMLTQ::PML2BASE::rename_type($name.'__#eparents');
+    if ($name =~ /^adata/) {
+        for my $node ($tree->descendants) {
+            for my $p (PML_A::GetEParents($node,\&PML_A::DiveAuxCP)) {
+                $fh->{$table_name}->print(PMLTQ::PML2BASE::mkdump($hash->{$node}{'#idx'},$hash->{$p}{'#idx'}));
+            }
+        }
+    } elsif ($name =~ /^tdata/) {
+        for my $node ($tree->descendants) {
+            for my $p (PML_T::GetEParents($node)) {
+                $fh->{$table_name}->print(PMLTQ::PML2BASE::mkdump($hash->{$node}{'#idx'},$hash->{$p}{'#idx'}));
+            }
+        }
+    } elsif ($name eq 'treex_document' ) {
+        my $adata_c_table = PMLTQ::PML2BASE::rename_type($name.'__adata#eparents_c');
+        my $adata_table = PMLTQ::PML2BASE::rename_type($name.'__adata#eparents');
+        my $tdata_table = PMLTQ::PML2BASE::rename_type($name.'__tdata#eparents');
+        my $struct_name = $tree->type->get_structure_name||'';
+        if ($struct_name eq 'a-root') {
+            foreach my $anode ($tree->descendants) {
+                foreach my $p (TreexUtils::AGetEParentsC($anode)) {
+                    $fh->{$adata_c_table}->print(PMLTQ::PML2BASE::mkdump($hash->{$anode}{'#idx'}, $hash->{$p}{'#idx'}));
+                }
+                foreach my $p (TreexUtils::AGetEParents($anode)) {
+                    $fh->{$adata_table}->print(PMLTQ::PML2BASE::mkdump($hash->{$anode}{'#idx'}, $hash->{$p}{'#idx'}));
+                }
+            }
+        } elsif ($struct_name eq 't-root') {
+            foreach my $tnode ($tree->descendants) {
+                foreach my $p (TreexUtils::TGetEParents($tnode)) {
+                    $fh->{$tdata_table}->print(PMLTQ::PML2BASE::mkdump($hash->{$tnode}{'#idx'}, $hash->{$p}{'#idx'}));
+                }
+            }
+        }
+    }
 }
