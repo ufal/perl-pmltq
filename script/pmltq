@@ -952,8 +952,7 @@ sub cmd_initdb {
   $dbh->do("CREATE DATABASE ".$config->{db}->{name});
   $dbh = db_connect($config);
   for my $file (qw/init_postgres.sql pml2base_init-pg.sql/) {
-    my $sqlfile = "$RealBin/../share/sql/$file";
-    
+    run_sql_from_file($file,File::Spec->catfile(PMLTQ->shared_dir,"sql"));
   }
   db_disconnect($dbh);
 }
