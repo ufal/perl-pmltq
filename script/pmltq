@@ -912,8 +912,6 @@ sub cmd_convert {
     $PMLTQ::PML2BASE::opts{'output-dir'} = $sqldir;
     %{$PMLTQ::PML2BASE::opts{'ref'}}=();
     $PMLTQ::PML2BASE::opts{'ref'}{$_} = $layer->{'references'}{$_} for (keys %{$layer->{'references'}||{}});
-    use Data::Dumper;
-    print STDERR Dumper($layer);
     PMLTQ::PML2BASE::init();
 
     #$PMLTQ::PML2BASE::opts{'debug'} = 1;
@@ -1082,7 +1080,6 @@ sub mk_eparent_table {
     my $name = $schema->get_root_name;
     my @tables;
     my $table_name = PMLTQ::PML2BASE::rename_type($name.'__#eparents');
-    print "mk_eparent_table\n";
 
     if ($name eq 'treex_document') {
         ## init tables for both tdata and adata because
