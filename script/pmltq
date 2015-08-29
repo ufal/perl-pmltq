@@ -998,8 +998,9 @@ sub cmd_verify {
 sub run_sql_from_file {
   my $file = shift;
   my $dir = shift;
+  my $sqlfile = File::Spec->catfile($dir,$file);
   my $sql = do {
-      open my $fh, '<', "$dir/$file" or die "Can't open $dir/$file: $!";
+      open my $fh, '<', $sqlfile or die "Can't open $sqlfile: $!";
       local $/;
       <$fh>
     };
