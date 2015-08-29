@@ -1604,7 +1604,6 @@ EOF
 
 sub get_full_path {
   my $file = shift;
-  print STDERR "get_full_path($file) ",[caller]->[2]," \n";
   return exists $opts{'output-dir'} ? File::Spec->catfile($opts{'output-dir'},$file) : $file;
 }
 
