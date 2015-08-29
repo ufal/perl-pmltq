@@ -1007,7 +1007,7 @@ sub run_sql_from_file {
   if($file =~ m/.ctl/ && $sql =~ m/(COPY .*? FROM *?["'].*?["'])/g ) {
     die "more copy commands than one in file is not supported" if @_ > 1;
     $sql =~ s/(COPY .*? FROM) *?["'](.*?)["']/$1 STDIN/;
-    my $dump_file = "$dir/$2";
+    my $dump_file = File::Spec->catfile($dir,$2);
     my $data = do {
         open my $fh, '<', "$dump_file" or die "Can't open $dump_file: $!";
         local $/;
@@ -1131,7 +1131,7 @@ EOF
             ],
             index => ["#idx","#value"]
         };
-        open $fh->{$table},'>',PMLTQ::PML2BASE::to_filename($table);
+        open $fh->{$table},'>',PMLTQ::PML2BASE::get_full_path(PMLTQ::PML2BASE::to_filename($table));
     }
 }
 
