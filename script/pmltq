@@ -903,15 +903,19 @@ sub cmd_convert {
   Treex::PML::AddResourcePath($config->{resources});
   for my $layer (@{$config->{layers}}) {
     print STDERR "==== Converting data for layer $layer->{name}\n";
-    PMLTQ::PML2BASE::init();
     $PMLTQ::PML2BASE::opts{'no-secondary-files'} = 1;
     $PMLTQ::PML2BASE::opts{'resource-dir'} = $config->{resources};
+    $PMLTQ::PML2BASE::opts{'related-schema'} = $layer->{'related-schema'} || [];
     $PMLTQ::PML2BASE::opts{'syntax'} = 'postgres';
     $PMLTQ::PML2BASE::opts{'loader'} = 'file_list'; # SH
     $PMLTQ::PML2BASE::opts{'data-dir'} = $config->{data_dir};
     $PMLTQ::PML2BASE::opts{'output-dir'} = $sqldir;
     %{$PMLTQ::PML2BASE::opts{'ref'}}=();
     $PMLTQ::PML2BASE::opts{'ref'}{$_} = $layer->{'references'}{$_} for (keys %{$layer->{'references'}||{}});
+    use Data::Dumper;
+    print STDERR Dumper($layer);
+    PMLTQ::PML2BASE::init();
+
     #$PMLTQ::PML2BASE::opts{'debug'} = 1;
 
     # converting schema from pml2base.btred
