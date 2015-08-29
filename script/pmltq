@@ -910,8 +910,8 @@ sub cmd_convert {
     $PMLTQ::PML2BASE::opts{'loader'} = 'file_list'; # SH
     $PMLTQ::PML2BASE::opts{'data-dir'} = $config->{data_dir};
     $PMLTQ::PML2BASE::opts{'output-dir'} = $sqldir;
-    $PMLTQ::PML2BASE::opts{'ref'}{$_->[0]} = $_->[1] for $PMLTQ::PML2BASE::opts{'references'}||();
-
+    %{$PMLTQ::PML2BASE::opts{'ref'}}=();
+    $PMLTQ::PML2BASE::opts{'ref'}{$_} = $layer->{'references'}{$_} for (keys %{$layer->{'references'}||{}});
     #$PMLTQ::PML2BASE::opts{'debug'} = 1;
 
     # converting schema from pml2base.btred
