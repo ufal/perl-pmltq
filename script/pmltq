@@ -910,6 +910,8 @@ sub cmd_convert {
     $PMLTQ::PML2BASE::opts{'loader'} = 'file_list'; # SH
     $PMLTQ::PML2BASE::opts{'data-dir'} = $config->{data_dir};
     $PMLTQ::PML2BASE::opts{'output-dir'} = $sqldir;
+    $PMLTQ::PML2BASE::opts{'ref'}{$_->[0]} = $_->[1] for $PMLTQ::PML2BASE::opts{'references'}||();
+
     #$PMLTQ::PML2BASE::opts{'debug'} = 1;
 
     # converting schema from pml2base.btred
@@ -1309,7 +1311,7 @@ functor (attribute C<functor>)
 =cut
 
 sub IsCoord {
-  my $node=$_[0];# || $this;
+  my $node=$_[0]//undef;# || $this;
   return 0 unless $node;
   return $node->{functor} =~ /ADVS|APPS|CONFR|CONJ|CONTRA|CSQ|DISJ|GRAD|OPER|REAS/;
 }
@@ -1334,41 +1336,3 @@ sub GetEParents {
   return ($node) if !IsCoord($node);
   return (ExpandCoord($node));
 } # GetEParents
-
-
-
-
-
-=x
-#####
-sub load_tred_macros {
-  use File::Which;
-  my $tred_path = which('start_tred');
-  $tred_path = readlink $tred_path;
-  print STDERR "##########\t\t\t$tred_path\n\n";
-  print STDERR join(" ",File::Spec->splitdir($tred_path)),"\n\n";
-  my @path = File::Spec->splitdir($tred_path);
-  pop @path; # removing start_tred
-  pop @path; # removing bin
-  my $rb = File::Spec->catdir(@path);
-  print STDERR ">> $rb\n";
-  my $libDir;
-  if (exists $ENV{TREDHOME}) {
-    $libDir=$ENV{TREDHOME};
-  } elsif (-d "$rb/tredlib") {
-    $libDir="$rb/tredlib";
-  } elsif (-d "$rb/../lib/tredlib") {
-    $libDir="$rb/../lib/tredlib";
-  } elsif (-d "$rb/../lib/tred") {
-    $libDir="$rb/../lib/tred";
-  }
-
-  if (-d $libDir) {
-    unshift @INC,$libDir;
-  }
-
-
-}
-
-=x
-# user defined relations from pml2base.btred
