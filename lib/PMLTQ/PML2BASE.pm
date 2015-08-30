@@ -1552,7 +1552,7 @@ EOF
       for my $desc (values %schema) {
         for my $col (@{$desc->{colspec}}) {
           my ($c,$t)=@$col;
-          if ($t = m/ (FOREIGN KEY) (.*)$/) {
+          if ($t =~ m/ (FOREIGN KEY) (.*)$/) {
             $fh{'#POST_SQL'}->print(qq{ALTER TABLE "$desc->{table}" ADD $1("$c") $2;\n});
           }
         }
