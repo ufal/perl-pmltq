@@ -1312,8 +1312,9 @@ functor (attribute C<functor>)
 =cut
 
 sub IsCoord {
-  my $node=$_[0]//undef;# || $this;
+  my $node=$_[0];# || $this;
   return 0 unless $node;
+  return 0 if $node->{nodetype} eq 'root'; # root does not have functor !!!
   return $node->{functor} =~ /ADVS|APPS|CONFR|CONJ|CONTRA|CSQ|DISJ|GRAD|OPER|REAS/;
 }
 
