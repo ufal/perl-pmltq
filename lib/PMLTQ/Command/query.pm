@@ -16,7 +16,7 @@ use Encode;
 
 sub run {
   my $self = shift;
-  my @args = @_
+  my @args = @_;
   my %opts;
   GetOptionsFromArray(\@args, \%opts, 
   'debug|D',

@@ -243,7 +243,6 @@ Print program version.
 use open IO => ':utf8';
 use open ':std';
 
-
 use warnings;
 use strict;
 $|=1;
@@ -319,7 +318,7 @@ if ($command eq 'convert') {
 } 
 =cut
 
-=x
+
 package PMLTQ::Common::Effective;
 
 
@@ -622,14 +621,4 @@ sub GetEParents {
   return ($node) if !IsCoord($node);
   return (ExpandCoord($node));
 } # GetEParents
-
-
-
-
-
-
-
-
-
-
 

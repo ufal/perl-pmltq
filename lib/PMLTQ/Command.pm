@@ -1,6 +1,6 @@
 package PMLTQ::Command;
 
-use ExtUtils::Installed;
+#use Module::Find 'useall';
 
 sub load_config {
   my $config_file = shift;
@@ -69,9 +69,9 @@ sub run_sql_from_file {
 }
 
 sub module_list {
-  my $inst = ExtUtils::Installed->new();
-  my @modules = grep {m/^PMLTQ.*/} $inst->modules();
-  return @modules;
+  use Module::Find 'useall';
+  return useall "PMLTQ::Command";
+  return map { /^(.+)::$/ ? "PMLTQ::Command::$1" : () } keys %{"PMLTQ::Command::"};
 }
 
 1;
