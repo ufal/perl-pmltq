@@ -55,6 +55,7 @@ EOF
     $fh->{'#DELETE_SQL'}->print(<<"EOF");
 DELETE FROM "#PML_USR_REL" WHERE "tbl"='${adata_table}';
 DELETE FROM "#PML_USR_REL" WHERE "tbl"='${tdata_table}';
+DELETE FROM "#PML_USR_REL" WHERE "tbl"='${adata_c_table}';
 EOF
   }
 
