@@ -12,6 +12,7 @@ Convert from PML to SQL
 
 package PMLTQ::Command::convert;
 use PMLTQ::Command;
+use Module::Load;
 
 sub run {
   my $self = shift;
@@ -51,6 +52,11 @@ sub run {
       if ($Treex::PML::FSError) {
         die "Error loading file $file: $Treex::PML::FSError ($!)\n";
       }
+      my @for_modules = map {
+            my $fun = exists $layer->{$_} ? $layer->{$_} : '';
+            $fun =~ s/::[^:]*$//;
+            $fun ? ($fun) : (); } qw/for_each_tree for_each_node for_schema/;
+      load $_ for @for_modules;
       my %for_ = map {(exists $layer->{$_} ? ($_ => \&{$layer->{$_}}) : ())} qw/for_each_tree for_each_node for_schema/;
       PMLTQ::PML2BASE::fs2base($fsfile, \%for_);
     }
