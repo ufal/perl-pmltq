@@ -27,12 +27,13 @@ use Module::Load;
 sub run {
   my $self = shift;
   my $command = shift;
+  my $noexit = shift;
   my @modules = PMLTQ::Command::module_list();
   my %commands = map {my $key = $_; $key =~ s/^PMLTQ::Command:://;($key => $_)} @modules;
   if ($command){
     unknown_command($command,\%commands) unless exists $commands{$command};
     load "PMLTQ::Command::$command";
-    pod2usage( -verbose => 99, -input => Pod::Find::pod_where({-inc => 1}, $commands{$command}) );
+    pod2usage( -verbose => 99, -input => Pod::Find::pod_where({-inc => 1}, $commands{$command}), $noexit ? (-exitval => 'NOEXIT') : () );
   } else {
     print_commands(\%commands);
   }
