@@ -1,3 +1,15 @@
+=head1 SYNOPSIS
+
+  pmltq convert <treebank_config> <sql_dir>
+
+=head1 DESCRIPTION
+
+Convert from PML to SQL
+
+=head1 OPTIONS
+
+=cut
+
 package PMLTQ::Command::convert;
 use PMLTQ::Command;
 

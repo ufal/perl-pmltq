@@ -1,3 +1,15 @@
+=head1 SYNOPSIS
+
+  pmltq load <treebank_config> <sql_dir>
+
+=head1 DESCRIPTION
+
+Load treebank to database
+
+=head1 OPTIONS
+
+=cut
+
 package PMLTQ::Command::load;
 use PMLTQ::Command;
 

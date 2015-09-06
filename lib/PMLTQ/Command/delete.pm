@@ -1,5 +1,19 @@
+=head1 SYNOPSIS
+
+  pmltq delete <treebank_config>
+
+=head1 DESCRIPTION
+
+Delete the treebank from database.
+
+=head1 OPTIONS
+
+=cut
+
+
 package PMLTQ::Command::delete;
 use PMLTQ::Command;
+
 
 sub run {
   my $self = shift;

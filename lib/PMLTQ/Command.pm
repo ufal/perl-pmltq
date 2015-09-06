@@ -71,7 +71,6 @@ sub run_sql_from_file {
 sub module_list {
   use Module::Find 'findallmod';
   return findallmod "PMLTQ::Command";
-  return map { /^(.+)::$/ ? "PMLTQ::Command::$1" : () } keys %{"PMLTQ::Command::"};
 }
 
 1;

@@ -1,3 +1,15 @@
+=head1 SYNOPSIS
+
+  pmltq verify <treebank_config>
+
+=head1 DESCRIPTION
+
+Check if database exists and that it contains some data.
+
+=head1 OPTIONS
+
+=cut
+
 package PMLTQ::Command::verify;
 use PMLTQ::Command;
 

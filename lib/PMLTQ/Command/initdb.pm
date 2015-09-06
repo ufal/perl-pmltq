@@ -1,3 +1,15 @@
+=head1 SYNOPSIS
+
+  pmltq initdb <treebank_config>
+  
+=head1 DESCRIPTION
+
+Initialize empty database.
+
+=head1 OPTIONS
+
+=cut
+
 package PMLTQ::Command::initdb;
 use PMLTQ::Command;
 
