@@ -51,7 +51,7 @@ sub run {
       if ($Treex::PML::FSError) {
         die "Error loading file $file: $Treex::PML::FSError ($!)\n";
       }
-      my %for_ = map {(exists $layer->{$_} ? ($_ => \&{$layer->{$_}}) : ())} qw/for for_each_tree for_each_node for_schema/;
+      my %for_ = map {(exists $layer->{$_} ? ($_ => \&{$layer->{$_}}) : ())} qw/for_each_tree for_each_node for_schema/;
       PMLTQ::PML2BASE::fs2base($fsfile, \%for_);
     }
     PMLTQ::PML2BASE::finish();
