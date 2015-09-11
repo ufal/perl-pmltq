@@ -1,5 +1,6 @@
 package PMLTQ::Command;
 
+use SQL::SplitStatement;
 #use Module::Find 'useall';
 
 sub load_config {
@@ -63,8 +64,15 @@ sub run_sql_from_file {
     };
     warn $@ if $@;
   } else {
-    for my $s (split(/;\s*\n/, $sql)) {
-      eval {$dbh->do("$s;");};
+    my $sql_splitter = SQL::SplitStatement->new(
+        keep_terminators      => 1,
+        keep_extra_spaces     => 1,
+        keep_comments         => 1,
+        keep_empty_statements => 1
+    );
+    my @statements = $sql_splitter->split($sql);
+    for my $s (@statements) {
+      eval {$dbh->do($s);};
     }
   }
 }
