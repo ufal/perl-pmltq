@@ -43,9 +43,9 @@ sub mk_eparent_table {
   my $table_name = PMLTQ::PML2BASE::rename_type($name.'__#eparents');
   ## init tables for both tdata and adata because
   ## treex_documents contains all trees in one document
-  my $adata_c_table = PML2BASE::rename_type($name.'__adata#eparents_c');
-  my $adata_table = PML2BASE::rename_type($name.'__adata#eparents');
-  my $tdata_table = PML2BASE::rename_type($name.'__tdata#eparents');
+  my $adata_c_table = PMLTQ::PML2BASE::rename_type($name.'__adata#eparents_c');
+  my $adata_table = PMLTQ::PML2BASE::rename_type($name.'__adata#eparents');
+  my $tdata_table = PMLTQ::PML2BASE::rename_type($name.'__tdata#eparents');
   unless ($opts{'no-schema'}) {
     $fh->{'#INIT_SQL'}->print(<<"EOF");
 INSERT INTO "#PML_USR_REL" VALUES('eparentC','echildC','a-node','a-node','${adata_c_table}');
