@@ -23,7 +23,7 @@ sub run {
   }
   $dbh = PMLTQ::Command::db_connect($config);
   for my $layer (@{$config->{layers}}) {
-    my $listfile = "$sqldir$layer->{name}__init.list";
+    my $listfile = File::Spec->catfile($sqldir,"$layer->{name}__init.list");
     open my $fh, '<', $listfile or die "Can't open $listfile: $!";
     for my $file (<$fh>) {
       $file =~ s/\n$//;
