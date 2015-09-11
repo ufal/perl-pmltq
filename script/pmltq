@@ -89,7 +89,6 @@ use FindBin qw($RealBin);
 use Getopt::Long;
 use Pod::Usage;
 use YAML::Tiny;
-use File::Path qw( make_path );
 
 Getopt::Long::Configure ("bundling");
 my %error_msg = (invalid_param_n => "Invalid number of parameters !!! \n", connection => "Unable to connect to database !!!\n");

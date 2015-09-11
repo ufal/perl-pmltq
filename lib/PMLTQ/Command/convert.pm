@@ -13,6 +13,7 @@ Convert from PML to SQL
 package PMLTQ::Command::convert;
 use PMLTQ::Command;
 use Module::Load;
+use File::Path qw( make_path );
 
 sub run {
   my $self = shift;
