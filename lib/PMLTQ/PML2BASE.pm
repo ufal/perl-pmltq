@@ -302,7 +302,7 @@ sub column_spec {
         }
         my $comment = "Updating PMLREF column: $table/$column refers to nodes in $target of type $target_type";
         if ($opts{syntax} eq 'postgres') {
-          $fh{'#POST_SQL'}->print("\\echo $comment\n");
+          $fh{'#POST_SQL'}->print("\\echo $comment\n") unless $opts{loader} eq 'file_list';
         } elsif ($opts{syntax} eq 'oracle') {
           $fh{'#POST_SQL'}->print("prompt $comment\n");
         } else {
