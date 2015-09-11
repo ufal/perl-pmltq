@@ -28,7 +28,7 @@ sub run {
     for my $file (<$fh>) {
       $file =~ s/\n$//;
       next unless $file;
-      PMLTQ::Command::run_sql_from_file($file,$sqldir);
+      PMLTQ::Command::run_sql_from_file($file,$sqldir,$dbh);
     }
     ###$dbh->do($sql);
   }

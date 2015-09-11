@@ -39,12 +39,14 @@ sub db_disconnect {
 sub run_sql_from_file {
   my $file = shift;
   my $dir = shift;
+  my $dbh = shift;
   my $sqlfile = File::Spec->catfile($dir,$file);
   my $sql = do {
       open my $fh, '<', $sqlfile or die "Can't open $sqlfile: $!";
       local $/;
       <$fh>
     };
+  print STDERR "RUNNING SQL FROM $sqlfile\n";
   if($file =~ m/.ctl/ && $sql =~ m/(COPY .*? FROM *?["'].*?["'])/g ) {
     die "more copy commands than one in file is not supported" if @_ > 1;
     $sql =~ s/(COPY .*? FROM) *?["'](.*?)["']/$1 STDIN/;
@@ -61,7 +63,6 @@ sub run_sql_from_file {
     };
     warn $@ if $@;
   } else {
-    print STDERR "RUNNING SQL FROM $file\n";
     for my $s (split(/;\s*\n/, $sql)) {
       eval {$dbh->do("$s;");};
     }
