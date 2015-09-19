@@ -61,7 +61,6 @@ close $dh;
 
 BEGIN {
   my @resources = (
-    File::Spec->catfile(PMLTQ->home, 'resources'), # resources for PML-TQ
     File::Spec->catfile(PMLTQ->shared_dir, 'resources'), # resources for PML-TQ
     glob(File::Spec->catfile($FindBin::RealBin,'treebanks', '*', 'resources')) # Load required resources for all tested treebanks
   );
