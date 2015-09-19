@@ -310,7 +310,8 @@ sub column_spec {
         }
         my $col = $column;
         $col=~s/\.rf$//;
-        $table = rename_type($table);
+        # Possible fix for #329 - table name is renamed twice
+        #$table = rename_type($table); 
         my $tt;
         if ($target eq $root_name) {
           $tt = rename_type($target_type);
@@ -345,7 +346,7 @@ sub column_spec {
           $target_id||='id';
         }
         my $sql = <<"EOF";
-UPDATE "$table" t SET "$col"=(SELECT a."#idx" FROM "$tt" a WHERE a."$target_id"=t."$column~") WHERE "$col" IS NULL;
+UPDATE "$table" t SET "$col"=(SELECT a."#idx" FROM "$tt" a WHERE a."$target_id"=t."$column~" LIMIT 1) WHERE "$col" IS NULL;
 EOF
         unless ($opts{incremental}) {
           $sql .= <<"EOF";

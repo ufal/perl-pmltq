@@ -73,6 +73,7 @@ sub run_sql_from_file {
     my @statements = $sql_splitter->split($sql);
     for my $s (@statements) {
       eval {$dbh->do($s);};
+      print STDERR "SQL:\t$s\n" if $@;
     }
   }
 }
