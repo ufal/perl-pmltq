@@ -8,7 +8,7 @@ sub run {
     die qq{Unknown command "$name", maybe you need to install it?\n} if split("\n",$@) <= 2;
     die $@;
   }
-  $module->run(@args);
+  return $module->run(@args);
 }
 
 1;

@@ -37,6 +37,7 @@ sub run {
   } else {
     print_commands(\%commands);
   }
+  return 1;
 }
 
 sub unknown_command {

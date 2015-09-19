@@ -11,6 +11,8 @@ Convert from PML to SQL
 =cut
 
 package PMLTQ::Command::convert;
+use Treex::PML;
+use PMLTQ::PML2BASE;
 use PMLTQ::Command;
 use Module::Load;
 use File::Path qw( make_path );
@@ -64,6 +66,7 @@ sub run {
     PMLTQ::PML2BASE::finish();
     PMLTQ::PML2BASE::destroy();
   }
+  return 1;
 }
 
 
