@@ -741,8 +741,11 @@ EOF
                             qq{, "target_layer" }.varchar(128).
                             qq{, "target_table" }.varchar(MAX_NAME_LENGTH).
                             qq{, "target_type" }.varchar(128).qq{);\n});
-
-    $fh{'#DELETE_SQL'}->print(qq{DROP TABLE "$pmlref_table";\n});
+    if (lc($opts{syntax}) eq 'postgres') {
+      $fh{'#DELETE_SQL'}->print(qq{DROP TABLE IF EXISTS "$pmlref_table";\n});
+    } else {
+      $fh{'#DELETE_SQL'}->print(qq{DROP TABLE "$pmlref_table";\n});
+    }
     for my $k (sort keys %{$opts{ref}}) {
       my ($t1,$t2) = split /:/,$opts{ref}{$k};
       unless ($t2) {
@@ -1480,7 +1483,11 @@ sub finish {
     }
     for my $desc (@tables) {
       my $sugar = $opts{syntax} eq 'oracle' ? 'CONSTRAINTS' : '';
-      $fh{'#DELETE_SQL'}->print(qq{DROP TABLE "$desc->{table}" CASCADE $sugar;\n});
+      if (lc($opts{syntax}) eq 'postgres') {
+        $fh{'#DELETE_SQL'}->print(qq{DROP TABLE IF EXISTS "$desc->{table}" CASCADE;\n});
+      } else {
+        $fh{'#DELETE_SQL'}->print(qq{DROP TABLE "$desc->{table}" CASCADE $sugar;\n});
+      }
     }
   }
   unless ($opts{'schema'}) {
