@@ -1,0 +1,42 @@
+---
+data_dir: "/data"
+resources: "/resources" # main directory with PML schemas
+
+db:
+  name: pdt20_sample_small
+  host: localhost
+  port: 5432
+  user: pmltq_test
+  password: tesTpass
+
+layers: # description of all data layers
+  - name: valency_lexicon
+    data: "./vallex_pml/vallex_ab*.pml" # skiping the rest of alphabeth
+    references:
+      problem/author: user
+      local_event/author: user
+      valency_lexicon/owner: user
+  - name: adata
+    data: ./*.a.gz
+    resources:
+      - extra_resource
+  - name: tdata
+    data: ./*.t.gz
+    for_each_tree: "PMLTQ::PML2BASE::PDT::DumpData::tdata::dump_eparent"
+    for_schema: "PMLTQ::PML2BASE::PDT::MakeTable::tdata::mk_extra_tables"
+    related-schema:
+      - /home/matyas/Documents/UFAL/PMLTQ_WEB/REP/perl-pmltq_CONV_SCRIPT/perl-pmltq/script/DATA/pdt20_mini/resources/adata_schema.xml
+      - /home/matyas/Documents/UFAL/PMLTQ_WEB/REP/perl-pmltq_CONV_SCRIPT/perl-pmltq/script/DATA/pdt20_mini/data/vallex_pml/vallex_schema.xml
+    references:
+      t-a/aux.rf: "adata:a-node"  # t-a/aux.rf=adata:a-node
+      t-a/lex.rf: "adata:a-node"
+      t-root/atree.rf: "adata:a-root"
+      t-node/coref_gram.rf: t-node  # t-node/coref_gram.rf=t-node
+      t-node/coref_text.rf: t-node
+      t-node/compl.rf: t-node
+      t-node/val_frame.rf: "valency_lexicon:v-frame"
+  - name: mdata
+    data: ./*.m.gz
+  - name: wdata
+    data: ./*.w.gz
+

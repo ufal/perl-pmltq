@@ -28,7 +28,6 @@ use PMLTQ;
 use TestPMLTQ;
 
 BEGIN {
-  print STDERR PMLTQ->home;
   my @resources = (
     File::Spec->catfile(PMLTQ->shared_dir, 'resources'), # resources for PML-TQ
     glob(File::Spec->catfile($FindBin::RealBin,'treebanks', '*', 'resources')) # Load required resources for all tested treebanks
@@ -41,12 +40,16 @@ BEGIN {
 }
 
 
-my $conf_file = File::Spec->catfile($FindBin::RealBin, 'treebanks', 'sql.conf');
-my $configs = TestPMLTQ::read_sql_conf($conf_file);
+#my $conf_file = File::Spec->catfile($FindBin::RealBin, 'treebanks', 'sql.conf');
+#my $configs = TestPMLTQ::read_sql_conf($conf_file);
 my @treebanks = qw/pdt20_sample_small/;
 
 for my $treebank (@treebanks) {
-  my $evaluator = TestPMLTQ::init_sql_evaluator($treebank,$configs);
+  my $conf_file = File::Spec->catfile($FindBin::RealBin, 'treebanks',$treebank, 'config.yml');
+  print STDERR $conf_file,"\n###";
+  my $config = TestPMLTQ::read_yaml_conf($conf_file);
+  #my $evaluator = TestPMLTQ::init_sql_evaluator($treebank,$configs);
+  my $evaluator = TestPMLTQ::init_sql_evaluator($config);
   for my $query_file (glob(File::Spec->catfile($FindBin::RealBin, 'queries', '*.tq'))) {
     my $name = basename($query_file);
     local $/;

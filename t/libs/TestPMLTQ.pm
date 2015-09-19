@@ -1,5 +1,6 @@
 package TestPMLTQ;
 use PMLTQ::Common;
+use PMLTQ::Command;
 use PMLTQ::SQLEvaluator;
 use List::Util qw(first);
 
@@ -51,14 +52,38 @@ sub read_sql_conf {
   return $cfg_root->{configurations};
 }
 
+sub read_yaml_conf {
+  my $conf_file = shift; 
+  my $config = PMLTQ::Command::load_config($conf_file);
+  return $config;
+}
+
+# sub init_sql_evaluator {
+#   my $id = shift;
+#   my $configs = shift;
+#   $conf = first { $_->{id} eq $id } map $_->value, grep $_->name eq 'dbi', PMLTQ::Common::SeqV($configs);
+#   return unless $conf;
+#   my $evaluator = PMLTQ::SQLEvaluator->new(undef,{
+#         connect => $conf,
+#         #debug=>$DEBUG,
+#       });
+#   $evaluator->connect();
+#   return $evaluator;
+#}
+
 sub init_sql_evaluator {
-  my $id = shift;
-  my $configs = shift;
-  $conf = first { $_->{id} eq $id } map $_->value, grep $_->name eq 'dbi', PMLTQ::Common::SeqV($configs);
-  return unless $conf;
+  my $config = shift;
+  return unless $config;
   my $evaluator = PMLTQ::SQLEvaluator->new(undef,{
-        connect => $conf,
-        #debug=>$DEBUG,
+        connect => {
+          database => $config->{db}->{name},
+          host => $config->{db}->{host},
+          port => $config->{db}->{port},
+          driver => 'Pg',
+          username => $config->{db}->{user},
+          password => $config->{db}->{password},
+          # TODO ??? sources, abstract, description
+        }
       });
   $evaluator->connect();
   return $evaluator;
