@@ -1,5 +1,6 @@
 package PMLTQ::Command;
 
+use YAML::Tiny;
 use SQL::SplitStatement;
 #use Module::Find 'useall';
 
