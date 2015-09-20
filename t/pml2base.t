@@ -9,6 +9,8 @@ plan skip_all => 'set TEST_QUERY to enable this test (developer only!)'
 use Capture::Tiny ':all';
 use PMLTQ::Commands;
 use File::Basename;
+use File::Spec;
+use File::Temp;
 use FindBin qw($RealBin);
 use lib ($RealBin.'/../lib', ## PMLTQ
 	 $RealBin.'/libs', 
@@ -18,6 +20,9 @@ use DBI;
 
 my @cmds = qw/initdb verify help convert delete load man/;
 my $conf_file = File::Spec->catfile($FindBin::RealBin, 'treebanks','pdt20_sample_small', 'config.yml');
+my $tmpdir = File::Temp->newdir();
+my $tmpdirname   = $tmpdir->dirname;
+
 
 subtest 'command' => \&command;
 subtest 'help' => \&help;
@@ -64,11 +69,19 @@ sub help {
 
 
 sub convert {
+  my $datadir = File::Spec->catfile($tmpdirname,"expdata");
+  my $config = PMLTQ::Command::load_config($conf_file);
   undef $@;
-  $h = capture_merged {eval {PMLTQ::Commands->run("convert",$conf_file,"TMPTMP")}};
+  $h = capture_merged {eval {PMLTQ::Commands->run("convert",$conf_file,$datadir)}};
   ok(! $@, "conversion ok");
   print STDERR $@ if $@;
-
+  my %files =  map {$_ => 1} split(" ",`ls $datadir`);
+  for my $layer (@{$config->{layers}}) {
+    for my $n (qw/init.sql init.list schema.dump/) {
+      my $filename = "$layer->{name}__$n";
+      ok(exists $files{$filename} && -s File::Spec->catfile($datadir,$filename),"$filename exists and is not empty");
+    }
+  }
 ## TODO absolute/relative paths
 ## checking conversion (basic)
 }
@@ -92,19 +105,32 @@ sub dbconect {
 sub initdb {
   $h = capture_merged {eval {PMLTQ::Commands->run("initdb",$conf_file)}};
   ok(! $@, "initdb ok");
-  print STDERR $@ if $@;  
-  pass('initdb TODO');
+  print STDERR $@ if $@;
 }
+
 sub load {
-  pass('load TODO');
+  undef $@;
+  $h = capture_merged {eval {PMLTQ::Commands->run("load",$conf_file,File::Spec->catfile($tmpdirname,"expdata"))}};
+  ok(! $@, "load ok");
+  print STDERR $@ if $@;
 }
+
 sub del {
-  pass('delete TODO');
+  undef $@;
+  $h = capture_merged {eval {PMLTQ::Commands->run("delete",$conf_file)}};
+  ok(! $@, "delete ok");
+  print STDERR $@ if $@;
 }
 
 sub verify {
-
-  pass('verify TODO');
+  undef $@;
+  my $config = PMLTQ::Command::load_config($conf_file);
+  $h = capture_merged {eval {PMLTQ::Commands->run("verify",$conf_file)}};
+  ok(! $@, "verify ok");
+  like($h,qr/Database $config->{db}->{name} exists/,"database exists");
+  like($h,qr/Database contains [1-9][0-9]*/,"database contains tables");
+  like($h,qr/contains [1-9][0-9]* rows/,"database contains nonempty tables");
+  print STDERR $@ if $@;
 }
 
 
