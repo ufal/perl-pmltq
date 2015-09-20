@@ -2,6 +2,7 @@ package PMLTQ::Command;
 
 use YAML::Tiny;
 use SQL::SplitStatement;
+use DBI;
 #use Module::Find 'useall';
 
 sub load_config {

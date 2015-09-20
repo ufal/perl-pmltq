@@ -3,7 +3,7 @@ data_dir: "/home/matyas/Documents/UFAL/PMLTQ_WEB/REP/perl-pmltq_CONV_SCRIPT/perl
 resources: "/home/matyas/Documents/UFAL/PMLTQ_WEB/REP/perl-pmltq_CONV_SCRIPT/perl-pmltq/t/treebanks/pdt20_sample_small/resources" # main directory with PML schemas
 
 db:
-  name: pdt20_sample_small
+  name: test_pdt20_sample_small
   host: localhost
   port: 5432
   user: pmltq_test

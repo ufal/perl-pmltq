@@ -11,6 +11,7 @@ Initialize empty database.
 =cut
 
 package PMLTQ::Command::initdb;
+use PMLTQ;
 use PMLTQ::Command;
 
 sub run {

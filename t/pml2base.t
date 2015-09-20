@@ -13,12 +13,16 @@ use FindBin qw($RealBin);
 use lib ($RealBin.'/../lib', ## PMLTQ
 	 $RealBin.'/libs', 
 	);
-my @cmds = qw/initdb verify help convert delete load man/;
+use DBI;
 
+
+my @cmds = qw/initdb verify help convert delete load man/;
+my $conf_file = File::Spec->catfile($FindBin::RealBin, 'treebanks','pdt20_sample_small', 'config.yml');
 
 subtest 'command' => \&command;
 subtest 'help' => \&help;
 subtest 'convert' => \&convert;
+plan skip_all =>  'SKIPPING THE REST OF TESTS' unless subtest 'test database connection' => \&dbconect;
 subtest 'initdb' => \&initdb;
 subtest 'load' => \&load;
 subtest 'verify' => \&verify;
@@ -56,8 +60,10 @@ sub help {
    
 }
 
+
+
+
 sub convert {
-  my $conf_file = File::Spec->catfile($FindBin::RealBin, 'treebanks','pdt20_sample_small', 'config.yml');
   undef $@;
   $h = capture_merged {eval {PMLTQ::Commands->run("convert",$conf_file,"TMPTMP")}};
   ok(! $@, "conversion ok");
@@ -67,19 +73,39 @@ sub convert {
 ## checking conversion (basic)
 }
 
+
+sub dbconect {
+  my $config = PMLTQ::Command::load_config($conf_file);
+  my $dbh = DBI->connect("DBI:".$config->{db}->{driver}.":dbname=postgres;host=".$config->{db}->{host}.";port=".$config->{db}->{port}, 
+    $config->{db}->{user}, 
+    $config->{db}->{password}, 
+    { RaiseError => 0, PrintError => 1, mysql_enable_utf8 => 1 });
+  unless($dbh) {
+    fail("database connection failed");
+    return;
+  }
+  pass("succesfully connected to database");
+  $dbh->disconnect();
+  return 1;
+}
+
 sub initdb {
+  $h = capture_merged {eval {PMLTQ::Commands->run("initdb",$conf_file)}};
+  ok(! $@, "initdb ok");
+  print STDERR $@ if $@;  
   pass('initdb TODO');
 }
 sub load {
   pass('load TODO');
 }
-sub verify {
-  pass('verify TODO');
-}
 sub del {
   pass('delete TODO');
 }
 
+sub verify {
+
+  pass('verify TODO');
+}
 
 
 
