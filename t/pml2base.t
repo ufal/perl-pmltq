@@ -44,8 +44,9 @@ for testing.
 
 subtest 'initdb' => \&initdb;
 subtest 'load' => \&load;
-subtest 'verify' => \&verify;
 subtest 'delete' => \&del;
+subtest 'verify' => \&verify;
+
 
 done_testing();
 
@@ -103,28 +104,18 @@ sub convert {
 
 sub dbconect {
   my $config = PMLTQ::Command::load_config($conf_file);
-  my $dbh = DBI->connect("DBI:".$config->{db}->{driver}.":dbname=postgres;host=".$config->{db}->{host}.";port=".$config->{db}->{port}, 
-    $config->{db}->{user}, 
-    $config->{db}->{password}, 
-    { RaiseError => 0, PrintError => 1, mysql_enable_utf8 => 1 });
-  unless($dbh) {
+  unless(dbconnectable($config,'postgres')) {
     fail("database connection failed");
     return;
   }
   pass("succesfully connected to database");
-  $dbh->disconnect();
   return 1;
 }
 
 sub dbexist {
   my $config = PMLTQ::Command::load_config($conf_file);
-  my $dbh = DBI->connect("DBI:".$config->{db}->{driver}.":dbname=".$config->{db}->{name}.";host=".$config->{db}->{host}.";port=".$config->{db}->{port}, 
-    $config->{db}->{user}, 
-    $config->{db}->{password}, 
-    { RaiseError => 0, PrintError => 1, mysql_enable_utf8 => 1 });
-  if($dbh) {
+  if(dbconnectable($config)) {
     fail("database exist");
-    $dbh->disconnect();
     return;
   }
   pass("tested database does not exist");
@@ -134,8 +125,9 @@ sub dbexist {
 
 sub initdb {
   $h = capture_merged {eval {PMLTQ::Commands->run("initdb",$conf_file)}};
-  ok(! $@, "initdb ok");
+  ok(! $@, "no error");
   print STDERR $@ if $@;
+  ok(dbconnectable(PMLTQ::Command::load_config($conf_file)), "Database exists");
 }
 
 sub load {
@@ -150,30 +142,47 @@ sub del {
   $h = capture_merged {eval {PMLTQ::Commands->run("delete",$conf_file)}};
   ok(! $@, "delete ok");
   print STDERR $@ if $@;
+  ok(! dbconnectable(PMLTQ::Command::load_config($conf_file)), "Database does not exist");
 }
 
 sub verify {
   undef $@;
   my $config = PMLTQ::Command::load_config($conf_file);
+  ## database does not exist
+  $h = capture_merged {eval {PMLTQ::Commands->run("verify",$conf_file)}};
+  like($@,qr/Database .* does not exist/, "verify database does not exist");
+  
+  ## database is initialized
+  capture_merged {PMLTQ::Commands->run("initdb",$conf_file)};
+  undef $@;
+  $h = capture_merged {eval {PMLTQ::Commands->run("verify",$conf_file)}};
+  ok(! $@, "verify database is initialized");
+  print STDERR "\n\n##$@\n\n$h\n\n";
+  
+  like($h,qr/Database $config->{db}->{name} exists/,"database exists");
+  like($h,qr/Database contains 4 tables/,"database contains 4 tables");
+  
+  ## database exists and contains data:
+  capture_merged {PMLTQ::Commands->run("load",$conf_file,File::Spec->catfile($tmpdirname,"expdata"))};
+  undef $@;
   $h = capture_merged {eval {PMLTQ::Commands->run("verify",$conf_file)}};
   ok(! $@, "verify ok");
   like($h,qr/Database $config->{db}->{name} exists/,"database exists");
   like($h,qr/Database contains [1-9][0-9]*/,"database contains tables");
   like($h,qr/contains [1-9][0-9]* rows/,"database contains nonempty tables");
-  print STDERR $@ if $@;
+  capture_merged {PMLTQ::Commands->run("delete",$conf_file)}; # cleaning database
 }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+sub dbconnectable {
+  my $config = shift;
+  my $dbname = shift;
+  my $dbh = DBI->connect("DBI:".$config->{db}->{driver}.":dbname=".($dbname||$config->{db}->{name}).";host=".$config->{db}->{host}.";port=".$config->{db}->{port}, 
+    $config->{db}->{user}, 
+    $config->{db}->{password}, 
+    { RaiseError => 0, PrintError => 0, mysql_enable_utf8 => 1 });
+  return unless $dbh;
+  $dbh->disconnect();
+  return 1;
+}
