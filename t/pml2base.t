@@ -27,7 +27,12 @@ my $tmpdirname   = $tmpdir->dirname;
 subtest 'command' => \&command;
 subtest 'help' => \&help;
 subtest 'convert' => \&convert;
-plan skip_all =>  'SKIPPING THE REST OF TESTS' unless subtest 'test database connection' => \&dbconect;
+plan skip_all =>  "
+SKIPPING THE REST OF TESTS
+Run t/scripts/postgres_init.sh under user with postgres CREATEROLE privilege. 
+This will create user allowed to create database, that is needed to run the 
+rest of tests. After testing you should remove him with t/scripts/postgres_delete.sh
+" unless subtest 'test database connection' => \&dbconect;
 subtest 'initdb' => \&initdb;
 subtest 'load' => \&load;
 subtest 'verify' => \&verify;
