@@ -33,6 +33,15 @@ Run t/scripts/postgres_init.sh under user with postgres CREATEROLE privilege.
 This will create user allowed to create database, that is needed to run the 
 rest of tests. After testing you should remove him with t/scripts/postgres_delete.sh
 " unless subtest 'test database connection' => \&dbconect;
+
+plan skip_all =>  "
+SKIPPING THE REST OF TESTS
+Run t/scripts/postgres_delete.sh under user with postgres CREATEROLE privilege. 
+And then run t/scripts/postgres_init.sh to reinitialize postgres setting needed 
+for testing.
+" unless subtest 'test database existence' => \&dbexist;
+
+
 subtest 'initdb' => \&initdb;
 subtest 'load' => \&load;
 subtest 'verify' => \&verify;
@@ -106,6 +115,22 @@ sub dbconect {
   $dbh->disconnect();
   return 1;
 }
+
+sub dbexist {
+  my $config = PMLTQ::Command::load_config($conf_file);
+  my $dbh = DBI->connect("DBI:".$config->{db}->{driver}.":dbname=".$config->{db}->{name}.";host=".$config->{db}->{host}.";port=".$config->{db}->{port}, 
+    $config->{db}->{user}, 
+    $config->{db}->{password}, 
+    { RaiseError => 0, PrintError => 1, mysql_enable_utf8 => 1 });
+  if($dbh) {
+    fail("database exist");
+    $dbh->disconnect();
+    return;
+  }
+  pass("tested database does not exist");
+  return 1;
+}
+
 
 sub initdb {
   $h = capture_merged {eval {PMLTQ::Commands->run("initdb",$conf_file)}};
