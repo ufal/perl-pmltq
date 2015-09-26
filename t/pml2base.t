@@ -8,9 +8,12 @@ plan skip_all => 'set TEST_QUERY to enable this test (developer only!)'
 
 use Capture::Tiny ':all';
 use PMLTQ::Commands;
+use PMLTQ::Command;
 use File::Basename;
 use File::Spec;
 use File::Temp;
+use Test::PostgreSQL;
+
 use FindBin qw($RealBin);
 use lib ($RealBin.'/../lib', ## PMLTQ
 	 $RealBin.'/libs', 
@@ -24,24 +27,13 @@ my $tmpdir = File::Temp->newdir();
 my $tmpdirname   = $tmpdir->dirname;
 
 
+my $psql;
+
 subtest 'command' => \&command;
 subtest 'help' => \&help;
 subtest 'convert' => \&convert;
-plan skip_all =>  "
-SKIPPING THE REST OF TESTS
-Run t/scripts/postgres_init.sh under user with postgres CREATEROLE privilege. 
-This will create user allowed to create database, that is needed to run the 
-rest of tests. After testing you should remove him with t/scripts/postgres_delete.sh
-" unless subtest 'test database connection' => \&dbconect;
 
-plan skip_all =>  "
-SKIPPING THE REST OF TESTS
-Run t/scripts/postgres_delete.sh under user with postgres CREATEROLE privilege. 
-And then run t/scripts/postgres_init.sh to reinitialize postgres setting needed 
-for testing.
-" unless subtest 'test database existence' => \&dbexist;
-
-
+start_postgres();
 subtest 'initdb' => \&initdb;
 subtest 'load' => \&load;
 subtest 'delete' => \&del;
@@ -100,28 +92,6 @@ sub convert {
 ## TODO absolute/relative paths
 ## checking conversion (basic)
 }
-
-
-sub dbconect {
-  my $config = PMLTQ::Command::load_config($conf_file);
-  unless(dbconnectable($config,'postgres')) {
-    fail("database connection failed");
-    return;
-  }
-  pass("succesfully connected to database");
-  return 1;
-}
-
-sub dbexist {
-  my $config = PMLTQ::Command::load_config($conf_file);
-  if(dbconnectable($config)) {
-    fail("database exist");
-    return;
-  }
-  pass("tested database does not exist");
-  return 1;
-}
-
 
 sub initdb {
   $h = capture_merged {eval {PMLTQ::Commands->run("initdb",$conf_file)}};
@@ -185,4 +155,17 @@ sub dbconnectable {
   return unless $dbh;
   $dbh->disconnect();
   return 1;
+}
+
+
+sub start_postgres {
+  my $config = PMLTQ::Command::load_config($conf_file);
+  $pgsql = Test::PostgreSQL->new(
+      port => $config->{db}->{port},
+      #auto_start => 0,
+      #base_dir => $pg_dir, # use dir for subsequent runs to simply skip initialization
+    ) or plan skip_all => $Test::PostgreSQL::errstr;
+  my $dbh = DBI->connect($pgsql->dsn,undef, undef, { RaiseError => 0, PrintError => 0, mysql_enable_utf8 => 1 });
+  $dbh->do("CREATE ROLE ".$config->{db}->{user}." WITH CREATEDB LOGIN PASSWORD '".$config->{db}->{password}."';");
+  $dbh->disconnect();
 }
