@@ -127,7 +127,6 @@ sub verify {
   undef $@;
   $h = capture_merged {eval {PMLTQ::Commands->run("verify",$conf_file)}};
   ok(! $@, "verify database is initialized");
-  print STDERR "\n\n##$@\n\n$h\n\n";
   
   like($h,qr/Database $config->{db}->{name} exists/,"database exists");
   like($h,qr/Database contains 4 tables/,"database contains 4 tables");
