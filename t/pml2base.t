@@ -1,5 +1,5 @@
 #!/usr/bin/perl -Ilib -I../lib
-# Run this like so: `perl test_query_sql.t'
+# Run this like so: `perl pml2base.t'
 #   Matyas Kopp <matyas.kopp@gmail.com>     2015/09/19 20:30:00
 
 use Test::More;
@@ -7,8 +7,10 @@ plan skip_all => 'set TEST_QUERY to enable this test (developer only!)'
   unless $ENV{TEST_QUERY};
 
 use Capture::Tiny ':all';
+use PMLTQ;
 use PMLTQ::Commands;
 use PMLTQ::Command;
+use Treex::PML;
 use File::Basename;
 use File::Spec;
 use File::Temp;
@@ -19,7 +21,15 @@ use lib ($RealBin.'/../lib', ## PMLTQ
 	 $RealBin.'/libs', 
 	);
 use DBI;
+use TestPMLTQ;
 
+BEGIN {
+  my @resources = (
+    File::Spec->catfile(PMLTQ->shared_dir, 'resources'), # resources for PML-TQ
+    glob(File::Spec->catfile($FindBin::RealBin,'treebanks', '*', 'resources')) # Load required resources for all tested treebanks
+  );
+  Treex::PML::AddResourcePath(@resources);
+}
 
 my @cmds = qw/initdb verify help convert delete load man/;
 my $conf_file = File::Spec->catfile($FindBin::RealBin, 'treebanks','pdt20_sample_small', 'config.yml');
@@ -36,6 +46,7 @@ subtest 'convert' => \&convert;
 start_postgres();
 subtest 'initdb' => \&initdb;
 subtest 'load' => \&load;
+subtest 'query' => \&query;
 subtest 'delete' => \&del;
 subtest 'verify' => \&verify;
 
@@ -105,6 +116,47 @@ sub load {
   $h = capture_merged {eval {PMLTQ::Commands->run("load",$conf_file,File::Spec->catfile($tmpdirname,"expdata"))}};
   ok(! $@, "load ok");
   print STDERR $@ if $@;
+
+  my $config = PMLTQ::Command::load_config($conf_file);
+  my $dbh = DBI->connect("DBI:".$config->{db}->{driver}.":dbname=".$config->{db}->{name}.";host=".$config->{db}->{host}.";port=".$config->{db}->{port}, 
+    $config->{db}->{user}, 
+    $config->{db}->{password}, 
+    { RaiseError => 0, PrintError => 0, mysql_enable_utf8 => 1 });
+  for my $layer (@{$config->{layers}}) {
+    my $sth = $dbh->prepare(qq(SELECT "schema" FROM "#PML" WHERE "root" = "$layer->{name}"));
+    $sth->execute();
+    my $ref = $sth->fetchrow_hashref();
+    ok($ref && ! $sth->fetchrow_hashref(), "Schema for $layer->{name} is in database");
+
+  }
+  
+
+}
+
+sub query {
+  my $config = PMLTQ::Command::load_config($conf_file);
+  my $evaluator = TestPMLTQ::init_sql_evaluator($config);
+  my $treebank = 'pdt20_sample_small';
+  for my $query_file (glob(File::Spec->catfile($FindBin::RealBin, 'queries', '*.tq'))) {
+    my $name = basename($query_file);
+    local $/;
+    undef $/;
+    open my $fh, '<:utf8', $query_file or die "Can't open file: '$query_file'\n";
+    my $query = <$fh>;
+
+    my $result;
+    eval{$result = TestPMLTQ::run_sql_query($query,$query_file,$evaluator)};
+    print STDERR $@;
+    ok(defined($result)  , "evaluationable ($name) on $treebank");
+    my @rows = @$result;
+    my $res="";
+    $res .= join("\t",@$_)."\n" for (@rows);
+    open my $fh, '<:utf8', File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res") or die "Can't open result file: ".File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res")."\n";
+    local $/=undef;
+    my $expected = <$fh>;
+    ok(defined($result) && $res eq $expected, "query evaluation ($name) on $treebank");
+  }
+  $evaluator->{dbi}->disconnect();
 }
 
 sub del {

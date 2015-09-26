@@ -46,7 +46,6 @@ my @treebanks = qw/pdt20_sample_small/;
 
 for my $treebank (@treebanks) {
   my $conf_file = File::Spec->catfile($FindBin::RealBin, 'treebanks',$treebank, 'config.yml');
-  print STDERR $conf_file,"\n###";
   my $config = TestPMLTQ::read_yaml_conf($conf_file);
   #my $evaluator = TestPMLTQ::init_sql_evaluator($treebank,$configs);
   my $evaluator = TestPMLTQ::init_sql_evaluator($config);
