@@ -19,6 +19,15 @@ sub load_config {
   }
   exit unless $data;
   $data->[0]->{db}->{driver} ||= 'Pg';
+  # fixing paths
+  my $base;
+  (undef,$base,undef) = File::Spec->splitpath($config_file);
+  $data->[0]->{data_dir} = File::Spec->rel2abs( $data->[0]->{data_dir} , $base );
+  $data->[0]->{resources} = File::Spec->rel2abs( $data->[0]->{resources} , $base );
+  for my $lr (@{$data->[0]->{layers}}) {
+    next unless exists $lr->{'related-schema'};
+    $lr->{'related-schema'} = [map {File::Spec->rel2abs( $_ , $base )} @{$lr->{'related-schema'}}];
+  }
   return $data->[0];
 }
 

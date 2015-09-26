@@ -1,6 +1,6 @@
 ---
-data_dir: "/home/matyas/Documents/UFAL/PMLTQ_WEB/REP/perl-pmltq_CONV_SCRIPT/perl-pmltq/t/treebanks/pdt20_sample_small/data"
-resources: "/home/matyas/Documents/UFAL/PMLTQ_WEB/REP/perl-pmltq_CONV_SCRIPT/perl-pmltq/t/treebanks/pdt20_sample_small/resources" # main directory with PML schemas
+data_dir: "./data"
+resources: "./resources" # main directory with PML schemas
 
 extension: PDT
 
@@ -19,8 +19,8 @@ layers: # description of all data layers
   - name: tdata
     data: ./*.t.gz
     related-schema:
-      - /home/matyas/Documents/UFAL/PMLTQ_WEB/REP/perl-pmltq_CONV_SCRIPT/perl-pmltq/script/DATA/pdt20_mini/resources/adata_schema.xml
-      - /home/matyas/Documents/UFAL/PMLTQ_WEB/REP/perl-pmltq_CONV_SCRIPT/perl-pmltq/script/DATA/pdt20_mini/data/vallex_pml/vallex_schema.xml
+      - "./resources/adata_schema.xml"
+      - "./data/vallex_pml/vallex_schema.xml"
     references:
       t-a/aux.rf: "adata:a-node"  # t-a/aux.rf=adata:a-node
       t-a/lex.rf: "adata:a-node"
