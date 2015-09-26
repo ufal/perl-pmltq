@@ -2,6 +2,8 @@
 data_dir: "/home/matyas/Documents/UFAL/PMLTQ_WEB/REP/perl-pmltq_CONV_SCRIPT/perl-pmltq/t/treebanks/pdt20_sample_small/data"
 resources: "/home/matyas/Documents/UFAL/PMLTQ_WEB/REP/perl-pmltq_CONV_SCRIPT/perl-pmltq/t/treebanks/pdt20_sample_small/resources" # main directory with PML schemas
 
+extension: PDT
+
 db:
   name: test_pdt20_sample_small
   host: localhost
@@ -16,8 +18,6 @@ layers: # description of all data layers
       - extra_resource
   - name: tdata
     data: ./*.t.gz
-    for_each_tree: "PMLTQ::PML2BASE::PDT::DumpData::tdata::dump_eparent"
-    for_schema: "PMLTQ::PML2BASE::PDT::MakeTable::tdata::mk_extra_tables"
     related-schema:
       - /home/matyas/Documents/UFAL/PMLTQ_WEB/REP/perl-pmltq_CONV_SCRIPT/perl-pmltq/script/DATA/pdt20_mini/resources/adata_schema.xml
       - /home/matyas/Documents/UFAL/PMLTQ_WEB/REP/perl-pmltq_CONV_SCRIPT/perl-pmltq/script/DATA/pdt20_mini/data/vallex_pml/vallex_schema.xml
