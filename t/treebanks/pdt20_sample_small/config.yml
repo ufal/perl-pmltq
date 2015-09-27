@@ -20,7 +20,6 @@ layers: # description of all data layers
     data: ./*.t.gz
     related-schema:
       - "./resources/adata_schema.xml"
-      - "./data/vallex_pml/vallex_schema.xml"
     references:
       t-a/aux.rf: "adata:a-node"  # t-a/aux.rf=adata:a-node
       t-a/lex.rf: "adata:a-node"
