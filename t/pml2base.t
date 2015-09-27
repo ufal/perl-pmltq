@@ -123,7 +123,7 @@ sub load {
     $config->{db}->{password}, 
     { RaiseError => 0, PrintError => 0, mysql_enable_utf8 => 1 });
   for my $layer (@{$config->{layers}}) {
-    my $sth = $dbh->prepare(qq(SELECT "schema" FROM "#PML" WHERE "root" = "$layer->{name}"));
+    my $sth = $dbh->prepare(qq(SELECT "schema" FROM "#PML" WHERE "root" = '$layer->{name}'));
     $sth->execute();
     my $ref = $sth->fetchrow_hashref();
     ok($ref && ! $sth->fetchrow_hashref(), "Schema for $layer->{name} is in database");
