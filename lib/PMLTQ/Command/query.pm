@@ -153,11 +153,12 @@ use LWP::UserAgent;
 use File::Temp;
 use Encode;
 
+my $extension_dir;
+my %opts;
 
 sub run {
   my $self = shift;
   my @args = @_;
-  my %opts;
   GetOptionsFromArray(\@args, \%opts, 
   'debug|D',
   'server|s=s',
@@ -214,7 +215,7 @@ sub run {
   }
 
   $opts{$1}=1 if defined($opts{server}) and $opts{server}=~s{^[nbj]tred://}{};
-  my $extension_dir =
+  $extension_dir =
     $opts{'pmltq-extension-dir'} ||
     File::Spec->catfile($ENV{HOME},'.tred.d','extensions', 'pmltq');
   Treex::PML::AddResourcePath(File::Spec->catfile($extension_dir,'resources'));
