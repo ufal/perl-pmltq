@@ -225,7 +225,7 @@ sub run {
   } elsif ($opts{jtred}) {
     jtred_search();
   } elsif ($opts{btred}) {
-    btred_search();
+    btred_search(@args);
   } else {
     pmltq_http_search();
   }
@@ -239,11 +239,12 @@ sub run {
 
 my %auth;
 sub pmltq_http_search {
+  my @args = @_;
   my $query;
-  if ($opts{query} and !@ARGV) {
+  if ($opts{query} and !@args) {
     $query = $opts{query};
-  } elsif (!$query and @ARGV) {
-    $query=join ' ',@ARGV;
+  } elsif (!$query and @args) {
+    $query=join ' ',@args;
   } elsif ($opts{'query-pml-file'}) {
     my $query_file = Treex::PML::Factory->createDocumentFromFile($opts{'query-pml-file'});
     die "Failed to open PML query file $opts{'query-pml-file'}: $Treex::PML::FSError\n" if $Treex::PML::FSError or !$query_file or !$query_file->trees;
@@ -471,6 +472,7 @@ sub quote_cmdline {
 }
 
 sub ntred_search {
+  my @args = @_;
   my ($host,$port)= $opts{server} ? split(/:/,$opts{server}) : ();
   my $command = $opts{command} || 'ntred';
 
@@ -488,7 +490,7 @@ sub ntred_search {
     ((defined($port) and length($port)) ? ('--port',$port) : ()),
     '-q',
     '-I', File::Spec->catfile($extension_dir,qw(contrib pmltq pmltq.ntred)),
-    ($opts{filelist} ? ('-l', File::Spec->rel2abs($opts{filelist})) : (@ARGV ? ('-L', '--', @ARGV) : ())),
+    ($opts{filelist} ? ('-l', File::Spec->rel2abs($opts{filelist})) : (@args ? ('-L', '--', @args) : ())),
     '--', @script_flags
   );
   open(my $pipe, $command.' | ') || die "Failed to start ntred client: $!";
@@ -498,6 +500,7 @@ sub ntred_search {
 }
 
 sub jtred_search {
+  my @args = @_;
   my $command = $opts{command} || 'jtred';
 
   my $jobname="pmltq_jtred_$$";
@@ -533,7 +536,7 @@ sub jtred_search {
     ($opts{'shared-dir'} ? ('-jw', $shared_dir) : ()),
     '-jn', $jobname,
     ($opts{quiet} ? '-jq' : ()),
-    ($filelist ? ('-l', $filelist) : @ARGV),
+    ($filelist ? ('-l', $filelist) : @args),
     '-jb',
     '-q',
     '-I', File::Spec->catfile($extension_dir,qw(contrib pmltq pmltq.ntred)),
@@ -562,6 +565,7 @@ SCRIPT
 }
 
 sub btred_search {
+  my @args = @_;
   my $command = $opts{command} || 'btred';
 
   my $jobname="pmltq_btred_$$";
@@ -588,7 +592,7 @@ sub btred_search {
     ($opts{quiet} ? '-Q' : '-q'),
     '-I', File::Spec->catfile($extension_dir,qw(contrib pmltq pmltq.ntred)),
     '-o', '--apply-filters', @script_flags, '--',
-    ($opts{filelist} ? ('-l', $opts{filelist}) : @ARGV),
+    ($opts{filelist} ? ('-l', $opts{filelist}) : @args),
   );
   if ($opts{server}) {
     my $cwd = quote_cmdline(getcwd());
@@ -602,6 +606,7 @@ cd $cwd
 $command
 SCRIPT
   } else {
+    print STDERR "$command\n";
     system($command);
   }
   unlink $filter_file if -f $filter_file and !$opts{'keep-tmp-files'};
