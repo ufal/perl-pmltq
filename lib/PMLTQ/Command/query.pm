@@ -7,7 +7,7 @@
 
 or
 
-  pmltq [options] [ --print-servers|-P | --node-types | --relations ]
+  pmltq query [options] [ --print-servers|-P | --node-types | --relations ]
 
 
 =head1 DESCRIPTION
