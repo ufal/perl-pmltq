@@ -8,12 +8,24 @@ use DBI;
 sub load_config {
   my $config_file = shift;
   my $data;
-  eval {$data = YAML::Tiny->read($config_file)};
+  my $yaml_str;
+  if($config_file eq '--') {
+    $yaml_str = do {
+        local $/;
+        <STDIN>
+      };
+    eval {$data = YAML::Tiny->read_string($yaml_str)};
+  }
+  else {
+    eval {$data = YAML::Tiny->read($config_file)};
+  }
   if ($@ && $@ =~ m/YAML_LOAD_ERR/) {
     print STDERR "unable to load config file '$config_file'\n";
   } elsif ($@ && $@ =~ m/YAML_PARSE_ERR/) {
     $@ =~ s/\n.*//g;
     print STDERR "unable to parse config file '$config_file'\n\t$@\n";
+  } elsif ($config_file eq '--' && ! $data) {
+    print STDERR "unable to parse config from STDIN:\n$yaml_str\n";
   } elsif (! $data) {
     print STDERR "unable to open config file '$config_file'\n";
   }
