@@ -30,6 +30,7 @@ sub load_config {
     print STDERR "unable to open config file '$config_file'\n";
   }
   exit unless $data;
+  verify_config($data->[0]);
   $data->[0]->{db}->{driver} ||= 'Pg';
   # fixing paths
   my $base;
@@ -41,6 +42,19 @@ sub load_config {
     $lr->{'related-schema'} = [map {File::Spec->rel2abs( $_ , $base )} @{$lr->{'related-schema'}}];
   }
   return $data->[0];
+}
+
+sub verify_config {
+  my $conf = shift;
+  die "empty config file !!!" unless $conf;
+  die "config not contain db !!!" unless ref($conf) && ref($conf) eq 'HASH'  &&  exists($conf->{db});
+  for my $d (qw/name host port user password/) {
+    die "config not contain db->$d !!!" unless  exists($conf->{db}->{$d});
+  }
+  for my $d (qw/data_dir layers/) {
+    warn "config not contain $d !!!" unless  exists($conf->{$d});
+  }
+  die "layers sould be array !!!" unless exists($conf->{layers}) || ref($conf->{layers}) eq 'ARRAY';
 }
 
 sub db_connect {
