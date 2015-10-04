@@ -8,6 +8,18 @@ Load treebank to database
 
 =head1 OPTIONS
 
+=head1 PARAMS
+
+=over 5
+
+=item B<treebank_config>
+
+Path to configuration file. If a treebank_config is --, config is readed from STDIN.
+
+Path to ïnput directory.
+
+=back
+
 =cut
 
 package PMLTQ::Command::load;

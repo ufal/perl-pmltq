@@ -1,12 +1,24 @@
 =head1 SYNOPSIS
 
-  pmltq convert <treebank_config> <sql_dir>
+pmltq convert <treebank_config> <sql_dir>
 
 =head1 DESCRIPTION
 
-Convert from PML to SQL
+Convert from PML to SQL.
 
 =head1 OPTIONS
+
+=head1 PARAMS
+
+=over 5
+
+=item B<treebank_config>
+
+Path to configuration file. If a treebank_config is --, config is readed from STDIN.
+
+Path to output directory. If doesn't exist, directory is created.
+
+=back
 
 =cut
 

@@ -8,6 +8,16 @@ Check if database exists and that it contains some data.
 
 =head1 OPTIONS
 
+=head1 PARAMS
+
+=over 5
+
+=item B<treebank_config>
+
+Path to configuration file. If a treebank_config is --, config is readed from STDIN.
+
+=back
+
 =cut
 
 package PMLTQ::Command::verify;
