@@ -172,13 +172,17 @@ for my $file (@files) {
 
   open my $fh, '<:utf8', $file or die "Can't open file: '$file'\n";
   my $string = <$fh>;
-  my $result = PMLTQ::Common::parse_query($string);
+  close($fh);
+  my $result;
+  eval { $result = PMLTQ::Common::parse_query($string)};
 
   my $query_name = basename($file);
   $query_name=~s/\.\w+$//;
   ok($result, "parsing query '$query_name'");
-  $result->set_attr('id', $file);
-  $doc->append_tree($result); ## every tree contains one query
+  if($result) {
+    $result->set_attr('id', $file);
+    $doc->append_tree($result); ## every tree contains one query
+  }
 }
 
 for my $treebank (@treebanks) {
