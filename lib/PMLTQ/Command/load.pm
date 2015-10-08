@@ -36,7 +36,7 @@ sub run {
   if(!-d $sqldir) {
     die "Directory $sqldir does not exist\n";
   }
-  $dbh = PMLTQ::Command::db_connect($config);
+  my $dbh = PMLTQ::Command::db_connect($config);
   for my $layer (@{$config->{layers}}) {
     my $listfile = File::Spec->catfile($sqldir,"$layer->{name}__init.list");
     open my $fh, '<', $listfile or die "Can't open $listfile: $!";

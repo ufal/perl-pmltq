@@ -57,14 +57,14 @@ Only those secondary files that are already open are returned.
 
 =cut
 
-sub GetSecondaryFiles {
-    my ($fsfile) = @_;
-    $fsfile ||= CurrentFile();
-    return
-        exists(&TrEd::File::get_secondary_files)
-        ? TrEd::File::get_secondary_files($fsfile)
-        : ();
-}
+#sub GetSecondaryFiles {
+#    my ($fsfile) = @_;
+#    $fsfile ||= CurrentFile();
+#    return
+#        exists(&TrEd::File::get_secondary_files)
+#        ? TrEd::File::get_secondary_files($fsfile)
+#        : ();
+#}
 
 =item C<Backends()>
 
@@ -72,9 +72,9 @@ Return a list of currently registered I/O backends.
 
 =cut
 
-sub Backends {
-    return ();#TrEd::File::get_backends();
-}
+#sub Backends {
+#    return ();#TrEd::File::get_backends();
+#}
 
 =item C<ThisAddress(node?,fsfile?)>
 
@@ -90,14 +90,14 @@ the corresponding L<Treex::PML::Document|http://search.cpan.org/dist/Treex-PML/l
 
 =cut
 
-sub ThisAddress {
-    my ( $f, $i, $n, $id ) = &LocateNode;
-    if ( $i == 0 and $id ) {
-        return $f . '#' . $id;
-    }
-    else {
-        return $f . '##' . $i . '.' . $n;
-    }
-}
+#sub ThisAddress {
+#    my ( $f, $i, $n, $id ) = &LocateNode;
+#    if ( $i == 0 and $id ) {
+#        return $f . '#' . $id;
+#    }
+#    else {
+#        return $f . '##' . $i . '.' . $n;
+#    }
+#}
 
 1;

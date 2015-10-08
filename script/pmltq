@@ -90,7 +90,6 @@ use Getopt::Long;
 use Pod::Usage;
 
 Getopt::Long::Configure ("bundling");
-my %error_msg = (invalid_param_n => "Invalid number of parameters !!! \n", connection => "Unable to connect to database !!!\n");
 my %opts;
 
 

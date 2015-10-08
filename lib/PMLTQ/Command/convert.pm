@@ -43,7 +43,8 @@ sub run {
   Treex::PML::AddResourcePath($config->{resources});
   if(exists $config->{extension}) {
     load "PMLTQ::PML2BASE::".$config->{extension};
-    $ext = \%{"PMLTQ::PML2BASE::".$config->{extension}."::export"};
+    print STDERR "TODO !!! convert\n";
+    $ext = { (eval {'$PMLTQ::PML2BASE::'.$config->{extension}."::export"})};
   }
   for my $layer (@{$config->{layers}}) {
     print STDERR "==== Converting data for layer $layer->{name}\n";

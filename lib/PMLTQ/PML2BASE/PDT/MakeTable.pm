@@ -9,7 +9,7 @@ sub mk_eparent_table {
   my @tables;
   my $table_name = PMLTQ::PML2BASE::rename_type($name.'__#eparents');
   @tables = ($table_name);
-  unless ($opts{'no-schema'}) {
+  unless ($PMLTQ::PML2BASE::opts{'no-schema'}) {
     my $node_type;
     $node_type = 'a-data' if $name =~ m/adata/;
     $node_type = 't-data' if $name =~ m/tdata/;
@@ -37,7 +37,7 @@ EOF
 }
 
 sub mk_extra_tables {
-  mk_eparent_table(@_) unless $opts{'no-eparents'};
+  mk_eparent_table(@_) unless $PMLTQ::PML2BASE::opts{'no-eparents'};
 }
 
 1;

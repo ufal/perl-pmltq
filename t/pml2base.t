@@ -93,7 +93,7 @@ sub convert {
   my $datadir = File::Spec->catfile($tmpdirname,"expdata");
   my $config = PMLTQ::Command::load_config($conf_file);
   undef $@;
-  $h = capture_merged {eval {PMLTQ::Commands->run("convert",$conf_file,$datadir)}};
+  my $h = capture_merged {eval {PMLTQ::Commands->run("convert",$conf_file,$datadir)}};
   ok(! $@, "conversion ok");
   print STDERR $@ if $@;
   my %files =  map {$_ => 1} split(" ",`ls $datadir`);
@@ -108,7 +108,7 @@ sub convert {
 }
 
 sub initdb {
-  $h = capture_merged {eval {PMLTQ::Commands->run("initdb",$conf_file)}};
+  my $h = capture_merged {eval {PMLTQ::Commands->run("initdb",$conf_file)}};
   ok(! $@, "no error");
   print STDERR $@ if $@;
   ok(dbconnectable(PMLTQ::Command::load_config($conf_file)), "Database exists");
@@ -116,7 +116,7 @@ sub initdb {
 
 sub load {
   undef $@;
-  $h = capture_merged {eval {PMLTQ::Commands->run("load",$conf_file,File::Spec->catfile($tmpdirname,"expdata"))}};
+  my $h = capture_merged {eval {PMLTQ::Commands->run("load",$conf_file,File::Spec->catfile($tmpdirname,"expdata"))}};
   ok(! $@, "load ok");
   print STDERR $@ if $@;
 
@@ -146,7 +146,7 @@ sub query {
     undef $/;
     open my $fh, '<:utf8', $query_file or die "Can't open file: '$query_file'\n";
     my $query = <$fh>;
-
+    close($fh);
     my $result;
     eval{$result = TestPMLTQ::run_sql_query($query,$query_file,$evaluator)};
     print STDERR $@;
@@ -154,9 +154,10 @@ sub query {
     my @rows = @$result;
     my $res="";
     $res .= join("\t",@$_)."\n" for (@rows);
-    open my $fh, '<:utf8', File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res") or die "Can't open result file: ".File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res")."\n";
+    open my $fh2, '<:utf8', File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res") or die "Can't open result file: ".File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res")."\n";
     local $/=undef;
-    my $expected = <$fh>;
+    my $expected = <$fh2>;
+    close($fh2);
     ok(defined($result) && $res eq $expected, "query evaluation ($name) on $treebank");
   }
   $evaluator->{dbi}->disconnect();
@@ -164,7 +165,7 @@ sub query {
 
 sub del {
   undef $@;
-  $h = capture_merged {eval {PMLTQ::Commands->run("delete",$conf_file)}};
+  my $h = capture_merged {eval {PMLTQ::Commands->run("delete",$conf_file)}};
   ok(! $@, "delete ok");
   print STDERR $@ if $@;
   ok(! dbconnectable(PMLTQ::Command::load_config($conf_file)), "Database does not exist");
@@ -174,7 +175,7 @@ sub verify {
   undef $@;
   my $config = PMLTQ::Command::load_config($conf_file);
   ## database does not exist
-  $h = capture_merged {eval {PMLTQ::Commands->run("verify",$conf_file)}};
+  my $h = capture_merged {eval {PMLTQ::Commands->run("verify",$conf_file)}};
   like($@,qr/Database .* does not exist/, "verify database does not exist");
   
   ## database is initialized
@@ -214,12 +215,12 @@ sub dbconnectable {
 
 sub start_postgres {
   my $config = PMLTQ::Command::load_config($conf_file);
-  $pgsql = Test::PostgreSQL->new(
+  $psql = Test::PostgreSQL->new(
       port => $config->{db}->{port},
       #auto_start => 0,
       #base_dir => $pg_dir, # use dir for subsequent runs to simply skip initialization
     ) or plan skip_all => $Test::PostgreSQL::errstr;
-  my $dbh = DBI->connect($pgsql->dsn,undef, undef, { RaiseError => 0, PrintError => 0, mysql_enable_utf8 => 1 });
+  my $dbh = DBI->connect($psql->dsn,undef, undef, { RaiseError => 0, PrintError => 0, mysql_enable_utf8 => 1 });
   $dbh->do("CREATE ROLE ".$config->{db}->{user}." WITH CREATEDB LOGIN PASSWORD '".$config->{db}->{password}."';");
   $dbh->disconnect();
 }

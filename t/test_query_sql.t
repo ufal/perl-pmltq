@@ -58,15 +58,17 @@ for my $treebank (@treebanks) {
     undef $/;
     open my $fh, '<:utf8', $query_file or die "Can't open file: '$query_file'\n";
     my $query = <$fh>;
+    close($fh);
     my $result;
     eval{$result = TestPMLTQ::run_sql_query($query,$query_file,$evaluator)};
     ok(defined($result)  , "evaluationable ($name) on $treebank");
     my @rows = @$result;
     my $res="";
     $res .= join("\t",@$_)."\n" for (@rows);
-    open my $fh, '<:utf8', File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res") or die "Can't open result file: ".File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res")."\n";
+    open $fh, '<:utf8', File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res") or die "Can't open result file: ".File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res")."\n";
     local $/=undef;
     my $expected = <$fh>;
+    close($fh);
     ok(defined($result) && $res eq $expected, "query evaluation ($name) on $treebank");
   }
   $evaluator->{dbi}->disconnect();

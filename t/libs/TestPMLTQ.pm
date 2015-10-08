@@ -38,7 +38,7 @@ sub openFile {
 sub next_file {
   my ($evaluator,$files)=@_;
   return unless @$files;
-  $fsfile = openFile(shift @$files);
+  my $fsfile = openFile(shift @$files);
   # reusing the evaluator for next file
   my $iter = $evaluator->get_first_iterator;
   $iter->set_file($fsfile);

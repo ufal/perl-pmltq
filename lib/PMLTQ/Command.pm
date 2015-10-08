@@ -5,6 +5,7 @@ use warnings;
 use YAML::Tiny;
 use SQL::SplitStatement;
 use DBI;
+use PMLTQ::Commands;
 #use Module::Find 'useall';
 
 sub load_config {
@@ -66,7 +67,7 @@ sub db_connect {
   my $dbh_ = DBI->connect("DBI:".$config->{db}->{driver}.":dbname=$dbname;host=".$config->{db}->{host}.";port=".$config->{db}->{port}, 
     $config->{db}->{user}, 
     $config->{db}->{password}, 
-    { RaiseError => 1, PrintError => 1, mysql_enable_utf8 => 1 }) or die "$error_msg{connection}\n$DBI::errstr";
+    { RaiseError => 1, PrintError => 1, mysql_enable_utf8 => 1 }) or die "Unable to connect to database !!!\n$DBI::errstr";
   return $dbh_;
 }
 

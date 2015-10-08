@@ -12,6 +12,7 @@ use warnings;
 #use TrEd::Basics;
 use TrEd::MacroAPI::Default;
 #no warnings qw(redefine);
+my ($this,$root);
 sub reset {
   #$grp = undef;
   #$this = undef;
