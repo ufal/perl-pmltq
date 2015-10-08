@@ -62,7 +62,7 @@ for my $treebank (@treebanks) {
     my $result;
     eval{$result = TestPMLTQ::run_sql_query($query,$query_file,$evaluator)};
     ok(defined($result)  , "evaluationable ($name) on $treebank");
-    my @rows = @$result;
+    my @rows = defined($result) ? @$result : ();
     my $res="";
     $res .= join("\t",@$_)."\n" for (@rows);
     open $fh, '<:utf8', File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res") or die "Can't open result file: ".File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res")."\n";
