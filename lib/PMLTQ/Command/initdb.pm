@@ -21,6 +21,9 @@ Path to configuration file. If a treebank_config is --, config is readed from ST
 =cut
 
 package PMLTQ::Command::initdb;
+
+use strict;
+use warnings;
 use PMLTQ;
 use PMLTQ::Command;
 

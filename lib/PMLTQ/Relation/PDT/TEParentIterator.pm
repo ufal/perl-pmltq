@@ -1,6 +1,7 @@
 package PMLTQ::Relation::PDT::TEParentIterator;
 
 use strict;
+use warnings;
 use base qw(PMLTQ::Relation::SimpleListIterator);
 use PMLTQ::Relation {
   name              => 'eparent',

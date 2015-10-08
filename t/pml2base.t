@@ -2,6 +2,9 @@
 # Run this like so: `perl pml2base.t'
 #   Matyas Kopp <matyas.kopp@gmail.com>     2015/09/19 20:30:00
 
+use strict;
+use warnings;
+
 use Test::More;
 plan skip_all => 'set TEST_QUERY to enable this test (developer only!)'
   unless $ENV{TEST_QUERY};

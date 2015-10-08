@@ -1,5 +1,8 @@
 package TredMacro;
 
+use strict;
+use warnings;
+
   #####################
   # Code to provide stuff required from btred
   #####################

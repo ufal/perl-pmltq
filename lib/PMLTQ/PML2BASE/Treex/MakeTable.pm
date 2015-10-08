@@ -1,5 +1,8 @@
 package PMLTQ::PML2BASE::Treex::MakeTable;
 
+use strict;
+use warnings;
+
 sub mk_extra_tables {
   mk_eparent_table(@_) unless $opts{'no-eparents'};
   mk_a_rf_table(@_) unless $opts{'no-a-rf'};

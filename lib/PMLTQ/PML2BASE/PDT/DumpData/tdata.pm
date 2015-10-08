@@ -1,5 +1,7 @@
 package PMLTQ::PML2BASE::PDT::DumpData::tdata;
 
+use strict;
+use warnings;
 use PMLTQ::Relation::PDT;
 
 sub dump_eparent {

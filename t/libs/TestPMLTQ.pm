@@ -1,4 +1,8 @@
 package TestPMLTQ;
+
+use strict;
+use warnings;
+
 use PMLTQ::Common;
 use PMLTQ::Command;
 use PMLTQ::SQLEvaluator;

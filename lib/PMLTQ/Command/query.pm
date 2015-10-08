@@ -139,6 +139,9 @@ Print some extended information (e.g. evaluation benchmarks).
 =cut
 
 package PMLTQ::Command::query;
+
+use strict;
+use warnings;
 use PMLTQ::Command;
 use Cwd;
 use File::Spec;

@@ -22,8 +22,10 @@ Path to configuration file. If a treebank_config is --, config is readed from ST
 
 
 package PMLTQ::Command::delete;
-use PMLTQ::Command;
 
+use strict;
+use warnings;
+use PMLTQ::Command;
 
 sub run {
   my $self = shift;

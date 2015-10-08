@@ -1,5 +1,7 @@
 package PMLTQ::Command;
 
+use strict;
+use warnings;
 use YAML::Tiny;
 use SQL::SplitStatement;
 use DBI;

@@ -1,5 +1,7 @@
 package PMLTQ::PML2BASE::PDT::DumpData;
 
+use strict;
+use warnings;
 use PMLTQ::PML2BASE::PDT::DumpData::adata;
 use PMLTQ::PML2BASE::PDT::DumpData::tdata;
 

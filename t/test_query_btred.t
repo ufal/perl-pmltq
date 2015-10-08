@@ -2,6 +2,9 @@
 # Run this like so: `perl test_query.t'
 #   Michal Sedlak <sedlakmichal@gmail.com>     2014/05/07 15:13:00
 
+use strict;
+use warnings;
+
 use Test::More;
 use Test::Exception;
 plan skip_all => 'set TEST_QUERY to enable this test (developer only!)'

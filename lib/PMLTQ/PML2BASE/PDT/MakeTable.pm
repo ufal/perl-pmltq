@@ -1,5 +1,8 @@
 package PMLTQ::PML2BASE::PDT::MakeTable;
 
+use strict;
+use warnings;
+
 sub mk_eparent_table {
   my ($schema,$desc,$fh)=@_;
   my $name = $schema->get_root_name;

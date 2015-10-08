@@ -19,6 +19,9 @@ Print help for <command>.
 =cut
 
 package PMLTQ::Command::help;
+
+use strict;
+use warnings;
 use PMLTQ::Command;
 use Pod::Usage;
 use Pod::Find;
@@ -42,7 +45,7 @@ sub run {
 
 sub unknown_command {
   my $command = shift;
-  my $commands = shift
+  my $commands = shift;
   print STDERR "Unknown command: $command\n\n";
   print_commands($commands);
   die;

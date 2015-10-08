@@ -1,4 +1,7 @@
 package PMLTQ::Commands;
+
+use strict;
+use warnings;
 use Module::Load;
 
 sub run {

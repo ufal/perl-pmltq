@@ -23,6 +23,9 @@ Path to output directory. If doesn't exist, directory is created.
 =cut
 
 package PMLTQ::Command::convert;
+
+use strict;
+use warnings;
 use Treex::PML;
 use PMLTQ::PML2BASE;
 use PMLTQ::Command;

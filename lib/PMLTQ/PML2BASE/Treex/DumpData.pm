@@ -1,5 +1,7 @@
 package PMLTQ::PML2BASE::Treex::DumpData;
 
+use strict;
+use warnings;
 use PMLTQ::Relation::Treex;
 
 sub dump_eparent {

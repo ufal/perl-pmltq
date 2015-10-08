@@ -8,6 +8,9 @@ Print whole help.
 
 =cut
 package PMLTQ::Command::man;
+
+use strict;
+use warnings;
 use PMLTQ::Command;
 use PMLTQ::Command::help;
 

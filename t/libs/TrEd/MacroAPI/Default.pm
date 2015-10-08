@@ -1,4 +1,8 @@
 package TredMacro;
+
+use strict;
+use warnings;
+
 {
   package TrEd::File;
   sub get_secondary_files {

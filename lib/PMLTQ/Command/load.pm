@@ -23,6 +23,9 @@ Path to ïnput directory.
 =cut
 
 package PMLTQ::Command::load;
+
+use strict;
+use warnings;
 use PMLTQ::Command;
 
 sub run {

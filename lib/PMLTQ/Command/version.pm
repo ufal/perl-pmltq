@@ -11,10 +11,14 @@ Print program version.
 =cut
 
 package PMLTQ::Command::version;
+use strict;
+use warnings;
+
+use PMLTQ;
 
 sub run {
   my $self = shift;
-  print "VERSION";
+  print $PMLTQ::VERSION || 'DEV' . "\n";
 }
 
 

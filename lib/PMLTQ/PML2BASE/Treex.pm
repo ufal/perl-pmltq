@@ -1,5 +1,7 @@
 package PMLTQ::PML2BASE::Treex;
 
+use strict;
+use warnings;
 use PMLTQ::PML2BASE::Treex::DumpData;
 use PMLTQ::PML2BASE::Treex::MakeTable;
 

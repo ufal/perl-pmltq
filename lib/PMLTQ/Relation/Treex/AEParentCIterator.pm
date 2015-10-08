@@ -1,6 +1,7 @@
 package PMLTQ::Relation::Treex::AEParentCIterator;
 
 use strict;
+use warnings;
 use base qw(PMLTQ::Relation::SimpleListIterator);
 use PMLTQ::Relation {
   name              => 'eparentC',

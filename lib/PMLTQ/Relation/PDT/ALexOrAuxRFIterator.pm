@@ -1,6 +1,7 @@
 package PMLTQ::Relation::PDT::ALexOrAuxRFIterator;
 
 use strict;
+use warnings;
 use base qw(PMLTQ::Relation::SimpleListIterator);
 use PMLTQ::Relation {
   name             => 'a/lex.rf|a/aux.rf',
