@@ -40,13 +40,12 @@ my $tmpdir = File::Temp->newdir();
 my $tmpdirname   = $tmpdir->dirname;
 
 
-my $psql;
 
 subtest 'command' => \&command;
 subtest 'help' => \&help;
 subtest 'convert' => \&convert;
 
-start_postgres();
+TestPMLTQ::start_postgres($conf_file);
 subtest 'initdb' => \&initdb;
 subtest 'load' => \&load;
 subtest 'query' => \&query;
@@ -210,17 +209,4 @@ sub dbconnectable {
   return unless $dbh;
   $dbh->disconnect();
   return 1;
-}
-
-
-sub start_postgres {
-  my $config = PMLTQ::Command::load_config($conf_file);
-  $psql = Test::PostgreSQL->new(
-      port => $config->{db}->{port},
-      #auto_start => 0,
-      #base_dir => $pg_dir, # use dir for subsequent runs to simply skip initialization
-    ) or plan skip_all => $Test::PostgreSQL::errstr;
-  my $dbh = DBI->connect($psql->dsn,undef, undef, { RaiseError => 0, PrintError => 0, mysql_enable_utf8 => 1 });
-  $dbh->do("CREATE ROLE ".$config->{db}->{user}." WITH CREATEDB LOGIN PASSWORD '".$config->{db}->{password}."';");
-  $dbh->disconnect();
 }

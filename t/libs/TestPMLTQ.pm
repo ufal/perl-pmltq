@@ -4,9 +4,13 @@ use strict;
 use warnings;
 
 use PMLTQ::Common;
-use PMLTQ::Command;
+#use PMLTQ::Command;
+use Test::PostgreSQL;
+use Test::More;
 use PMLTQ::SQLEvaluator;
 use List::Util qw(first);
+
+my $psql;
 
 #####################################################
 # open a data file and related files on lower layers
@@ -102,5 +106,17 @@ sub run_sql_query {
   return $result; 
 }
 
+
+sub start_postgres {
+  my $config = read_yaml_conf(shift);
+  $psql = Test::PostgreSQL->new(
+      port => $config->{db}->{port},
+      #auto_start => 0,
+      #base_dir => $pg_dir, # use dir for subsequent runs to simply skip initialization
+    ) or plan skip_all => $Test::PostgreSQL::errstr;
+  my $dbh = DBI->connect($psql->dsn,undef, undef, { RaiseError => 0, PrintError => 0, mysql_enable_utf8 => 1 });
+  $dbh->do("CREATE ROLE ".$config->{db}->{user}." WITH CREATEDB LOGIN PASSWORD '".$config->{db}->{password}."';");
+  $dbh->disconnect();
+}
 
 1;
