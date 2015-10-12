@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use PMLTQ::Common;
-#use PMLTQ::Command;
+use PMLTQ::Command;
 use Test::PostgreSQL;
 use Test::More;
 use PMLTQ::SQLEvaluator;
@@ -118,5 +118,20 @@ sub start_postgres {
   $dbh->do("CREATE ROLE ".$config->{db}->{user}." WITH CREATEDB LOGIN PASSWORD '".$config->{db}->{password}."';");
   $dbh->disconnect();
 }
+
+sub load_database {
+  my $config = read_yaml_conf(shift);
+  my $dump_file = shift;
+  print STDERR "TODO: load_database, problem is possibly in dump file (where is pdt20_mini as a db name used)\n";
+  my @cmd = ('pg_restore', '-d', 'postgres', '-h', $config->{db}->{host}, '-p', $config->{db}->{port}, '-U', 'postgres', '--no-acl', '--no-owner', '--create', '-w', $dump_file);
+  #say STDERR join(' ', @cmd);
+  system(@cmd) == 0 or die "Restoring test database failed: $?";
+}
+
+sub drop_database {
+  my $config = read_yaml_conf(shift);
+  print STDERR "TODO: drop_database\n";  
+}
+
 
 1;

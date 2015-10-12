@@ -51,6 +51,8 @@ for my $treebank (@treebanks) {
   my $conf_file = File::Spec->catfile($FindBin::RealBin, 'treebanks',$treebank, 'config.yml');
   my $config = TestPMLTQ::read_yaml_conf($conf_file);
   #my $evaluator = TestPMLTQ::init_sql_evaluator($treebank,$configs);
+  TestPMLTQ::start_postgres($conf_file);
+  TestPMLTQ::load_database($conf_file,File::Spec->catfile($FindBin::RealBin, 'treebanks',$treebank, "$treebank.dump"));
   my $evaluator = TestPMLTQ::init_sql_evaluator($config);
   for my $query_file (glob(File::Spec->catfile($FindBin::RealBin, 'queries', '*.tq'))) {
     my $name = basename($query_file);
@@ -72,5 +74,7 @@ for my $treebank (@treebanks) {
     ok(defined($result) && $res eq $expected, "query evaluation ($name) on $treebank");
   }
   $evaluator->{dbi}->disconnect();
-}  
+  TestPMLTQ::drop_database($conf_file);
+}
+
 done_testing();
