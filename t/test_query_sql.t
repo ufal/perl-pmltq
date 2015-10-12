@@ -45,7 +45,7 @@ BEGIN {
 
 #my $conf_file = File::Spec->catfile($FindBin::RealBin, 'treebanks', 'sql.conf');
 #my $configs = TestPMLTQ::read_sql_conf($conf_file);
-my @treebanks = qw/pdt20_sample_small/;
+my @treebanks = qw/pdt20_mini/;
 
 for my $treebank (@treebanks) {
   my $conf_file = File::Spec->catfile($FindBin::RealBin, 'treebanks',$treebank, 'config.yml');

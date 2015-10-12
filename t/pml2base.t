@@ -35,7 +35,7 @@ BEGIN {
 }
 
 my @cmds = qw/initdb verify help convert delete load man/;
-my $conf_file = File::Spec->catfile($FindBin::RealBin, 'treebanks','pdt20_sample_small', 'config.yml');
+my $conf_file = File::Spec->catfile($FindBin::RealBin, 'treebanks','pdt20_mini', 'config.yml');
 my $tmpdir = File::Temp->newdir();
 my $tmpdirname   = $tmpdir->dirname;
 
@@ -138,7 +138,7 @@ sub load {
 sub query {
   my $config = PMLTQ::Command::load_config($conf_file);
   my $evaluator = TestPMLTQ::init_sql_evaluator($config);
-  my $treebank = 'pdt20_sample_small';
+  my $treebank = 'pdt20_mini';
   for my $query_file (glob(File::Spec->catfile($FindBin::RealBin, 'queries', '*.tq'))) {
     my $name = basename($query_file);
     local $/;

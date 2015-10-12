@@ -5,7 +5,7 @@ resources: "./resources" # main directory with PML schemas
 extension: PDT
 
 db:
-  name: pdt20_sample_small
+  name: pdt20_mini
   host: localhost
   port: 15432
   user: pmltq_test
