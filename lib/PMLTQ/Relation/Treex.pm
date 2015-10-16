@@ -1,5 +1,8 @@
 package PMLTQ::Relation::Treex;
 
+use warnings;
+use strict;
+
 #
 # This file implements the following user-defined relations for PML-TQ
 #

@@ -1,4 +1,8 @@
 package PMLTQ::Relation::PDT;
+
+use warnings;
+use strict;
+
 #
 # This file implements the following user-defined relations for PML-TQ
 #
