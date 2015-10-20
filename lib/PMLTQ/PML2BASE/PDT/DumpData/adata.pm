@@ -10,7 +10,7 @@ sub dump_eparent {
   die "" unless $name =~ /^adata/;
   my $table_name = PMLTQ::PML2BASE::rename_type($name.'__#eparents');
   for my $node ($tree->descendants) {
-    for my $p (PMLTQ::Relation::PDT::PML_A::GetEParents($node,\&PMLTQ::Relation::PDT::PML_A::DiveAuxCP)) {
+    for my $p (PMLTQ::Relation::PDT::AGetEParents($node,\&PMLTQ::Relation::PDT::ADiveAuxCP)) {
       $fh->{$table_name}->print(PMLTQ::PML2BASE::mkdump($hash->{$node}{'#idx'},$hash->{$p}{'#idx'}));
     }
   }

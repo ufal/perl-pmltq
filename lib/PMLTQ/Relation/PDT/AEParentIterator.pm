@@ -9,7 +9,7 @@ use PMLTQ::Relation {
   start_node_type   => 'a-node',
   target_node_type  => 'a-node',
   iterator_class    => __PACKAGE__,
-  test_code         => q( grep($_ == $end, PML_A::GetEParents($start,\&PML_A::DiveAuxCP)) ? 1 : 0 ),
+  test_code         => q( grep($_ == $end, PMLTQ::Relation::PDT::AGetEParents($start,\&PMLTQ::Relation::PDT::ADiveAuxCP)) ? 1 : 0 ),
 };
 
 
@@ -17,7 +17,7 @@ sub get_node_list {
   my ($self, $node) = @_;
   my $type   = $node->type->get_base_type_name;
   my $fsfile = $self->start_file;
-  return [ map [ $_, $fsfile ], PML_A::GetEParents($node, \&PML_A::DiveAuxCP) ];
+  return [ map [ $_, $fsfile ], PMLTQ::Relation::PDT::AGetEParents($node, \&PMLTQ::Relation::PDT::ADiveAuxCP) ];
 }
 
 1;
