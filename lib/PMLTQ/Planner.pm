@@ -66,11 +66,11 @@ sub name_all_query_nodes {
   return \%name2node;
 }
 sub weight {
-  my ($rel,$node_type)=@_;
+  my ($schema_name,$node_type,$rel)=@_;
   my $name = $rel->name;
   my $w;
   if ($name eq 'user-defined') {
-    $w = PMLTQ::Relation->iterator_weight($node_type,$name) || $weight{'user-defined:'.$name};
+    $w = PMLTQ::Relation->iterator_weight($schema_name,$node_type,$name) || $weight{'user-defined:'.$name};
   } else {
     $w = $weight{$name};
   }
@@ -79,13 +79,13 @@ sub weight {
   return 5;
 }
 sub reversed_rel {
-  my ($ref,$start_type)=@_;
+  my ($schema_name,$start_type,$ref)=@_;
   my ($rel)=SeqV($ref->{relation});
   my $name = $rel->name;
   if ($name eq 'user-defined') {
     $name=$rel->value->{category}.':'.$rel->value->{label};
   }
-  my $rname = PMLTQ::Common::reversed_relation($name,$start_type);
+  my $rname = PMLTQ::Common::reversed_relation($schema_name,$start_type,$name);
   if (defined $rname) {
     my $relv = $rel->value;
     my $revv = Treex::PML::CloneValue($relv);
@@ -111,9 +111,9 @@ sub reversed_rel {
 }
 
 sub plan {
-  my ($query_nodes,$query_tree,$query_root)=@_;
-  die 'usage: plan(\@nodes,$query_tree,$query_node?)' unless
-    ref($query_nodes) eq 'ARRAY' and $query_tree;
+  my ($type_mapper,$query_nodes,$query_tree,$query_root)=@_;
+  die 'usage: plan($type_mapper,\@nodes,$query_tree,$query_node?)' unless
+    $type_mapper and ref($query_nodes) eq 'ARRAY' and $query_tree;
   my %node2pos = map { $query_nodes->[$_] => $_ } 0..$#$query_nodes;
   my %name2pos = map {
     my $name = $query_nodes->[$_]->{name};
@@ -198,11 +198,11 @@ sub plan {
 	  ref=>$ref,
 	  real_start=>$edge_data->[0],
 	  real_end=>$edge_data->[1],
-	  weight=>weight($rel,$sn->{'node-type'}),
+	  weight=>weight($type_mapper->get_schema_name_for($sn->{'node-type'}),$sn->{'node-type'},$rel),
 	} unless defined($root_pos) and $t==$root_pos;
       }
       unless ($no_reverse or (defined($root_pos) and $s==$root_pos)) {
-	my $reversed = reversed_rel($ref,$tn->{'node-type'});
+	my $reversed = reversed_rel($type_mapper->get_schema_name_for($tn->{'node-type'}),$tn->{'node-type'},$ref);
 	if (defined $reversed) {
 	  push @edges,{
 	  from => $t,
@@ -211,7 +211,7 @@ sub plan {
 	  reverse_of_ref => $ref,
 	  real_start=>$edge_data->[1],
 	  real_end=>$edge_data->[0],
-	  weight => weight($reversed,$tn->{'node-type'}),
+	  weight => weight($type_mapper->get_schema_name_for($tn->{'node-type'}),$tn->{'node-type'},$reversed),
 	};
 	}
       }

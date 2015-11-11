@@ -5,6 +5,7 @@ use warnings;
 use base qw(PMLTQ::Relation::SimpleListIterator);
 use PMLTQ::Relation {
   name              => 'eparent',
+  schema            => 'tdata',
   reversed_relation => 'implementation:echild',
   start_node_type   => 't-node',
   target_node_type  => 't-node',

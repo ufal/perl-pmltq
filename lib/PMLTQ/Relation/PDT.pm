@@ -70,7 +70,7 @@ sub AGetEParents { # node through
   print STDERR
     "GetEParents: Error - no coordination head $init_node->{AID}: ".ThisAddress($init_node)."\n";
         return();
-      } elsif($node->{afun}eq'AuxS') {
+      } elsif($node->{afun} eq 'AuxS') {
   print STDERR
     "GetEParents: Error - no coordination head $node->{AID}: ".ThisAddress($node)."\n";
         return();

@@ -400,9 +400,10 @@ sub new {
     @query_nodes=PMLTQ::Common::FilterQueryNodes($query_tree); # same order as @orig_nodes
     %orig2query = map { $orig_nodes[$_] => $query_nodes[$_] } 0..$#orig_nodes;
     PMLTQ::Planner::name_all_query_nodes($query_tree); # need for planning
-    $roots = PMLTQ::Planner::plan(\@query_nodes,$query_tree);
+    $roots = PMLTQ::Planner::plan($self->{type_mapper},\@query_nodes,$query_tree);
     for my $subquery (grep { $_->{'#name'} eq 'subtree' } $query_tree->root->descendants) {
       my $subquery_roots = PMLTQ::Planner::plan(
+        $self->{type_mapper},
         [PMLTQ::Common::FilterQueryNodes($subquery)],
         $subquery->parent,
         $subquery
@@ -801,7 +802,8 @@ sub create_iterator {
       die "Invalid bounds for transitive relation '$label\{$min,$max}'\n";
     }
 
-    $iterator = PMLTQ::Relation->create_iterator($start_node->{'node-type'}, $label, $conditions);
+    my $schema = $self->{type_mapper}->get_schema_for_type($start_node->{'node-type'});
+    $iterator = PMLTQ::Relation->create_iterator($schema->get_root_name, $start_node->{'node-type'}, $label, $conditions);
     unless (defined $iterator) {
       if (first { $_ eq $label }
             @{$self->{type_mapper}->get_pmlrf_relations($start_node)}) {
@@ -2200,8 +2202,10 @@ sub serialize_element {
       } else {
         my $start_node = $node->parent;
         $start_node = $start_node->parent while $start_node && $start_node->{'#name'} !~ /^(node|subquery)$/;
-        $expression =
-          $start_node && PMLTQ::Relation->test_code($start_node->{'node-type'},$label);
+        if ($start_node) {
+          my $schema = $self->{type_mapper}->get_schema_for_type($start_node->{'node-type'});
+          $expression = PMLTQ::Relation->test_code($schema->get_root_name,$start_node->{'node-type'},$label);
+        }
         if (!defined $expression) {
           if (first { $_ eq $label } @{$self->{type_mapper}->get_pmlrf_relations($node)}) {
             return $self->serialize_element(
@@ -3180,12 +3184,12 @@ sub find_next_match {
 }
 
 sub plan_query {
-  my ($query_tree)=@_;
+  my ($type_mapper,$query_tree)=@_;
   require PMLTQ::Planner;
   $query_tree||=$TredMacro::root;
   PMLTQ::Planner::name_all_query_nodes($query_tree);
   my @query_nodes=PMLTQ::Common::FilterQueryNodes($query_tree);
-  PMLTQ::Planner::plan(\@query_nodes,$query_tree);
+  PMLTQ::Planner::plan($type_mapper,\@query_nodes,$query_tree);
 }
 
 1; # End of PMLTQ::BtredEvaluator
