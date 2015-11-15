@@ -122,15 +122,16 @@ sub start_postgres {
 sub load_database {
   my $config = read_yaml_conf(shift);
   my $dump_file = shift;
-  print STDERR "TODO: load_database, problem is possibly in dump file (where is pdt20_mini as a db name used)\n";
   my @cmd = ('pg_restore', '-d', 'postgres', '-h', $config->{db}->{host}, '-p', $config->{db}->{port}, '-U', 'postgres', '--no-acl', '--no-owner', '--create', '-w', $dump_file);
   #say STDERR join(' ', @cmd);
   system(@cmd) == 0 or die "Restoring test database failed: $?";
+  my $dbh = DBI->connect("DBI:Pg:dbname=".$config->{db}->{name}.";host=".$config->{db}->{host}.";port=".$config->{db}->{port},'postgres',undef, { RaiseError => 1, PrintError => 1, mysql_enable_utf8 => 1 });
+  $dbh->do("GRANT SELECT ON ALL TABLES IN SCHEMA public TO ".$config->{db}->{user}.";" );
+  $dbh->disconnect();
 }
 
 sub drop_database {
   my $config = read_yaml_conf(shift);
-  print STDERR "TODO: drop_database\n";  
 }
 
 
