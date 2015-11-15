@@ -3,6 +3,13 @@ package PMLTQ::Relation::PDT;
 use warnings;
 use strict;
 
+require PMLTQ::Relation::PDT::AEChildIterator;
+require PMLTQ::Relation::PDT::AEParentIterator;
+require PMLTQ::Relation::PDT::ALexOrAuxRFIterator;
+require PMLTQ::Relation::PDT::TEChildIterator;
+require PMLTQ::Relation::PDT::TEParentIterator;
+
+
 #
 # This file implements the following user-defined relations for PML-TQ
 #
@@ -37,20 +44,20 @@ provided in this package.
 
 =cut
 
-sub _ExpandCoordGetEParents { # node through
+sub A_ExpandCoordGetEParents { # node through
   my ($node,$through)=@_;
   my @toCheck = $node->children;
   my @checked;
   while (@toCheck) {
     @toCheck=map {
       if (&$through($_)) { $_->children() }
-      elsif($_->{afun}=~/Coord|Apos/&&$_->{is_member}){ _ExpandCoordGetEParents($_,$through) }
+      elsif($_->{afun}=~/Coord|Apos/&&$_->{is_member}){ A_ExpandCoordGetEParents($_,$through) }
       elsif($_->{is_member}){ push @checked,$_;() }
       else{()}
     }@toCheck;
   }
   return @checked;
-}# _ExpandCoordGetEParents
+}# A_ExpandCoordGetEParents
 
 sub AGetEParents { # node through
   my ($node,$through)=@_;
@@ -79,8 +86,65 @@ sub AGetEParents { # node through
   $node=$node->parent;
   return unless $node;
   return $node if $node->{afun}!~/Coord|Apos/;
-  _ExpandCoordGetEParents($node,$through);
+  A_ExpandCoordGetEParents($node,$through);
 } # AGetEParents
+
+=item AGetEChildren($node,$dive)
+
+Return a list of nodes linguistically dependant on a given
+node. C<$dive> is a function which is called to test whether a given
+node should be used as a terminal node (in which case it should return
+false) or whether it should be skipped and its children processed
+instead (in which case it should return true). Most usual treatment is
+provided in C<DiveAuxCP>. If C<$dive> is skipped, a function returning 0
+for all arguments is used.
+
+=cut
+
+sub A_FilterEChildren{ # node dive suff from
+  my ($node,$dive,$suff,$from)=@_;
+  my @sons;
+  $node=$node->firstson;
+  while ($node) {
+#    return @sons if $suff && @sons; # comment this line to get all members
+    unless ($node==$from){ # on the way up do not go back down again
+      if (!$suff&&$node->{afun}=~/Coord|Apos/&&!$node->{is_member}
+    or$suff&&$node->{afun}=~/Coord|Apos/&&$node->{is_member}) {
+  push @sons,A_FilterEChildren($node,$dive,1,0)
+      } elsif (&$dive($node) and $node->firstson){
+  push @sons,A_FilterEChildren($node,$dive,$suff,0);
+      } elsif(($suff&&$node->{is_member})
+        ||(!$suff&&!$node->{is_member})){ # this we are looking for
+  push @sons,$node;
+      }
+    } # unless node == from
+    $node=$node->rbrother;
+  }
+  @sons;
+} # A_FilterEChildren
+
+sub AGetEChildren{ # node dive
+  my ($node,$dive)=@_;
+  return() if !$node or $node->{afun}=~/^(?:Coord|Apos|Aux[SCP])$/;
+  my @sons;
+  my $from;
+  $dive = sub { 0 } unless defined($dive);
+  push @sons,A_FilterEChildren($node,$dive,0,0);
+  if($node->{is_member}){
+    my @oldsons=@sons;
+    while($node->{afun}!~/Coord|Apos|AuxS/ or $node->{is_member}){
+      $from=$node;$node=$node->parent;
+      push @sons,A_FilterEChildren($node,$dive,0,$from);
+    }
+    if ($node->{afun}eq'AuxS'){
+      print STDERR "Error: Missing Coord/Apos: $node->{id} ".ThisAddress($node)."\n";
+      @sons=@oldsons;
+    }
+  }
+  return@sons;
+} # AGetEChildren
+
+
  
 
 ######## T Layer
@@ -139,8 +203,59 @@ sub TGetEParents {
   return () unless $node;
   return ($node) if !IsCoord($node);
   return (ExpandCoord($node));
-} # AGetEParents
+} # TGetEParents
 
+=item GetEChildren($node?)
+
+Return a list of nodes linguistically dependant on a given node.
+
+=cut
+
+sub T_FilterEChildren { # node suff from
+  my ($node,$suff,$from)=@_;
+  my @sons;
+  $node=$node->firstson;
+  while ($node) {
+#    return @sons if $suff && @sons; #uncomment this line to get only first occurence
+    unless ($node==$from){ # on the way up do not go back down again
+      if(($suff&&$node->{is_member})
+   ||(!$suff&&!$node->{is_member})){ # this we are looking for
+  push @sons,$node unless IsCoord($node);
+      }
+      push @sons,T_FilterEChildren($node,1,0)
+  if (!$suff
+      &&IsCoord($node)
+      &&!$node->{is_member})
+    or($suff
+       &&IsCoord($node)
+       &&$node->{is_member});
+    } # unless node == from
+    $node=$node->rbrother;
+  }
+  return @sons;
+} # T_FilterEChildren
+
+sub TGetEChildren { # node
+  my $node=$_[0]; #||$this;
+  return () if IsCoord($node);
+  my @sons;
+  my $init_node=$node;# for error message
+  my $from;
+  push @sons,T_FilterEChildren($node,0,0);
+  if($node->{is_member}){
+    my @oldsons=@sons;
+    while($node and $node->{nodetype}ne'root'
+    and ($node->{is_member} || !IsCoord($node))){
+      $from=$node;$node=$node->parent;
+      push @sons,T_FilterEChildren($node,0,$from) if $node;
+    }
+    if ($node->{nodetype}eq'root'){
+      stderr("Error: Missing coordination head: $init_node->{id} $node->{id} ",ThisAddressNTRED($node),"\n");
+      @sons=@oldsons;
+    }
+  }
+  return @sons;
+} # TGetEChildren
 
 1;
 
