@@ -16,4 +16,4 @@ t-q-09-02-18_175656.tq
 t-q-09-02-21_225806.tq
 t-q-09-03-16_170323.tq
 t-q-09-03-16_174507.tq
-t-verb-lemmas-cphr.tq; do echo t-joint-functor-distribution.tq; done!
+t-verb-lemmas-cphr.tq; do echo t-verb-lemmas-cphr.tq; done!

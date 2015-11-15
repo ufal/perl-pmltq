@@ -1,0 +1,5 @@
+a-node 
+[ m/lemma != 'lze', echild a-node 
+     [ afun = 'Sb', m/tag ~ '^Vf', 0x echild a-node 
+          [ afun = 'AuxV' ] ] ];
+  >> give count()

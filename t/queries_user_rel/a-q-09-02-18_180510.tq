@@ -1,0 +1,8 @@
+a-node $v := 
+[ m/tag ~ '^V', m/lemma = 'dokázat', echild a-node 
+     [ afun = "Obj", m/tag ~ '^....3', 0x ancestor a-node 
+          [ afun = "AuxP", ancestor $v ] ], 
+     echild a-node $n3 := 
+     [ afun = "Obj", m/tag ~ '^....4', 0x ancestor a-node 
+          [ afun = "AuxP", ancestor $v ] ] ];
+  >> for $v.m/lemma give $1,count() sort by $2,$1

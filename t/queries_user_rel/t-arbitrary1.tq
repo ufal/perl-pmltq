@@ -1,0 +1,12 @@
+t-node $n0 := 
+[ functor = 'PRED', 
+     3x echild t-node $n5 := 
+     [ functor = 'ADDR', a/lex.rf a-node $n6 := 
+          [ m/tag ~ '^N' ] ], echild t-node $n1 := 
+     [ functor = 'PAT', 
+          3x  t-node $n4 := [  ],  t-node $n2 := 
+          [  t-node $n3 := 
+               [ coref_text.rf $act ] ] ], 
+     echild t-node $act := 
+     [ functor = 'ACT' ] ];
+  >> give $n0.id,$n1.id,$n2.id,$n3.id,$act.id sort by $1,$2,$3,$4,$5

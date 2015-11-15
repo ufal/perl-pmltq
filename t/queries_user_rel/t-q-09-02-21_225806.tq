@@ -1,0 +1,12 @@
+a-node $n3 := 
+[ m/tag ~ '^V[^f]' ];
+
+a-node $n2 := 
+[ m/tag ~ '^Vs' ];
+
+t-node 
+[ a/lex.rf $n2, echild t-node $act :=
+     [ functor = "ACT", a/lex.rf|a/aux.rf $n3,
+          0x a/lex.rf|a/aux.rf a-node
+          [ afun = "Sb" ] ] ];
+  >> for address($act) give $1
