@@ -3,6 +3,13 @@ package PMLTQ::Relation::Treex;
 use warnings;
 use strict;
 
+use PMLTQ::Relation::Treex::AEChildCIterator;
+use PMLTQ::Relation::Treex::AEParentCIterator;
+use PMLTQ::Relation::Treex::TEParentIterator;
+use PMLTQ::Relation::Treex::AEParentIterator;
+use PMLTQ::Relation::Treex::AEChildIterator;
+use PMLTQ::Relation::Treex::TEChildIterator;
+
 #
 # This file implements the following user-defined relations for PML-TQ
 #
