@@ -1,3 +1,19 @@
+package PMLTQ::Command::delete;
+
+# ABSTRACT: Deletes the treebank from database
+
+use strict;
+use warnings;
+use PMLTQ::Command;
+
+sub run {
+  my $self = shift;
+  my $config = PMLTQ::Command::load_config(shift);
+  my $dbh = PMLTQ::Command::db_connect($config,'postgres');
+  $dbh->do("DROP DATABASE ".$config->{db}->{name});
+  PMLTQ::Command::db_disconnect($dbh);
+}
+
 =head1 SYNOPSIS
 
   pmltq delete <treebank_config>
@@ -19,20 +35,5 @@ Path to configuration file. If a treebank_config is --, config is readed from ST
 =back
 
 =cut
-
-
-package PMLTQ::Command::delete;
-
-use strict;
-use warnings;
-use PMLTQ::Command;
-
-sub run {
-  my $self = shift;
-  my $config = PMLTQ::Command::load_config(shift);
-  my $dbh = PMLTQ::Command::db_connect($config,'postgres');
-  $dbh->do("DROP DATABASE ".$config->{db}->{name});
-  PMLTQ::Command::db_disconnect($dbh);
-}
 
 1;

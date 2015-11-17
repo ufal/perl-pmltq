@@ -1,31 +1,10 @@
-=head1 SYNOPSIS
-
-pmltq convert <treebank_config> <sql_dir>
-
-=head1 DESCRIPTION
-
-Convert from PML to SQL.
-
-=head1 OPTIONS
-
-=head1 PARAMS
-
-=over 5
-
-=item B<treebank_config>
-
-Path to configuration file. If a treebank_config is --, config is readed from STDIN.
-
-Path to output directory. If doesn't exist, directory is created.
-
-=back
-
-=cut
-
 package PMLTQ::Command::convert;
+
+# ABSTRACT: Converts PML files to sql
 
 use strict;
 use warnings;
+
 use Treex::PML;
 use PMLTQ::PML2BASE;
 use PMLTQ::Command;
@@ -64,7 +43,7 @@ sub run {
       my $fsfile = Treex::PML::Factory->createDocumentFromFile($file);
       if ($Treex::PML::FSError) {
         die "Error loading file $file: $Treex::PML::FSError ($!)\n";
-      }     
+      }
       PMLTQ::PML2BASE::fs2base($fsfile, $ext);
     }
     PMLTQ::PML2BASE::finish();
@@ -73,5 +52,28 @@ sub run {
   return 1;
 }
 
+=head1 SYNOPSIS
+
+pmltq convert <treebank_config> <sql_dir>
+
+=head1 DESCRIPTION
+
+Convert from PML to SQL.
+
+=head1 OPTIONS
+
+=head1 PARAMS
+
+=over 5
+
+=item B<treebank_config>
+
+Path to configuration file. If a treebank_config is --, config is readed from STDIN.
+
+Path to output directory. If doesn't exist, directory is created.
+
+=back
+
+=cut
 
 1;

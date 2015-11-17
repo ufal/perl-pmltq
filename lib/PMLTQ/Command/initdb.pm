@@ -1,26 +1,6 @@
-=head1 SYNOPSIS
-
-  pmltq initdb <treebank_config>
-  
-=head1 DESCRIPTION
-
-Initialize empty database.
-
-=head1 OPTIONS
-
-=head1 PARAMS
-
-=over 5
-
-=item B<treebank_config>
-
-Path to configuration file. If a treebank_config is --, config is readed from STDIN.
-
-=back
-
-=cut
-
 package PMLTQ::Command::initdb;
+
+# ABSTRACT: Initialize empty database
 
 use strict;
 use warnings;
@@ -39,5 +19,26 @@ sub run {
   PMLTQ::Command::db_disconnect($dbh);
 }
 
+=head1 SYNOPSIS
+
+  pmltq initdb <treebank_config>
+
+=head1 DESCRIPTION
+
+Initialize empty database.
+
+=head1 OPTIONS
+
+=head1 PARAMS
+
+=over 5
+
+=item B<treebank_config>
+
+Path to configuration file. If a treebank_config is --, config is readed from STDIN.
+
+=back
+
+=cut
 
 1;

@@ -1,5 +1,7 @@
 package PMLTQ::PML2BASE::PDT;
 
+# ABSTRACT: PDT conversion extension
+
 use strict;
 use warnings;
 use PMLTQ::PML2BASE::PDT::DumpData;

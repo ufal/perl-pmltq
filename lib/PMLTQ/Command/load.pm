@@ -1,28 +1,6 @@
-=head1 SYNOPSIS
-
-  pmltq load <treebank_config> <sql_dir>
-
-=head1 DESCRIPTION
-
-Load treebank to database
-
-=head1 OPTIONS
-
-=head1 PARAMS
-
-=over 5
-
-=item B<treebank_config>
-
-Path to configuration file. If a treebank_config is --, config is readed from STDIN.
-
-Path to ïnput directory.
-
-=back
-
-=cut
-
 package PMLTQ::Command::load;
+
+# ABSTRACT: Load treebank to database
 
 use strict;
 use warnings;
@@ -50,5 +28,28 @@ sub run {
   PMLTQ::Command::db_disconnect($dbh);
 }
 
+=head1 SYNOPSIS
+
+  pmltq load <treebank_config> <sql_dir>
+
+=head1 DESCRIPTION
+
+Load treebank to database
+
+=head1 OPTIONS
+
+=head1 PARAMS
+
+=over 5
+
+=item B<treebank_config>
+
+Path to configuration file. If a treebank_config is --, config is readed from STDIN.
+
+Path to ïnput directory.
+
+=back
+
+=cut
 
 1;

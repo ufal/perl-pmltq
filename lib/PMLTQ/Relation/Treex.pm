@@ -1,5 +1,7 @@
 package PMLTQ::Relation::Treex;
 
+# ABSTRACT: Treex user defined relations
+
 use warnings;
 use strict;
 

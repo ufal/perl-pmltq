@@ -1,5 +1,7 @@
 package PMLTQ::Relation::PDT::ALexOrAuxRFIterator;
 
+# ABSTRACT: a/lex.rf or a/aux.rf relation iterator for PDT like treebanks
+
 use strict;
 use warnings;
 use base qw(PMLTQ::Relation::SimpleListIterator);

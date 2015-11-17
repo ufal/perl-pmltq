@@ -1,18 +1,20 @@
 package PMLTQ::PML2BASE::Treex::MakeTable;
 
+# ABSTRACT: Make tables for Treex user defined relations
+
 use strict;
 use warnings;
 
 sub mk_extra_tables {
-  mk_eparent_table(@_) unless $opts{'no-eparents'};
-  mk_a_rf_table(@_) unless $opts{'no-a-rf'};
+  mk_eparent_table(@_) unless $PMLTQ::PML2BASE::opts{'no-eparents'};
+  mk_a_rf_table(@_) unless $PMLTQ::PML2BASE::opts{'no-a-rf'};
 }
 
 sub mk_a_rf_table {
   my ($schema,$desc,$fh)=@_;
   my $name = $schema->get_root_name;
   my $table_name = PMLTQ::PML2BASE::rename_type($name);
-  unless ($opts{'no-schema'}) {
+  unless ($PMLTQ::PML2BASE::opts{'no-schema'}) {
     if ($name =~ /^tdata/) {
       $fh->{'#INIT_SQL'}->print(<<"EOF");
 CREATE TABLE "${table_name}__#a_rf" ("#idx" INT, "#value" INT);
@@ -49,7 +51,7 @@ sub mk_eparent_table {
   my $adata_c_table = PMLTQ::PML2BASE::rename_type($name.'__adata#eparents_c');
   my $adata_table = PMLTQ::PML2BASE::rename_type($name.'__adata#eparents');
   my $tdata_table = PMLTQ::PML2BASE::rename_type($name.'__tdata#eparents');
-  unless ($opts{'no-schema'}) {
+  unless ($PMLTQ::PML2BASE::opts{'no-schema'}) {
     $fh->{'#INIT_SQL'}->print(<<"EOF");
 INSERT INTO "#PML_USR_REL" VALUES('eparentC','echildC','a-node','a-node','${adata_c_table}');
 INSERT INTO "#PML_USR_REL" VALUES('eparent','echild','a-node','a-node','${adata_table}');

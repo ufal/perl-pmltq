@@ -1,5 +1,7 @@
 package PMLTQ::PML2BASE::PDT::MakeTable;
 
+# ABSTRACT: Make tables for PDT user defined relations
+
 use strict;
 use warnings;
 

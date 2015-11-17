@@ -1,5 +1,7 @@
 package PMLTQ::Commands;
 
+# ABSTRACT: PMLTQ command line interface
+
 use strict;
 use warnings;
 use PMLTQ::Loader;

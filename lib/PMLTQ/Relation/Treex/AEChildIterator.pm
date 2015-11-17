@@ -1,5 +1,7 @@
 package PMLTQ::Relation::Treex::AEChildIterator;
 
+# ABSTRACT: Effective child relation iterator on a-nodes for Treex treebanks
+
 use strict;
 use warnings;
 use base qw(PMLTQ::Relation::SimpleListIterator);

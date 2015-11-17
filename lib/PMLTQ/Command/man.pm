@@ -1,13 +1,6 @@
-=head1 SYNOPSIS
-
-  pmltq man
-
-=head1 DESCRIPTION
-
-Print whole help.
-
-=cut
 package PMLTQ::Command::man;
+
+# ABSTRACT: Print whole help
 
 use strict;
 use warnings;
@@ -25,5 +18,14 @@ sub run {
   }
 }
 
+=head1 SYNOPSIS
+
+  pmltq man
+
+=head1 DESCRIPTION
+
+Print whole help.
+
+=cut
 
 1;

@@ -1,5 +1,7 @@
 package PMLTQ::Relation::PDT::AEChildIterator;
 
+# ABSTRACT: Effective child relation iterator on a-nodes for PDT like treebanks
+
 use strict;
 use warnings;
 use base qw(PMLTQ::Relation::SimpleListIterator);

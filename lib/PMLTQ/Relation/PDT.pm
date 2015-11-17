@@ -1,5 +1,7 @@
 package PMLTQ::Relation::PDT;
 
+# ABSTRACT: PDT user defined relations
+
 use warnings;
 use strict;
 

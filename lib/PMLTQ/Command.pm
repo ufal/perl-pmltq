@@ -1,5 +1,7 @@
 package PMLTQ::Command;
 
+# ABSTRACT: Command base class
+
 use strict;
 use warnings;
 use YAML::Tiny;
@@ -64,9 +66,9 @@ sub db_connect {
   my $config = shift;
   my $dbname = shift || $config->{db}->{name};
   die "Database driver ".$config->{db}->{driver}." is not supported !!!\n" unless $config->{db}->{driver} eq 'Pg';
-  my $dbh_ = DBI->connect("DBI:".$config->{db}->{driver}.":dbname=$dbname;host=".$config->{db}->{host}.";port=".$config->{db}->{port}, 
-    $config->{db}->{user}, 
-    $config->{db}->{password}, 
+  my $dbh_ = DBI->connect("DBI:".$config->{db}->{driver}.":dbname=$dbname;host=".$config->{db}->{host}.";port=".$config->{db}->{port},
+    $config->{db}->{user},
+    $config->{db}->{password},
     { RaiseError => 1, PrintError => 1, mysql_enable_utf8 => 1 }) or die "Unable to connect to database !!!\n$DBI::errstr";
   return $dbh_;
 }

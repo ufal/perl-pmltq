@@ -1,5 +1,7 @@
 package PMLTQ::PML2BASE::Treex::DumpData;
 
+# ABSTRACT: Dump data for Treex user defined relations
+
 use strict;
 use warnings;
 use PMLTQ::Relation::Treex;

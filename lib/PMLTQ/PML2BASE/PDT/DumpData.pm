@@ -1,5 +1,7 @@
 package PMLTQ::PML2BASE::PDT::DumpData;
 
+# ABSTRACT: Dump data for PDT user defined relations
+
 use strict;
 use warnings;
 use PMLTQ::PML2BASE::PDT::DumpData::adata;

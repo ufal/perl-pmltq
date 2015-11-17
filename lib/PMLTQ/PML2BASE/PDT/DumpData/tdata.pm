@@ -1,5 +1,7 @@
 package PMLTQ::PML2BASE::PDT::DumpData::tdata;
 
+# ABSTRACT: Dump data for PDT user defined relations on t-nodes
+
 use strict;
 use warnings;
 use PMLTQ::Relation::PDT;
@@ -13,7 +15,7 @@ sub dump_eparent {
     for my $p (PMLTQ::Relation::PDT::TGetEParents($node)) {
       $fh->{$table_name}->print(PMLTQ::PML2BASE::mkdump($hash->{$node}{'#idx'},$hash->{$p}{'#idx'}));
     }
-  }  
+  }
 }
 
 1;

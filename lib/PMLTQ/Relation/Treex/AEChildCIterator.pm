@@ -1,5 +1,13 @@
 package PMLTQ::Relation::Treex::AEChildCIterator;
 
+# ABSTRACT: Different implementation of effective child relation iterator on a-nodes for Treex treebanks
+
+=head1 DESCRIPTION
+
+Classic effective child implementation is skipping nodes with afuns that match /Aux[CP]/. This one doesn't.
+
+=cut
+
 use strict;
 use warnings;
 use base qw(PMLTQ::Relation::SimpleListIterator);

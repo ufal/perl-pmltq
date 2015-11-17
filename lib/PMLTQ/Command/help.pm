@@ -1,24 +1,6 @@
-=head1 SYNOPSIS
-
-  pmltq help [command]
-
-=head1 DESCRIPTION
-
-Print list of available commands.
-
-=head1 OPTIONS
-
-=over 5
-
-=item B<command>
-
-Print help for <command>.
-
-=back
-
-=cut
-
 package PMLTQ::Command::help;
+
+# ABSTRACT: Print list of available commands
 
 use strict;
 use warnings;
@@ -53,7 +35,27 @@ sub unknown_command {
 
 sub print_commands {
   my $commands = shift;
-  print STDERR "Available commands:\n\t",join("\n\t",sort keys %$commands),"\n"; 
+  print STDERR "Available commands:\n\t",join("\n\t",sort keys %$commands),"\n";
 }
+
+=head1 SYNOPSIS
+
+  pmltq help [command]
+
+=head1 DESCRIPTION
+
+Print list of available commands.
+
+=head1 OPTIONS
+
+=over 5
+
+=item B<command>
+
+Print help for <command>.
+
+=back
+
+=cut
 
 1;

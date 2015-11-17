@@ -1,5 +1,7 @@
 package PMLTQ::PML2BASE::Treex;
 
+# ABSTRACT: Treex conversion extension
+
 use strict;
 use warnings;
 use PMLTQ::PML2BASE::Treex::DumpData;
