@@ -136,16 +136,16 @@ sub AGetEChildren{ # node dive
       $from=$node;$node=$node->parent;
       push @sons,A_FilterEChildren($node,$dive,0,$from);
     }
-    if ($node->{afun}eq'AuxS'){
+    if ($node->{afun} eq 'AuxS'){
       print STDERR "Error: Missing Coord/Apos: $node->{id} ".ThisAddress($node)."\n";
       @sons=@oldsons;
     }
   }
-  return@sons;
+  return @sons;
 } # AGetEChildren
 
 
- 
+
 
 ######## T Layer
 
@@ -244,12 +244,12 @@ sub TGetEChildren { # node
   push @sons,T_FilterEChildren($node,0,0);
   if($node->{is_member}){
     my @oldsons=@sons;
-    while($node and $node->{nodetype}ne'root'
+    while($node and $node->{nodetype} ne 'root'
     and ($node->{is_member} || !IsCoord($node))){
       $from=$node;$node=$node->parent;
       push @sons,T_FilterEChildren($node,0,$from) if $node;
     }
-    if ($node->{nodetype}eq'root'){
+    if ($node->{nodetype} eq 'root'){
       stderr("Error: Missing coordination head: $init_node->{id} $node->{id} ",ThisAddressNTRED($node),"\n");
       @sons=@oldsons;
     }

@@ -1,80 +1,46 @@
-#!/usr/bin/perl -Ilib -I../lib
+#!/usr/bin/env perl
 # Run this like so: `perl test_query_sql.t'
 #   Matyas Kopp <matyas.kopp@gmail.com>     2014/07/12 11:52:00
 
-use strict;
-use warnings;
+use Test::Most;
+use File::Basename qw/dirname basename/;
+use File::Slurp;
+use Scalar::Util 'blessed';
+use lib dirname(__FILE__);
 
-use Test::More;
-plan skip_all => 'set TEST_QUERY to enable this test (developer only!)'
-  unless $ENV{TEST_QUERY};
+require 'bootstrap.pl';
 
-use File::Basename;
-use FindBin qw($RealBin);
-use lib ($RealBin.'/../lib', ## PMLTQ
-	 $RealBin.'/libs', 
-	);
-use Treex::PML;
-#Treex::PML::UseBackends(qw(Storable PMLBackend PMLTransformBackend));
-{
-  package PML;
-  sub Schema {
-    &Treex::PML::Document::schema; #    &TrEd::Basics::fileSchema;
+start_postgres();
+init_database();
+
+for my $treebank ( treebanks() ) {
+  my $treebank_name = $treebank->{name};
+  my $evaluator     = init_sql_evaluator($treebank_name);
+
+  lives_ok { $evaluator->connect() } 'Connection to database successful';
+  next unless $evaluator->{dbi};
+
+  for my $query ( load_queries($treebank_name) ) {
+    my $name = $query->{name};
+    my @args = ( $treebank_name, $evaluator, $query->{text} );
+
+    if ( $name =~ s/^_// ) {
+    TODO: {
+        local $TODO = 'Failing query...';
+        subtest "$treebank_name:$name" => sub {
+          sql_test_query( $name, @args );
+          fail('Fail');
+        }
+      }
+    }
+    else {
+      subtest "$treebank_name:$name" => sub {
+        sql_test_query( $name, @args );
+      }
+    }
   }
-  sub GetNodeByID {
-    my ($id,$fsfile)=@_;
-    my $h = $fsfile->appData('id-hash');
-    return $h && $id && $h->{$id};
-  }
-}
-use PMLTQ;
-use TestPMLTQ;
 
-BEGIN {
-  my @resources = (
-    File::Spec->catfile(PMLTQ->shared_dir, 'resources'), # resources for PML-TQ
-    glob(File::Spec->catfile($FindBin::RealBin,'treebanks', '*', 'resources')) # Load required resources for all tested treebanks
-  );
-  Treex::PML::AddResourcePath(@resources);
-
-#$SIG{__WARN__} = sub { use Devel::StackTrace; print STDERR "--------------------------- STACK @_ \n".Devel::StackTrace->new->as_string."---------------------------\n";  };
-#$SIG{__DIE__} = sub { use Devel::StackTrace; print STDERR "--------------------------- STACK @_ \n".Devel::StackTrace->new->as_string."---------------------------\n";  die;};
-
-}
-
-
-#my $conf_file = File::Spec->catfile($FindBin::RealBin, 'treebanks', 'sql.conf');
-#my $configs = TestPMLTQ::read_sql_conf($conf_file);
-my @treebanks = qw/pdt20_mini/;
-
-for my $treebank (@treebanks) {
-  my $conf_file = File::Spec->catfile($FindBin::RealBin, 'treebanks',$treebank, 'config.yml');
-  my $config = TestPMLTQ::read_yaml_conf($conf_file);
-  #my $evaluator = TestPMLTQ::init_sql_evaluator($treebank,$configs);
-  TestPMLTQ::start_postgres($conf_file);
-  TestPMLTQ::load_database($conf_file,File::Spec->catfile($FindBin::RealBin, 'treebanks',$treebank, "$treebank.dump"));
-  my $evaluator = TestPMLTQ::init_sql_evaluator($config);
-  for my $query_file (glob(File::Spec->catfile($FindBin::RealBin, 'queries', '*.tq'))) {
-    my $name = basename($query_file);
-    local $/;
-    undef $/;
-    open my $fh, '<:utf8', $query_file or die "Can't open file: '$query_file'\n";
-    my $query = <$fh>;
-    close($fh);
-    my $result;
-    eval{$result = TestPMLTQ::run_sql_query($query,$query_file,$evaluator)};
-    ok(defined($result)  , "evaluationable ($name) on $treebank");
-    my @rows = defined($result) ? @$result : ();
-    my $res="";
-    $res .= join("\t",@$_)."\n" for (@rows);
-    open $fh, '<:utf8', File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res") or die "Can't open result file: ".File::Spec->catfile($FindBin::RealBin, 'results',$treebank,"$name.res")."\n";
-    local $/=undef;
-    my $expected = <$fh>;
-    close($fh);
-    ok(defined($result) && $res eq $expected, "query evaluation ($name) on $treebank");
-  }
-  $evaluator->{dbi}->disconnect();
-  TestPMLTQ::drop_database($conf_file);
+  undef $evaluator;    # destroy evaluator
 }
 
 done_testing();

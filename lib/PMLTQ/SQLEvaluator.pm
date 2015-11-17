@@ -558,7 +558,7 @@ sub find_special_attribute {
 }
 
 sub idx_to_pos {
-  my ($self,$idx_list)=@_;
+  my ($self,$idx_list,$force_id)=@_;
   my @res;
   my %id_attr;
   my $layout = $self->{layout_version};
@@ -588,7 +588,7 @@ EOF
     my $result = $self->run_sql_query($sql,{ MaxRows=>1, RaiseError=>1 });
     $result = $result->[0];
     my ($fn,$tn,$nn,$id,$is_top) = @$result;
-    if (defined($id) and !$is_top) {
+    if (defined($id) and (!$is_top || $force_id)) {
       push @res, $fn.'#'.$id;
     } else {
       push @res, $fn.'##'.($tn+1).'.'.$nn;
@@ -2768,10 +2768,11 @@ sub serialize_predicate {
   $is_positive_conjunct=0 if $is_positive_conjunct && $negate;
 
   my $res;
-  my $R_type = ref($R) ?
+  my ($R_type, $L_type) = (COL_UNKNOWN, COL_UNKNOWN);
+  $R_type = ref($R) ?
     (defined($R->{col_type}) ? $R->{col_type} : $self->compute_data_type($R->{expression},$opts))
       : defined($opts->{R_type}) ? $opts->{R_type} : COL_UNKNOWN;
-  my $L_type = ref($L) ?
+  $L_type = ref($L) ?
     (defined($L->{col_type}) ? $L->{col_type} : $self->compute_data_type($L->{expression},$opts))
       : defined($opts->{L_type}) ? $opts->{L_type} : COL_UNKNOWN;
 
@@ -2963,6 +2964,13 @@ sub cmp_subquery_scope {
   $_ = ref($_) ? $_ : $self->{name2node}{$_} || croak("Didn't find node '\$$_'")
     for $src,$target;
   return PMLTQ::Common::cmp_subquery_scope($src,$target);
+}
+
+sub DESTROY {
+  my $self = shift;
+
+  # Make sure we disconnect from database when destroyed
+  $self->{dbi}->disconnect() if $self->{dbi};
 }
 
 1; # End of PMLTQ::SQLEvaluator

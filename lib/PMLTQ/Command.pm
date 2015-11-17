@@ -6,7 +6,7 @@ use YAML::Tiny;
 use SQL::SplitStatement;
 use DBI;
 use PMLTQ::Commands;
-#use Module::Find 'useall';
+use PMLTQ::Loader;
 
 sub load_config {
   my $config_file = shift;
@@ -119,8 +119,7 @@ sub run_sql_from_file {
 }
 
 sub module_list {
-  use Module::Find 'findallmod';
-  return findallmod "PMLTQ::Command";
+  return PMLTQ::Loader->search('PMLTQ::Command');
 }
 
 1;

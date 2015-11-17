@@ -20,10 +20,10 @@ sub import {
   my $class=shift;
   for my $def (@_) {
     my $name = $def->{name};
-    my $schema = $dev->{schema};
-    my $node_type = $dev->{start_node_type};
+    my $schema = $def->{schema};
+    my $node_type = $def->{start_node_type};
 
-    _relation($schema, $node_type, $name);
+    _relation($schema, $node_type, $name, $def);
   }
 }
 
@@ -72,7 +72,7 @@ sub reversed_relation {
 }
 
 sub test_code {
-  my ($class, $start_type, $name)=@_;
+  my ($class, $schema_name, $start_type, $name)=@_;
   my $rel = _relation($schema_name, $start_type, $name);
   return $rel && $rel->{test_code};
   return undef;

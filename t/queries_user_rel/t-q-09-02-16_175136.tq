@@ -1,8 +1,0 @@
-t-node $n3 := 
-[ echild t-node $n1 := 
-     [ functor in { "PAT", "EFF", "INTT" }, a/lex.rf $n2 ] ];
-
-a-node $n2 := 
-[ m/tag ~ '^Vf', 0x echild a-node 
-     [ afun = 'AuxV' ] ];
-  >> for $n1.functor,$n3.t_lemma give $1,$2,count() sort by $3,$1,$2

@@ -1,7 +1,0 @@
-t-node 
-[ gram/sempos = "v", echild t-node 
-     [ functor = 'ACT', a/lex.rf $n2 ] ];
-
-a-node $n2 := 
-[ afun != 'Sb' ];
-  >> for $n2.afun give $1,count() sort by $2,$1

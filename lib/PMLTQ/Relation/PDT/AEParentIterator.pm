@@ -10,6 +10,7 @@ use PMLTQ::Relation {
   start_node_type   => 'a-node',
   target_node_type  => 'a-node',
   iterator_class    => __PACKAGE__,
+  iterator_weight   => 2,
   test_code         => q( grep($_ == $end, PMLTQ::Relation::PDT::AGetEParents($start,\&PMLTQ::Relation::PDT::ADiveAuxCP)) ? 1 : 0 ),
 };
 

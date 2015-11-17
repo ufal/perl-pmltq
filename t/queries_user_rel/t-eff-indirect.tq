@@ -1,8 +1,0 @@
-# Efektivní nepřímí potomci
-t-node $n0 := 
-[ functor = 'PRED', !child $act, !child $pat, 
-     echild t-node $act := 
-     [ functor = 'ACT' ], 
-     echild t-node $pat := 
-     [ functor = 'PAT' ] ];
-  >> give $n0.id,$act.id,$pat.id sort by $1,$2,$3

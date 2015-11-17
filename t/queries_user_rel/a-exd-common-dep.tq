@@ -1,5 +1,0 @@
-# ''ExD'' jako společné rozvití
-a-node $exd := 
-[ afun = 'ExD', !is_member = 1, eparent a-node $n0 := 
-     [ !descendant $exd, !afun ~ '^Aux|^ExD' ] ];
-  >> give $exd.id,$n0.id sort by $1,$2

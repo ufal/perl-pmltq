@@ -2,15 +2,13 @@ package PMLTQ::Commands;
 
 use strict;
 use warnings;
-use Module::Load;
+use PMLTQ::Loader;
 
 sub run {
-  my ($self,$name,@args) = @_;
-  my $module = "PMLTQ::Command::$name";#_command("PMLTQ::Command::$name");
-  unless(eval{load $module;1;}) {
-    die qq{Unknown command "$name", maybe you need to install it?\n} if split("\n",$@) <= 2;
-    die $@;
-  }
+  my ( $self, $name, @args ) = @_;
+  my $module = "PMLTQ::Command::$name";
+
+  die qq{Unknown command "$name", maybe you need to install it?\n} if PMLTQ::Loader->load($module);
   return $module->run(@args);
 }
 
