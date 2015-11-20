@@ -18,7 +18,7 @@ use PMLTQ::Relation {
 
 
 sub get_node_list {
-  my ($self, $node) = @_;
+  my ( $self, $node ) = @_;
   my $type   = $node->type->get_base_type_name;
   my $fsfile = $self->start_file;
   return [ map [ $_, $fsfile ], PMLTQ::Relation::Treex::TGetEChildren($node) ];

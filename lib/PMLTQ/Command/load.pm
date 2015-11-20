@@ -2,30 +2,37 @@ package PMLTQ::Command::load;
 
 # ABSTRACT: Load treebank to database
 
-use strict;
-use warnings;
-use PMLTQ::Command;
+use PMLTQ::Base 'PMLTQ::Command';
+
+has usage => sub { shift->extract_usage };
 
 sub run {
   my $self = shift;
-  my $conf = shift;
-  my $config = PMLTQ::Command::load_config($conf);
-  my $sqldir = shift;
-  if(!-d $sqldir) {
-    die "Directory $sqldir does not exist\n";
+
+  my $config     = $self->config;
+  my $output_dir = $self->config->{output_dir};
+
+  unless ( -d $output_dir ) {
+    die <<"MSG";
+Output directory $output_dir does not exist.
+
+Maybe you need to run 'pmltq convert' first.
+
+MSG
   }
-  my $dbh = PMLTQ::Command::db_connect($config);
-  for my $layer (@{$config->{layers}}) {
-    my $listfile = File::Spec->catfile($sqldir,"$layer->{name}__init.list");
+
+  my $dbh = $self->db;
+  for my $layer ( @{ $config->{layers} } ) {
+    my $listfile = File::Spec->catfile( $output_dir, "$layer->{name}__init.list" );
     open my $fh, '<', $listfile or die "Can't open $listfile: $!";
     for my $file (<$fh>) {
       $file =~ s/\n$//;
       next unless $file;
-      PMLTQ::Command::run_sql_from_file($file,$sqldir,$dbh);
+      $self->run_sql_from_file( $file, $output_dir, $dbh );
     }
     ###$dbh->do($sql);
   }
-  PMLTQ::Command::db_disconnect($dbh);
+  $dbh->disconnect;
 }
 
 =head1 SYNOPSIS

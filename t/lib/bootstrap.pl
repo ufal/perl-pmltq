@@ -7,14 +7,16 @@ use File::Slurp;
 use File::Which 'which';
 use File::Path qw/make_path/;
 use File::Basename qw/dirname basename/;
-use lib File::Spec->rel2abs( File::Spec->catdir( dirname(__FILE__), '..', 'lib' ) );
+use lib File::Spec->rel2abs( File::Spec->catdir( dirname(__FILE__), File::Spec->updir, File::Spec->updir, 'lib' ) );
 
 use Test::PostgreSQL;
+use Test::MockModule;
 
 use Treex::PML;
 use Treex::PML::Factory;
 use IO::Socket::IP;
 use List::Util 'pairfirst';
+use Scalar::Util 'blessed';
 use List::MoreUtils 'zip';
 
 use PMLTQ;
@@ -23,13 +25,13 @@ use PMLTQ::Command;
 
 binmode STDOUT, ':utf8';
 
-my $current_dir = File::Spec->rel2abs( File::Spec->catdir( dirname(__FILE__) ) );
-my $treebanks_dir = File::Spec->catdir( $current_dir, 'treebanks' );
+my $base_dir = File::Spec->rel2abs( File::Spec->catdir( dirname(__FILE__), File::Spec->updir ) );
+my $treebanks_dir = File::Spec->catdir( $base_dir, 'treebanks' );
 
 my ( $pg_restore, $pg_create_db, $pgsql, $pg_port, @treebanks );
 
-my $results_base_dir = File::Spec->catdir( $current_dir, 'results' );
-my $queries_base_dir = File::Spec->catdir( $current_dir, 'queries' );
+my $results_base_dir = File::Spec->catdir( $base_dir, 'results' );
+my $queries_base_dir = File::Spec->catdir( $base_dir, 'queries' );
 
 sub generate_port {
   IO::Socket::IP->new( Listen => 5, LocalAddr => '127.0.0.1' )->sockport;
@@ -37,21 +39,36 @@ sub generate_port {
 
 $pg_port = $ENV{PG_PORT} || generate_port();
 
+sub pg_port {$pg_port}
+
+my %db = (
+  port     => pg_port(),
+  user     => 'postgres',
+  password => '',
+);
+
+my $CommandsMock = Test::MockModule->new('PMLTQ::Commands');
+$CommandsMock->mock(
+  _load_config => sub {
+    my $config = $CommandsMock->original('_load_config')->(@_);
+
+    # tamper db connection
+    while ( my ( $key, $value ) = each %db ) {
+      $config->{db}->{$key} = $value;
+    }
+
+    $config->{sys_db} = 'postgres';
+    return $config;
+  });
+
 sub treebanks {
   return @treebanks if (@treebanks);
 
   @treebanks = map {
-    my $config = PMLTQ::Command::load_config( File::Spec->catdir( $treebanks_dir, $_, 'config.yml' ) );
-
-    # tamper db connection
-    $config->{db}->{port}     = $pg_port;
-    $config->{db}->{user}     = 'postgres';
-    $config->{db}->{password} = '';
-
     return {
       name   => $_,
       dir    => File::Spec->catdir( $treebanks_dir, $_ ),
-      config => $config,
+      config => PMLTQ::Commands::_load_config( File::Spec->catdir( $treebanks_dir, $_, 'pmltq.yml' ) ),
       dump   => File::Spec->catdir( $treebanks_dir, $_, 'database.dump' ),
     };
   } read_dir $treebanks_dir;
@@ -113,13 +130,13 @@ sub load_database {
   system(@restore_cmd) == 0 or die "Restoring $dbname database failed: $?";
 }
 
-sub init_database() {
+sub init_database {
   for my $tb ( treebanks() ) {
     load_database( $tb->{config}, $tb->{dump} );
   }
 }
 
-sub init_sql_evaluator() {
+sub init_sql_evaluator {
   my $name = shift;
   return PMLTQ::SQLEvaluator->new(
     undef,
@@ -265,6 +282,36 @@ $query
 Result: $@
 MSG
   }
+}
+
+sub test_queries_for {
+  my $treebank_name = shift;
+
+  my $evaluator = init_sql_evaluator($treebank_name);
+  lives_ok { $evaluator->connect() } 'Connection to database successful';
+  next unless $evaluator->{dbi};
+
+  for my $query ( load_queries($treebank_name) ) {
+    my $name = $query->{name};
+    my @args = ( $treebank_name, $evaluator, $query->{text} );
+
+    if ( $name =~ s/^_// ) {
+    TODO: {
+        local $TODO = 'Failing query...';
+        subtest "$treebank_name:$name" => sub {
+          sql_test_query( $name, @args );
+          fail('Fail');
+        };
+      }
+    }
+    else {
+      subtest "$treebank_name:$name" => sub {
+        sql_test_query( $name, @args );
+      };
+    }
+  }
+
+  undef $evaluator;    # destroy evaluator
 }
 
 1;

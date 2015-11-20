@@ -2,10 +2,10 @@ package PMLTQ::Command::version;
 
 # ABSTRACT: Print PMLTQ version
 
-use strict;
-use warnings;
-
+use PMLTQ::Base 'PMLTQ::Command';
 use PMLTQ;
+
+has usage => sub { shift->extract_usage };
 
 sub run {
   my $self = shift;
@@ -18,7 +18,7 @@ sub run {
 
 =head1 DESCRIPTION
 
-Print program version.
+Print current PMLTQ version.
 
 =head1 OPTIONS
 

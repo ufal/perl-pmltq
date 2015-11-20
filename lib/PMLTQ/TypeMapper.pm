@@ -12,6 +12,8 @@ use PMLTQ::Common (qw(uniq first));
 use PMLTQ::Relation;
 use UNIVERSAL::DOES;
 
+PMLTQ::Relation->load();
+
 BEGIN { # TredMacro should work in TrEd 2.0
     eval {
         require TrEd::MacroAPI::Default;

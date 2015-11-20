@@ -2,21 +2,25 @@ package PMLTQ::Command::initdb;
 
 # ABSTRACT: Initialize empty database
 
-use strict;
-use warnings;
+use PMLTQ::Base 'PMLTQ::Command';
 use PMLTQ;
-use PMLTQ::Command;
+
+has usage => sub { shift->extract_usage };
 
 sub run {
   my $self = shift;
-  my $config = PMLTQ::Command::load_config(shift);
-  my $dbh = PMLTQ::Command::db_connect($config,'postgres');
-  $dbh->do("CREATE DATABASE ".$config->{db}->{name});
-  $dbh = PMLTQ::Command::db_connect($config);
+
+  my $config = $self->config;
+  my $dbh    = $self->sys_db;
+
+  $dbh->do( 'CREATE DATABASE ' . $config->{db}->{name} );
+  $dbh->disconnect;
+
+  $dbh = $self->db;
   for my $file (qw/init_postgres.sql pml2base_init-pg.sql/) {
-    PMLTQ::Command::run_sql_from_file($file,File::Spec->catfile(PMLTQ->shared_dir,"sql"), $dbh);
+    $self->run_sql_from_file( $file, File::Spec->catfile( PMLTQ->shared_dir, 'sql' ), $dbh );
   }
-  PMLTQ::Command::db_disconnect($dbh);
+  $dbh->disconnect;
 }
 
 =head1 SYNOPSIS

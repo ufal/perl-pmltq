@@ -1,10 +1,8 @@
 package PMLTQ::Command::query;
 
-# ABSTRACT: Executes query on treebank
+# ABSTRACT: WIP: Executes query on treebank
 
-use strict;
-use warnings;
-use PMLTQ::Command;
+use PMLTQ::Base 'PMLTQ::Command';
 use Cwd;
 use File::Spec;
 
@@ -20,6 +18,8 @@ use Encode;
 
 my $extension_dir;
 my %opts;
+
+has usage => sub { shift->extract_usage };
 
 sub run {
   my $self = shift;
@@ -43,11 +43,11 @@ sub run {
 
   'pmltq-extension-dir|X=s',
 
-        'stdin',
+  'stdin',
   'query|Q=s',
-        'query-id|i=s',
+  'query-id|i=s',
   'query-file|f=s',
-        'query-pml-file|p=s',
+  'query-pml-file|p=s',
   'filters|F=s',
   'no-filters',
 
@@ -65,7 +65,7 @@ sub run {
   'quiet|q',
   'help|h=s@',
   'usage|u',
-        'version|V',
+  'version|V',
   'man' ) || die "invalid options";
   Treex::PML::AddResourcePath(
        PMLTQ->resources_dir,
@@ -95,12 +95,6 @@ sub run {
     pmltq_http_search();
   }
 }
-
-
-
-
-
-
 
 my %auth;
 sub pmltq_http_search {

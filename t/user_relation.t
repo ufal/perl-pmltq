@@ -5,7 +5,6 @@
 use Test::Most;
 use File::Spec;
 use File::Basename 'dirname';
-use lib dirname(__FILE__);
 use lib File::Spec->rel2abs( File::Spec->catdir( dirname(__FILE__), 'lib' ) );
 
 BEGIN {

@@ -2,16 +2,17 @@ package PMLTQ::Command::delete;
 
 # ABSTRACT: Deletes the treebank from database
 
-use strict;
-use warnings;
-use PMLTQ::Command;
+use PMLTQ::Base 'PMLTQ::Command';
+
+has usage => sub { shift->extract_usage };
 
 sub run {
   my $self = shift;
-  my $config = PMLTQ::Command::load_config(shift);
-  my $dbh = PMLTQ::Command::db_connect($config,'postgres');
-  $dbh->do("DROP DATABASE ".$config->{db}->{name});
-  PMLTQ::Command::db_disconnect($dbh);
+  my $config = $self->config;
+
+  my $dbh = $self->sys_db;
+  $dbh->do('DROP DATABASE '.$config->{db}->{name});
+  $dbh->disconnect;
 }
 
 =head1 SYNOPSIS

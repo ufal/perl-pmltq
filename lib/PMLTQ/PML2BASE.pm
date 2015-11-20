@@ -82,13 +82,16 @@ use constant TOP_TREE_FLAG=>8; # The <root>__#files table has a 'top' column ind
 use Treex::PML::Schema;
 use Treex::PML::Instance;
 use PMLTQ::Common;
+use PMLTQ::Relation;
 use List::Util qw(max first);
 use Cwd;
 use Carp;
 
+PMLTQ::Relation->load();
+
 my ($file_table,$root_name,$schema,$references_table,%schema,%fh,%orig_name,%seen_ref_schema,
     $node_table,$index_id,$last_type_no,$tree_no,$filename,
-    $idx,$node_idx, $last_tree_no, %pmlref_target_info
+    $idx,$node_idx, $last_tree_no, %pmlref_target_info, $relations, @dump_fns
    );
 
 our %opts;
@@ -100,6 +103,8 @@ sub init {
   $index_id=0;
   $tree_no=0;
   $filename=undef;
+  $relations=[];
+  @dump_fns=();
 
   %pmlref_target_info=();
 
@@ -133,6 +138,7 @@ sub destroy {
   undef $last_tree_no;
   undef %pmlref_target_info;
   undef %opts;
+  undef $relations;
 }
 
 sub varchar {
@@ -311,7 +317,7 @@ sub column_spec {
         my $col = $column;
         $col=~s/\.rf$//;
         # Possible fix for #329 - table name is renamed twice
-        #$table = rename_type($table); 
+        #$table = rename_type($table);
         my $tt;
         if ($target eq $root_name) {
           $tt = rename_type($target_type);
@@ -378,7 +384,7 @@ END;
 EOF
           } elsif ($opts{syntax} eq 'postgres') {
             $sql =~ s/'/''/g;
-            my $execute = join("\n",map {qq(EXECUTE (''$_'');)} grep !/^\s*--/, grep /\S/, split /;\s*\n/, $sql)."\n";
+            my $execute = join("\n",map {qq(EXECUTE (''$_'');)} grep !/^\s*--/, grep /\S/, split /;\s*\n/, $sql);
             $sql = <<"EOF"
 CREATE OR REPLACE FUNCTION pml2base__update_pmlref() RETURNS integer AS '
 DECLARE
@@ -390,8 +396,11 @@ $execute
   RETURN 1;
 END;
 ' LANGUAGE plpgsql;
+
 SELECT pml2base__update_pmlref();
+
 DROP FUNCTION pml2base__update_pmlref();
+
 EOF
           }
         }
@@ -509,8 +518,8 @@ sub convert_schema {
   my $pmlref_table = $root_name."__#pmlref_map";
   $opts{loader} //= 'SH';
   die "driver $opts{driver} and loader $opts{loader} is not supported" if $opts{loader} eq 'file_list' && ! $opts{driver} eq 'postgres';
-  open $fh{'#INIT_SH'},'>',get_full_path(to_filename("init",'sh')) || die "$!" if $opts{loader} eq 'SH'; 
-  open $fh{'#INIT_LIST'},'>',get_full_path(to_filename("init",'list')) || die "$!" if $opts{loader} eq 'file_list'; 
+  open $fh{'#INIT_SH'},'>',get_full_path(to_filename("init",'sh')) || die "$!" if $opts{loader} eq 'SH';
+  open $fh{'#INIT_LIST'},'>',get_full_path(to_filename("init",'list')) || die "$!" if $opts{loader} eq 'file_list';
   unless ($opts{'no-schema'}) {
     open $fh{'#INIT_SQL'},'>',get_full_path(to_filename("init",'sql'))  || die "$!";
     open $fh{'#DELETE_SQL'},'>',get_full_path(to_filename("delete",'sql'))  || die "$!";
@@ -724,10 +733,10 @@ EOF
     dump_schema($schema);
     for my $decl ($schema->node_types) {
       my $tab = table_name($decl,1);
-      $fh{'#INIT_SQL'}->print(qq{INSERT INTO "#PMLTYPES" VALUES('$tab','$root_name');\n});
+      $fh{'#INIT_SQL'}->print(qq{INSERT INTO "#PMLTYPES" VALUES('$tab','$root_name');\n\n});
     }
-    $fh{'#DELETE_SQL'}->print(qq{DELETE FROM "#PML" WHERE "root"='$root_name';\n});
-    $fh{'#DELETE_SQL'}->print(qq{DELETE FROM "#PMLTYPES" WHERE "root"='$root_name';\n});
+    $fh{'#DELETE_SQL'}->print(qq{DELETE FROM "#PML" WHERE "root"='$root_name';\n\n});
+    $fh{'#DELETE_SQL'}->print(qq{DELETE FROM "#PMLTYPES" WHERE "root"='$root_name';\n\n});
 
     #   $fh{'#INIT_SQL'}->print(qq{CREATE TABLE "" (}.
     #                             qq{ "ref_type" }.varchar(128).
@@ -741,11 +750,11 @@ EOF
                             qq{, "ref_table" }.varchar(MAX_NAME_LENGTH).
                             qq{, "target_layer" }.varchar(128).
                             qq{, "target_table" }.varchar(MAX_NAME_LENGTH).
-                            qq{, "target_type" }.varchar(128).qq{);\n});
+                            qq{, "target_type" }.varchar(128).qq{);\n\n});
     if (lc($opts{syntax}) eq 'postgres') {
-      $fh{'#DELETE_SQL'}->print(qq{DROP TABLE IF EXISTS "$pmlref_table";\n});
+      $fh{'#DELETE_SQL'}->print(qq{DROP TABLE IF EXISTS "$pmlref_table";\n\n});
     } else {
-      $fh{'#DELETE_SQL'}->print(qq{DROP TABLE "$pmlref_table";\n});
+      $fh{'#DELETE_SQL'}->print(qq{DROP TABLE "$pmlref_table";\n\n});
     }
     for my $k (sort keys %{$opts{ref}}) {
       my ($t1,$t2) = split /:/,$opts{ref}{$k};
@@ -756,12 +765,12 @@ EOF
       my $tab = rename_type($k);
       if ($t1 eq $root_name) {
         my $tab = rename_type($t2);
-        $fh{'#INIT_SQL'}->print(qq{INSERT INTO "$pmlref_table" VALUES('$k','$tab','$t1','$tab','$t2');\n});
+        $fh{'#INIT_SQL'}->print(qq{INSERT INTO "$pmlref_table" VALUES('$k','$tab','$t1','$tab','$t2');\n\n});
       } else {
         $fh{'#INIT_SQL'}->print(qq{INSERT INTO "$pmlref_table" VALUES('$k','$tab','$t1',}.
-                                  qq{(SELECT "table" FROM "#PMLTABLES" WHERE "type"='$t2'),'$t2');\n});
+                                  qq{(SELECT "table" FROM "#PMLTABLES" WHERE "type"='$t2'),'$t2');\n\n});
         $fh{'#INIT_SQL'}->print(qq{UPDATE "$pmlref_table" SET ("target_table")=('$t2') }.
-                                  qq{WHERE "ref_type"='$k' AND "target_table" IS NULL;\n});
+                                  qq{WHERE "ref_type"='$k' AND "target_table" IS NULL;\n\n});
       }
     }
   }
@@ -783,7 +792,7 @@ EOF
       my $is_node = (($opts{no_tree_table}||$opts{hybrid}) && (($decl->get_role||'') eq '#NODE')) ? 1  : 0;
       if ($decl_is == PML_STRUCTURE_DECL) {
         my @m = grep {
-          (!defined($_->get_role) or $_->get_role ne '#CHILDNODES')
+          (!defined($_->get_role) or ($_->get_role ne '#CHILDNODES' and $_->get_role ne '#TREES'))
             and (($_->get_content_decl && $_->get_content_decl->get_role ||'') ne '#TREES')
           } $decl->get_members;
         $desc = {
@@ -796,7 +805,7 @@ EOF
          };
       } elsif ($decl_is == PML_CONTAINER_DECL) {
         my ($content_decl) = grep {
-          (!defined($_->get_role) or $_->get_role ne '#CHILDNODES')
+          (!defined($_->get_role) or ($_->get_role ne '#CHILDNODES' and $_->get_role ne '#TREES'))
             and ((($_->get_content_decl && $_->get_content_decl->get_role) ||'') ne '#TREES')
               } grep defined, $decl->get_knit_content_decl;
         $desc = {
@@ -932,7 +941,7 @@ sub dump_schema {
     my $ctl = "${root_name}__pml_init.ctl";
     open $fh, ($append ? '>>' : '>'), get_full_path($ctl);
 
-    
+
     if(exists $fh{'#INIT_SH'}) {
       print $fh <<"EOF";
 \\echo Loading PML meta-table
@@ -1020,8 +1029,8 @@ sub dump_typemap {
   while (($type_name,$table_name)=each %$typemap) {
     if (exists $schema{$table_name}) {
       # qq{DELETE FROM "#PMLTABLES" WHERE "type"='$type_name';\n}.
-      $fh{'#INIT_SQL'}->print(qq{INSERT INTO "#PMLTABLES" VALUES('$type_name','$table_name');\n});
-      $fh{'#DELETE_SQL'}->print(qq{DELETE FROM "#PMLTABLES" WHERE "type"='$type_name';\n});
+      $fh{'#INIT_SQL'}->print(qq{INSERT INTO "#PMLTABLES" VALUES('$type_name','$table_name');\n\n});
+      $fh{'#DELETE_SQL'}->print(qq{DELETE FROM "#PMLTABLES" WHERE "type"='$type_name';\n\n});
     }
   }
 }
@@ -1143,7 +1152,7 @@ sub traverse_data {
       $is_tree = 1 if ($opts{is_treex} and ($decl->get_structure_name || '') =~ /[atn]-root/);
     my %midx;
     my @members = grep {
-      (!defined($_->get_role) or $_->get_role ne '#CHILDNODES')
+      (!defined($_->get_role) or ($_->get_role ne '#CHILDNODES' and $_->get_role ne '#TREES'))
         and (($_->get_content_decl && $_->get_content_decl->get_role ||'') ne '#TREES')
         } $decl->get_members;
     $desc = {
@@ -1361,6 +1370,9 @@ sub traverse_subtree {
   if (ref $opts{for_each_tree}) {
     $opts{for_each_tree}->($tree,\%hash,\%fh);
   }
+  if (@dump_fns) {
+    $_->($tree,\%hash) for @dump_fns;
+  }
   return [ map {
     my $h = $_->[1];
     my $data = delete $h->{'#data'};
@@ -1396,6 +1408,25 @@ sub fs2base {
 
   if (!$schema) {
     convert_schema($fs->metaData('schema'),$opts);
+    $relations = PMLTQ::Relation->relations_for_schema($schema->get_root_name);
+
+    for my $rel (@$relations) {
+      next unless $rel->{table_name}; # if it doesn't have table we ignore it
+      my $reversed_relation = $rel->{reversed_relation};
+      $reversed_relation =~ s/^implementation:// if $reversed_relation;
+      my $spec = make_user_rel_table($rel->{table_name}, $rel->{name}, $reversed_relation, $rel->{start_node_type}, $rel->{target_node_type});
+
+      my $init_sql = $rel->{iterator_class}->can('init_sql');
+      $init_sql->($spec->{table}, $schema, $spec, \%fh) if $init_sql;
+
+      my $dump_fn = $rel->{iterator_class}->can('dump_relation');
+      push @dump_fns, sub {
+        my ($tree, $hash) = @_;
+        return unless $tree->type->get_structure_name||'' eq $rel->{tree_root};
+        $dump_fn->(@_, $fh{$spec->{table}})
+      } if $dump_fn;
+    }
+
     dump_typemap() unless $opts{'no-schema'};
   }
   my $f = $filename = $fs->filename;
@@ -1442,10 +1473,10 @@ sub finish {
   if ($opts{incremental}) {
     if ($opts{syntax} eq 'postgres') {
       $fh{'#POST_SQL'}->print(qq{UPDATE "#PML" SET ("last_idx","last_node_idx")=($idx,$node_idx)}.
-                                qq{ WHERE "root"='$root_name';\n});
+                                qq{ WHERE "root"='$root_name';\n\n});
     } else {
       $fh{'#POST_SQL'}->print(qq{UPDATE "#PML" SET ("last_idx","last_node_idx")=(SELECT $idx,$node_idx FROM DUAL)}.
-                                qq{ WHERE "root"='$root_name';\n});
+                                qq{ WHERE "root"='$root_name';\n\n});
     }
   }
   if ($opts{'dump-rename-map'}) {
@@ -1474,10 +1505,10 @@ sub finish {
                                      $t=~s/ FOREIGN KEY.*$//;
                                      qq{"$c" $t}
                                    } @{$desc->{colspec}}
-                                  ), "\n);\n");
+                                  ), "\n);\n\n");
       for (@{$desc->{colspec}}) {
         if ($_->[2]) {
-          $fh{'#INIT_SQL'}->print(qq{CREATE INDEX "#i_${root_name}_$index_id" ON "$desc->{table}" ("$_->[0]");\n});
+          $fh{'#INIT_SQL'}->print(qq{CREATE INDEX "#i_${root_name}_$index_id" ON "$desc->{table}" ("$_->[0]");\n\n});
           $index_id++;
         }
       }
@@ -1485,9 +1516,9 @@ sub finish {
     for my $desc (@tables) {
       my $sugar = $opts{syntax} eq 'oracle' ? 'CONSTRAINTS' : '';
       if (lc($opts{syntax}) eq 'postgres') {
-        $fh{'#DELETE_SQL'}->print(qq{DROP TABLE IF EXISTS "$desc->{table}" CASCADE;\n});
+        $fh{'#DELETE_SQL'}->print(qq{DROP TABLE IF EXISTS "$desc->{table}" CASCADE;\n\n});
       } else {
-        $fh{'#DELETE_SQL'}->print(qq{DROP TABLE "$desc->{table}" CASCADE $sugar;\n});
+        $fh{'#DELETE_SQL'}->print(qq{DROP TABLE "$desc->{table}" CASCADE $sugar;\n\n});
       }
     }
   }
@@ -1561,19 +1592,19 @@ EOF
         for my $col (@{$desc->{colspec}}) {
           my ($c,$t)=@$col;
           if ($t =~ m/ (FOREIGN KEY) (.*)$/) {
-            $fh{'#POST_SQL'}->print(qq{ALTER TABLE "$desc->{table}" ADD $1("$c") $2;\n});
+            $fh{'#POST_SQL'}->print(qq{ALTER TABLE "$desc->{table}" ADD $1("$c") $2;\n\n});
           }
         }
       }
     }
     if ($opts{syntax} eq 'postgres') {
       for my $desc (values %schema) {
-        $fh{'#POST_SQL'}->print(qq{VACUUM FULL ANALYZE "$desc->{table}";\n});
+        $fh{'#POST_SQL'}->print(qq{VACUUM FULL ANALYZE "$desc->{table}";\n\n});
       }
     }
     if ($opts{syntax} eq 'oracle') {
-      $fh{'#DELETE_SQL'}->print(qq{PURGE RECYCLEBIN;\n});
-      $fh{'#POST_SQL'}->print(qq{EXECUTE DBMS_STATS.GATHER_SCHEMA_STATS(NULL,DBMS_STATS.AUTO_SAMPLE_SIZE);\n});
+      $fh{'#DELETE_SQL'}->print(qq{PURGE RECYCLEBIN;\n\n});
+      $fh{'#POST_SQL'}->print(qq{EXECUTE DBMS_STATS.GATHER_SCHEMA_STATS(NULL,DBMS_STATS.AUTO_SAMPLE_SIZE);\n\n});
     }
     if ($opts{'schema'} and !$opts{'incremental'}) {
       if(exists $fh{'#INIT_SH'}) {
@@ -1615,6 +1646,37 @@ sub get_full_path {
   return exists $opts{'output-dir'} ? File::Spec->catfile($opts{'output-dir'},$file) : $file;
 }
 
+sub make_user_rel_table {
+  my ($table_name, $name, $reverse_name, $node_type, $target_node_type) = @_;
 
+  $target_node_type = $node_type unless defined $target_node_type; # default target node to start node
+
+  my $table = rename_type($table_name);
+  my $values = join(',', map { defined $_ ? "'$_'" : 'NULL' } ($name, $reverse_name, $node_type, $target_node_type, $table));
+
+  unless ($opts{'no-schema'}) {
+    $fh{'#INIT_SQL'}->print(<<"SQL");
+INSERT INTO "#PML_USR_REL" VALUES(${values});
+
+SQL
+    $fh{'#DELETE_SQL'}->print(<<"SQL");
+    DELETE FROM "#PML_USR_REL" WHERE "tbl"='${table}';
+
+SQL
+  }
+
+  my $spec = $schema{$table} = {
+    table => $table,
+    colspec => [
+      ['#idx','INT'],
+      ['#value','INT'],
+    ],
+    index => ['#idx','#value']
+  };
+
+  open $fh{$table}, '>', get_full_path(to_filename($table));
+
+  return $spec;
+}
 
 1; # End of PMLTQ::PML2BASE

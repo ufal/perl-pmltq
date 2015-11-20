@@ -7,14 +7,20 @@ use strict;
 use warnings;
 use Carp;
 use File::Spec;
-use PMLTQ::Loader;
+use PMLTQ::Loader qw/find_modules load_class/;
 
 my %user_defined;
 my %start_to_target_type_map;
 
-our @RELATIONS = PMLTQ::Loader->search('PMLTQ::Relation');
+our @RELATIONS;
 
-PMLTQ::Loader->load($_) for (@RELATIONS);
+sub load {
+  return if (@RELATIONS);
+
+  @RELATIONS = find_modules('PMLTQ::Relation');
+
+  load_class($_) for (@RELATIONS);
+}
 
 sub import {
   my $class=shift;
@@ -57,6 +63,13 @@ sub relations_for_node_type {
   my ($class,$schema_name,$start_type)=@_;
   my $map = $start_to_target_type_map{$schema_name}{$start_type};
   return $map ? [sort keys %$map] : [];
+}
+
+sub relations_for_schema {
+  my ($class, $schema_name) = @_;
+
+  my $map = $user_defined{$schema_name};
+  return $map ? [map { values %$_ } values %$map] : [];
 }
 
 sub target_type {

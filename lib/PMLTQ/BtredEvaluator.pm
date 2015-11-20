@@ -16,13 +16,14 @@ use UNIVERSAL::DOES;
 use if $ENV{TREEX_EXTENSION}, 'Treex::Core::Document';
 
 use PMLTQ::Common qw(:constants first min max uniq ListV AltV SeqV compute_column_data_type compute_expression_data_type compute_expression_data_type_pt);
-use PMLTQ::Relation;
 
 our $STOP;
 our $PROGRESS;
 our $DEBUG = $ENV{PMLTQ_DEBUG};
 our $DEBUGGER = $ENV{IN_DEBUGGER}; # set when using a debugger, this will save subroutines as files
 our $ALL_SUBQUERIES_LAST=0;
+
+PMLTQ::Relation->load();
 
 sub round {
   my ($num, $digits)=@_;

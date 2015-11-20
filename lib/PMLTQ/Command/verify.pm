@@ -2,25 +2,29 @@ package PMLTQ::Command::verify;
 
 # ABSTRACT: Check if database exists and that it contains some data
 
-use strict;
-use warnings;
-use PMLTQ::Command;
+use PMLTQ::Base 'PMLTQ::Command';
+
+has usage => sub { shift->extract_usage };
 
 sub run {
   my $self = shift;
-  my $config = PMLTQ::Command::load_config(shift);
+
+  my $db_name = $self->config->{db}->{name};
+
   my $dbh;
-  eval { $dbh = PMLTQ::Command::db_connect($config)};
-  die "Database ".$config->{db}->{name}." does not exist !!!\n" if $@;
-  print "Database ".$config->{db}->{name}." exists\n";
-  my @tables = map {s/^public\.//;$_} grep { m/^public\./ } $dbh->tables();
+  eval { $dbh = $self->db };
+
+  die "Database " . $db_name . " does not exist!\n" if $@;
+  print "Database " . $db_name . " exists\n";
+
+  my @tables = map { s/^public\.//; $_ } grep {m/^public\./} $dbh->tables();
   print "Database contains ", scalar @tables, " tables\n";
   for my $table (@tables) {
     my $sth = $dbh->prepare("SELECT * FROM $table");
     $sth->execute;
-    print "Table $table contains ".$sth->rows." rows\n";
+    print "Table $table contains " . $sth->rows . " rows\n";
   }
-  PMLTQ::Command::db_disconnect($dbh);
+  $dbh->disconnect;
 }
 
 =head1 SYNOPSIS

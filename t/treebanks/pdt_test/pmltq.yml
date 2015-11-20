@@ -1,23 +1,23 @@
 ---
-data_dir: "./data"
-resources: "./resources" # main directory with PML schemas
-
-extension: PDT
+data_dir: "data"
+resources: "resources" # main directory with PML schemas
 
 db:
   name: pdt_test
   host: localhost
   port: 15432
-  user: pmltq_test
+  user: postgres
   password:
+
+sys_db: postgres
 
 layers: # description of all data layers
   - name: adata
-    data: ./*.a.gz
+    data: *.a.gz
   - name: tdata
-    data: ./*.t.gz
+    data: *.t.gz
     related-schema:
-      - adata_schema.xml
+      - adata_30_schema.xml
     references:
       st-node/tnode.rfs: t-node
       t-a/aux.rf: 'adata:a-node'  # t-a/aux.rf=adata:a-node

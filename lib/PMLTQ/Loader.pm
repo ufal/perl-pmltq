@@ -4,10 +4,10 @@ package PMLTQ::Loader;
 
 =head1 SYNOPSIS
 
-  use PMLTQ::Loader;
-  for my $module (PMLTQ::Loader->search('PMLTQ::Relation')) {
+  use PMLTQ::Loader qw/find_modules load_class/;
+  for my $module (find_modules('PMLTQ::Relation')) {
     print "Loading module: '$module'\n";
-    PMLTQ::Loader->load($module);
+    load_class($module);
   }
 
 =head1 DESCRIPTION
@@ -17,36 +17,40 @@ framework allowing users to define their own PML-TQ relations.
 
 =cut
 
-use strict;
-use warnings;
+use PMLTQ::Base -strict;
+
+use Exporter 'import';
 use File::Basename 'fileparse';
 use File::Spec;
 
+our @EXPORT_OK
+  = qw(find_modules load_class);
+
 sub class_to_path { join '.', join('/', split /::|'/, shift), 'pm' }
 
-sub load {
-  my ($class, $module) = @_;
- 
+sub load_class {
+  my ($class) = @_;
+
   # Check module name
-  return 1 if !$module || $module !~ /^\w(?:[\w:']*\w)?$/;
- 
+  return undef if !$class || $class !~ /^\w(?:[\w:']*\w)?$/;
+
   # Load
-  return undef if $module->can('new') || eval "require $module; 1";
- 
+  return 1 if $class->can('new') || eval "require $class; 1";
+
   # Exists
-  return 1 if $@ =~ /^Can't locate \Q@{[class_to_path $module]}\E in \@INC/;
- 
+  return undef if $@ =~ /^Can't locate \Q@{[class_to_path $class]}\E in \@INC/;
+
   # Real error
   die $@;
 }
- 
-sub search {
-  my ($class, $ns) = @_;
- 
+
+sub find_modules {
+  my ($ns) = @_;
+
   my %modules;
   for my $directory (@INC) {
     next unless -d (my $path = File::Spec->catdir($directory, split(/::|'/, $ns)));
- 
+
     # List "*.pm" files in directory
     opendir(my $dir, $path);
     for my $file (grep /\.pm$/, readdir $dir) {
@@ -54,7 +58,7 @@ sub search {
       $modules{"${ns}::" . fileparse $file, qr/\.pm/}++;
     }
   }
- 
+
   return keys %modules;
 }
 
