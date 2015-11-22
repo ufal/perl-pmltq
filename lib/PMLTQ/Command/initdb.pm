@@ -17,9 +17,7 @@ sub run {
   $dbh->disconnect;
 
   $dbh = $self->db;
-  for my $file (qw/init_postgres.sql pml2base_init-pg.sql/) {
-    $self->run_sql_from_file( $file, File::Spec->catfile( PMLTQ->shared_dir, 'sql' ), $dbh );
-  }
+  $self->run_sql_from_file( 'init.sql', File::Spec->catfile( PMLTQ->shared_dir, 'sql' ), $dbh );
   $dbh->disconnect;
 }
 
