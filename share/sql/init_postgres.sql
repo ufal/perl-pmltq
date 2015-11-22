@@ -7,6 +7,7 @@ RETURNS BOOLEAN AS $$
     CREATE LANGUAGE plpgsql;
     SELECT TRUE;
 $$ LANGUAGE SQL;
+
 SELECT CASE WHEN NOT
     (
         SELECT  TRUE AS exists
@@ -29,7 +30,8 @@ DROP FUNCTION create_language_plpgsql();
 -- aggregation function that concatenates fields
 --
 --
-DROP AGGREGATE IF EXISTS concat_agg(text) ;
+DROP AGGREGATE IF EXISTS concat_agg(text);
+
 CREATE AGGREGATE concat_agg(
   basetype    = text,
   sfunc       = textcat,
