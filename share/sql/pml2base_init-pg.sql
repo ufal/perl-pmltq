@@ -2,21 +2,24 @@ DROP TABLE IF EXISTS "#PML", "#PMLTYPES", "#PMLTABLES", "#PML_USR_REL";
 
 CREATE TABLE "#PML" (
   "root" VARCHAR(32) UNIQUE,
-  "schema_file" VARCHAR(128) UNIQUE, 
-  "data_dir" VARCHAR(128), 
+  "schema_file" VARCHAR(128) UNIQUE,
+  "data_dir" VARCHAR(128),
   "schema" TEXT,
   "last_idx" INT,
   "last_node_idx" INT,
   "flags" INT
 );
+
 CREATE TABLE "#PMLTYPES" (
   "type" VARCHAR(32) UNIQUE,
   "root" VARCHAR(32)
 );
+
 CREATE TABLE "#PMLTABLES" (
-  "type" VARCHAR(128) UNIQUE, 
+  "type" VARCHAR(128) UNIQUE,
   "table" VARCHAR(32)
 );
+
 CREATE TABLE "#PML_USR_REL" (
   "relname" VARCHAR(32) NOT NULL,
   "reverse" VARCHAR(32),

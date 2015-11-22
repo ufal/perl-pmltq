@@ -43,9 +43,7 @@ sub convert {
 
 sub initdb {
   my ($config) = @_;
-  my $h = capture_merged {
-    lives_ok { PMLTQ::Commands->run('initdb') } 'database initialized';
-  };
+  lives_ok { PMLTQ::Commands->run('initdb') } 'database initialized';
   my $dbh = database_connect( $config->{db} );
   ok( $dbh && $dbh->ping, 'Database exists' );
   $dbh->disconnect;

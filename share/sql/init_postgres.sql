@@ -1,14 +1,12 @@
 --
 -- init pgsql/pl used by initializing scripts
 --
-
 -- http://timmurphy.org/2011/08/27/create-language-if-it-doesnt-exist-in-postgresql/
 CREATE OR REPLACE FUNCTION create_language_plpgsql()
 RETURNS BOOLEAN AS $$
     CREATE LANGUAGE plpgsql;
     SELECT TRUE;
 $$ LANGUAGE SQL;
-
 SELECT CASE WHEN NOT
     (
         SELECT  TRUE AS exists
