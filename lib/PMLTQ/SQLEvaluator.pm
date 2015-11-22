@@ -1,6 +1,6 @@
 package PMLTQ::SQLEvaluator;
 
-# ABSTRACT: SQL evaluator of PML-TQ queries which can use PostreSQL or Oracle as a backend
+# ABSTRACT: SQL evaluator of PML-TQ queries which can use PostreSQL as a backend
 
 use 5.006;
 use strict;
@@ -29,7 +29,6 @@ BEGIN {
 
 use constant PREFER_LEFT_JOINS => {
   postgres => 1, # 1 seams reasonable too
-  oracle => 1,
 };
 use constant USE_PLANNER => 'never'; #'forests'; # 'always', 'never', 'forests'
 use PMLTQ::Planner;
@@ -391,7 +390,6 @@ sub prepare_query {
   my $sql = $self->serialize_conditions($query_tree,
                                                      { %$opts,
                                                        syntax=> (
-                                                         $driver eq 'Oracle' ? 'oracle' :
                                                          $driver eq 'Pg' ? 'postgres' : q()
                                                         ),
                                                        #no_filters => $opts->{no_filters},
@@ -449,22 +447,14 @@ sub connect {
                                              { flags=>0 ,safe=>0 } );
     alarm(20);
     $self->{layout_version} = $cfg->{layout_version}||0;
-    if ($cfg->{driver} eq 'Pg') {
-      require DBD::Pg;
-      import DBD::Pg qw(:async);
-    } elsif ($cfg->{driver} eq 'Oracle') {
-      $::ENV{NLS_LANG}='AMERICAN_AMERICA.AL32UTF8';
-      $::ENV{NLS_NCHAR}='AL32UTF8';
-      $::ENV{ORA_NCHAR_LITERAL_REPLACE}='TRUE';
-      for my $var (ListV($cfg->{environment})) {
-        $::ENV{$var->{name}} = $var->{'#content'};
-      }
-    }
+
+    require DBD::Pg;
+    import DBD::Pg qw(:async);
+
     my $string = 'dbi:'.$cfg->{driver}.':'
                          .($cfg->{host} ? ($cfg->{driver} eq 'DB2' ? 'hostname=' : 'host=').$cfg->{host}.';' : '' )
-                         .($cfg->{database} ? ($cfg->{driver} eq 'Oracle' ? "sid=" : "database=").$cfg->{database}.';' : '')
+                         .($cfg->{database} ? "database=".$cfg->{database}.';' : '')
                          .($cfg->{port} ? "port=".$cfg->{port} : '');
-    print STDERR "$string, ",$ENV{ORACLE_SID}||'',", ",$ENV{ORACLE_HOME}||'',"\n" if $self->{debug};
     $self->{dbi} = DBI->connect($string,
                         $cfg->{username},
                         $cfg->{password},
@@ -648,26 +638,6 @@ EOF
   }
   return @res;
 }
-
-# sub first_x_distinct_oracle {
-#   my $sth = run_sql('SELECT '.$select);
-#   my $rows = []; # cache for batches of rows
-#   my $count=0;
-#   my $total=0;
-#   my %seen;
-#   while( my $row = ( shift(@$rows) || # get row from cache, or reload cache:
-#                      shift(@{$rows=$sth->fetchall_arrayref(undef,$limit)||[]}) )
-#       ) {
-#     $total++;
-#     my $key = join("\t",@$row);
-#     next if exists $seen{$key};
-#     $seen{$key}=undef;
-#     $count++;
-# #    print "$key\n";
-#     last if $count>=$limit;
-#   }
-#   print "counted ",$count," distinct rows, fetched $total\n";
-# }
 
 # sub first_x_distinct_postgres {
 #   $dbi->do("DECLARE csr CURSOR FOR SELECT $select");
@@ -908,13 +878,8 @@ sub run_sql_query {
 }
 
 sub serialize_limit {
-  my ($self, $limit, $with_where)=@_;
-  my $driver = $self->sql_driver;
-  if ($driver eq 'Oracle') {
-    return ($with_where ? 'WHERE' : 'AND').' ROWNUM<='.$limit;
-  } elsif ($driver eq 'Pg') {
-    return 'LIMIT '.$limit.';';
-  }
+  my ($self, $limit)=@_;
+  return 'LIMIT '.$limit.';';
 }
 
 
@@ -1593,7 +1558,7 @@ sub build_sql {
       my @with;
       my $tables = delete $self->{precompute_recursive_relation};
       my $next_with_clause =
-        ($opts->{syntax} eq 'oracle' or grep ({ !$_->{recursive} } values(%$tables)))
+        (grep ({ !$_->{recursive} } values(%$tables)))
           ? qq{WITH\n} : qq{WITH RECURSIVE\n};
       for my $key (reverse sort keys %$tables) {
         my $spec = $tables->{$key};
@@ -1634,23 +1599,14 @@ sub build_sql {
           # recursive version of $rel_table
           my $select;
           my $max_depth='';
-          if ($opts->{syntax} eq 'oracle') {
-            $select =
-              qq{   SELECT CONNECT_BY_ROOT "#idx" "#idx", "#value" "#value", LEVEL depth\n}.
-              qq{     FROM "$rel_table"\n}.
-              (defined($spec->{max}) ?
-                 qq{     WHERE LEVEL <= $spec->{max}} : q{}).
-              qq{     CONNECT BY NOCYCLE PRIOR "#value" = "#idx"\n};
-          } else {
-            $select =
-              qq{    SELECT "#idx" "#idx", "#value" "#value", 1 depth, '['||"#idx"||']' path FROM "$rel_table"\n}.
-              qq{  UNION\n}.
-              qq{    SELECT r."#idx", c."#value", r.depth+1, r.path || '[' || c."#idx"||']'\n}.
-              qq{      FROM "#rec_$spec->{name}" r\n}.
-              qq{      JOIN "$rel_table" c ON r."#value" = c."#idx"\n}.
-              qq{    WHERE r."#idx" != c."#value" and strpos(path,'[' || c."#idx" || ']')=0\n}.
-              (defined($spec->{max}) ? qq{          AND r.depth <= $spec->{max}\n} : q{});
-          }
+          $select =
+            qq{    SELECT "#idx" "#idx", "#value" "#value", 1 depth, '['||"#idx"||']' path FROM "$rel_table"\n}.
+            qq{  UNION\n}.
+            qq{    SELECT r."#idx", c."#value", r.depth+1, r.path || '[' || c."#idx"||']'\n}.
+            qq{      FROM "#rec_$spec->{name}" r\n}.
+            qq{      JOIN "$rel_table" c ON r."#value" = c."#idx"\n}.
+            qq{    WHERE r."#idx" != c."#value" and strpos(path,'[' || c."#idx" || ']')=0\n}.
+            (defined($spec->{max}) ? qq{          AND r.depth <= $spec->{max}\n} : q{});
           push @with, [ qq{$next_with_clause "#rec_$spec->{name}" AS (\n}.$select ];
         }
         push @with, [qq{)\n}];
@@ -2168,7 +2124,6 @@ sub serialize_expression_pt {# pt stands for parse tree
           my $ret = 'LENGTH('
               .  $self->serialize_expression_pt($args->[0],$opts,$extra_joins)
                 . ')';
-          $ret = qq{NVL($ret,0)} if ($opts->{syntax} eq 'oracle');
           return $ret;
         } else {
           die "Wrong arguments for function ${name}() in expression $opts->{expression} of node '$this_node_id'!\nUsage: ${name}(string)\n";
@@ -2302,10 +2257,6 @@ sub serialize_expression_pt {# pt stands for parse tree
           my @args = map { $self->serialize_expression_pt($_,$opts,$extra_joins) } @$args;
           my $ret = 'round(100*('.$args[0].')'
             . (@args>1 ? ','.$args[1] : '').q[)];
-          if ($opts->{syntax} eq 'oracle') {
-            # substitute a zero before a decimal point
-            $ret = qq{REGEXP_REPLACE(TO_CHAR($ret, 'TM','NLS_NUMERIC_CHARACTERS = ''.,'''),'^(-)?\\.','\\10.')};
-          }
           return $ret;
         } else {
           die "Wrong arguments for function percnt() in expression $opts->{expression} of node '$this_node_id'!\nUsage: percnt(number,precision?)\n";
@@ -2357,15 +2308,7 @@ sub serialize_expression_pt {# pt stands for parse tree
           if (defined($match_opts) and (ref($match_opts) or $match_opts!~/^\s*'[icnmg]*'\s*$/)) {
             die "Wrong match options $match_opts for function ${name}() in expression $opts->{expression} of node '$this_node_id'!\nUsage: $name(string,pattern,replacement,options), where options is a literal string consisting only of characters from the set [icnmg]\n";
           }
-          if ($opts->{syntax} eq 'oracle') {
-            my $occurrence = 1;
-            if (defined($match_opts) and $match_opts=~s/g//g) {
-              $occurrence = 0;
-            }
-            return 'REGEXP_REPLACE('.join(',', @args[0..2],1,$occurrence,$match_opts ? $match_opts : ()).')'
-          } else {
-            return 'REGEXP_REPLACE('.join(',', @args[0..2],$match_opts ? $match_opts : ()).')'
-          }
+          return 'REGEXP_REPLACE('.join(',', @args[0..2],$match_opts ? $match_opts : ()).')'
         } else {
           die "Wrong arguments for function ${name}() in expression $opts->{expression} of node '$this_node_id'!\nUsage: $name(string,pattern,replacement,options)\n";
         }
@@ -2385,17 +2328,10 @@ sub serialize_expression_pt {# pt stands for parse tree
           if (defined($match_opts) and (ref($match_opts) or $match_opts!~/^\s*'[icnm]*'\s*$/)) {
             die "Wrong match options [$match_opts] for function ${name}() in expression $opts->{expression} of node '$this_node_id'!\nUsage: $name(string,pattern,options?), where options is a literal string consisting only of characters from the set [icnm]\n";
           }
-          if ($opts->{syntax} eq 'oracle') {
-            return 'REGEXP_SUBSTR('.join(',', @args[0,1],1,1,
-                                         ($match_opts || q('')),
-                                        )
-                                .')'
-          } else {
-            return '(REGEXP_MATCHES('.qq{$args[0],'(' || $args[1] || ')',}
-                                     .($match_opts || q(''))
-                                     .'))[1]'
+          return '(REGEXP_MATCHES('.qq{$args[0],'(' || $args[1] || ')',}
+                                   .($match_opts || q(''))
+                                   .'))[1]'
 
-          }
         } else {
           die "Wrong arguments for function ${name}() in expression $opts->{expression} of node '$this_node_id'!\nUsage: $name(string,pattern,options?)\n";
         }
@@ -2406,13 +2342,9 @@ sub serialize_expression_pt {# pt stands for parse tree
         my @types = map { $self->compute_data_type($_,$opts) } @$args;
         my @args = map { $self->serialize_expression_pt($_,$opts,$extra_joins) } @$args;
         if (first { $_ !=COL_NUMERIC } @types) {
-          if ($opts->{syntax} eq 'oracle') {
-            $_=qq{TO_NCHAR($_)} for @args;
-          } else {
-            for (@args) {
-              if ( shift(@types)!=COL_STRING ) {
-                $_=qq{cast($_ as varchar)} ;
-              }
+          for (@args) {
+            if ( shift(@types)!=COL_STRING ) {
+              $_=qq{cast($_ as varchar)} ;
             }
           }
         }
@@ -2439,13 +2371,7 @@ sub serialize_expression_pt {# pt stands for parse tree
       my ($if_true_sql,$if_false_sql) = map { $self->serialize_expression_pt($_,$opts,$extra_joins) }
         ($if_true,$if_false);
       if ($true_type != $false_type or $true_type == COL_UNKNOWN) {
-        if ($opts->{syntax} eq 'oracle') {
-          $_=qq{TO_NCHAR($_)} for ($if_true_sql, $if_false_sql);
-        } else {
-          $_=qq{cast($_ as varchar)} for ($if_true_sql, $if_false_sql);
-        }
-      } elsif ($opts->{syntax} eq 'oracle' and $true_type == COL_STRING) {
-        $_=qq{TO_NCHAR($_)} for ($if_true_sql, $if_false_sql);
+        $_=qq{cast($_ as varchar)} for ($if_true_sql, $if_false_sql);
       }
       return qq{(CASE WHEN $test THEN $if_true_sql ELSE $if_false_sql END)};
     } elsif ($type eq 'ANALYTIC_FUNC') {
@@ -2482,25 +2408,14 @@ sub serialize_expression_pt {# pt stands for parse tree
       }
       my $out='';
       if ($name eq 'concat') {
-        if ($opts->{syntax} eq 'oracle') {
-          $out=q{utl_i18n.raw_to_nchar(concat_agg(utl_i18n.string_to_raw(to_nchar(};
-          # this stopped working for no reason:
-          #   $out=q{utl_i18n.raw_to_nchar(concat_agg_raw(utl_i18n.string_to_raw(};
-        } else {
-          $out=q{concat_agg(};
-        }
+        $out=q{concat_agg(};
         if (@args==1) {
           $out.=$args[0];
         } elsif (@args==2) {
           my $sep = $args[1];
-          # if ($opts->{syntax} eq 'oracle') {
-          #   $out=q{regexp_replace(}.$out.$args[0].') || TO_NCHAR('.$sep;
-          # } else {
-            $out=q{regexp_replace(}.$out.$args[0].' || '.$sep;
-#         }
+          $out=q{regexp_replace(}.$out.$args[0].' || '.$sep;
         }
-      } elsif ($name eq 'ratio_to_report'
-                 and $opts->{syntax} ne 'oracle') {
+      } elsif ($name eq 'ratio_to_report') {
         my $arg = @args ? $args[0] : 'count(*)';
         $out='(('.$arg.') / sum('.$arg;
       } else {
@@ -2521,12 +2436,7 @@ sub serialize_expression_pt {# pt stands for parse tree
           }
         }
       }
-      if ($name eq 'concat' and $opts->{syntax} eq 'oracle') {
-#       $out.=q{,'AL32UTF8'))};
-        $out.=q{)))};
-      } else {
-        $out.=')';
-      }
+      $out.=')';
       my ($over,$sort)=@$pt;
       if (($over and @$over) or ($sort and @$sort) or $name =~ /^(rank|dense_rank|row_number)/) {
         $out.= ' OVER (';
@@ -2540,18 +2450,10 @@ sub serialize_expression_pt {# pt stands for parse tree
           if ($name !~ /^(rank|dense_rank|row_number)/) {
             $out.=' RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING'
           }
-        } else {
-          if ($opts->{syntax} eq 'oracle' and $name =~ /^(rank|dense_rank|row_number)/) {
-            $out.=' ORDER BY ROWNUM'; # oracle requires some ORDER BY clause here
-          }
         }
         $out.=')';
       }
       if ($name eq 'concat') {
-        if ($opts->{syntax} eq 'oracle') {
-          #$out.=q{,'AL32UTF8')}; # closes utl_i18n.raw_to_nchar( ... )
-          $out.=q{)}; # if 'AL32UTF8' is used, we loose some latin-2 characters
-        }
         if (@args==2) {
           #
           # we now quote 2nd argument so that we can use it as a regexp
@@ -2577,9 +2479,6 @@ sub serialize_expression_pt {# pt stands for parse tree
           }
           $out.=qq{,$trim_separator,'')};
         }
-      } elsif ($name eq 'ratio_to_report'
-                 and $opts->{syntax} ne 'oracle') {
-        $out.=')';
       }
       return $out;
     } elsif ($type eq 'EXP') {
@@ -2600,13 +2499,8 @@ sub serialize_expression_pt {# pt stands for parse tree
         } elsif ($op eq '*') {
           $mult=qq{($mult * $exp)};
         } elsif ($op eq '&') {
-          # if ($opts->{syntax} eq 'oracle') {
-          #   $out.= $mult=~/^TO_NCHAR\(/ ? qq{$mult || } : qq{TO_NCHAR($mult) || };
-          #   $mult = qq{TO_NCHAR($exp)};
-          # } else {
-            $out.=qq{$mult || };
-            $mult = $exp;
-#         }
+          $out.=qq{$mult || };
+          $mult = $exp;
         } elsif ($op =~ /^[-+]$/) {
           $out.=qq{$mult $op };
           $mult = $exp;
@@ -2630,13 +2524,7 @@ sub serialize_expression_pt {# pt stands for parse tree
     } elsif ($pt=~s/^(['"])(.*)\1$/$2/s) { # literal string
       $pt=~s/\\(.)/$1/sg;
       $opts->{can_be_null}=1 if !length $pt;
-      if ($opts->{syntax} eq 'oracle' and $pt=~/[^[:ascii:]]/) {
-        $pt=~s/'/''/sg;
-#       $pt=~s/\\/\\\\/;
-#       $pt=~s/([^[:ascii:]])/ sprintf("\\%04x",ord($1)) /eg;
-#       qq( UNISTR('$pt') )
-        qq( N'$pt' );
-      } elsif ($opts->{syntax} eq 'postgres' and $pt=~/\\/) {
+      if ($opts->{syntax} eq 'postgres' and $pt=~m/\\/) {
         $pt=~s/'/\\'/sg;
         $pt=~s{\\}{\\\\}g;
         qq( E'$pt' );
@@ -2776,33 +2664,19 @@ sub serialize_predicate {
     (defined($L->{col_type}) ? $L->{col_type} : $self->compute_data_type($L->{expression},$opts))
       : defined($opts->{L_type}) ? $opts->{L_type} : COL_UNKNOWN;
 
-  if ($operator eq '~' and defined($opts->{syntax}) and $opts->{syntax} eq 'oracle') {
-    $res = qq{REGEXP_LIKE($left,$right)};
-    $res .= qq{ AND $left IS NOT NULL} if $left_can_be_null and !$is_positive_conjunct;
-  } elsif ($operator eq '~*' and defined($opts->{syntax}) and $opts->{syntax} eq 'oracle') {
-    $res = qq{REGEXP_LIKE($left,$right,'i')};
-    $res .= qq{ AND $left IS NOT NULL} if $left_can_be_null and !$is_positive_conjunct;
-  } elsif ($right =~ qr{^\s*[NE]?''\s*$} and $left =~ qr{^\s*[NE]?''\s*$}) {
+  if ($right =~ qr{^\s*[NE]?''\s*$} and $left =~ qr{^\s*[NE]?''\s*$}) {
     $res = qq{0=0}
   } elsif ($right =~ qr{^\s*[NE]?''\s*$}) {
-    if ($opts->{syntax} eq 'oracle') {
-      $res = qq{$left IS NULL};
+    if ($L_type == COL_STRING) {
+      $res = qq{($left }.uc($operator).qq{ $right OR $left IS NULL)}
     } else {
-      if ($L_type == COL_STRING) {
-        $res = qq{($left }.uc($operator).qq{ $right OR $left IS NULL)}
-      } else {
-        $res = qq{$left IS NULL}
-      }
+      $res = qq{$left IS NULL}
     }
   } elsif ($left =~ qr{^\s*[NE]?''\s*$}) {
-    if ($opts->{syntax} eq 'oracle') {
-      $res = qq{$right IS NULL};
+    if ($R_type == COL_STRING) {
+      $res = qq{($right }.uc($operator).qq{ $left OR $right IS NULL)}
     } else {
-      if ($R_type == COL_STRING) {
-        $res = qq{($right }.uc($operator).qq{ $left OR $right IS NULL)}
-      } else {
-        $res = qq{$right IS NULL}
-      }
+      $res = qq{$right IS NULL}
     }
   }
   if (!defined $res) {
@@ -2828,9 +2702,7 @@ sub serialize_predicate {
     $res = '('.$cmp
       .($left_can_be_null && !$is_positive_conjunct ? qq{ AND $left IS NOT NULL} : '')
       .($right_can_be_null && !$is_positive_conjunct ? qq{ AND $right IS NOT NULL} : '')
-      .(($opts->{syntax} eq 'oracle' and $operator eq '='
-           and $left_can_be_null and $right_can_be_null
-          ) ? qq{ OR $left IS NULL AND $right IS NULL} : '').')';
+      .')';
   }
   $res = qq{NOT($res)} if $negate;
   if (defined $wrap_right) {
@@ -2894,14 +2766,12 @@ sub serialize_element {
     # we treat 0x and 1+x especially
     # using exists and not exists
     my ($exists, $not_exists);
-    #if ($opts->{syntax} eq 'oracle') {
     $exists = (@vals==1 and $vals[0]{min}==1 and
                    (!defined($vals[0]{max}) or !length($vals[0]{max})));
     $not_exists = ( ! $exists
                     and @vals == 1
                     and defined $vals[0]{max} and length $vals[0]{max} and $vals[0]{max} == 0
                     and ($vals[0]{min}||0) == 0);
-    #}
     my $subquery = $self->build_sql($node,{
       format => 1,
       count=> ($exists || $not_exists ) ? 3 : 2,
