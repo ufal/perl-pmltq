@@ -9,7 +9,10 @@ use Treex::PML::Schema;
 use Carp;
 
 use PMLTQ::Common (qw(uniq first));
+use PMLTQ::Relation;
 use UNIVERSAL::DOES;
+
+PMLTQ::Relation->load();
 
 BEGIN { # TredMacro should work in TrEd 2.0
     eval {
@@ -55,6 +58,13 @@ sub get_schema_for_type {
   }
   my $decl = $self->get_decl_for($type);
   return $decl && $decl->get_schema;
+}
+
+sub get_schema_name_for {
+  my ($self,$type)=@_;
+
+  my $schema = $self->get_schema_for_type($type);
+  return $schema ? $schema->get_root_name : undef;
 }
 
 sub _get_fsfile {
@@ -209,7 +219,8 @@ sub get_user_defined_relations {
   my ($self,$qnode_or_type)=@_;
   if ($qnode_or_type) {
     my $type = ref($qnode_or_type) ? PMLTQ::Common::GetQueryNodeType($qnode_or_type,$self) : $qnode_or_type;
-    return PMLTQ::Relation->relations_for_node_type($type);
+    my $schema_name = $self->get_schema_name_for($type);
+    return PMLTQ::Relation->relations_for_node_type($schema_name, $type);
   }
   return [
     map @{$self->get_user_defined_relations($_)}, grep $_, @{$self->get_node_types}

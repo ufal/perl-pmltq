@@ -147,9 +147,9 @@ my %type = (
 );
 
 sub reversed_relation {
-  my ($name,$node_type)=@_;
+  my ($schema_name,$node_type,$name)=@_;
   if ($name=~s{^implementation:}{}) {
-    return PMLTQ::Relation->reversed_relation($node_type,$name);
+    return PMLTQ::Relation->reversed_relation($schema_name,$node_type,$name);
   }
   return $reversed_relations{$name};
 }

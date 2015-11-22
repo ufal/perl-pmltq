@@ -48,7 +48,7 @@ sub get_node_list  {
       my $n = PML::GetNodeByID($id,$fsfile);
       $n ? [$n, $fsfile] : ()
     }
-  } Treex::PML::Instance::get_all($node,$self->[ATTR])];
+  } grep { defined } Treex::PML::Instance::get_all($node,$self->[ATTR])];
 }
 
 1; # End of PMLTQ::Relation::PMLREFIterator

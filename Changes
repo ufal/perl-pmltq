@@ -2,6 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
  [API CHANGES]
+ - Added new command system that is replacing old shell scripts
+ - Commands support YAML configuration, by default it's loading pmltq.yml in current directory
 
  [BUG FIXES]
 

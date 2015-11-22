@@ -5,6 +5,7 @@ package PMLTQ::BtredEvaluator;
 use 5.006;
 use strict;
 use warnings;
+no warnings 'uninitialized';
 use Carp;
 use Scalar::Util qw(weaken);
 use Treex::PML ();
@@ -21,6 +22,8 @@ our $PROGRESS;
 our $DEBUG = $ENV{PMLTQ_DEBUG};
 our $DEBUGGER = $ENV{IN_DEBUGGER}; # set when using a debugger, this will save subroutines as files
 our $ALL_SUBQUERIES_LAST=0;
+
+PMLTQ::Relation->load();
 
 sub round {
   my ($num, $digits)=@_;
@@ -400,9 +403,10 @@ sub new {
     @query_nodes=PMLTQ::Common::FilterQueryNodes($query_tree); # same order as @orig_nodes
     %orig2query = map { $orig_nodes[$_] => $query_nodes[$_] } 0..$#orig_nodes;
     PMLTQ::Planner::name_all_query_nodes($query_tree); # need for planning
-    $roots = PMLTQ::Planner::plan(\@query_nodes,$query_tree);
+    $roots = PMLTQ::Planner::plan($self->{type_mapper},\@query_nodes,$query_tree);
     for my $subquery (grep { $_->{'#name'} eq 'subtree' } $query_tree->root->descendants) {
       my $subquery_roots = PMLTQ::Planner::plan(
+        $self->{type_mapper},
         [PMLTQ::Common::FilterQueryNodes($subquery)],
         $subquery->parent,
         $subquery
@@ -801,7 +805,8 @@ sub create_iterator {
       die "Invalid bounds for transitive relation '$label\{$min,$max}'\n";
     }
 
-    $iterator = PMLTQ::Relation->create_iterator($start_node->{'node-type'}, $label, $conditions);
+    my $schema = $self->{type_mapper}->get_schema_for_type($start_node->{'node-type'});
+    $iterator = PMLTQ::Relation->create_iterator($schema->get_root_name, $start_node->{'node-type'}, $label, $conditions);
     unless (defined $iterator) {
       if (first { $_ eq $label }
             @{$self->{type_mapper}->get_pmlrf_relations($start_node)}) {
@@ -851,7 +856,7 @@ sub serialize_filters {
     my $j=0;
     for my $f (@filters) {
       my $i = -1;
-      print STDERR "##### RESULT FILTER ", $j,"\n";
+      print STDERR "##### RESULT FILTER ", $j++,"\n";
       print STDERR sprintf("%3s\t%s",$i++,$_."\n") for split /\n/,$f->{code};
       my $k=0;
       for my $s (@{$f->{local_filters_code}}) {
@@ -1343,7 +1348,7 @@ sub serialize_filter {
 
     my $agg_filter = {
       'group-by' => $filter->{'group-by'},
-      'return' => Treex::PML::Factory->createList(
+      'return' => Treex::PML::Factory->createList([
         (map '$'.$_, sort keys(%$return_columns)),
         # these we pass in parsed
         (map [ 'ANALYTIC_FUNC',
@@ -1352,7 +1357,7 @@ sub serialize_filter {
                undef,                        # over
                Treex::PML::CloneValue($_->[4]),   # sort by
               ], @aggregations),
-       ),
+       ]),
     };
     push @compiled_filters, $self->serialize_filter($agg_filter,$opts);
 
@@ -1649,7 +1654,7 @@ sub serialize_filter {
             $arg1 = $aggr->[1][1];
             $arg1 = defined($arg1) && length($arg1) ? $arg1 : q('');
             my @op = map { $_->[1]==COL_NUMERIC ? '<=>' : 'cmp' } @$sort_by_columns_and_types;
-            my @dir = map { $_->[2] eq 'desc' ? '-' : '' } @$sort_by_columns_and_types;
+            my @dir = map { $_->[2] && $_->[2] eq 'desc' ? '-' : '' } @$sort_by_columns_and_types;
             $sort_cmp = join(' or ',
                              map $dir[$_].'( $a->['.($_+1).'] '.$op[$_].' $b->['.($_+1).'])',
                              0..$#$sort_by_columns_and_types
@@ -1956,6 +1961,8 @@ sub serialize_conditions {
 sub serialize_test {
   my ($self, $left, $operator, $right, $left_type, $right_type)=@_;
   my $negate = $operator=~s/^!// ? 1 : 0;
+  $left_type ||= 0;
+  $right_type ||= 0;
 
   # fix empty variables
   $left = "($left||0)" if ($left_type == COL_NUMERIC && $left =~ /^\$/);
@@ -2010,7 +2017,7 @@ sub serialize_element {
   my ($self,$opts)=@_;
 
   my ($name,$node)=map {$opts->{$_}} qw(name condition);
-  my $pos = $opts->{query_pos};
+  my $pos = $opts->{query_pos} || 0;
   my $match_pos = $self->{pos2match_pos}[$pos]; #WARN Use of uninitialized value $pos in array element (same bug is in original implementation)
   if ($name eq 'test') {
     my %depends_on;
@@ -2145,7 +2152,7 @@ sub serialize_element {
          (length($_->{max}) ? $_->{max}+1 : undef)) : (1,undef)
        } AltV($node->{occurrences});
     my $occ_list =
-      max(map {int($_)} @occ)
+      max(map {int($_||0)} @occ)
           .','.join(',',(map { defined($_) ? $_ : 'undef' } @occ));
     my $condition = q`(($backref or $matched_nodes->[`.$match_pos.q`]=$node) and `. # trick: the subquery may ask about the current node
       qq/\$sub_queries[$sq_pos]->test_occurrences(\$node,\$fsfile,$occ_list))/;
@@ -2200,8 +2207,10 @@ sub serialize_element {
       } else {
         my $start_node = $node->parent;
         $start_node = $start_node->parent while $start_node && $start_node->{'#name'} !~ /^(node|subquery)$/;
-        $expression =
-          $start_node && PMLTQ::Relation->test_code($start_node->{'node-type'},$label);
+        if ($start_node) {
+          my $schema = $self->{type_mapper}->get_schema_for_type($start_node->{'node-type'});
+          $expression = PMLTQ::Relation->test_code($schema->get_root_name,$start_node->{'node-type'},$label);
+        }
         if (!defined $expression) {
           if (first { $_ eq $label } @{$self->{type_mapper}->get_pmlrf_relations($node)}) {
             return $self->serialize_element(
@@ -2339,7 +2348,9 @@ sub serialize_element {
     my $target_pos = $self->{name2pos}{$target};
     my $target_match_pos = $self->{name2match_pos}{$target};
     my $condition = q/ do{
-                              my ($start,$end,$start_fsfile)=($node,$matched_nodes->[/.$target_match_pos.q/],$fsfile); # /.qq{$target (p:$target_pos/m:$target_match_pos)} .q/
+                              my ($start,$end,$start_fsfile)=($node,$matched_nodes->[/.$target_match_pos.q/],$fsfile); # /.
+                              qq{$target (p:}. (defined $target_pos ? $target_pos : 'undef') .
+                              qq{/m:} . (defined $target_match_pos ? $target_match_pos : 'undef') . qq{)} .q/
                        /.$expression.q/ } /;
     if (defined $target_pos) {
       # target node in the same sub-query
@@ -2377,7 +2388,7 @@ sub serialize_target2 {
   my ($self,$target,$opts)=@_;
   my $target_match_pos = $self->{name2match_pos}{$target};
   my $this_pos = $opts->{query_pos};
-  if ($target eq $opts->{id} and !$opts->{output_filter}) {
+  if (defined $opts->{id} and $target eq $opts->{id} and !$opts->{output_filter}) {
     return ('$node',qq{\$iterators[$this_pos]->file});
   }
   if (defined $target_match_pos) {
@@ -3180,12 +3191,12 @@ sub find_next_match {
 }
 
 sub plan_query {
-  my ($query_tree)=@_;
+  my ($type_mapper,$query_tree)=@_;
   require PMLTQ::Planner;
   $query_tree||=$TredMacro::root;
   PMLTQ::Planner::name_all_query_nodes($query_tree);
   my @query_nodes=PMLTQ::Common::FilterQueryNodes($query_tree);
-  PMLTQ::Planner::plan(\@query_nodes,$query_tree);
+  PMLTQ::Planner::plan($type_mapper,\@query_nodes,$query_tree);
 }
 
 1; # End of PMLTQ::BtredEvaluator

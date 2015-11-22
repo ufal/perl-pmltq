@@ -1,3 +1,0 @@
-t-node $n0 := 
-[ functor = 'DPHR' ];
-  >> give $n0.id sort by $1

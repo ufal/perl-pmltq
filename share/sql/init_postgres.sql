@@ -1,7 +1,6 @@
 --
 -- init pgsql/pl used by initializing scripts
 --
-
 -- http://timmurphy.org/2011/08/27/create-language-if-it-doesnt-exist-in-postgresql/
 CREATE OR REPLACE FUNCTION create_language_plpgsql()
 RETURNS BOOLEAN AS $$
@@ -31,7 +30,8 @@ DROP FUNCTION create_language_plpgsql();
 -- aggregation function that concatenates fields
 --
 --
-DROP AGGREGATE IF EXISTS concat_agg(text) ;
+DROP AGGREGATE IF EXISTS concat_agg(text);
+
 CREATE AGGREGATE concat_agg(
   basetype    = text,
   sfunc       = textcat,

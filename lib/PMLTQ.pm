@@ -18,12 +18,12 @@ use File::Spec ();
 use File::ShareDir 'dist_dir';
 
 my $home_dir = File::Spec->catdir(dirname(__FILE__), __PACKAGE__);
+my $local_shared_dir = File::Spec->catdir(dirname(__FILE__), File::Spec->updir, 'share');
 my $shared_dir = eval {	dist_dir(__PACKAGE__) };
 
 # Assume installation
-unless ($shared_dir) {
-	my $updir = File::Spec->updir();
-	$shared_dir = File::Spec->catdir(dirname(__FILE__), $updir, 'share');	
+if (-d $local_shared_dir or !$shared_dir) {
+  $shared_dir = $local_shared_dir;
 }
 
 sub home { $home_dir }

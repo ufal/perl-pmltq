@@ -1,3 +1,0 @@
-t-node $n0 := 
-[ gram/resultative = "res1" ];
-  >> give $n0.id sort by $1

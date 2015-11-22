@@ -82,13 +82,16 @@ use constant TOP_TREE_FLAG=>8; # The <root>__#files table has a 'top' column ind
 use Treex::PML::Schema;
 use Treex::PML::Instance;
 use PMLTQ::Common;
+use PMLTQ::Relation;
 use List::Util qw(max first);
 use Cwd;
 use Carp;
 
+PMLTQ::Relation->load();
+
 my ($file_table,$root_name,$schema,$references_table,%schema,%fh,%orig_name,%seen_ref_schema,
     $node_table,$index_id,$last_type_no,$tree_no,$filename,
-    $idx,$node_idx, $last_tree_no, %pmlref_target_info
+    $idx,$node_idx, $last_tree_no, %pmlref_target_info, $relations, @dump_fns
    );
 
 our %opts;
@@ -100,6 +103,8 @@ sub init {
   $index_id=0;
   $tree_no=0;
   $filename=undef;
+  $relations=[];
+  @dump_fns=();
 
   %pmlref_target_info=();
 
@@ -112,6 +117,28 @@ sub init {
   $opts{hybrid}||=1;
   $opts{prefix}||='';
   $opts{'data-dir'}||='';
+}
+
+sub destroy {
+  undef $file_table;
+  undef $root_name;
+  undef $schema;
+  undef $references_table;
+  undef %schema;
+  undef %fh;
+  undef %orig_name;
+  undef %seen_ref_schema;
+  undef $node_table;
+  undef $index_id;
+  undef $last_type_no;
+  undef $tree_no;
+  undef $filename;
+  undef $idx;
+  undef $node_idx;
+  undef $last_tree_no;
+  undef %pmlref_target_info;
+  undef %opts;
+  undef $relations;
 }
 
 sub varchar {
@@ -143,22 +170,22 @@ sub mkdump {
   if (lc($opts{syntax}) eq 'postgres') {
     return join("\t",map {
       if (defined) {
-	my $x=$_;
-	$x=~s/[\t\n]/ /g;
-	$x=~s/(\\|\r)/\\$1/g;
-	$x
+        my $x=$_;
+        $x=~s/[\t\n]/ /g;
+        $x=~s/(\\|\r)/\\$1/g;
+        $x
       } else {
-	"\\N"
+        "\\N"
       }
     } @_)."\n";
   } else {
     return join("\t",map {
       if (defined) {
-	my $x=$_;
-	$x=~s/[\t\n]/ /g;
-	$x
+        my $x=$_;
+        $x=~s/[\t\n]/ /g;
+        $x
       } else {
-	''
+        ''
       }
     } @_)."\n";
   }
@@ -194,25 +221,25 @@ sub complete_schema_pmlref_list {
       my $table = table_name($decl,1);
       my @m;
       if ($decl_is == PML_STRUCTURE_DECL) {
-	@m = map [$_->get_name, $_->get_knit_content_decl], $decl->get_members;
+        @m = map [$_->get_name, $_->get_knit_content_decl], $decl->get_members;
       } elsif ($decl_is == PML_CONTAINER_DECL) {
-	@m = ['#content', $_->get_content_decl],map [$_->get_name, $_->get_content_decl], $decl->get_attributes;
+        @m = ['#content', $_->get_content_decl],map [$_->get_name, $_->get_content_decl], $decl->get_attributes;
       } elsif ($decl_is == PML_SEQUENCE_DECL) {
-	@m = map [$_->get_name, $_->get_knit_content_decl], $decl->get_elements;
+        @m = map [$_->get_name, $_->get_knit_content_decl], $decl->get_elements;
       } elsif ($decl_is == PML_LIST_DECL or $decl_is == PML_ALT_DECL) {
-	@m = ['#value', $decl->get_knit_content_decl];
+        @m = ['#value', $decl->get_knit_content_decl];
       } else { return }
       foreach my $member (@m) {
-	next unless $member->[1] and $member->[1]->get_decl_type == PML_CDATA_DECL and
-	  $member->[1]->get_format eq 'PMLREF';
-	my $p=$member->[1]->get_parent_decl;
-	next if ($p and (($p->get_role||'') eq '#KNIT'
-			       or ($p->get_decl_type == PML_LIST_DECL or $p->get_decl_type == PML_ALT_DECL)
-				 and ($p->get_role||'') eq '#KNIT'));
-	my $path =$member->[0] eq '#value' ? $table : $table.'/'.$member->[0];
-	unless (ref($opts{ref}) and exists ($opts{ref}{$path})) {
-	  $opts{ref}{$path}='-';
-	}
+        next unless $member->[1] and $member->[1]->get_decl_type == PML_CDATA_DECL and
+          $member->[1]->get_format eq 'PMLREF';
+        my $p=$member->[1]->get_parent_decl;
+        next if ($p and (($p->get_role||'') eq '#KNIT'
+                               or ($p->get_decl_type == PML_LIST_DECL or $p->get_decl_type == PML_ALT_DECL)
+                                 and ($p->get_role||'') eq '#KNIT'));
+        my $path =$member->[0] eq '#value' ? $table : $table.'/'.$member->[0];
+        unless (ref($opts{ref}) and exists ($opts{ref}{$path})) {
+          $opts{ref}{$path}='-';
+        }
       }
     });
   return ($opts{ref}||={});
@@ -231,8 +258,8 @@ sub get_pmlref_target_info {
   return unless $decl->get_decl_type == PML_CDATA_DECL and $decl->get_format eq 'PMLREF';
   my $p=$decl->get_parent_decl;
   unless ($p and (($p->get_role||'') eq '#KNIT'
-		    or ($p->get_decl_type == PML_LIST_DECL or $p->get_decl_type == PML_ALT_DECL)
-		      and ($p->get_role||'') eq '#KNIT')) {
+                    or ($p->get_decl_type == PML_LIST_DECL or $p->get_decl_type == PML_ALT_DECL)
+                      and ($p->get_role||'') eq '#KNIT')) {
     my $o_name = $orig_name{$table} || $table;
     my $path =$column eq '#value' ? $o_name : $o_name.'/'.$column;
     unless (ref($opts{ref}) and exists ($opts{ref}{$path})) {
@@ -270,76 +297,77 @@ sub column_spec {
     if ($format eq 'PMLREF') {
       my ($target,$target_type) = get_pmlref_target_info($decl,$table,$column,1);
       if ((!$opts{'no-schema'} || $opts{'incremental'} ) and
-	  (defined($target) or defined($target_type))) {
+          (defined($target) or defined($target_type))) {
         if (!$target_type) {
-	  $target_type=$target;
-	  $target=$root_name;
-	}
-	my $target_id;
-	if ($target_type=~s/[@](.*)$//) {
-	  $target_id=$1;
-	}
-	my $comment = "Updating PMLREF column: $table/$column refers to nodes in $target of type $target_type";
-	if ($opts{syntax} eq 'postgres') {
-	  $fh{'#POST_SQL'}->print("\\echo $comment\n");
-	} elsif ($opts{syntax} eq 'oracle') {
-	  $fh{'#POST_SQL'}->print("prompt $comment\n");
-	} else {
-	  $fh{'#POST_SQL'}->print("-- $comment\n");
-	}
-	my $col = $column;
-	$col=~s/\.rf$//;
-	$table = rename_type($table);
-	my $tt;
-	if ($target eq $root_name) {
-	  $tt = rename_type($target_type);
-	} else {
-	  $tt = q(' || tab || ');
-	}
-	my $rename='';
-# 	if ($opts{syntax}=~/(oracle|postgres)/) {
-# 	  $rename=<<"EOF";
+          $target_type=$target;
+          $target=$root_name;
+        }
+        my $target_id;
+        if ($target_type=~s/[@](.*)$//) {
+          $target_id=$1;
+        }
+        my $comment = "Updating PMLREF column: $table/$column refers to nodes in $target of type $target_type";
+        if ($opts{syntax} eq 'postgres') {
+          $fh{'#POST_SQL'}->print("\\echo $comment\n") unless $opts{loader} eq 'file_list';
+        } elsif ($opts{syntax} eq 'oracle') {
+          $fh{'#POST_SQL'}->print("prompt $comment\n");
+        } else {
+          $fh{'#POST_SQL'}->print("-- $comment\n");
+        }
+        my $col = $column;
+        $col=~s/\.rf$//;
+        # Possible fix for #329 - table name is renamed twice
+        #$table = rename_type($table);
+        my $tt;
+        if ($target eq $root_name) {
+          $tt = rename_type($target_type);
+        } else {
+          $tt = q(' || tab || ');
+        }
+        my $rename='';
+#         if ($opts{syntax}=~/(oracle|postgres)/) {
+#           $rename=<<"EOF";
 # ALTER TABLE "$table" RENAME COLUMN "#tmp" TO "$col";
 # EOF
-# 	} else {
-# 	  $rename=<<"EOF";
+#         } else {
+#           $rename=<<"EOF";
 # ALTER TABLE "$table" ADD "$col" INT;
 # UPDATE "$table" t SET "$col"="#tmp";
 # ALTER TABLE "$table" DROP COLUMN "#tmp";
 # EOF
-# 	}
-	unless ($target_id) {
-	  my $target_decl = eval { PMLTQ::Common::QueryTypeToDecl($target_type,$schema,@{$opts{other_schemas}}) };
-	  warn $@ if $@;
-	  if ($target_decl) {
-	    my $decl_is = $target_decl->get_decl_type;
-	    if ($decl_is==PML_STRUCTURE_DECL or
-		  $decl_is==PML_CONTAINER_DECL) {
-	      my ($id_m) = $target_decl->find_members_by_role('#ID');
-	      if ($id_m) {
-		$target_id = $id_m->get_name;
-	      }
-	    }
-	  }
-	  $target_id||='id';
-	}
-	my $sql = <<"EOF";
-UPDATE "$table" t SET "$col"=(SELECT a."#idx" FROM "$tt" a WHERE a."$target_id"=t."$column~") WHERE "$col" IS NULL;
+#         }
+        unless ($target_id) {
+          my $target_decl = eval { PMLTQ::Common::QueryTypeToDecl($target_type,$schema,@{$opts{other_schemas}}) };
+          warn $@ if $@;
+          if ($target_decl) {
+            my $decl_is = $target_decl->get_decl_type;
+            if ($decl_is==PML_STRUCTURE_DECL or
+                  $decl_is==PML_CONTAINER_DECL) {
+              my ($id_m) = $target_decl->find_members_by_role('#ID');
+              if ($id_m) {
+                $target_id = $id_m->get_name;
+              }
+            }
+          }
+          $target_id||='id';
+        }
+        my $sql = <<"EOF";
+UPDATE "$table" t SET "$col"=(SELECT a."#idx" FROM "$tt" a WHERE a."$target_id"=t."$column~" LIMIT 1) WHERE "$col" IS NULL;
 EOF
-	unless ($opts{incremental}) {
-	  $sql .= <<"EOF";
+        unless ($opts{incremental}) {
+          $sql .= <<"EOF";
 ALTER TABLE "$table" DROP COLUMN "$column~";
 EOF
-	}
-# 	unless ($opts{'no-schema'}) {
-# 	  $sql .= <<"EOF";
+        }
+#         unless ($opts{'no-schema'}) {
+#           $sql .= <<"EOF";
 # CREATE INDEX "#i_${root_name}_$index_id" ON "$table" ("$col");
 # EOF
-# 	}
-	unless ($target eq $root_name) {
-	  if ($opts{syntax} eq 'oracle') {
-	    my $execute = join("\n",map {qq(  EXECUTE IMMEDIATE '$_';)} grep /\S/, split /;\s*\n/, $sql)."\n";
-	    $sql = <<"EOF"
+#         }
+        unless ($target eq $root_name) {
+          if ($opts{syntax} eq 'oracle') {
+            my $execute = join("\n",map {qq(  EXECUTE IMMEDIATE '$_';)} grep /\S/, split /;\s*\n/, $sql)."\n";
+            $sql = <<"EOF"
 DECLARE
   tab VARCHAR(40);
 BEGIN
@@ -354,10 +382,10 @@ END;
 /
 
 EOF
-	  } elsif ($opts{syntax} eq 'postgres') {
-	    $sql =~ s/'/''/g;
-	    my $execute = join("\n",map {qq(EXECUTE (''$_'');)} grep !/^\s*--/, grep /\S/, split /;\s*\n/, $sql)."\n";
-	    $sql = <<"EOF"
+          } elsif ($opts{syntax} eq 'postgres') {
+            $sql =~ s/'/''/g;
+            my $execute = join("\n",map {qq(EXECUTE (''$_'');)} grep !/^\s*--/, grep /\S/, split /;\s*\n/, $sql);
+            $sql = <<"EOF"
 CREATE OR REPLACE FUNCTION pml2base__update_pmlref() RETURNS integer AS '
 DECLARE
   tab VARCHAR(40);
@@ -368,20 +396,23 @@ $execute
   RETURN 1;
 END;
 ' LANGUAGE plpgsql;
+
 SELECT pml2base__update_pmlref();
+
 DROP FUNCTION pml2base__update_pmlref();
+
 EOF
-	  }
-	}
-	$fh{'#POST_SQL'}->print($sql);
-	$index_id++;
-	#my $fk="";
-	#$fk=' FOREIGN KEY REFERENCES "$tt" ("#idx")' if $target eq $root_name;
-	{
-	  my $col = $column;
-	  $col=~s/\.rf$//;
-	  return ([$column.'~' => 'STRING()'.$constraint,1], [$col => 'INT',1]);
-	}
+          }
+        }
+        $fh{'#POST_SQL'}->print($sql);
+        $index_id++;
+        #my $fk="";
+        #$fk=' FOREIGN KEY REFERENCES "$tt" ("#idx")' if $target eq $root_name;
+        {
+          my $col = $column;
+          $col=~s/\.rf$//;
+          return ([$column.'~' => 'STRING()'.$constraint,1], [$col => 'INT',1]);
+        }
       }
     }
     return [$column => 'STRING()'.$constraint,$create_index];
@@ -485,17 +516,20 @@ sub convert_schema {
   $file_table = $root_name."__#files";
   $references_table = $root_name."__#references";
   my $pmlref_table = $root_name."__#pmlref_map";
-  open $fh{'#INIT_SH'},'>',to_filename("init",'sh') || die "$!";
+  $opts{loader} //= 'SH';
+  die "driver $opts{driver} and loader $opts{loader} is not supported" if $opts{loader} eq 'file_list' && ! $opts{driver} eq 'postgres';
+  open $fh{'#INIT_SH'},'>',get_full_path(to_filename("init",'sh')) || die "$!" if $opts{loader} eq 'SH';
+  open $fh{'#INIT_LIST'},'>',get_full_path(to_filename("init",'list')) || die "$!" if $opts{loader} eq 'file_list';
   unless ($opts{'no-schema'}) {
-    open $fh{'#INIT_SQL'},'>',to_filename("init",'sql')  || die "$!";
-    open $fh{'#DELETE_SQL'},'>',to_filename("delete",'sql')  || die "$!";
+    open $fh{'#INIT_SQL'},'>',get_full_path(to_filename("init",'sql'))  || die "$!";
+    open $fh{'#DELETE_SQL'},'>',get_full_path(to_filename("delete",'sql'))  || die "$!";
   }
   unless ($opts{'no-schema'} and !$opts{'incremental'}) {
-    open $fh{'#POST_SQL'},'>',to_filename("postprocess",'sql')  || die "$!";
+    open $fh{'#POST_SQL'},'>',get_full_path(to_filename("postprocess",'sql'))  || die "$!";
   }
-  open $fh{'#FILE_TABLE'},'>',to_filename($file_table)  || die "$!";
-  open $fh{'#REFFILE_TABLE'},'>',to_filename($references_table)  || die "$!";
-  open $fh{$node_table},'>',to_filename($node_table)  || die "$!";
+  open $fh{'#FILE_TABLE'},'>',get_full_path(to_filename($file_table))  || die "$!";
+  open $fh{'#REFFILE_TABLE'},'>',get_full_path(to_filename($references_table))  || die "$!";
+  open $fh{$node_table},'>',get_full_path(to_filename($node_table))  || die "$!";
 
   my ($db_cmd,$ldr_cmd,$extra_flags);
   $extra_flags='';
@@ -512,7 +546,7 @@ sub convert_schema {
   if ($opts{'schema'} and !$opts{'incremental'}) {
     $extra_flags.=' --init|--finish'
   }
-
+  if(exists $fh{'#INIT_SH'}) {
   $fh{'#INIT_SH'}->print(<<"EOF");
 #!/bin/bash
 
@@ -530,16 +564,16 @@ EOF
   $fh{'#INIT_SH'}->print(<<'EOF');
 while [ $# -gt 0 ]; do
     case "$1" in
-	-u|--user) user=$2; shift 2; ;;
-	-d|--database) db=$2; shift 2; ;;
-	-w|--password) password=$2; shift 2; ;;
-	-h|--host) host=$2; shift 2; ;;
-	-p|--port) port=$2; shift 2; ;;
-	-c|--db-cmd) db_cmd=$2; shift 2; ;;
-	-l|--loader-cmd) loader_cmd=$2; shift 2; ;;
-	--init|--finish) task=$2; shift 2; ;;
-	--) shift ; break ;;
-	*) echo "Unknown argument: $1" ; exit 1 ;;
+        -u|--user) user=$2; shift 2; ;;
+        -d|--database) db=$2; shift 2; ;;
+        -w|--password) password=$2; shift 2; ;;
+        -h|--host) host=$2; shift 2; ;;
+        -p|--port) port=$2; shift 2; ;;
+        -c|--db-cmd) db_cmd=$2; shift 2; ;;
+        -l|--loader-cmd) loader_cmd=$2; shift 2; ;;
+        --init|--finish) task=$2; shift 2; ;;
+        --) shift ; break ;;
+        *) echo "Unknown argument: $1" ; exit 1 ;;
     esac
 done
 
@@ -553,10 +587,11 @@ if [ -z $db ]; then
 fi
 
 EOF
-
+  }
 
   if (lc($opts{syntax}) eq 'postgres') {
-    $fh{'#INIT_SH'}->print(<<'EOF');
+    if(exists $fh{'#INIT_SH'}) {
+      $fh{'#INIT_SH'}->print(<<'EOF');
     sql_files=""
     export PGUSER=$user
     export PGDATABASE=$db
@@ -586,6 +621,7 @@ EOP
       echo "Finished!"
     }
 EOF
+    }
   } elsif (lc($opts{syntax}) eq 'oracle') {
     $fh{'#INIT_SH'}->print(<<'EOF');
     ora_login="${user}";
@@ -651,9 +687,11 @@ EOF
   }
 
   if ($opts{'schema'} and !$opts{'incremental'}) {
-    $fh{'#INIT_SH'}->print(<<'EOF');
+    if(exists $fh{'#INIT_SH'}) {
+      $fh{'#INIT_SH'}->print(<<'EOF');
 if [ "@${task}" = "@--init" ]; then
 EOF
+    }
   }
 
   $schema{$node_table} = {
@@ -685,46 +723,54 @@ EOF
 
 
   unless ($opts{'no-schema'}) {
-    $fh{'#INIT_SH'}->print(mkload(to_filename("delete",'sql'),{quiet=>1}));
-    $fh{'#INIT_SH'}->print(mkload(to_filename("init",'sql')));
+    if(exists $fh{'#INIT_SH'}) {
+      $fh{'#INIT_SH'}->print(mkload(to_filename("delete",'sql'),{quiet=>1}));
+      $fh{'#INIT_SH'}->print(mkload(to_filename("init",'sql')));
+    } elsif(exists $fh{'#INIT_LIST'}) {
+      $fh{'#INIT_LIST'}->print(to_filename("delete",'sql')."\n");
+      $fh{'#INIT_LIST'}->print(to_filename("init",'sql')."\n");
+    }
     dump_schema($schema);
     for my $decl ($schema->node_types) {
       my $tab = table_name($decl,1);
-      $fh{'#INIT_SQL'}->print(qq{INSERT INTO "#PMLTYPES" VALUES('$tab','$root_name');\n});
+      $fh{'#INIT_SQL'}->print(qq{INSERT INTO "#PMLTYPES" VALUES('$tab','$root_name');\n\n});
     }
-    $fh{'#DELETE_SQL'}->print(qq{DELETE FROM "#PML" WHERE "root"='$root_name';\n});
-    $fh{'#DELETE_SQL'}->print(qq{DELETE FROM "#PMLTYPES" WHERE "root"='$root_name';\n});
+    $fh{'#DELETE_SQL'}->print(qq{DELETE FROM "#PML" WHERE "root"='$root_name';\n\n});
+    $fh{'#DELETE_SQL'}->print(qq{DELETE FROM "#PMLTYPES" WHERE "root"='$root_name';\n\n});
 
     #   $fh{'#INIT_SQL'}->print(qq{CREATE TABLE "" (}.
-    # 			    qq{ "ref_type" }.varchar(128).
-    # 			    qq{, "ref_table" }.varchar(MAX_NAME_LENGTH).
-    # 			    qq{, "target_layer" }.varchar(128).
-    # 			    qq{, "target_table" }.varchar(MAX_NAME_LENGTH).
-    # 			    qq{, "target_type" }.varchar(128).
-    # 			    qq{, "pmref" }.boolean().qq{);\n});
+    #                             qq{ "ref_type" }.varchar(128).
+    #                             qq{, "ref_table" }.varchar(MAX_NAME_LENGTH).
+    #                             qq{, "target_layer" }.varchar(128).
+    #                             qq{, "target_table" }.varchar(MAX_NAME_LENGTH).
+    #                             qq{, "target_type" }.varchar(128).
+    #                             qq{, "pmref" }.boolean().qq{);\n});
     $fh{'#INIT_SQL'}->print(qq{CREATE TABLE "$pmlref_table" (}.
-   		            qq{ "ref_type" }.varchar(128).
-			    qq{, "ref_table" }.varchar(MAX_NAME_LENGTH).
-			    qq{, "target_layer" }.varchar(128).
-			    qq{, "target_table" }.varchar(MAX_NAME_LENGTH).
-			    qq{, "target_type" }.varchar(128).qq{);\n});
-
-    $fh{'#DELETE_SQL'}->print(qq{DROP TABLE "$pmlref_table";\n});
+                               qq{ "ref_type" }.varchar(128).
+                            qq{, "ref_table" }.varchar(MAX_NAME_LENGTH).
+                            qq{, "target_layer" }.varchar(128).
+                            qq{, "target_table" }.varchar(MAX_NAME_LENGTH).
+                            qq{, "target_type" }.varchar(128).qq{);\n\n});
+    if (lc($opts{syntax}) eq 'postgres') {
+      $fh{'#DELETE_SQL'}->print(qq{DROP TABLE IF EXISTS "$pmlref_table";\n\n});
+    } else {
+      $fh{'#DELETE_SQL'}->print(qq{DROP TABLE "$pmlref_table";\n\n});
+    }
     for my $k (sort keys %{$opts{ref}}) {
       my ($t1,$t2) = split /:/,$opts{ref}{$k};
       unless ($t2) {
-	$t2=$t1;
-	$t1=$root_name;
+        $t2=$t1;
+        $t1=$root_name;
       }
       my $tab = rename_type($k);
       if ($t1 eq $root_name) {
-	my $tab = rename_type($t2);
-	$fh{'#INIT_SQL'}->print(qq{INSERT INTO "$pmlref_table" VALUES('$k','$tab','$t1','$tab','$t2');\n});
+        my $tab = rename_type($t2);
+        $fh{'#INIT_SQL'}->print(qq{INSERT INTO "$pmlref_table" VALUES('$k','$tab','$t1','$tab','$t2');\n\n});
       } else {
-	$fh{'#INIT_SQL'}->print(qq{INSERT INTO "$pmlref_table" VALUES('$k','$tab','$t1',}.
-				  qq{(SELECT "table" FROM "#PMLTABLES" WHERE "type"='$t2'),'$t2');\n});
-	$fh{'#INIT_SQL'}->print(qq{UPDATE "$pmlref_table" SET ("target_table")=('$t2') }.
-				  qq{WHERE "ref_type"='$k' AND "target_table" IS NULL;\n});
+        $fh{'#INIT_SQL'}->print(qq{INSERT INTO "$pmlref_table" VALUES('$k','$tab','$t1',}.
+                                  qq{(SELECT "table" FROM "#PMLTABLES" WHERE "type"='$t2'),'$t2');\n\n});
+        $fh{'#INIT_SQL'}->print(qq{UPDATE "$pmlref_table" SET ("target_table")=('$t2') }.
+                                  qq{WHERE "ref_type"='$k' AND "target_table" IS NULL;\n\n});
       }
     }
   }
@@ -738,95 +784,95 @@ EOF
       return if $decl_is == PML_TYPE_DECL or $decl_is==PML_ROOT_DECL;
       my $p=$decl->get_parent_decl;
       if ($p and $p->get_decl_type == PML_MEMBER_DECL
-	    and ($p->get_role||'') eq '#CHILDNODES') {
-	return;
+            and ($p->get_role||'') eq '#CHILDNODES') {
+        return;
       }
       my $table = table_name($decl);
       my $desc;
       my $is_node = (($opts{no_tree_table}||$opts{hybrid}) && (($decl->get_role||'') eq '#NODE')) ? 1  : 0;
       if ($decl_is == PML_STRUCTURE_DECL) {
-	my @m = grep {
-	  (!defined($_->get_role) or $_->get_role ne '#CHILDNODES')
-	    and (($_->get_content_decl && $_->get_content_decl->get_role ||'') ne '#TREES')
-	  } $decl->get_members;
-	$desc = {
-	  table=> $table,
-	  colspec => [
-	    ($is_node ? @{$node_schema{colspec}} : ['#idx', 'INT NOT NULL PRIMARY KEY', 0]),
-	    map column_spec($table,$_->get_knit_name,$_->get_knit_content_decl,$_->is_required,$_->get_role),
-	    @m
-	   ],
-	 };
+        my @m = grep {
+          (!defined($_->get_role) or ($_->get_role ne '#CHILDNODES' and $_->get_role ne '#TREES'))
+            and (($_->get_content_decl && $_->get_content_decl->get_role ||'') ne '#TREES')
+          } $decl->get_members;
+        $desc = {
+          table=> $table,
+          colspec => [
+            ($is_node ? @{$node_schema{colspec}} : ['#idx', 'INT NOT NULL PRIMARY KEY', 0]),
+            map column_spec($table,$_->get_knit_name,$_->get_knit_content_decl,$_->is_required,$_->get_role),
+            @m
+           ],
+         };
       } elsif ($decl_is == PML_CONTAINER_DECL) {
-	my ($content_decl) = grep {
-	  (!defined($_->get_role) or $_->get_role ne '#CHILDNODES')
-	    and ((($_->get_content_decl && $_->get_content_decl->get_role) ||'') ne '#TREES')
-	      } grep defined, $decl->get_knit_content_decl;
-	$desc = {
-	  table=> $table,
-	  colspec => [
-	    ($is_node ? @{$node_schema{colspec}} : ['#idx', 'INT NOT NULL PRIMARY KEY']),
-	    ($content_decl ? column_spec($table,"#content",$content_decl,$content_decl->get_role) : ()),
-	    map column_spec($table,$_->get_name,$_->get_content_decl,$_->is_required,$_->get_role), $decl->get_attributes
-	   ],
-	};
+        my ($content_decl) = grep {
+          (!defined($_->get_role) or ($_->get_role ne '#CHILDNODES' and $_->get_role ne '#TREES'))
+            and ((($_->get_content_decl && $_->get_content_decl->get_role) ||'') ne '#TREES')
+              } grep defined, $decl->get_knit_content_decl;
+        $desc = {
+          table=> $table,
+          colspec => [
+            ($is_node ? @{$node_schema{colspec}} : ['#idx', 'INT NOT NULL PRIMARY KEY']),
+            ($content_decl ? column_spec($table,"#content",$content_decl,$content_decl->get_role) : ()),
+            map column_spec($table,$_->get_name,$_->get_content_decl,$_->is_required,$_->get_role), $decl->get_attributes
+           ],
+        };
       } elsif ($decl_is == PML_SEQUENCE_DECL) {
-	$desc = {
-	  table=> $table,
-	  colspec => [
-	    ["#idx", 'INT NOT NULL PRIMARY KEY',0],
-	    map [$_->get_name,'INT',1], $decl->get_elements
-	   ],
-	 };
+        $desc = {
+          table=> $table,
+          colspec => [
+            ["#idx", 'INT NOT NULL PRIMARY KEY',0],
+            map [$_->get_name,'INT',1], $decl->get_elements
+           ],
+         };
       } elsif ($decl_is == PML_ELEMENT_DECL) {
-	my $content_decl = $decl->get_knit_content_decl;
-	$table = '#e_'.table_name($content_decl);
-	$desc = {
-	  table=> $table,
-	  colspec => [
-	    ["#idx",'INT'],
-	    ["#pos",'INT'],
-	    ["#elpos",'INT'],
-	    column_spec($table,'#value',$content_decl,$content_decl->get_role)
-	   ]
-	 };
+        my $content_decl = $decl->get_knit_content_decl;
+        $table = '#e_'.table_name($content_decl);
+        $desc = {
+          table=> $table,
+          colspec => [
+            ["#idx",'INT'],
+            ["#pos",'INT'],
+            ["#elpos",'INT'],
+            column_spec($table,'#value',$content_decl,$content_decl->get_role)
+           ]
+         };
       } elsif ($decl_is == PML_LIST_DECL) {
-	my $content_decl = $decl->get_knit_content_decl;
-	$desc = {
-	  table=> $table,
-	  colspec => [
-	    ["#idx",'INT',1],
-	    ($decl->is_ordered ? ["#pos",'INT'] : ()),
-	    column_spec($table,'#value',$content_decl,$content_decl->get_role),
-	   ]
-	 };
+        my $content_decl = $decl->get_knit_content_decl;
+        $desc = {
+          table=> $table,
+          colspec => [
+            ["#idx",'INT',1],
+            ($decl->is_ordered ? ["#pos",'INT'] : ()),
+            column_spec($table,'#value',$content_decl,$content_decl->get_role),
+           ]
+         };
       } elsif ($decl_is == PML_ALT_DECL) {
-	my $content_decl = $decl->get_knit_content_decl;
-	$desc = {
-	  table=> $table,
-	  colspec => [
-	    ["#idx",'INT',1],
-	    column_spec($table,'#value',$content_decl,$content_decl->get_role),
-	   ]
-	 };
+        my $content_decl = $decl->get_knit_content_decl;
+        $desc = {
+          table=> $table,
+          colspec => [
+            ["#idx",'INT',1],
+            column_spec($table,'#value',$content_decl,$content_decl->get_role),
+           ]
+         };
       } elsif ($decl_is == PML_CHOICE_DECL) {
       } elsif ($decl_is == PML_CONSTANT_DECL) {
       } elsif ($decl_is == PML_CDATA_DECL) {
       } elsif ($decl_is == PML_ATTRIBUTE_DECL
-	       || $decl_is == PML_MEMBER_DECL
-	       || $decl_is == PML_ELEMENT_DECL) {
-	#    print $decl->get_parent_decl->get_decl_path,"/[".$decl->get_name,"]\n";
+               || $decl_is == PML_MEMBER_DECL
+               || $decl_is == PML_ELEMENT_DECL) {
+        #    print $decl->get_parent_decl->get_decl_path,"/[".$decl->get_name,"]\n";
       } else {
-	print STDERR "Unexpected decl: ",$decl->get_decl_type_str,"\n";
+        print STDERR "Unexpected decl: ",$decl->get_decl_type_str,"\n";
       }
       if ($desc) {
-	warn "couldn't determine table name for decl $decl\n" if !defined $table;
-	$desc->{'#decl_order'}=$decl_order++;
-	$schema{$desc->{table}}=$desc;
-	unless ($opts{schema}) {
-	  my $fn = table2filename($desc->{table});
-	  open $fh{$desc->{table}},'>',$fn or  die "Cannot open '$fn' for writing: $!";
-	}
+        warn "couldn't determine table name for decl $decl\n" if !defined $table;
+        $desc->{'#decl_order'}=$decl_order++;
+        $schema{$desc->{table}}=$desc;
+        unless ($opts{schema}) {
+          my $fn = table2filename($desc->{table});
+          open $fh{$desc->{table}},'>',get_full_path($fn) or  die "Cannot open '$fn' for writing: $!";
+        }
       }
     });
   if ($opts and ref $opts->{for_schema}) {
@@ -881,30 +927,40 @@ sub dump_schema {
     my $schema_dump = "${root_name}__schema.dump";
     my $blob;
     $schema->write({string=>\$blob});
-    open(my $fh, '>', $schema_dump);
+    open(my $fh, '>', get_full_path($schema_dump));
     my $r=$root_name;
 
     s{(\\|\n|\r|\^)}{\\$1}g for $r,$filename,$data_dir,$blob;
     print $fh ($r.'^',
-	       $filename.'^',
-	       $data_dir.'^',
-	       $flags.'^',
-	       $blob
-	      );
+               $filename.'^',
+               $data_dir.'^',
+               $flags.'^',
+               $blob
+              );
     close $fh;
     my $ctl = "${root_name}__pml_init.ctl";
-    open $fh, ($append ? '>>' : '>'), $ctl;
-    print $fh <<"EOF";
+    open $fh, ($append ? '>>' : '>'), get_full_path($ctl);
+
+
+    if(exists $fh{'#INIT_SH'}) {
+      print $fh <<"EOF";
 \\echo Loading PML meta-table
 \\copy "#PML" ("root", "schema_file", "data_dir", "flags", "schema") from '$schema_dump' delimiter '^'
 EOF
-    close $fh;
-    $fh{'#INIT_SH'}->print(mkdataload($ctl));
+      close $fh;
+      $fh{'#INIT_SH'}->print(mkdataload($ctl));
+    } elsif(exists $fh{'#INIT_LIST'}) {
+      print $fh <<"EOF";
+COPY "#PML" ("root", "schema_file", "data_dir", "flags", "schema") FROM '$schema_dump' DELIMITER '^'
+EOF
+      close $fh;
+      $fh{'#INIT_LIST'}->print("$ctl\n");
+    }
     #print $fh{'#INIT_SH'}(qq{sleep 0.2; echo quit | sqlldr SILENT=ALL USERID="\$login" CONTROL="$ctl"\n});
   } elsif (lc($opts{syntax}) eq 'oracle') {
     my $schema_dump = $root_name."__schema.pml";
     $schema->write({filename=>$schema_dump});
-    my $ctl = $root_name."__pml_init.ctl";
+    my $ctl = get_full_path($root_name."__pml_init.ctl");
     open my $fh, '>', $ctl;
     print $fh <<"EOF";
 LOAD DATA CHARACTERSET UTF8 LENGTH SEMANTICS CHAR
@@ -931,11 +987,11 @@ EOF
     $schema->write({filename=>$schema_pml});
     my $fh;
     my $r=$root_name;
-    open $fh, '>', $schema_dump;
+    open $fh, '>', get_full_path($schema_dump);
     print $fh qq{$r,$filename,$data_dir,$schema_pml\n};
     close $fh;
     my $ctl = to_filename("pml_init",'ctl');
-    open $fh, '>', $ctl;
+    open $fh, '>', get_full_path($ctl);
     print $fh <<"EOF";
 IMPORT FROM  '$schema_dump' OF DEL LOBS FROM '.'
 COMMITCOUNT 400 INSERT INTO "#PML";
@@ -952,8 +1008,8 @@ sub analyze_string {
   if ($opts{'enforce-col-info'}) {
     for ($schema{$table}{col}{$column}||0) {
       if ($l > $_) {
-	warn "Truncating value in table $table, column $column from $l to $_ chars\n";
-	$_[2] = substr($string,0,$_);
+        warn "Truncating value in table $table, column $column from $l to $_ chars\n";
+        $_[2] = substr($string,0,$_);
       }
     }
     warn "NON-ASCII value in table $table, column $column\n"  if !$schema{$table}{non_ascii}{$column} and $string=~/[^[:ascii:]]/;
@@ -973,8 +1029,8 @@ sub dump_typemap {
   while (($type_name,$table_name)=each %$typemap) {
     if (exists $schema{$table_name}) {
       # qq{DELETE FROM "#PMLTABLES" WHERE "type"='$type_name';\n}.
-      $fh{'#INIT_SQL'}->print(qq{INSERT INTO "#PMLTABLES" VALUES('$type_name','$table_name');\n});
-      $fh{'#DELETE_SQL'}->print(qq{DELETE FROM "#PMLTABLES" WHERE "type"='$type_name';\n});
+      $fh{'#INIT_SQL'}->print(qq{INSERT INTO "#PMLTABLES" VALUES('$type_name','$table_name');\n\n});
+      $fh{'#DELETE_SQL'}->print(qq{DELETE FROM "#PMLTABLES" WHERE "type"='$type_name';\n\n});
     }
   }
 }
@@ -1003,14 +1059,14 @@ sub convert_references {
       # we need to extract the schema
       my $refpml = $refdata->{$id};
       if (UNIVERSAL::DOES::does($refpml,'Treex::PML::Instance')) {
-	my $ref_schema = $refpml->get_schema;
-	# dump_schema($ref_schema);
-	convert_references($reffile,
-		     $ref_schema,
-		     $refpml->get_references_hash,
-		     $refpml->get_refname_hash,
-		     $refpml->get_ref($id),
-		     $opts);
+        my $ref_schema = $refpml->get_schema;
+        # dump_schema($ref_schema);
+        convert_references($reffile,
+                     $ref_schema,
+                     $refpml->get_references_hash,
+                     $refpml->get_refname_hash,
+                     $refpml->get_ref($id),
+                     $opts);
       }
     }
   }
@@ -1051,8 +1107,8 @@ sub table_name {
 #    warn("Couldn't determine table name for $decl with parent ".$decl->get_parent_decl."\n");
     return rename_type('/'.$decl->get_parent_decl->get_name,$no_rename) if $parent_is==PML_ROOT_DECL;
     if ($parent_is==PML_STRUCTURE_DECL or
-	$parent_is==PML_SEQUENCE_DECL or
-	$parent_is==PML_CONTAINER_DECL) {
+        $parent_is==PML_SEQUENCE_DECL or
+        $parent_is==PML_CONTAINER_DECL) {
       my $name = $decl->get_name;
       $path = table_name($decl->get_parent_decl,1);
 #      print "result: $path/$name\n";
@@ -1072,7 +1128,7 @@ sub rename_type {
   return $table_name if $no_rename;
   $table_name=$opts{prefix}.$table_name;
   if ($opts{'rename-type'} and
-	$opts{'rename-type'}{$table_name}) {
+        $opts{'rename-type'}{$table_name}) {
     $table_name=$opts{'rename-type'}{$table_name};
   } elsif (length($table_name)>MAX_NAME_LENGTH) {
     my $new_name = $opts{'rename-type'}{$table_name} = $root_name.'##'.($last_type_no++);
@@ -1096,9 +1152,9 @@ sub traverse_data {
       $is_tree = 1 if ($opts{is_treex} and ($decl->get_structure_name || '') =~ /[atn]-root/);
     my %midx;
     my @members = grep {
-      (!defined($_->get_role) or $_->get_role ne '#CHILDNODES')
-	and (($_->get_content_decl && $_->get_content_decl->get_role ||'') ne '#TREES')
-	} $decl->get_members;
+      (!defined($_->get_role) or ($_->get_role ne '#CHILDNODES' and $_->get_role ne '#TREES'))
+        and (($_->get_content_decl && $_->get_content_decl->get_role ||'') ne '#TREES')
+        } $decl->get_members;
     $desc = {
       '#table' => $table,
       '#idx' => ($is_tree ? new_tree($value,$desc) : $index),
@@ -1108,11 +1164,11 @@ sub traverse_data {
       my $v = $value->{$n};
       my $d = $_->get_knit_content_decl;
       if (defined($v) and !$d->is_atomic) {
-	my $mdump = traverse_data($d,$v);
-	$desc->{$n} = data_index($mdump);
+        my $mdump = traverse_data($d,$v);
+        $desc->{$n} = data_index($mdump);
       } else {
-	my ($key,$value) = col_val($d,$table,$n,$v);
-	$desc->{$key} = $value;
+        my ($key,$value) = col_val($d,$table,$n,$v);
+        $desc->{$key} = $value;
       }
     }
     $desc=traverse_subtree($value,$desc,$opts) if $is_tree;
@@ -1123,9 +1179,9 @@ sub traverse_data {
       '#table' => $table,
       '#idx' => ($is_tree ? new_tree($value,$desc) : $index),
       map {
-	my $n = $_->get_name;
-	my $v = $value->{$n};
-	col_val($_->get_content_decl,$table,$n,$v)
+        my $n = $_->get_name;
+        my $v = $value->{$n};
+        col_val($_->get_content_decl,$table,$n,$v)
       } @attrs
     };
     my $knit_content_decl = $decl->get_knit_content_decl;
@@ -1133,14 +1189,14 @@ sub traverse_data {
     my $role = ($content_decl && $content_decl->get_role)||'';
     if (defined($content_decl) and $role ne '#CHILDNODES' and $role ne '#TREES') {
       if ($knit_content_decl and defined($value->{'#content'})) {
-	if ($knit_content_decl->is_atomic) {
-	  my ($key,$value) = col_val($knit_content_decl,$table,'#content',$value->{'#content'});
-	  $desc->{$key} = $value;
-	} else {
-	  $desc->{'#content'} = data_index(traverse_data($knit_content_decl,$value->{'#content'}));
-	}
+        if ($knit_content_decl->is_atomic) {
+          my ($key,$value) = col_val($knit_content_decl,$table,'#content',$value->{'#content'});
+          $desc->{$key} = $value;
+        } else {
+          $desc->{'#content'} = data_index(traverse_data($knit_content_decl,$value->{'#content'}));
+        }
       } else {
-	$desc->{'#content'} = undef;
+        $desc->{'#content'} = undef;
       }
     }
     $desc=traverse_subtree($value,$desc,$opts) if $is_tree;
@@ -1151,8 +1207,8 @@ sub traverse_data {
       '#table' => $table,
       '#idx'   => $index,
       map {
-	my $n = $_->get_name;
-	$n => ($midx{$n}=$idx++)
+        my $n = $_->get_name;
+        $n => ($midx{$n}=$idx++)
       } @elems
     };
     my %epos;
@@ -1162,9 +1218,9 @@ sub traverse_data {
       my $v = $_->value;
       my $e = $decl->get_element_by_name($n);
       traverse_data($e,$v,$midx{$n},{
-	'#table'=>'#e_'.table_name($e->get_knit_content_decl),
-	'#pos'=>$i++,
-	'#elpos' => ($epos{$n}++||0),
+        '#table'=>'#e_'.table_name($e->get_knit_content_decl),
+        '#pos'=>$i++,
+        '#elpos' => ($epos{$n}++||0),
       });
     }
   } elsif ($decl_is == PML_ELEMENT_DECL) {
@@ -1192,21 +1248,21 @@ sub traverse_data {
     $desc = [];
     if ($atomic) {
       for my $v ($value->values) {
-	push @$desc, {
-	  '#table'=>$table,
-	  '#idx'=>$index,
-	   col_val($content_decl,$table,'#value',$v),
-	  ($ordered ? ('#pos'=>$i++) : ()),
-	};
+        push @$desc, {
+          '#table'=>$table,
+          '#idx'=>$index,
+           col_val($content_decl,$table,'#value',$v),
+          ($ordered ? ('#pos'=>$i++) : ()),
+        };
       }
     } else {
       for my $v ($value->values) {
-	push @$desc, {
-	  '#table'=>$table,
-	  '#idx'=>$index,
-	  '#value'=> defined($v) && data_index(traverse_data($content_decl,$v)),
-	  ($ordered ? ('#pos'=>$i++) : ()),
-	};
+        push @$desc, {
+          '#table'=>$table,
+          '#idx'=>$index,
+          '#value'=> defined($v) && data_index(traverse_data($content_decl,$v)),
+          ($ordered ? ('#pos'=>$i++) : ()),
+        };
       }
     }
   } elsif ($decl_is == PML_CHOICE_DECL || $decl_is == PML_CONSTANT_DECL || $decl_is == PML_CDATA_DECL) {
@@ -1236,10 +1292,11 @@ sub dump_data_desc {
     if (defined $fh{$table}) {
       $fh{$table}->print(mkdump(delete @d{@columns}));
       die "The following columns were left in a row for table $table: "
-	.join(',',keys %d)."\n"
-	  ."expected: ".join(',',@columns)."\n"
-	    if keys %d;
+        .join(',',keys %d)."\n"
+          ."expected: ".join(',',@columns)."\n"
+            if keys %d;
     } else {
+      print join(" ",keys %fh),"\n";
       die "Error: didn't find any filehandle for table $table\n";
     }
   }
@@ -1268,21 +1325,21 @@ sub traverse_subtree {
       $hash{$node} = {};
       $hash{$node}{'#table'} = $node_table;
       $hash{$node}{'#data'} = $parent ?
-	traverse_data($node->type,
-		      $node,
-		      ++$idx,
-		      {%$opts,
-		       no_dump => 1,
-		       root_idx=>$root_idx})
-	  : $desc;
+        traverse_data($node->type,
+                      $node,
+                      ++$idx,
+                      {%$opts,
+                       no_dump => 1,
+                       root_idx=>$root_idx})
+          : $desc;
       #$hash{$node}{'#ID'}=$node->get_id;
       $hash{$node}{'#idx'}=$hash{$node}{'#data'}{'#idx'};
       $hash{$node}{'#chld'}  = 0;
       my $name = $node->{'#name'};
       my $type = $hash{$node}{'#data'}{'#table'};
       if (defined($name) and length($name)) {
-	val(undef,$node_table,'#name',$name);
-	$hash{$node}{'#name'}  = val(undef,$type,'#name',$name);
+        val(undef,$node_table,'#name',$name);
+        $hash{$node}{'#name'}  = val(undef,$type,'#name',$name);
       }
       val(undef,$node_table,'#type',table_name($node->type,1));
       $hash{$node}{'#type'}  = val(undef,$type,'#type',table_name($node->type,1));
@@ -1292,8 +1349,8 @@ sub traverse_subtree {
       $hash{$node}{'#root_idx'}  = $root_idx;
       $hash{$node}{'#min_ord'} = $hash{$node}{'#max_ord'} = $node->get_order;
       if ($node->firstson) {
-	$node = $node->firstson;
-	next;
+        $node = $node->firstson;
+        next;
       }
     }
     $hash{$node}{'#r'} = $idx;
@@ -1301,9 +1358,9 @@ sub traverse_subtree {
     if ($parent and defined($min_ord) and !defined($parent->get_order)) {
       my $hp=$hash{$parent};
       $hp->{'#min_ord'} = $min_ord
-	if (!defined($hp->{'#min_ord'}) or $hp->{'#min_ord'} > $min_ord);
+        if (!defined($hp->{'#min_ord'}) or $hp->{'#min_ord'} > $min_ord);
       $hp->{'#max_ord'} = $max_ord
-	if (!defined($hp->{'#max_ord'}) or $hp->{'#max_ord'} < $max_ord);
+        if (!defined($hp->{'#max_ord'}) or $hp->{'#max_ord'} < $max_ord);
     }
     if (ref $opts{for_each_node}) {
       $opts{for_each_node}->($node,\%hash,\%fh);
@@ -1312,6 +1369,9 @@ sub traverse_subtree {
   }
   if (ref $opts{for_each_tree}) {
     $opts{for_each_tree}->($tree,\%hash,\%fh);
+  }
+  if (@dump_fns) {
+    $_->($tree,\%hash) for @dump_fns;
   }
   return [ map {
     my $h = $_->[1];
@@ -1348,17 +1408,36 @@ sub fs2base {
 
   if (!$schema) {
     convert_schema($fs->metaData('schema'),$opts);
+    $relations = PMLTQ::Relation->relations_for_schema($schema->get_root_name);
+
+    for my $rel (@$relations) {
+      next unless $rel->{table_name}; # if it doesn't have table we ignore it
+      my $reversed_relation = $rel->{reversed_relation};
+      $reversed_relation =~ s/^implementation:// if $reversed_relation;
+      my $spec = make_user_rel_table($rel->{table_name}, $rel->{name}, $reversed_relation, $rel->{start_node_type}, $rel->{target_node_type});
+
+      my $init_sql = $rel->{iterator_class}->can('init_sql');
+      $init_sql->($spec->{table}, $schema, $spec, \%fh) if $init_sql;
+
+      my $dump_fn = $rel->{iterator_class}->can('dump_relation');
+      push @dump_fns, sub {
+        my ($tree, $hash) = @_;
+        return unless $tree->type->get_structure_name||'' eq $rel->{tree_root};
+        $dump_fn->(@_, $fh{$spec->{table}})
+      } if $dump_fn;
+    }
+
     dump_typemap() unless $opts{'no-schema'};
   }
   my $f = $filename = $fs->filename;
   $filename = abs2rel($filename);
 
   convert_references($f,
-		     $schema,
-		     $fs->metaData('references'),
-		     $fs->metaData('refnames'),
-		     $fs->appData('ref'),
-		     $opts);
+                     $schema,
+                     $fs->metaData('references'),
+                     $fs->metaData('refnames'),
+                     $fs->appData('ref'),
+                     $opts);
   analyze_string($file_table,file => $f);
   my $trees_type =$fs->metaData('pml_trees_type');
   if ($trees_type->get_decl_type == PML_MEMBER_DECL) {
@@ -1394,10 +1473,10 @@ sub finish {
   if ($opts{incremental}) {
     if ($opts{syntax} eq 'postgres') {
       $fh{'#POST_SQL'}->print(qq{UPDATE "#PML" SET ("last_idx","last_node_idx")=($idx,$node_idx)}.
-				qq{ WHERE "root"='$root_name';\n});
+                                qq{ WHERE "root"='$root_name';\n\n});
     } else {
       $fh{'#POST_SQL'}->print(qq{UPDATE "#PML" SET ("last_idx","last_node_idx")=(SELECT $idx,$node_idx FROM DUAL)}.
-				qq{ WHERE "root"='$root_name';\n});
+                                qq{ WHERE "root"='$root_name';\n\n});
     }
   }
   if ($opts{'dump-rename-map'}) {
@@ -1413,30 +1492,34 @@ sub finish {
   unless ($opts{'no-schema'}) {
     for my $desc (reverse @tables) {
       $fh{'#INIT_SQL'}->print(qq{CREATE TABLE "$desc->{table}" (\n    },
-			      join(",\n    ",
-				   map {
-				     my ($c,$t)=@$_;
-				     if ($t=~/STRING\(\)/i) {
-				       my $l = $desc->{col}{$c}||=0;
-				       my $non_ascii = $desc->{non_ascii}{$c}||=0;
-				       warn ("length for $c in $desc->{table} is 0; changing to 1\n") if !$l;
-				       $l||=1;
-				       $t=~s/STRING\(\)/varchar($l,$non_ascii)/ieg;
-				     }
-				     $t=~s/ FOREIGN KEY.*$//;
-				     qq{"$c" $t}
-				   } @{$desc->{colspec}}
-				  ), "\n);\n");
+                              join(",\n    ",
+                                   map {
+                                     my ($c,$t)=@$_;
+                                     if ($t=~/STRING\(\)/i) {
+                                       my $l = $desc->{col}{$c}||=0;
+                                       my $non_ascii = $desc->{non_ascii}{$c}||=0;
+                                       warn ("length for $c in $desc->{table} is 0; changing to 1\n") if !$l;
+                                       $l||=1;
+                                       $t=~s/STRING\(\)/varchar($l,$non_ascii)/ieg;
+                                     }
+                                     $t=~s/ FOREIGN KEY.*$//;
+                                     qq{"$c" $t}
+                                   } @{$desc->{colspec}}
+                                  ), "\n);\n\n");
       for (@{$desc->{colspec}}) {
-	if ($_->[2]) {
-	  $fh{'#INIT_SQL'}->print(qq{CREATE INDEX "#i_${root_name}_$index_id" ON "$desc->{table}" ("$_->[0]");\n});
-	  $index_id++;
-	}
+        if ($_->[2]) {
+          $fh{'#INIT_SQL'}->print(qq{CREATE INDEX "#i_${root_name}_$index_id" ON "$desc->{table}" ("$_->[0]");\n\n});
+          $index_id++;
+        }
       }
     }
     for my $desc (@tables) {
       my $sugar = $opts{syntax} eq 'oracle' ? 'CONSTRAINTS' : '';
-      $fh{'#DELETE_SQL'}->print(qq{DROP TABLE "$desc->{table}" CASCADE $sugar;\n});
+      if (lc($opts{syntax}) eq 'postgres') {
+        $fh{'#DELETE_SQL'}->print(qq{DROP TABLE IF EXISTS "$desc->{table}" CASCADE;\n\n});
+      } else {
+        $fh{'#DELETE_SQL'}->print(qq{DROP TABLE "$desc->{table}" CASCADE $sugar;\n\n});
+      }
     }
   }
   unless ($opts{'schema'}) {
@@ -1444,20 +1527,24 @@ sub finish {
       my $t = $desc->{table};
       my $dump = table2filename($t);
       my $ctl=table2filename($t,'ctl');
-      open LOAD_SQL,'>',$ctl;
+      open LOAD_SQL,'>',get_full_path($ctl);
       my $replace = $opts{'no-schema'} ? "APPEND" : "REPLACE";
       if (lc($opts{syntax}) eq 'postgres') {
-	my $cols = join ',', map { qq{"$_->[0]"} } @{$desc->{colspec}};
-	print LOAD_SQL qq{\\echo Loading data to table "$t"\n};
-	print LOAD_SQL qq{\\copy "$t" ($cols) from '$dump'\n};
+        my $cols = join ',', map { qq{"$_->[0]"} } @{$desc->{colspec}};
+        if(exists $fh{'#INIT_SH'}) {
+          print LOAD_SQL qq{\\echo Loading data to table "$t"\n};
+          print LOAD_SQL qq{\\copy "$t" ($cols) from '$dump'\n};
+        } elsif( exists $fh{'#INIT_LIST'}) {
+          print LOAD_SQL qq{COPY "$t" ($cols) FROM '$dump'\n};
+        }
       } elsif (lc($opts{syntax}) eq 'oracle') {
-	my $cols = join ',', map { qq{"$_->[0]"}
-				     .( $_->[1]=~/STRING/ ? q{CHAR(}.(($desc->{col}{$_->[0]}||0) || 1).q{)} : '')
-				   }
-	  @{$desc->{colspec}};
-	my $bad = table2filename($t,'bad');
-	my $rej = table2filename($t,'rej');
-	print LOAD_SQL <<"EOF";
+        my $cols = join ',', map { qq{"$_->[0]"}
+                                     .( $_->[1]=~/STRING/ ? q{CHAR(}.(($desc->{col}{$_->[0]}||0) || 1).q{)} : '')
+                                   }
+          @{$desc->{colspec}};
+        my $bad = table2filename($t,'bad');
+        my $rej = table2filename($t,'rej');
+        print LOAD_SQL <<"EOF";
 LOAD DATA CHARACTERSET UTF8 LENGTH SEMANTICS CHAR
 INFILE '$dump'
 BADFILE '$bad'
@@ -1469,60 +1556,82 @@ TRAILING NULLCOLS
 ($cols)
 EOF
       } elsif (lc($opts{syntax}) eq 'db2') {
-	  print LOAD_SQL qq{IMPORT FROM '$dump' OF DEL MODIFIED BY COLDELX09 COMMITCOUNT 400 $replace INTO "$t";\n};
-	}
+          print LOAD_SQL qq{IMPORT FROM '$dump' OF DEL MODIFIED BY COLDELX09 COMMITCOUNT 400 $replace INTO "$t";\n};
+      }
       close LOAD_SQL;
-      $fh{'#INIT_SH'}->print(mkdataload($ctl));
+      if(exists $fh{'#INIT_SH'}) {
+        $fh{'#INIT_SH'}->print(mkdataload($ctl));
+      } elsif(exists $fh{'#INIT_LIST'}) {
+        $fh{'#INIT_LIST'}->print("$ctl\n");
+      }
     }
   }
   if ($opts{'no-schema'}) {
     if ($opts{incremental}) {
-      $fh{'#INIT_SH'}->print(mkload(to_filename("postprocess",'sql')));
+      if(exists $fh{'#INIT_SH'}) {
+        $fh{'#INIT_SH'}->print(mkload(to_filename("postprocess",'sql')));
+      } elsif(exists $fh{'#INIT_LIST'}) {
+        $fh{'#INIT_LIST'}->print(to_filename("postprocess",'sql')."\n");
+      }
     }
   } else {
     if ($opts{'schema'}  and !$opts{'incremental'}) {
-      $fh{'#INIT_SH'}->print(q(elif [ "@${task}" = "@--finish" ]; then)."\n");
+      if(exists $fh{'#INIT_SH'}) {
+        $fh{'#INIT_SH'}->print(q(elif [ "@${task}" = "@--finish" ]; then)."\n");
+        } elsif(exists $fh{'#INIT_LIST'}) {
+          ###TODO
+        }
     }
-    $fh{'#INIT_SH'}->print(mkload(to_filename("postprocess",'sql')));
+    if(exists $fh{'#INIT_SH'}) {
+      $fh{'#INIT_SH'}->print(mkload(to_filename("postprocess",'sql')));
+    } elsif(exists $fh{'#INIT_LIST'}) {
+      $fh{'#INIT_LIST'}->print(to_filename("postprocess",'sql')."\n");
+    }
     unless ($opts{incremental}) {
       for my $desc (values %schema) {
-	for my $col (@{$desc->{colspec}}) {
-	  my ($c,$t)=@$col;
-	  if ($t = m/ (FOREIGN KEY) (.*)$/) {
-	    $fh{'#POST_SQL'}->print(qq{ALTER TABLE "$desc->{table}" ADD $1("$c") $2;\n});
-	  }
-	}
+        for my $col (@{$desc->{colspec}}) {
+          my ($c,$t)=@$col;
+          if ($t =~ m/ (FOREIGN KEY) (.*)$/) {
+            $fh{'#POST_SQL'}->print(qq{ALTER TABLE "$desc->{table}" ADD $1("$c") $2;\n\n});
+          }
+        }
       }
     }
     if ($opts{syntax} eq 'postgres') {
       for my $desc (values %schema) {
-	$fh{'#POST_SQL'}->print(qq{VACUUM FULL ANALYZE "$desc->{table}";\n});
+        $fh{'#POST_SQL'}->print(qq{VACUUM FULL ANALYZE "$desc->{table}";\n\n});
       }
     }
     if ($opts{syntax} eq 'oracle') {
-      $fh{'#DELETE_SQL'}->print(qq{PURGE RECYCLEBIN;\n});
-      $fh{'#POST_SQL'}->print(qq{EXECUTE DBMS_STATS.GATHER_SCHEMA_STATS(NULL,DBMS_STATS.AUTO_SAMPLE_SIZE);\n});
+      $fh{'#DELETE_SQL'}->print(qq{PURGE RECYCLEBIN;\n\n});
+      $fh{'#POST_SQL'}->print(qq{EXECUTE DBMS_STATS.GATHER_SCHEMA_STATS(NULL,DBMS_STATS.AUTO_SAMPLE_SIZE);\n\n});
     }
     if ($opts{'schema'} and !$opts{'incremental'}) {
-      $fh{'#INIT_SH'}->print(q(fi)."\n");
+      if(exists $fh{'#INIT_SH'}) {
+        $fh{'#INIT_SH'}->print(q(fi)."\n");
+        } elsif(exists $fh{'#INIT_LIST'}) {
+          ###TODO
+        }
     }
   }
-  $fh{'#INIT_SH'}->print(qq{\nfinish;\n});
+  if(exists $fh{'#INIT_SH'}) {
+    $fh{'#INIT_SH'}->print(qq{\nfinish;\n});
+  }
 
   if ($opts{'dump-idx'}) {
-    open my $fh, '>', $opts{'dump-idx'};
+    open my $fh, '>', get_full_path($opts{'dump-idx'});
       print $fh "$idx\t$node_idx\n";
     close $fh;
   }
   if ($opts{'dump-col-info'}) {
-    open my $fh, '>:utf8', $opts{'dump-col-info'};
+    open my $fh, '>:utf8', get_full_path($opts{'dump-col-info'});
     foreach my $table (keys %schema) {
       if ($schema{$table}{col}) {
-	foreach my $column (keys %{$schema{$table}{col}}) {
-	  my $length=$schema{$table}{col}{$column}||0;
-	  my $non_ascii=$schema{$table}{non_ascii}{$column}||0;
-	  print $fh "$table\t$column\t$length\t$non_ascii\n";
-	}
+        foreach my $column (keys %{$schema{$table}{col}}) {
+          my $length=$schema{$table}{col}{$column}||0;
+          my $non_ascii=$schema{$table}{non_ascii}{$column}||0;
+          print $fh "$table\t$column\t$length\t$non_ascii\n";
+        }
       }
     }
   }
@@ -1532,7 +1641,42 @@ EOF
 }
 
 
+sub get_full_path {
+  my $file = shift;
+  return exists $opts{'output-dir'} ? File::Spec->catfile($opts{'output-dir'},$file) : $file;
+}
 
+sub make_user_rel_table {
+  my ($table_name, $name, $reverse_name, $node_type, $target_node_type) = @_;
 
+  $target_node_type = $node_type unless defined $target_node_type; # default target node to start node
+
+  my $table = rename_type($table_name);
+  my $values = join(',', map { defined $_ ? "'$_'" : 'NULL' } ($name, $reverse_name, $node_type, $target_node_type, $table));
+
+  unless ($opts{'no-schema'}) {
+    $fh{'#INIT_SQL'}->print(<<"SQL");
+INSERT INTO "#PML_USR_REL" VALUES(${values});
+
+SQL
+    $fh{'#DELETE_SQL'}->print(<<"SQL");
+    DELETE FROM "#PML_USR_REL" WHERE "tbl"='${table}';
+
+SQL
+  }
+
+  my $spec = $schema{$table} = {
+    table => $table,
+    colspec => [
+      ['#idx','INT'],
+      ['#value','INT'],
+    ],
+    index => ['#idx','#value']
+  };
+
+  open $fh{$table}, '>', get_full_path(to_filename($table));
+
+  return $spec;
+}
 
 1; # End of PMLTQ::PML2BASE
