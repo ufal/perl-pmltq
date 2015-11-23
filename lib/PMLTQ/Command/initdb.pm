@@ -13,7 +13,7 @@ sub run {
   my $config = $self->config;
   my $dbh    = $self->sys_db;
 
-  $dbh->do( 'CREATE DATABASE ' . $config->{db}->{name} );
+  $dbh->do("CREATE DATABASE \"$config->{db}->{name}\";") or die $dbh->errstr;
   $dbh->disconnect;
 
   $dbh = $self->db;

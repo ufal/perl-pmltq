@@ -19,7 +19,7 @@ sub database_connect {
   my $config = shift;
   my $dbh
     = DBI->connect(
-    'DBI:' . $config->{driver} . ':dbname=' . $config->{name} . ';host=' . $config->{host} . ';port=' . $config->{port},
+    'DBI:' . $config->{driver} . ':database=' . $config->{name} . ';host=' . $config->{host} . ';port=' . $config->{port},
     $config->{user}, $config->{password}, { RaiseError => 1, PrintError => 0 } );
   return $dbh;
 }
@@ -43,7 +43,7 @@ sub convert {
 
 sub initdb {
   my ($config) = @_;
-  lives_ok { PMLTQ::Commands->run('initdb') } 'database initialized';
+  lives_ok { PMLTQ::Commands->run('initdb') } "Database $config->{db}->{name} initialized";
   my $dbh = database_connect( $config->{db} );
   ok( $dbh && $dbh->ping, 'Database exists' );
   $dbh->disconnect;
