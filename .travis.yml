@@ -13,7 +13,7 @@ perl:
 
 env:
   global:
-  - PG_PORT=5432
+    - PG_PORT=5432
 
 matrix:
   include:
@@ -31,13 +31,14 @@ branches:
 before_install:
   - git config --global user.name "TravisCI"
   - git config --global user.email $HOSTNAME":not-for-mail@travis-ci.org"
-  - git fetch --unshallow || exit 0
+  - git fetch --unshallow || true
   - git fetch origin master:master
   - git fetch origin releases:releases
   - git clone --depth=1 git://github.com/travis-perl/helpers ~/travis-perl-helpers
   - source ~/travis-perl-helpers/init
   - build-perl
-  - local-lib travis
+  - '[ `perlbrew lib list` ] || perlbrew lib create travis'
+  - perlbrew use $PERLBREW_PERL@travis
   - perl -V
   - build-dist
   - cd $BUILD_DIR
