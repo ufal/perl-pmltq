@@ -82,7 +82,7 @@ sub treebanks {
       dir    => File::Spec->catdir( $treebanks_dir, $_ ),
       config => PMLTQ::Commands::_load_config( File::Spec->catdir( $treebanks_dir, $_, 'pmltq.yml' ) ),
       dump   => File::Spec->catdir( $treebanks_dir, $_, 'database.dump' ),
-    }
+      }
   } read_dir $treebanks_dir;
 
   @treebanks = values %treebanks;
@@ -96,16 +96,14 @@ Treex::PML::AddResourcePath(@resources);
 Treex::PML::UseBackends(qw(Storable PMLBackend PMLTransformBackend));
 
 sub start_postgres {
-  return if $ENV{TRAVIS};                                             # We use Travis Postgresql addon
-
-  my $test_dsn = "DBI:Pg:dbname=test;host=127.0.0.1;port=$pg_port;user=postgres";
-
   $pg_restore = $ENV{PG_RESTORE} || which('pg_restore');
   plan skip_all => 'Cannot find pg_restore in your path and is not provided in PG_RESTORE variable either'
     unless $pg_restore;
   $pg_create_db = $ENV{PG_CREATE_DB} || which('createdb');
   plan skip_all => 'Cannot find createdb in your path and is not provided in PG_CREATE_DB variable either'
     unless $pg_create_db;
+
+  return if $ENV{TRAVIS};    # We use Travis Postgresql addon
 
   $pgsql = Test::PostgreSQL->new(
     port       => $pg_port,
@@ -121,10 +119,9 @@ sub start_postgres {
 sub create_db {
   my $dbname = shift;
 
-  my @createdb_cmd
-    = ( '/usr/bin/env', '-i', $pg_create_db, '-h', 'localhost', '-p', $pg_port, '-U', 'postgres', $dbname );
+  my @createdb_cmd = ( $pg_create_db, '-h', 'localhost', '-p', $pg_port, '-U', 'postgres', $dbname );
 
-  system(@createdb_cmd) == 0 or die "Creating $dbname database failed: $?";
+  system( join( ' ', @createdb_cmd ) ) == 0 or die "Creating $dbname database failed: $?";
 }
 
 sub load_database {
@@ -136,12 +133,12 @@ sub load_database {
 
   # run with clean environment
   my @restore_cmd = (
-    '/usr/bin/env', '-i', $pg_restore, '-d',       $dbname,      '-h', 'localhost', '-p',
-    $pg_port,       '-U', 'postgres',  '--no-acl', '--no-owner', '-w', $dump_file
+    $pg_restore, '-d',       $dbname,      '-h', 'localhost', '-p', $pg_port, '-U',
+    'postgres',  '--no-acl', '--no-owner', '-w', $dump_file
   );
 
   #say STDERR join(' ', @restore_cmd);
-  system(@restore_cmd) == 0 or die "Restoring $dbname database failed: $?";
+  system( join( ' ', @restore_cmd ) ) == 0 or die "Restoring $dbname database failed: $?";
 }
 
 sub init_database {
@@ -152,7 +149,7 @@ sub init_database {
 
 sub init_sql_evaluator {
   my $name = shift;
-  my $db = $treebanks{$name}->{config}->{db};
+  my $db   = $treebanks{$name}->{config}->{db};
   return PMLTQ::SQLEvaluator->new(
     undef,
     { connect => {

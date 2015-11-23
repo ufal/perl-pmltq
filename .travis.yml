@@ -5,35 +5,45 @@ addons:
   postgresql: "9.3"
 
 perl:
-  - "5.14"
-  # - "5.16"
-  # - "5.18"
-  # - "5.20"
-  # - "blead"
+  - '5.14'
+  - '5.16'
+  - '5.18'
+  - '5.20'
+  - 'blead'
 
 env:
-  - "PG_PORT=5432 HARNESS_PERL_SWITCHES='-MDevel::Cover=+ignore,local,^t/'"
+  global:
+  - PG_PORT=5432
 
 matrix:
   include:
     - perl: 5.18
-      env: COVERAGE=1
+      env:
+        - COVERAGE=1
+        - 'HARNESS_PERL_SWITCHES="-MDevel::Cover=+ignore,local,^t/"'
   allow_failures:
-    - perl: "blead"
+    - perl: blead
 
 branches:
   except:
     - releases
 
 before_install:
-  - git clone git://github.com/travis-perl/helpers ~/travis-perl-helpers
+  - git config --global user.name "TravisCI"
+  - git config --global user.email $HOSTNAME":not-for-mail@travis-ci.org"
+  - git fetch --unshallow || exit 0
+  - git fetch origin master:master
+  - git fetch origin releases:releases
+  - git clone --depth=1 git://github.com/travis-perl/helpers ~/travis-perl-helpers
   - source ~/travis-perl-helpers/init
   - build-perl
+  - local-lib travis
   - perl -V
   - build-dist
   - cd $BUILD_DIR
 
 install:
+  - cpan-install Devel::Cover
   - cpan-install --deps
   - cpan-install --coverage
 
@@ -41,10 +51,14 @@ before_script:
   - coverage-setup
 
 script:
-  - prove -l -j$(test-jobs) $(test-files)   # parallel testing
+  - prove -j$(test-jobs) $(test-files)   # parallel testing
 
 after_success:
   - coverage-report
+
+cache:
+  directories:
+    - $PERLBREW_HOME/libs
 
 notifications:
   email:
