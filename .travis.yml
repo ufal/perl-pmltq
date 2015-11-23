@@ -40,11 +40,12 @@ before_install:
   - '[ `perlbrew lib list` ] || perlbrew lib create travis'
   - perlbrew use $PERLBREW_PERL@travis
   - perl -V
-  - build-dist
-  - cd $BUILD_DIR
+  - cpan-install ExtUtils::MakeMaker~6.31 Dist::Zilla
+  - "cpan-install $(dzil authordeps --missing --versions | grep -v '^inc::' | sed -e's/ = 0$//' -e's/ = /~/')"
+  - dzil build --in="$(pwd)/build_dir"
+  - cd build_dir
 
 install:
-  - cpan-install Devel::Cover
   - cpan-install --deps
   - cpan-install --coverage
 
