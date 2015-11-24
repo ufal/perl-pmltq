@@ -7,11 +7,11 @@ use PMLTQ::Base 'PMLTQ::Command';
 has usage => sub { shift->extract_usage };
 
 sub run {
-  my $self = shift;
+  my $self   = shift;
   my $config = $self->config;
 
   my $dbh = $self->sys_db;
-  $dbh->do('DROP DATABASE '.$config->{db}->{name});
+  $dbh->do("DROP DATABASE \"$config->{db}->{name}\";") or die $dbh->errstr;
   $dbh->disconnect;
 }
 

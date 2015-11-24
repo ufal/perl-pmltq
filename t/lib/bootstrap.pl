@@ -4,10 +4,11 @@ BEGIN { $ENV{DIFF_OUTPUT_UNICODE} = 1 }
 use Test::Most;
 use File::Spec;
 use File::Slurp;
+use Cwd 'abs_path';
 use File::Which 'which';
 use File::Path qw/make_path/;
 use File::Basename qw/dirname basename/;
-use lib File::Spec->rel2abs( File::Spec->catdir( dirname(__FILE__), File::Spec->updir, File::Spec->updir, 'lib' ) );
+use lib abs_path( File::Spec->catdir( dirname(__FILE__), File::Spec->updir, File::Spec->updir, 'lib' ) );
 
 use Test::PostgreSQL;
 use Test::MockModule;
@@ -25,16 +26,24 @@ use PMLTQ::Command;
 
 binmode STDOUT, ':utf8';
 
-my $base_dir = File::Spec->rel2abs( File::Spec->catdir( dirname(__FILE__), File::Spec->updir ) );
+my $base_dir = abs_path( File::Spec->catdir( dirname(__FILE__), File::Spec->updir ) );
 my $treebanks_dir = File::Spec->catdir( $base_dir, 'treebanks' );
 
-my ( $pg_restore, $pg_create_db, $pgsql, $pg_port, @treebanks );
+my ( $pg_restore, $pg_create_db, $pgsql, $pg_port, @treebanks, %treebanks, %config_cache );
 
 my $results_base_dir = File::Spec->catdir( $base_dir, 'results' );
 my $queries_base_dir = File::Spec->catdir( $base_dir, 'queries' );
 
 sub generate_port {
   IO::Socket::IP->new( Listen => 5, LocalAddr => '127.0.0.1' )->sockport;
+}
+
+sub random_string {
+  my @chars = ( 'A' .. 'Z', 'a' .. 'z' );
+  my $string;
+  $string .= $chars[ rand @chars ] for 1 .. 8;
+
+  return $string;
 }
 
 $pg_port = $ENV{PG_PORT} || generate_port();
@@ -50,7 +59,9 @@ my %db = (
 my $CommandsMock = Test::MockModule->new('PMLTQ::Commands');
 $CommandsMock->mock(
   _load_config => sub {
-    my $config = $CommandsMock->original('_load_config')->(@_);
+    my $filename = abs_path(shift);
+    return $config_cache{$filename} if exists $config_cache{$filename};
+    my $config = $CommandsMock->original('_load_config')->($filename);
 
     # tamper db connection
     while ( my ( $key, $value ) = each %db ) {
@@ -58,20 +69,23 @@ $CommandsMock->mock(
     }
 
     $config->{sys_db} = 'postgres';
-    return $config;
-  });
+    $config->{db}->{name} = random_string();    # Randomize database name to allow running concurrent tests
+    return $config_cache{$filename} = $config;
+  } );
 
 sub treebanks {
   return @treebanks if (@treebanks);
 
-  @treebanks = map {
-    return {
+  %treebanks = map {
+    $_ => {
       name   => $_,
       dir    => File::Spec->catdir( $treebanks_dir, $_ ),
       config => PMLTQ::Commands::_load_config( File::Spec->catdir( $treebanks_dir, $_, 'pmltq.yml' ) ),
       dump   => File::Spec->catdir( $treebanks_dir, $_, 'database.dump' ),
-    };
+      }
   } read_dir $treebanks_dir;
+
+  @treebanks = values %treebanks;
 }
 
 my @resources = (
@@ -82,16 +96,14 @@ Treex::PML::AddResourcePath(@resources);
 Treex::PML::UseBackends(qw(Storable PMLBackend PMLTransformBackend));
 
 sub start_postgres {
-  return if $ENV{TRAVIS};                                             # We use Travis Postgresql addon
-
-  my $test_dsn = "DBI:Pg:dbname=test;host=127.0.0.1;port=$pg_port;user=postgres";
-
   $pg_restore = $ENV{PG_RESTORE} || which('pg_restore');
   plan skip_all => 'Cannot find pg_restore in your path and is not provided in PG_RESTORE variable either'
     unless $pg_restore;
   $pg_create_db = $ENV{PG_CREATE_DB} || which('createdb');
   plan skip_all => 'Cannot find createdb in your path and is not provided in PG_CREATE_DB variable either'
     unless $pg_create_db;
+
+  return if $ENV{TRAVIS};    # We use Travis Postgresql addon
 
   $pgsql = Test::PostgreSQL->new(
     port       => $pg_port,
@@ -107,10 +119,9 @@ sub start_postgres {
 sub create_db {
   my $dbname = shift;
 
-  my @createdb_cmd
-    = ( '/usr/bin/env', '-i', $pg_create_db, '-h', 'localhost', '-p', $pg_port, '-U', 'postgres', $dbname );
+  my @createdb_cmd = ( $pg_create_db, '-h', 'localhost', '-p', $pg_port, '-U', 'postgres', $dbname );
 
-  system(@createdb_cmd) == 0 or die "Creating $dbname database failed: $?";
+  system( join( ' ', @createdb_cmd ) ) == 0 or die "Creating $dbname database failed: $?";
 }
 
 sub load_database {
@@ -122,12 +133,12 @@ sub load_database {
 
   # run with clean environment
   my @restore_cmd = (
-    '/usr/bin/env', '-i', $pg_restore, '-d',       $dbname,      '-h', 'localhost', '-p',
-    $pg_port,       '-U', 'postgres',  '--no-acl', '--no-owner', '-w', $dump_file
+    $pg_restore, '-d',       $dbname,      '-h', 'localhost', '-p', $pg_port, '-U',
+    'postgres',  '--no-acl', '--no-owner', '-w', $dump_file
   );
 
   #say STDERR join(' ', @restore_cmd);
-  system(@restore_cmd) == 0 or die "Restoring $dbname database failed: $?";
+  system( join( ' ', @restore_cmd ) ) == 0 or die "Restoring $dbname database failed: $?";
 }
 
 sub init_database {
@@ -138,16 +149,17 @@ sub init_database {
 
 sub init_sql_evaluator {
   my $name = shift;
+  my $db   = $treebanks{$name}->{config}->{db};
   return PMLTQ::SQLEvaluator->new(
     undef,
     { connect => {
-        database       => $name,
-        host           => 'localhost',
-        port           => $pg_port,
+        database       => $db->{name},
+        host           => $db->{host},
+        port           => $db->{port},
         driver         => 'Pg',
-        username       => 'postgres',
+        username       => $db->{user},
         layout_version => 2,
-        password       => '',
+        password       => $db->{password},
       } } );
 }
 

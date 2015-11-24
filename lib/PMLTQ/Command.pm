@@ -34,7 +34,7 @@ sub _db_connect {
   my ( $driver, $database, $host, $port, $user, $password ) = @_;
   die 'Database driver ' . $driver . ' is not supported!\n' unless $driver eq 'Pg';
 
-  my $dbh = DBI->connect( 'DBI:' . $driver . ':dbname=' . $database . ';host=' . $host . ';port=' . $port,
+  my $dbh = DBI->connect( 'DBI:' . $driver . ':database=' . $database . ';host=' . $host . ';port=' . $port,
     $user, $password, { RaiseError => 1, PrintError => 1 } )
     or die "Unable to connect to database!\n$DBI::errstr\n";
   return $dbh;

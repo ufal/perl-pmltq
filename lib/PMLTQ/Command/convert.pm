@@ -5,7 +5,6 @@ package PMLTQ::Command::convert;
 use PMLTQ::Base 'PMLTQ::Command';
 
 use File::Path qw( make_path );
-use Module::Load;
 use PMLTQ::Command;
 use PMLTQ::PML2BASE;
 use Treex::PML;
