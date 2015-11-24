@@ -13,7 +13,6 @@ use Treex::PML::Schema;
 use POSIX qw(ceil floor);
 use PMLTQ::Relation;
 use UNIVERSAL::DOES;
-use if $ENV{TREEX_EXTENSION}, 'Treex::Core::Document';
 
 use PMLTQ::Common qw(:constants first min max uniq ListV AltV SeqV compute_column_data_type compute_expression_data_type compute_expression_data_type_pt);
 

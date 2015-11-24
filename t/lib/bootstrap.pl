@@ -19,12 +19,17 @@ use IO::Socket::IP;
 use List::Util 'pairfirst';
 use Scalar::Util 'blessed';
 use List::MoreUtils 'zip';
+use Getopt::Long;
 
 use PMLTQ;
 use PMLTQ::SQLEvaluator;
 use PMLTQ::Command;
 
 binmode STDOUT, ':utf8';
+
+my (%filter_treebanks, %filter_query);
+GetOptions('treebank|t=s' => sub { shift; $filter_treebanks{ shift() } = 1 },
+           'query|q=s' => sub { shift; $filter_query{ shift() } = 1 });
 
 my $base_dir = abs_path( File::Spec->catdir( dirname(__FILE__), File::Spec->updir ) );
 my $treebanks_dir = File::Spec->catdir( $base_dir, 'treebanks' );
@@ -86,6 +91,8 @@ sub treebanks {
   } read_dir $treebanks_dir;
 
   @treebanks = values %treebanks;
+  @treebanks = grep { $filter_treebanks{$_->{name}} } @treebanks if %filter_treebanks;
+  @treebanks
 }
 
 my @resources = (
@@ -173,6 +180,7 @@ sub treebank_schemas {
   my $treebank_name = shift;
 
   return
+    grep { defined $_->get_root_name }
     map { Treex::PML::Factory->createPMLSchema( { filename => $_ } ) }
     read_dir( File::Spec->catdir( $treebanks_dir, $treebank_name, 'resources' ), prefix => 1 );
 }
@@ -208,9 +216,11 @@ sub load_queries {
   my $query_dir = File::Spec->catdir( $queries_base_dir, $treebank_name );
 
   return () unless -d $query_dir;
-  return sort { $a->{name} cmp $b->{name} }
+  my @queries = sort { $a->{name} cmp $b->{name} }
     map { { name => basename( $_, '.tq' ), text => scalar( read_file( $_, binmode => ':utf8' ) ) } }
     read_dir( $query_dir, prefix => 1 );
+  @queries = grep { $filter_query{$_->{name}} } @queries if %filter_query;
+  @queries
 }
 
 my %file_cache;

@@ -109,7 +109,7 @@ sub get_schemas {
 
 sub get_schema_names {
   my ($self)=@_;
-  return [uniq(map { $_->get_root_name }  $self->get_schemas)];
+  return [uniq(grep { defined } map { $_->get_root_name }  $self->get_schemas)];
 }
 
 sub get_type_decl_for_query_node {
@@ -220,7 +220,7 @@ sub get_user_defined_relations {
   if ($qnode_or_type) {
     my $type = ref($qnode_or_type) ? PMLTQ::Common::GetQueryNodeType($qnode_or_type,$self) : $qnode_or_type;
     my $schema_name = $self->get_schema_name_for($type);
-    return PMLTQ::Relation->relations_for_node_type($schema_name, $type);
+    return $schema_name ? PMLTQ::Relation->relations_for_node_type($schema_name, $type) : []; # Ignore if it doesn't have schema_name
   }
   return [
     map @{$self->get_user_defined_relations($_)}, grep $_, @{$self->get_node_types}

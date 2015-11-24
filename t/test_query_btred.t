@@ -26,8 +26,6 @@ use TredMacro;
 
 binmode STDOUT, ':utf8';
 
-my %query_filter = map { $_ => 1 } @ARGV;
-
 my $TypeMapperMock = Test::MockModule->new('PMLTQ::TypeMapper');
 
 $PMLTQ::BtredEvaluator::DEBUG //= 0;
@@ -92,7 +90,6 @@ for my $treebank ( treebanks() ) {
   $TypeMapperMock->mock( get_schemas => sub {@schemas} );
 
   my @queries = load_queries($treebank_name);
-  @queries = grep { $query_filter{$_->{name}} } @queries if %query_filter;
   for my $query ( @queries ) {
     my $name = $query->{name};
     my @args = ( $treebank_name, $query->{text} );
