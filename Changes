@@ -6,11 +6,13 @@ Revision history for {{$dist->name}}
  - Commands support YAML configuration, by default it's loading pmltq.yml in current directory
 
  [BUG FIXES]
+ - Fixed invalid use of Treex::PML::Factory->createList
 
  [DOCUMENTATION]
 
  [ENHANCEMENTS]
- - Fix sql errors when dropping tables
+ - Fixed sql errors when dropping tables
+ - Added TravisCI testing
 
 0.8.3
  - Released: 2014-11-05 11:12:31 UTC
