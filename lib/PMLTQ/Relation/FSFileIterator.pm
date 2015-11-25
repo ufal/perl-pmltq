@@ -15,7 +15,6 @@ use constant TREES=>3;
 use constant NODE=>4;
 use constant TREEX_DOC=>5;
 
-use Treex::PML::Node;
 use PMLTQ::Loader 'load_class';
 
 our $PROGRESS; ### newly added
@@ -73,7 +72,7 @@ sub set_file {
   if ($schema_name && $schema_name eq 'treex_document') {
     die "Please install Treex::Core if you want to use PML-TQ with treex files\n" unless load_class('Treex::Core::Document');
     $self->[TREEX_DOC] = Treex::Core::Document->new({pmldoc => $file}); # Will convert the file to Treex Document in place
-    $_[0]->_extract_trees;
+    $self->_extract_trees;
   } else {
     $self->[TREES] = [$file->trees];
   }

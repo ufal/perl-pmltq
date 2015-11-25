@@ -10,7 +10,6 @@ use base qw(PMLTQ::Relation::CurrentFileIterator);
 use constant TREES=>PMLTQ::Relation::CurrentFileIterator::FIRST_FREE;
 use constant TREEX_DOC=>PMLTQ::Relation::CurrentFileIterator::FIRST_FREE+1;
 
-use Treex::PML::Node;
 use PMLTQ::Loader 'load_class';
 
 our $PROGRESS; ### newly added
