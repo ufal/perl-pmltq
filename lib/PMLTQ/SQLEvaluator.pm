@@ -389,9 +389,6 @@ sub prepare_query {
   my $driver = $self->sql_driver;
   my $sql = $self->serialize_conditions($query_tree,
                                                      { %$opts,
-                                                       syntax=> (
-                                                         $driver eq 'Pg' ? 'postgres' : q()
-                                                        ),
                                                        #no_filters => $opts->{no_filters},
                                                        #node_limit=>$opts->{node_limit},
                                                        #row_limit=>$opts->{row_limit},
@@ -2015,7 +2012,7 @@ sub serialize_expression_pt {# pt stands for parse tree
                 $j=$extra_joins;
               } elsif ($cmp) {
                 # outer SELECT, we can't join there if nullable
-                if ($opts->{syntax} eq 'postgres' and $ALLOW_MISPLACED_PG_JOIN) {
+                if ($ALLOW_MISPLACED_PG_JOIN) {
                   # but in postgres, we may in fact JOIN to the current SELECT
                   # (and we do because EXISTS is very slow there,
                   # try e.g. the query: t-node [ 0x a/aux.rf a-node [] ]
@@ -2264,8 +2261,7 @@ sub serialize_expression_pt {# pt stands for parse tree
       } elsif ($name eq 'substr') {
         if ($args and @$args>1 and @$args<4) {
           my $cast_to_string;
-          if ($opts->{syntax} eq 'postgres' and
-                $self->compute_data_type($args->[0],$opts)!=COL_STRING) {
+          if ($self->compute_data_type($args->[0],$opts)!=COL_STRING) {
             $cast_to_string=1;
           }
           my @args = map { $self->serialize_expression_pt($_,$opts,$extra_joins) } @$args;
@@ -2278,8 +2274,7 @@ sub serialize_expression_pt {# pt stands for parse tree
       } elsif ($name=~/(?:replace|tr)$/) {
         if ($args and @$args==3) {
           my $cast_to_string;
-          if ($opts->{syntax} eq 'postgres' and
-                $self->compute_data_type($args->[0],$opts)!=COL_STRING) {
+          if ($self->compute_data_type($args->[0],$opts)!=COL_STRING) {
             $cast_to_string=1;
           }
           my @args = map { $self->serialize_expression_pt($_,$opts,$extra_joins) } @$args;
@@ -2295,10 +2290,8 @@ sub serialize_expression_pt {# pt stands for parse tree
       } elsif ($name eq 'substitute') {
         if ($args and @$args>=3 and @$args<=4) {
           my @cast_to_string;
-          if ($opts->{syntax} eq 'postgres') {
-            for (0..2) {
-              $cast_to_string[$_]= ($self->compute_data_type($args->[$_],$opts)!=COL_STRING) ? 1 : 0 if $_<@$args;
-            }
+          for (0..2) {
+            $cast_to_string[$_]= ($self->compute_data_type($args->[$_],$opts)!=COL_STRING) ? 1 : 0 if $_<@$args;
           }
           my @args = map { $self->serialize_expression_pt($_,$opts,$extra_joins) } @$args;
           for (0..2) {
@@ -2315,10 +2308,8 @@ sub serialize_expression_pt {# pt stands for parse tree
       } elsif ($name eq 'match') {
         if ($args and @$args>=2 and @$args<=3) {
           my @cast_to_string;
-          if ($opts->{syntax} eq 'postgres') {
-            for (0..1) {
-              $cast_to_string[$_]= ($self->compute_data_type($args->[$_],$opts)!=COL_STRING) ? 1 : 0 if $_<@$args;
-            }
+          for (0..1) {
+            $cast_to_string[$_]= ($self->compute_data_type($args->[$_],$opts)!=COL_STRING) ? 1 : 0 if $_<@$args;
           }
           my @args = map { $self->serialize_expression_pt($_,$opts,$extra_joins) } @$args;
           for (0..1) {
@@ -2462,7 +2453,7 @@ sub serialize_expression_pt {# pt stands for parse tree
           #                                       (that is q{\' \| \'$})
           #
           my $trim_separator = $args[1];
-          if ($opts->{syntax} eq 'postgres' and $trim_separator =~ /^(\s*E?)(['])(.*?)([']\s*)$/) {
+          if ($trim_separator =~ /^(\s*E?)(['])(.*?)([']\s*)$/) {
             my ($lead,$lead2,$body,$trail)=($1,$2,$3,$4);
             $body=~s/\\(.)/$1/g; # unquote '
             $body=quotemeta($body); # quote meta characters
@@ -2524,7 +2515,7 @@ sub serialize_expression_pt {# pt stands for parse tree
     } elsif ($pt=~s/^(['"])(.*)\1$/$2/s) { # literal string
       $pt=~s/\\(.)/$1/sg;
       $opts->{can_be_null}=1 if !length $pt;
-      if ($opts->{syntax} eq 'postgres' and $pt=~m/\\/) {
+      if ($pt=~m/\\/) {
         $pt=~s/'/\\'/sg;
         $pt=~s{\\}{\\\\}g;
         qq( E'$pt' );
@@ -2681,13 +2672,12 @@ sub serialize_predicate {
   }
   if (!defined $res) {
     if ($operator =~/[<>=]/) { # includes "fake is-between operator" <N,M>
-      my $len = $opts->{syntax} eq 'postgres' ? '' : '(15)';
       if ($L_type == COL_NUMERIC and
             $R_type != COL_NUMERIC) {
-        $left=qq{cast($left as varchar$len)};
+        $left=qq{cast($left as varchar)};
       } elsif ($R_type == COL_NUMERIC and
                  $L_type != COL_NUMERIC) {
-        $right=qq{cast($right as varchar$len)};
+        $right=qq{cast($right as varchar)};
       }
     }
     my $cmp =
@@ -2816,7 +2806,7 @@ sub serialize_element {
     my ($rel) = SeqV($node->{relation});
     if ($target and $rel) {
       return ['('.$self->relation($as_id,$rel,$target,
-                                  {%$opts,is_positive_conjunct=>(($opts->{is_positive_conjunct} && ($opts->{syntax} eq 'postgres' || !$cmp) )
+                                  {%$opts,is_positive_conjunct=>(($opts->{is_positive_conjunct} || !$cmp) 
                                                                  ? 1 : undef)},
                                   $opts
                                  ).')',$node];
