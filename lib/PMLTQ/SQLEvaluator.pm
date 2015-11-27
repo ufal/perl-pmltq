@@ -564,7 +564,7 @@ sub idx_to_pos {
       }
       $id_attrs=$id_attr{$type} ? qq{, "n"."$id_attr{$type}", "f"."top"} : q{, null, "f"."top"};
     }
-    my $sql=<<"EOF".$self->serialize_limit(1);
+    my $sql=<<"EOF". "LIMIT 1;";
 SELECT "f"."file", "f"."tree_no", "n"."#idx"-"n"."#root_idx" $id_attrs
 FROM "${node_tab}" "n" JOIN "${basename}__#files" "f" ON "n"."#root_idx"="f"."#idx"
 WHERE "n"."#idx" = ${idx}
@@ -871,12 +871,6 @@ sub run_sql_query {
     return $sth->fetchall_arrayref(undef,$opts->{limit});
   }
 }
-
-sub serialize_limit {
-  my ($self, $limit)=@_;
-  return 'LIMIT '.$limit.';';
-}
-
 
 # serialize to SQL (or SQL fragment)
 sub serialize_conditions {
@@ -1426,8 +1420,7 @@ sub build_sql {
     $have_where = 1 if @w;
   }
   if (defined $opts->{select_first}) {
-    my $limit = $self->serialize_limit(1,$have_where ? 0 : 1);
-    $limit =~ s{;\s*$}{};
+    my $limit = 'LIMIT 1';
     push @sql, ["\n".$limit,'space'];
   }
   if (@outputs) {
@@ -1521,10 +1514,10 @@ sub build_sql {
       unless ($opts->{no_distinct}) {
         if ($opts->{node_limit}) {
           if ($opts->{node_limit}<0 or $opts->{node_limit}==1) {
-            push @sql, [' '.$self->serialize_limit(abs($opts->{node_limit}),$have_where ? 0 : 1)];
+            push @sql, [' '.'LIMIT '.abs($opts->{node_limit}).';'];
           } else {
             unshift @sql, ['SELECT * FROM ('];
-            push @sql, [qq{\n) "results" }.$self->serialize_limit($opts->{node_limit},1)];
+            push @sql, [qq{\n) "results" }.'LIMIT '.$opts->{node_limit}.';'];
           }
         }
       }
@@ -1535,7 +1528,7 @@ sub build_sql {
     } elsif ($opts->{row_limit}) {
 #      if ($opts->{syntax} eq 'oracle') {
         unshift @sql, ['SELECT * FROM ('];
-        push @sql, [qq{) "#count" }.$self->serialize_limit($opts->{row_limit},1)];
+        push @sql, [qq{) "#count" }.'LIMIT '.$opts->{row_limit}.';'];
 #      } else {
 #       push @sql, [' '.$self->serialize_limit($opts->{row_limit},1)];
 #      }
