@@ -2,6 +2,15 @@ package PMLTQ;
 
 # ABSTRACT: Query engine and query language for trees in PML format
 
+=begin :prelude
+
+=for html
+<a href="https://travis-ci.org/ufal/perl-pmltq"><img src="https://travis-ci.org/ufal/perl-pmltq.svg?branch=master" alt="Build Status"></a>
+<a href="https://coveralls.io/github/ufal/perl-pmltq?branch=travis_ci"><img src="https://coveralls.io/repos/ufal/perl-pmltq/badge.svg?branch=travis_ci&amp;service=github" alt="Coverage Status"></a>
+<a href="https://badge.fury.io/pl/PMLTQ"><img src="https://badge.fury.io/pl/PMLTQ.svg" alt="CPAN version"></a>
+
+=end :prelude
+
 =head1 DESCRIPTION
 
 This is an implementation of a PML-TQ search engine (CGI module) and a

@@ -6,7 +6,7 @@ MANIFEST
 META.json
 META.yml
 README
-README.mkdn
+README.md
 dev/generate_grammar.pl
 lib/PMLTQ.pm
 lib/PMLTQ/Base.pm
