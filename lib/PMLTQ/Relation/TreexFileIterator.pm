@@ -6,15 +6,22 @@ use 5.006;
 use strict;
 use warnings;
 
+use Carp;
 use base qw(PMLTQ::Relation::CurrentFileIterator);
 use constant TREES=>PMLTQ::Relation::CurrentFileIterator::FIRST_FREE;
 use constant TREEX_DOC=>PMLTQ::Relation::CurrentFileIterator::FIRST_FREE+1;
+
+use PMLTQ::Loader 'load_class';
+use English qw(-no_match_vars); # Load this because otherwise Treex::Core ends up with error on Perl 5.14
 
 our $PROGRESS; ### newly added
 our $STOP; ### newly added
 
 sub new {
   my ($class,$conditions,$schema_root_name)=@_;
+
+  croak 'Please install Treex::Core if you want to use PML-TQ with treex files' unless load_class('Treex::Core::Document');
+
   my $self = CurrentFileIterator->new($conditions, $schema_root_name);
   $self->[TREES] = [];
   return bless $self, $class; # rebless
@@ -35,7 +42,7 @@ sub _next_file {
       push @{$self->[PMLTQ::Relation::CurrentFileIterator::FILE_QUEUE]}, TredMacro::GetSecondaryFiles($f);
       if (!defined($schema_name) or $schema_name eq PML::SchemaName($f)) {
         $self->[PMLTQ::Relation::CurrentFileIterator::FILE]=$f;
-        $self->[TREEX_DOC] = Treex::Core::Document->new({pmldoc => $f}) if $ENV{TREEX_EXTENSION};
+        $self->[TREEX_DOC] = Treex::Core::Document->new({pmldoc => $f}); # This will rebless the file document as Treex::Core::Document
         $self->[PMLTQ::Relation::CurrentFileIterator::TREE_NO]=0;
         $self->_extract_trees;
         my $n = $self->[PMLTQ::Relation::CurrentFileIterator::NODE] = $self->tree(0);
@@ -49,14 +56,13 @@ sub _next_file {
 # Don't use any treex specific methods, nodes might not be reblessed
 sub _extract_trees {
   my ($self)=@_;
-  my $file = $self->[PMLTQ::Relation::CurrentFileIterator::FILE];
-  # lets assume it's treex file
-  $self->[TREES] = [$file->trees];
-  foreach my $bundle ($file->trees) {
+  my $doc = $self->[TREEX_DOC];
+  # lets assume it's a treex doc
+  $self->[TREES] = [];
+  foreach my $bundle ($doc->get_bundles) {
     last unless defined $bundle->{zones};
-    foreach my $zone ($bundle->{zones}->values) {
-      push @{$self->[TREES]}, grep {defined}
-        map {$zone->{trees}->{$_ . "_tree"};} qw(a t n p);
+    foreach my $zone ($bundle->get_all_zones) {
+      push @{$self->[TREES]}, $zone->get_all_trees;
     }
   }
 }
@@ -67,7 +73,8 @@ sub next {
   my $n=$self->[PMLTQ::Relation::CurrentFileIterator::NODE];
   my $f=$self->[PMLTQ::Relation::CurrentFileIterator::FILE];
   while ($n) {
-    $n = $n->following ||
+    # Treex has following hacked but we want to have classic following
+    $n = Treex::PML::Node::following($n) ||
       (($PROGRESS ? $PROGRESS->() : 1) && $STOP && do { $n = undef; last }) ||
         $self->tree(++$self->[PMLTQ::Relation::CurrentFileIterator::TREE_NO]) || $self->_next_file();
 
