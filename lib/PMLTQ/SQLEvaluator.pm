@@ -27,9 +27,7 @@ BEGIN {
   import PMLTQ::Common qw(:tredmacro :constants);
 }
 
-use constant PREFER_LEFT_JOINS => {
-  postgres => 1, # 1 seams reasonable too
-};
+use constant {PREFER_LEFT_JOINS => 1};
 use constant USE_PLANNER => 'never'; #'forests'; # 'always', 'never', 'forests'
 use PMLTQ::Planner;
 
@@ -900,7 +898,6 @@ sub serialize_conditions {
       node_limit => $opts->{node_limit},
       row_limit => $opts->{row_limit},
       select_first => $opts->{select_first},
-      syntax=>$opts->{syntax},
       no_distinct => $opts->{no_distinct},
     });
   }
@@ -975,7 +972,6 @@ sub relation {
           join=>$opts->{join},
           is_positive_conjunct=>$opts->{is_positive_conjunct},
           expression => qq{file(\$$target)},
-          syntax => $opts->{syntax},
         },
         {
           id=>$opts->{id},
@@ -983,7 +979,6 @@ sub relation {
           join=>$opts->{join},
           is_positive_conjunct=>$opts->{is_positive_conjunct},
           expression => qq{file(\$$id)},
-          syntax => $opts->{syntax},
         },
         '=',$opts # there should be no ambiguity here, treat expressoins as positive
        );
@@ -1009,7 +1004,6 @@ sub relation {
           join=>$opts->{join},
           is_positive_conjunct=>$opts->{is_positive_conjunct},
           expression => qq{\$$target.$order},
-          syntax => $opts->{syntax},
         };
         $S = {
           id=>$opts->{id},
@@ -1017,7 +1011,6 @@ sub relation {
           join=>$opts->{join},
           is_positive_conjunct=>$opts->{is_positive_conjunct},
           expression => qq{\$$id.$order},
-          syntax => $opts->{syntax},
         };
       }
     }
@@ -1056,7 +1049,6 @@ sub relation {
           is_positive_conjunct=>$opts->{is_positive_conjunct},
           expression => qq{\$$id.$path},
           allow_non_atomic => 1,
-          syntax => $opts->{syntax},
         },
         qq{"$target"."#idx"},
         q(=),$opts,
@@ -1140,7 +1132,6 @@ sub user_defined_relation {
             join=>$opts->{join},
             expression => qq{\$$id.$path},
             is_positive_conjunct=>$opts->{is_positive_conjunct},
-            syntax => $opts->{syntax},
           },
           qq{"$target"."#idx"},
           q(=),$opts,
@@ -1320,7 +1311,6 @@ sub build_sql {
         id=>$id,
         parent_id=>$parent_id,
         join => $extra_joins,
-        syntax=>$opts->{syntax},
       });
       push @conditions, [$conditions,$n] if @$conditions;
     }
@@ -1447,7 +1437,6 @@ sub build_sql {
     $output_opts = {
       id     => $self->{id_map}{$first},
       join   => {},
-      syntax => $opts->{syntax},
       referred_nodes => {},
     };
     my (@f_sql,@f_where);
@@ -2024,7 +2013,7 @@ sub serialize_expression_pt {# pt stands for parse tree
                   $j=$extra_joins;
                 }
               } else {
-                $opts->{use_exists}||=1 unless (ref(PREFER_LEFT_JOINS) and PREFER_LEFT_JOINS->{$opts->{syntax}});
+                $opts->{use_exists}||=1 unless (PREFER_LEFT_JOINS);
                 #$j=$extra_joins;
                 if ($opts->{use_exists}) {
                   $j=$extra_joins;
@@ -2769,7 +2758,6 @@ sub serialize_element {
       join => {
         '..' => $opts->{join}, # where joins for nodes in the outer scope should go
       }, # $opts->{join}, # let subqueries use their own join
-      syntax=>$opts->{syntax},
     });
 
     if ($exists) {
