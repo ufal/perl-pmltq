@@ -16,6 +16,7 @@ use constant NODE=>4;
 use constant TREEX_DOC=>5;
 
 use PMLTQ::Loader 'load_class';
+use English qw(-no_match_vars); # Load this because otherwise Treex::Core ends up with error on Perl 5.14
 
 our $PROGRESS; ### newly added
 our $STOP; ### newly added
@@ -70,7 +71,7 @@ sub set_file {
   my $schema_name = $file->schema->get_root_name;
 
   if ($schema_name && $schema_name eq 'treex_document') {
-    die "Please install Treex::Core if you want to use PML-TQ with treex files\n" unless load_class('Treex::Core::Document');
+    croak 'Please install Treex::Core if you want to use PML-TQ with treex files' unless load_class('Treex::Core::Document');
     $self->[TREEX_DOC] = Treex::Core::Document->new({pmldoc => $file}); # Will convert the file to Treex Document in place
     $self->_extract_trees;
   } else {

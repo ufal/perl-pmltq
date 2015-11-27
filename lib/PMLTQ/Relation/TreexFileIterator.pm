@@ -6,11 +6,13 @@ use 5.006;
 use strict;
 use warnings;
 
+use Carp;
 use base qw(PMLTQ::Relation::CurrentFileIterator);
 use constant TREES=>PMLTQ::Relation::CurrentFileIterator::FIRST_FREE;
 use constant TREEX_DOC=>PMLTQ::Relation::CurrentFileIterator::FIRST_FREE+1;
 
 use PMLTQ::Loader 'load_class';
+use English qw(-no_match_vars); # Load this because otherwise Treex::Core ends up with error on Perl 5.14
 
 our $PROGRESS; ### newly added
 our $STOP; ### newly added
@@ -18,7 +20,7 @@ our $STOP; ### newly added
 sub new {
   my ($class,$conditions,$schema_root_name)=@_;
 
-  die "Please install Treex::Core if you want to use PML-TQ with treex files\n" unless load_class('Treex::Core::Document');
+  croak 'Please install Treex::Core if you want to use PML-TQ with treex files' unless load_class('Treex::Core::Document');
 
   my $self = CurrentFileIterator->new($conditions, $schema_root_name);
   $self->[TREES] = [];

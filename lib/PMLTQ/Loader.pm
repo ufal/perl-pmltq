@@ -34,8 +34,12 @@ sub load_class {
   # Check module name
   return undef if !$class || $class !~ /^\w(?:[\w:']*\w)?$/;
 
-  # Load
-  return 1 if $class->can('new') || eval "require $class; 1";
+  # Loaded
+  return 1 if $class->can('new') || eval {
+    my $file = class_to_path($class);
+    require $file;
+    1;
+  };
 
   # Exists
   return undef if $@ =~ /^Can't locate \Q@{[class_to_path $class]}\E in \@INC/;
