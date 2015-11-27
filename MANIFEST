@@ -80,6 +80,7 @@ lib/PMLTQ/Relation/TreexFilelistIterator.pm
 lib/PMLTQ/SQLEvaluator.pm
 lib/PMLTQ/TypeMapper.pm
 lib/PMLTQ/_Parser.pm
+perlcritic.rc
 script/pml2base
 script/pmltq
 share/resources/pmltq_cgi_conf_schema.xml
@@ -192,9 +193,12 @@ t/treebanks/pdt_test/resources/mdata_30_schema.xml
 t/treebanks/pdt_test/resources/tdata_30_schema.xml
 t/treebanks/pdt_test/resources/vallex_schema.xml
 t/treebanks/pdt_test/resources/wdata_30_schema.xml
-t/treebanks/treex_test/data/f00001.treex.gz
-t/treebanks/treex_test/data/f00002.treex.gz
-t/treebanks/treex_test/data/f00003.treex.gz
+t/treebanks/treex_test/data/1.treex.gz
+t/treebanks/treex_test/data/2.treex.gz
+t/treebanks/treex_test/data/3.treex.gz
+t/treebanks/treex_test/data/4.treex.gz
+t/treebanks/treex_test/data/5.treex.gz
+t/treebanks/treex_test/data/6.treex.gz
 t/treebanks/treex_test/database.dump
 t/treebanks/treex_test/pmltq.yml
 t/treebanks/treex_test/resources/treex_schema.xml
