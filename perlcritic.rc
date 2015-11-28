@@ -1,2 +1,2 @@
 [TestingAndDebugging::RequireUseStrict]
-equivalent_modules = Test::Most,PMLTQ::Base
+equivalent_modules = Test::Most PMLTQ::Base

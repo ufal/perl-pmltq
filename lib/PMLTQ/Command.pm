@@ -10,7 +10,18 @@ use Pod::Usage 'pod2usage';
 
 has config => sub { die 'Command has no configuration'; };
 
-has usage => sub { 'Usage: ' };
+has usage => sub {'Usage: '};
+
+has term => sub {
+  require Term::UI;
+  require Term::ReadLine;
+  Term::ReadLine->new('pmltq');
+};
+
+has term_encoding => sub {
+  require Term::Encoding;
+  Term::Encoding::get_encoding();
+};
 
 sub run {
   die 'Override by parent class';
@@ -92,6 +103,54 @@ sub run_sql_from_file {
       print STDERR "SQL FAILED:\t$s\n\t$@\n" if $@;
     }
   }
+}
+
+# Borrowed from https://metacpan.org/release/Dist-Zilla
+sub prompt_str {
+  my ( $self, $prompt, $arg ) = @_;
+
+  $arg ||= {};
+  my $default = $arg->{default};
+  my $check   = $arg->{check};
+
+  require Encode;
+  my $term_encoding = $self->term_encoding;
+
+  my $encode
+    = $term_encoding
+    ? sub { Encode::encode( $term_encoding, shift, Encode::FB_CROAK() ) }
+    : sub {shift};
+  my $decode
+    = $term_encoding
+    ? sub { Encode::decode( $term_encoding, shift, Encode::FB_CROAK() ) }
+    : sub {shift};
+
+  my $input_bytes = $self->term->get_reply(
+    prompt => $encode->($prompt),
+    allow  => $check || sub { defined $_[0] and length $_[0] },
+    ( defined $default
+      ? ( default => $encode->($default) )
+      : ()
+    ),
+  );
+
+  my $input = $decode->($input_bytes);
+  chomp $input;
+
+  return $input;
+}
+
+sub prompt_yn {
+  my ( $self, $prompt, $arg ) = @_;
+  $arg ||= {};
+  my $default = $arg->{default};
+
+  my $input = $self->term->ask_yn(
+    prompt => $prompt,
+    ( defined $default ? ( default => $default ) : () ),
+  );
+
+  return $input;
 }
 
 1;

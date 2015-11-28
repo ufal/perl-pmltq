@@ -4,6 +4,7 @@ Revision history for {{$dist->name}}
  [API CHANGES]
  - Added new command system that is replacing old shell scripts
  - Commands support YAML configuration, by default it's loading pmltq.yml in current directory
+ - Added init command `pmltq init schema.xml` which will initialize treebank configuration based on schema
 
  [BUG FIXES]
  - Fixed invalid use of Treex::PML::Factory->createList

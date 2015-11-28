@@ -32,7 +32,7 @@ sub load_class {
   my ($class) = @_;
 
   # Check module name
-  return undef if !$class || $class !~ /^\w(?:[\w:']*\w)?$/;
+  return if !$class || $class !~ /^\w(?:[\w:']*\w)?$/;
 
   # Loaded
   return 1 if $class->can('new') || eval {
@@ -42,7 +42,7 @@ sub load_class {
   };
 
   # Exists
-  return undef if $@ =~ /^Can't locate \Q@{[class_to_path $class]}\E in \@INC/;
+  return if $@ =~ /^Can't locate \Q@{[class_to_path $class]}\E in \@INC/;
 
   # Real error
   die $@;

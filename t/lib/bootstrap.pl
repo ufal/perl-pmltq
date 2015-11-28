@@ -1,6 +1,3 @@
-
-BEGIN { $ENV{DIFF_OUTPUT_UNICODE} = 1 }
-
 use Test::Most;
 use File::Spec;
 use File::Slurp;
@@ -25,7 +22,7 @@ use PMLTQ;
 use PMLTQ::SQLEvaluator;
 use PMLTQ::Command;
 
-binmode STDOUT, ':utf8';
+binmode STDOUT, ':encoding(UTF-8)';
 
 my (%filter_treebanks, %filter_query);
 GetOptions('treebank|t=s' => sub { shift; $filter_treebanks{ shift() } = 1 },

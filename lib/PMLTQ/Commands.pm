@@ -8,7 +8,8 @@ use Cwd 'getcwd';
 use File::Basename 'fileparse';
 use File::Spec;
 use Getopt::Long ();
-use Hash::Merge qw( merge );
+use Hash::Merge 'merge';
+use List::MoreUtils 'apply';
 use PMLTQ::Loader qw/find_modules load_class/;
 use YAML::Tiny;
 
@@ -22,7 +23,8 @@ sub DEFAULT_CONFIG {
       driver => 'Pg',
       host   => 'localhost',
       port   => 5432
-    } };
+    }
+  };
 }
 
 sub run {
@@ -31,33 +33,45 @@ sub run {
   if ( $name && $name =~ /^\w+$/ && ( $name ne 'help' || $args[0] ) ) {
     $name = shift @args if my $help = $name eq 'help';
 
-    my $module = "PMLTQ::Command::$name";
-
-    die qq{Unknown command "$name", maybe you need to install it?\n} unless load_class($module);
-    die qq{Command doesn't inherit from PMLTQ::Command} unless $module->isa('PMLTQ::Command');
-
-    my $config = _parse_args( \@args );
-    my $command = $module->new( config => $config );
+    my $command = _command( "PMLTQ::Command::$name", \@args );
     return $help ? $command->help : $command->run(@args);
   }
+  print "Available commands:\n\t", join( "\n\t", sort { $a cmp $b } _available_commands() ), "\n";
+}
 
-  print "Available commands:\n\t",
-    join( "\n\t", sort map { s/^PMLTQ::Command:://; $_ } find_modules('PMLTQ::Command') ), "\n";
+sub _available_commands {
+  apply {s/^PMLTQ::Command:://} find_modules('PMLTQ::Command');
+}
+
+sub _command {
+  my ( $module, $args ) = @_;
+
+  die qq{Unknown command "$module", maybe you need to install it?\n} unless load_class($module);
+  die qq{Command doesn't inherit from PMLTQ::Command} unless $module->isa('PMLTQ::Command');
+
+  my $config = _parse_args($args);
+  return $module->new( config => $config );
 }
 
 sub _parse_args {
-  my $p           = Getopt::Long::Parser->new( config => [qw/pass_through permute no_ignore_case no_auto_abbrev/] );
+  my $args        = shift;
+  my $p           = Getopt::Long::Parser->new( config => [qw/pass_through no_ignore_case no_auto_abbrev/] );
   my $config_file = '';
   my $config      = {};
+
   my $command_line_config = {};
+  my @unprocessed_args    = ();
 
   $p->getoptionsfromarray(
-    @_,
+    $args,
     'c|config=s' => \$config_file,
     '<>'         => sub {
       my $arg = shift;
       my ( $path, $value ) = $arg =~ m/^--([a-z0-9-_]+)=(.*)$/;
-      return unless $path;
+      unless ($path) {
+        push @unprocessed_args, $arg;    # push back to args
+        return;
+      }
 
       my @path = split /-/, $path;
       my $name = pop @path;
@@ -67,17 +81,19 @@ sub _parse_args {
         $ref = $ref->{$part};
       }
       $ref->{$name} = $value;
-    } );
+    }
+  );
 
   if ( $config_file ne '--' ) {
     if ($config_file) {
       die "Configuration file '$config_file' does not exists or is not readable" unless -r $config_file;
-    }
-    else {
+    } else {
       $config_file = File::Spec->catfile( getcwd(), 'pmltq.yml' );
       $config_file = undef unless -r $config_file;
     }
   }
+
+  push @$args, @unprocessed_args if @unprocessed_args > 0;
 
   $config = _load_config($config_file) if $config_file;
 
@@ -94,21 +110,17 @@ sub _load_config {
       <STDIN>;
     };
     eval { $data = YAML::Tiny->read_string($yaml_str) };
-  }
-  else {
+  } else {
     eval { $data = YAML::Tiny->read($config_file) };
   }
   if ( $@ && $@ =~ m/YAML_LOAD_ERR/ ) {
     die "Unable to load config file '$config_file'\n";
-  }
-  elsif ( $@ && $@ =~ m/YAML_PARSE_ERR/ ) {
+  } elsif ( $@ && $@ =~ m/YAML_PARSE_ERR/ ) {
     $@ =~ s/\n.*//g;
     die "Unable to parse config file '$config_file'\n\t$@\n";
-  }
-  elsif ( $config_file eq '--' && !$data ) {
+  } elsif ( $config_file eq '--' && !$data ) {
     die "Unable to parse config from STDIN:\n$yaml_str\n";
-  }
-  elsif ( !$data ) {
+  } elsif ( !$data ) {
     die "Unable to open config file '$config_file'\n";
   }
 
@@ -127,8 +139,8 @@ sub _load_config {
   if ( $config->{layers} ) {
     for my $lr ( @{ $config->{layers} } ) {
       next unless exists $lr->{'related-schema'};
-      $lr->{'related-schema'}
-        = [ map { File::Spec->rel2abs( $_, $config->{resources} ) } @{ $lr->{'related-schema'} } ];
+      $lr->{'related-schema'} =
+        [ map { File::Spec->rel2abs( $_, $config->{resources} ) } @{ $lr->{'related-schema'} } ];
     }
   }
 
