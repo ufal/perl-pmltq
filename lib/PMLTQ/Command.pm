@@ -44,11 +44,7 @@ sub help {
 sub _db_connect {
   my ( $database, $host, $port, $user, $password ) = @_;
 
-<<<<<<< HEAD
-  my $dbh = DBI->connect( 'DBI:' . $driver . ':database=' . $database . ';host=' . $host . ';port=' . $port,
-=======
   my $dbh = DBI->connect( 'DBI:Pg:dbname=' . $database . ';host=' . $host . ';port=' . $port,
->>>>>>> remove driver and syntax from commands and tests
     $user, $password, { RaiseError => 1, PrintError => 1 } )
     or die "Unable to connect to database!\n$DBI::errstr\n";
   return $dbh;

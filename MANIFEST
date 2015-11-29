@@ -81,6 +81,17 @@ lib/PMLTQ/SQLEvaluator.pm
 lib/PMLTQ/TypeMapper.pm
 lib/PMLTQ/_Parser.pm
 perlcritic.rc
+<<<<<<< 02203c02172fde6119bebbbf42a921587c95a635
+=======
+LICENSE
+MANIFEST
+MANIFEST.bak
+META.json
+META.yml
+README
+README.mkdn
+script/pml2base
+>>>>>>> fixing merge
 script/pmltq
 share/resources/pmltq_cgi_conf_schema.xml
 share/resources/tree_query_schema.xml
@@ -97,7 +108,10 @@ share/static/loading.html
 share/static/menubar/menu.css
 share/static/menubar/menu.js
 t/00-compile.t
+<<<<<<< 02203c02172fde6119bebbbf42a921587c95a635
 t/init_command.t
+=======
+>>>>>>> fixing merge
 t/lib/PML.pm
 t/lib/TredMacro.pm
 t/lib/bootstrap.pl
