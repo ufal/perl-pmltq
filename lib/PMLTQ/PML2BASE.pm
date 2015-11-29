@@ -283,7 +283,6 @@ sub column_spec {
           $target_id=$1;
         }
         my $comment = "Updating PMLREF column: $table/$column refers to nodes in $target of type $target_type";
-        $fh{'#POST_SQL'}->print("\\echo $comment\n") unless $opts{loader} eq 'file_list';
         my $col = $column;
         $col=~s/\.rf$//;
         # Possible fix for #329 - table name is renamed twice
@@ -467,10 +466,7 @@ sub convert_schema {
   $file_table = $root_name."__#files";
   $references_table = $root_name."__#references";
   my $pmlref_table = $root_name."__#pmlref_map";
-  $opts{loader} //= 'SH';
-  die "driver $opts{driver} and loader $opts{loader} is not supported" if $opts{loader} eq 'file_list' && ! $opts{driver} eq 'postgres';
-  open $fh{'#INIT_SH'},'>',get_full_path(to_filename("init",'sh')) || die "$!" if $opts{loader} eq 'SH';
-  open $fh{'#INIT_LIST'},'>',get_full_path(to_filename("init",'list')) || die "$!" if $opts{loader} eq 'file_list';
+  open $fh{'#INIT_LIST'},'>',get_full_path(to_filename("init",'list')) || die "$!";
   unless ($opts{'no-schema'}) {
     open $fh{'#INIT_SQL'},'>',get_full_path(to_filename("init",'sql'))  || die "$!";
     open $fh{'#DELETE_SQL'},'>',get_full_path(to_filename("delete",'sql'))  || die "$!";
@@ -488,88 +484,6 @@ sub convert_schema {
   $ldr_cmd = 'psql';
   if ($opts{'schema'} and !$opts{'incremental'}) {
     $extra_flags.=' --init|--finish'
-  }
-  if(exists $fh{'#INIT_SH'}) {
-  $fh{'#INIT_SH'}->print(<<"EOF");
-#!/bin/bash
-
-if [ -z "\$1" ]; then
-
-  echo "Usage: \$0$extra_flags -u|--user <db_user> [-d|--database <db_name>] [-w|--password <db_password>] [-h|--host <db_host>] [-p|--port <db_port>] -- [ <db_options> ]"
-
-  exit 1;
-fi
-db_cmd='$db_cmd'
-loader_cmd='$ldr_cmd'
-
-EOF
-
-  $fh{'#INIT_SH'}->print(<<'EOF');
-while [ $# -gt 0 ]; do
-    case "$1" in
-        -u|--user) user=$2; shift 2; ;;
-        -d|--database) db=$2; shift 2; ;;
-        -w|--password) password=$2; shift 2; ;;
-        -h|--host) host=$2; shift 2; ;;
-        -p|--port) port=$2; shift 2; ;;
-        -c|--db-cmd) db_cmd=$2; shift 2; ;;
-        -l|--loader-cmd) loader_cmd=$2; shift 2; ;;
-        --init|--finish) task=$2; shift 2; ;;
-        --) shift ; break ;;
-        *) echo "Unknown argument: $1" ; exit 1 ;;
-    esac
-done
-
-if [ -z $user ]; then
-  echo "Required parameter: -u|--user <db_user> missing"
-  exit 1;
-fi
-if [ -z $db ]; then
-  echo "Required parameter: -d|--database <db_name> missing"
-  exit 1;
-fi
-
-EOF
-  }
-
-  if(exists $fh{'#INIT_SH'}) {
-    $fh{'#INIT_SH'}->print(<<'EOF');
-    sql_files=""
-    export PGUSER=$user
-    export PGDATABASE=$db
-    [ -n $host ] && export PGHOST=$host
-    [ -n $port ] && export PGPORT=$port
-    if [ -n "$password" ]; then
-      [ -n "$TMPDIR" ] || TMPDIR="/tmp"
-      PGPASSFILE="${TMPDIR}/pgpass.$USER.$$.conf"
-      [ -f "$PGPASSFILE" ] && rm "$PGPASSFILE"
-      touch "$PGPASSFILE"; chmod 600 "$PGPASSFILE"
-      cat <<EOP >> $PGPASSFILE
-$host:$port:$db:$user:$password
-EOP
-      export PGPASSFILE
-    fi
-    run_sql_commands() {
-      sql_files="$sql_files '$1'"
-    }
-    run_loader_commands() {
-      sql_files="$sql_files '$1'"
-    }
-    finish() {
-      load_cmd=$db_cmd
-      [ -n "$@" ] && load_cmd="$db_cmd $@"
-      eval cat $sql_files | eval "$load_cmd";
-      [ -n "$password" ] && rm -f "$PGPASSFILE"
-      echo "Finished!"
-    }
-EOF
-  }
-  if ($opts{'schema'} and !$opts{'incremental'}) {
-    if(exists $fh{'#INIT_SH'}) {
-      $fh{'#INIT_SH'}->print(<<'EOF');
-if [ "@${task}" = "@--init" ]; then
-EOF
-    }
   }
 
   $schema{$node_table} = {
@@ -601,13 +515,8 @@ EOF
 
 
   unless ($opts{'no-schema'}) {
-    if(exists $fh{'#INIT_SH'}) {
-      $fh{'#INIT_SH'}->print(mkload(to_filename("delete",'sql'),{quiet=>1}));
-      $fh{'#INIT_SH'}->print(mkload(to_filename("init",'sql')));
-    } elsif(exists $fh{'#INIT_LIST'}) {
-      $fh{'#INIT_LIST'}->print(to_filename("delete",'sql')."\n");
-      $fh{'#INIT_LIST'}->print(to_filename("init",'sql')."\n");
-    }
+    $fh{'#INIT_LIST'}->print(to_filename("delete",'sql')."\n");
+    $fh{'#INIT_LIST'}->print(to_filename("init",'sql')."\n");
     dump_schema($schema);
     for my $decl ($schema->node_types) {
       my $tab = table_name($decl,1);
@@ -814,22 +723,11 @@ sub dump_schema {
   my $ctl = "${root_name}__pml_init.ctl";
   open $fh, ($append ? '>>' : '>'), get_full_path($ctl);
 
-
-  if(exists $fh{'#INIT_SH'}) {
-    print $fh <<"EOF";
-\\echo Loading PML meta-table
-\\copy "#PML" ("root", "schema_file", "data_dir", "flags", "schema") from '$schema_dump' delimiter '^'
-EOF
-    close $fh;
-    $fh{'#INIT_SH'}->print(mkdataload($ctl));
-  } elsif(exists $fh{'#INIT_LIST'}) {
-    print $fh <<"EOF";
+  print $fh <<"EOF";
 COPY "#PML" ("root", "schema_file", "data_dir", "flags", "schema") FROM '$schema_dump' DELIMITER '^'
 EOF
-    close $fh;
-    $fh{'#INIT_LIST'}->print("$ctl\n");
-  }
-    #print $fh{'#INIT_SH'}(qq{sleep 0.2; echo quit | sqlldr SILENT=ALL USERID="\$login" CONTROL="$ctl"\n});
+  close $fh;
+  $fh{'#INIT_LIST'}->print("$ctl\n");
 }
 
 sub analyze_string {
@@ -1351,41 +1249,17 @@ sub finish {
       open LOAD_SQL,'>',get_full_path($ctl);
       my $replace = $opts{'no-schema'} ? "APPEND" : "REPLACE";
       my $cols = join ',', map { qq{"$_->[0]"} } @{$desc->{colspec}};
-      if(exists $fh{'#INIT_SH'}) {
-        print LOAD_SQL qq{\\echo Loading data to table "$t"\n};
-        print LOAD_SQL qq{\\copy "$t" ($cols) from '$dump'\n};
-      } elsif( exists $fh{'#INIT_LIST'}) {
-        print LOAD_SQL qq{COPY "$t" ($cols) FROM '$dump'\n};
-      }
+      print LOAD_SQL qq{COPY "$t" ($cols) FROM '$dump'\n};
       close LOAD_SQL;
-      if(exists $fh{'#INIT_SH'}) {
-        $fh{'#INIT_SH'}->print(mkdataload($ctl));
-      } elsif(exists $fh{'#INIT_LIST'}) {
-        $fh{'#INIT_LIST'}->print("$ctl\n");
-      }
+      $fh{'#INIT_LIST'}->print("$ctl\n");
     }
   }
   if ($opts{'no-schema'}) {
     if ($opts{incremental}) {
-      if(exists $fh{'#INIT_SH'}) {
-        $fh{'#INIT_SH'}->print(mkload(to_filename("postprocess",'sql')));
-      } elsif(exists $fh{'#INIT_LIST'}) {
-        $fh{'#INIT_LIST'}->print(to_filename("postprocess",'sql')."\n");
-      }
-    }
-  } else {
-    if ($opts{'schema'}  and !$opts{'incremental'}) {
-      if(exists $fh{'#INIT_SH'}) {
-        $fh{'#INIT_SH'}->print(q(elif [ "@${task}" = "@--finish" ]; then)."\n");
-        } elsif(exists $fh{'#INIT_LIST'}) {
-          ###TODO
-        }
-    }
-    if(exists $fh{'#INIT_SH'}) {
-      $fh{'#INIT_SH'}->print(mkload(to_filename("postprocess",'sql')));
-    } elsif(exists $fh{'#INIT_LIST'}) {
       $fh{'#INIT_LIST'}->print(to_filename("postprocess",'sql')."\n");
     }
+  } else {
+    $fh{'#INIT_LIST'}->print(to_filename("postprocess",'sql')."\n");
     unless ($opts{incremental}) {
       for my $desc (values %schema) {
         for my $col (@{$desc->{colspec}}) {
@@ -1399,16 +1273,6 @@ sub finish {
     for my $desc (values %schema) {
       $fh{'#POST_SQL'}->print(qq{VACUUM FULL ANALYZE "$desc->{table}";\n\n});
     }
-    if ($opts{'schema'} and !$opts{'incremental'}) {
-      if(exists $fh{'#INIT_SH'}) {
-        $fh{'#INIT_SH'}->print(q(fi)."\n");
-        } elsif(exists $fh{'#INIT_LIST'}) {
-          ###TODO
-        }
-    }
-  }
-  if(exists $fh{'#INIT_SH'}) {
-    $fh{'#INIT_SH'}->print(qq{\nfinish;\n});
   }
 
   if ($opts{'dump-idx'}) {
