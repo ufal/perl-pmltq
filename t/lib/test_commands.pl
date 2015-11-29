@@ -19,7 +19,7 @@ sub database_connect {
   my $config = shift;
   my $dbh
     = DBI->connect(
-    'DBI:' . $config->{driver} . ':dbname=' . $config->{name} . ';host=' . $config->{host} . ';port=' . $config->{port},
+    'DBI:Pg:dbname=' . $config->{name} . ';host=' . $config->{host} . ';port=' . $config->{port},
     $config->{user}, $config->{password}, { RaiseError => 1, PrintError => 0 } );
   return $dbh;
 }

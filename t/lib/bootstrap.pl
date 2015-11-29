@@ -144,7 +144,6 @@ sub init_sql_evaluator {
         database       => $name,
         host           => 'localhost',
         port           => $pg_port,
-        driver         => 'Pg',
         username       => 'postgres',
         layout_version => 2,
         password       => '',

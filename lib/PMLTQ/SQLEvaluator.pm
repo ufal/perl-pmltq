@@ -424,7 +424,7 @@ sub get_type_decl_for_node {
 
 sub sql_driver {
   my ($self)=@_;
-  return $self->{connect}{driver};
+  return 'Pg';
 }
 
 sub connect {
@@ -446,15 +446,16 @@ sub connect {
     require DBD::Pg;
     import DBD::Pg qw(:async);
 
-    my $string = 'dbi:'.$cfg->{driver}.':'
-                         .($cfg->{host} ? ($cfg->{driver} eq 'DB2' ? 'hostname=' : 'host=').$cfg->{host}.';' : '' )
+    my $string = 'dbi:Pg:'
+                         .($cfg->{host} ? 'host='.$cfg->{host}.';' : '' )
                          .($cfg->{database} ? "database=".$cfg->{database}.';' : '')
                          .($cfg->{port} ? "port=".$cfg->{port} : '');
     $self->{dbi} = DBI->connect($string,
                         $cfg->{username},
                         $cfg->{password},
                         { RaiseError => 1,
-                          (($cfg->{driver} eq 'Pg') ? (AutoCommit=>0, ReadOnly => 1) : ())
+                          AutoCommit=>0, 
+                          ReadOnly => 1
                         }
                        );
     alarm(0);
