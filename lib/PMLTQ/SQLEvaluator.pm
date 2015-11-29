@@ -384,7 +384,6 @@ sub prepare_query {
 
   $self->{sql}=undef;
   $self->{join_id}=0;
-  my $driver = $self->sql_driver;
   my $sql = $self->serialize_conditions($query_tree,
                                                      { %$opts,
                                                        #no_filters => $opts->{no_filters},
@@ -420,11 +419,6 @@ sub get_type_decl_for_node {
   my $n = $self->{name2node}{$name};
   my $node_type = $n && ( PMLTQ::Common::GetQueryNodeType($n,$self) );
   return $node_type && $self->get_decl_for($node_type);
-}
-
-sub sql_driver {
-  my ($self)=@_;
-  return 'Pg';
 }
 
 sub connect {
@@ -478,24 +472,12 @@ sub run {
     $self->connect ||
     die("Not connected to DBI!\n");
   my $timeout = $opts->{timeout};
-  my $driver_name = $self->sql_driver;
   my $t0 = new Benchmark;
   # my $limit = abs(int( $self->{returns_nodes} ? $opts->{node_limit} : $opts->{row_limit} ));
   my $results = eval {
     if ($opts->{use_cursor}) {
-      if ($self->sql_driver eq 'Pg') {
-        my $buffer = $self->cursor_next(1); # just pre-fill the buffer
-        $opts->{return_sth} ? $self->{sth} : $buffer;
-      } else {
-        my $cursor = $self->{cursor};
-        $self->run_sql_query($self->{sth},{
-          timeout => $cursor->{timeout},
-          limit => $cursor->{limit},
-          timeout_callback => $opts->{timeout_callback},
-          return_sth => $opts->{return_sth},
-          RaiseError => 1,
-        });
-      }
+      my $buffer = $self->cursor_next(1); # just pre-fill the buffer
+      $opts->{return_sth} ? $self->{sth} : $buffer;
     } else {
       $self->run_sql_query($self->{sth},{
         #    ($limit ? (limit=> $limit) : ()),
@@ -524,8 +506,7 @@ sub run {
     $opts->{return_sth} ? '?'
       : $opts->{count} ? $results->[0][0]
       : scalar(@$results);
-    my $driver_name = $self->sql_driver;
-    print STDERR "$self->{id}\tOK\t$driver_name\t$no_results\t$time\n" if $self->{debug};
+    print STDERR "$self->{id}\tOK\tPg\t$no_results\t$time\n" if $self->{debug};
   }
   if ($opts->{return_sth}) {
     return $results;
@@ -748,7 +729,6 @@ sub run_sql_query {
   local $dbi->{LongReadLen} = $opts->{LongReadLen} if exists($opts->{LongReadLen});
   require Time::HiRes;
   my $canceled = 0;
-  my $driver_name = $self->sql_driver;
   if ($opts->{use_cursor}) {
 #    print STDERR "Use cursor\n";
     $self->close_cursor if $self->{cursor};
@@ -759,36 +739,33 @@ sub run_sql_query {
     $cursor->{buffer_size} = $size;
     $cursor->{distinct}={} if ($opts->{no_distinct} and $self->{returns_nodes});
     $cursor->{timeout} = $opts->{timeout};
-    if ($driver_name eq 'Pg') {
-      my $csr = "pmltq_".$$;
-      $cursor->{name}=$csr;
-      eval {
-        $dbi->do(qq{DECLARE "$csr" CURSOR FOR }.$sql_or_sth);
-      };
-      my $err = $@;
-      if ($err) {
-        $dbi->rollback();
-        die $err;
-      }
+    my $csr = "pmltq_".$$;
+    $cursor->{name}=$csr;
+    eval {
+      $dbi->do(qq{DECLARE "$csr" CURSOR FOR }.$sql_or_sth);
+    };
+    my $err = $@;
+    if ($err) {
+      $dbi->rollback();
+      die $err;
+    }
 
-      $cursor->{close} = sub {
-        eval { $dbi->do(qq{CLOSE "$csr"}) };
-        $dbi->rollback() if $@;
-      };
-      if ($opts->{return_sth}) {
-        $cursor->{sth} = $dbi->prepare(qq{FETCH $size FROM "$csr"},{ pg_async => 1 });
-        if ($opts->{prepare_only}) {
-          $self->{sth} = $cursor->{sth};
-        }
-#       print STDERR "Created sth for $size: $cursor->{sth}\n";
-        return $cursor->{sth};
-      } else {
-        return;
+    $cursor->{close} = sub {
+      eval { $dbi->do(qq{CLOSE "$csr"}) };
+      $dbi->rollback() if $@;
+    };
+    if ($opts->{return_sth}) {
+      $cursor->{sth} = $dbi->prepare(qq{FETCH $size FROM "$csr"},{ pg_async => 1 });
+      if ($opts->{prepare_only}) {
+        $self->{sth} = $cursor->{sth};
       }
+#     print STDERR "Created sth for $size: $cursor->{sth}\n";
+      return $cursor->{sth};
+    } else {
+      return;
     }
   }
-  my $sth = ref($sql_or_sth) ? $sql_or_sth : $dbi->prepare( $sql_or_sth,
-                                                            $driver_name eq 'Pg' ? { pg_async => 1 } : ());
+  my $sth = ref($sql_or_sth) ? $sql_or_sth : $dbi->prepare( $sql_or_sth,{ pg_async => 1 } );
   if ($opts->{use_cursor}) {
     $self->{cursor}{sth}=$sth;
   }
@@ -800,70 +777,36 @@ sub run_sql_query {
     }
   }
 
-  if ($driver_name eq 'Pg') {
-    my $step=0.05;
-    my $time=$opts->{timeout};
-    eval {
-      $sth->execute(ref($opts->{Bind}) ? @{$opts->{Bind}} : ());
-      if (defined $time) {
-        while (!$sth->pg_ready) {
-          $time-=$step;
-          Time::HiRes::sleep($step);
-          if ($time<=0) {
-            if ($opts->{'timeout_callback'} and $opts->{'timeout_callback'}->($self)) {
-              $time=$opts->{timeout};
-            } else {
-              $sth->pg_cancel();
-              $opts->{timeout} = 0 if $opts->{update_timeout};
-              die "TIMEOUT\n"
-            }
+  my $step=0.05;
+  my $time=$opts->{timeout};
+  eval {
+    $sth->execute(ref($opts->{Bind}) ? @{$opts->{Bind}} : ());
+    if (defined $time) {
+      while (!$sth->pg_ready) {
+        $time-=$step;
+        Time::HiRes::sleep($step);
+        if ($time<=0) {
+          if ($opts->{'timeout_callback'} and $opts->{'timeout_callback'}->($self)) {
+            $time=$opts->{timeout};
+          } else {
+            $sth->pg_cancel();
+            $opts->{timeout} = 0 if $opts->{update_timeout};
+            die "TIMEOUT\n"
           }
         }
       }
-      $sth->pg_result;
-    };
-    my $err = $@;
-    if ($err) {
-      $dbi->rollback();
-      die $err;
-    #} else {
-      #$dbi->commit();
     }
-    $opts->{timeout} = $time if $opts->{update_timeout};
-  } else {
-    eval {
-      print STDERR "TIMEOUT $opts->{timeout}\n" if defined($opts->{timeout}) and $self->{debug};
-      if (defined $opts->{timeout}) {
-        my $h = Sys::SigAction::set_sig_handler( 'ALRM',
-                                 sub {
-                                   if ($opts->{'timeout_callback'} and $opts->{'timeout_callback'}->($self)) {
-                                     alarm($opts->{timeout});
-                                   } else {
-                                     $canceled = 1;
-                                     my $res = $sth->cancel();
-                                     warn "Canceled: ".(defined($res) ? $res : 'undef');
-                                   }
-                                 }, #dont die (oracle spills its guts)
-                                 { mask=>[ qw( INT ALRM ) ] ,safe => 0 }
-                                );
-        alarm($opts->{timeout});
-        $sth->execute(ref($opts->{Bind}) ? @{$opts->{Bind}} : ());
-        alarm(0);
-      } else {
-        $sth->execute(ref($opts->{Bind}) ? @{$opts->{Bind}} : ());
-      }
-    };
-    alarm(0);
-    my $err = $@;
-    if ( $err ) {
-      $dbi->rollback();
-      if ($canceled) {
-        die "TIMEOUT"
-      } else {
-        die $err;
-      }
-    }
+    $sth->pg_result;
+  };
+  my $err = $@;
+  if ($err) {
+    $dbi->rollback();
+    die $err;
+  #} else {
+    #$dbi->commit();
   }
+  $opts->{timeout} = $time if $opts->{update_timeout};
+
   if ($opts->{return_sth}) {
     return $sth;
   } elsif ($opts->{use_cursor}) {
