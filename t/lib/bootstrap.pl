@@ -157,11 +157,18 @@ sub init_sql_evaluator {
   return PMLTQ::SQLEvaluator->new(
     undef,
     { connect => {
+<<<<<<< HEAD
         database       => $db->{name},
         host           => $db->{host},
         port           => $db->{port},
         driver         => 'Pg',
         username       => $db->{user},
+=======
+        database       => $name,
+        host           => 'localhost',
+        port           => $pg_port,
+        username       => 'postgres',
+>>>>>>> remove driver and syntax from commands and tests
         layout_version => 2,
         password       => $db->{password},
       } } );

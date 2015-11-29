@@ -42,10 +42,13 @@ sub help {
 }
 
 sub _db_connect {
-  my ( $driver, $database, $host, $port, $user, $password ) = @_;
-  die 'Database driver ' . $driver . ' is not supported!\n' unless $driver eq 'Pg';
+  my ( $database, $host, $port, $user, $password ) = @_;
 
+<<<<<<< HEAD
   my $dbh = DBI->connect( 'DBI:' . $driver . ':database=' . $database . ';host=' . $host . ';port=' . $port,
+=======
+  my $dbh = DBI->connect( 'DBI:Pg:dbname=' . $database . ';host=' . $host . ';port=' . $port,
+>>>>>>> remove driver and syntax from commands and tests
     $user, $password, { RaiseError => 1, PrintError => 1 } )
     or die "Unable to connect to database!\n$DBI::errstr\n";
   return $dbh;
@@ -55,7 +58,7 @@ sub db {
   my $self = shift;
 
   my $db = $self->config->{db};
-  return _db_connect( $db->{driver}, $db->{name}, $db->{host}, $db->{port}, $db->{user}, $db->{password} );
+  return _db_connect( $db->{name}, $db->{host}, $db->{port}, $db->{user}, $db->{password} );
 }
 
 sub sys_db {
@@ -71,7 +74,7 @@ sub sys_db {
 
   $sys_db->{$_} = $db->{$_} for ( grep { !defined $sys_db->{$_} } qw/user password/ );
 
-  return _db_connect( $db->{driver}, $sys_db->{name}, $db->{host}, $db->{port}, $sys_db->{user}, $sys_db->{password} );
+  return _db_connect( $sys_db->{name}, $db->{host}, $db->{port}, $sys_db->{user}, $sys_db->{password} );
 }
 
 sub run_sql_from_file {

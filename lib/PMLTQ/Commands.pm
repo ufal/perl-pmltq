@@ -20,7 +20,6 @@ sub DEFAULT_CONFIG {
     output_dir => File::Spec->catdir( $base_dir, 'sql_dump' ),
     resources  => File::Spec->catdir( $base_dir, 'resources' ),
     db         => {
-      driver => 'Pg',
       host   => 'localhost',
       port   => 5432
     }

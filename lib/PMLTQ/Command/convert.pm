@@ -34,8 +34,8 @@ sub run {
     $PMLTQ::PML2BASE::opts{'no-secondary-files'} = 1;
     $PMLTQ::PML2BASE::opts{'resource-dir'} = $config->{resources};
     $PMLTQ::PML2BASE::opts{'related-schema'} = $layer->{'related-schema'} || [];
-    $PMLTQ::PML2BASE::opts{'syntax'} = 'postgres';
-    $PMLTQ::PML2BASE::opts{'loader'} = 'file_list'; # SH
+    $PMLTQ::PML2BASE::opts{'syntax'} = 'postgres'; ### TODO REMOVE
+    $PMLTQ::PML2BASE::opts{'loader'} = 'file_list'; # SH ### TODO REMOVE
     $PMLTQ::PML2BASE::opts{'data-dir'} = $config->{data_dir};
     $PMLTQ::PML2BASE::opts{'output-dir'} = $output_dir;
     %{$PMLTQ::PML2BASE::opts{'ref'}}=();
