@@ -16,6 +16,7 @@ layers: # description of all data layers
     data: *.treex.gz
     references:
       a_coreference/target-node.rf: '-'
+      t-coref_text-link/target_node.rf: 't-node'
       n-node/a.rf: 'a-node'
 
       t-node/src_tnode.rf: 't-node'
@@ -33,7 +34,5 @@ layers: # description of all data layers
       a-root/s.rf: '-'
       a-root/giza_scores/counterpart.rf: '-'
       a-node/p_terminal.rf: 'p-terminal'
-      a-align-links/counterpart.rf: 'a-node'
-      t-align-links/counterpart.rf: 't-node'
-      a-node/align: '-'
+      align-links/counterpart.rf: '-'
 

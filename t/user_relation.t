@@ -1,5 +1,5 @@
 #!/usr/bin/env perl
-# Run this like so: `perl test_query.t'
+# Run this like so: `perl user_relation.t'
 #   Michal Sedlak <sedlakmichal@gmail.com>     2014/05/07 15:13:00
 
 use Test::Most;
@@ -35,6 +35,15 @@ subtest pdt_relations => sub {
   my $t_type_mapper = PMLTQ::TypeMapper->new( { fsfile => open_file($t_file) } );
 
   cmp_bag( $t_type_mapper->get_user_defined_relations('t-node'), [qw{eparent echild a/lex.rf|a/aux.rf}], 't-node user relations' );
+};
+
+subtest treex_relations => sub {
+  my @files = treebank_files($TREEX_TREEBANK);
+  my $file = shift @files;
+  my $type_mapper = PMLTQ::TypeMapper->new( { fsfile => open_file($file) } );
+
+  cmp_bag( $type_mapper->get_user_defined_relations('a-node'), [qw/eparent eparentC echild echildC/], 'a-node user relations' );
+  cmp_bag( $type_mapper->get_user_defined_relations('t-node'), [qw/eparent echild/], 't-node user relations' );
 };
 
 done_testing();

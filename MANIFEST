@@ -6,7 +6,6 @@ MANIFEST
 META.json
 META.yml
 README
-README.mkdn
 dev/generate_grammar.pl
 lib/PMLTQ.pm
 lib/PMLTQ/Base.pm
@@ -15,6 +14,7 @@ lib/PMLTQ/CGI.pm
 lib/PMLTQ/Command.pm
 lib/PMLTQ/Command/convert.pm
 lib/PMLTQ/Command/delete.pm
+lib/PMLTQ/Command/init.pm
 lib/PMLTQ/Command/initdb.pm
 lib/PMLTQ/Command/load.pm
 lib/PMLTQ/Command/query.pm
@@ -104,6 +104,7 @@ share/static/loading.html
 share/static/menubar/menu.css
 share/static/menubar/menu.js
 t/00-compile.t
+t/init_command.t
 t/lib/PML.pm
 t/lib/TredMacro.pm
 t/lib/bootstrap.pl
