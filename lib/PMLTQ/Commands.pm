@@ -4,7 +4,7 @@ package PMLTQ::Commands;
 
 use PMLTQ::Base -strict;
 
-use Cwd 'getcwd';
+use Cwd qw/getcwd abs_path/;
 use File::Basename 'fileparse';
 use File::Spec;
 use Getopt::Long ();
@@ -129,7 +129,7 @@ sub _load_config {
   my $base_dir = $config->{base_dir};
   unless ($base_dir) {
     ( undef, $base_dir, undef ) = fileparse($config_file);
-    $base_dir = File::Spec->rel2abs($base_dir);
+    $base_dir = abs_path($base_dir);
   }
 
   for ( grep { $config->{$_} } qw/data_dir resources output_dir/ ) {
