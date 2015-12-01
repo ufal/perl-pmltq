@@ -410,7 +410,8 @@ sub _abs2rel {
       return $file;
     }
   }
-  $file = Cwd::abs_path($file);
+  # This shouldn't be needed anymore
+  #$file = Cwd::abs_path($file);
   return File::Spec->abs2rel($file,$base);
 }
 
