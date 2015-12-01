@@ -160,7 +160,6 @@ sub init_sql_evaluator {
         database       => $db->{name},
         host           => $db->{host},
         port           => $db->{port},
-        driver         => 'Pg',
         username       => $db->{user},
         layout_version => 2,
         password       => $db->{password},

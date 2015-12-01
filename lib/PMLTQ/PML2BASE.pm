@@ -141,54 +141,30 @@ sub destroy {
   undef $relations;
 }
 
-sub varchar {
+sub varchar { ### TODO REMOVE
   my ($l,$non_ascii)=@_;
-  if (lc($opts{syntax}) eq 'oracle') {
-    return $non_ascii ? "NVARCHAR2($l)" :"VARCHAR2($l)";
-  } else {
-    return "VARCHAR($l)";
-  }
+  return "VARCHAR($l)";
 }
-sub numeric {
+sub numeric { ### TODO REMOVE
   my ($l)=@_;
-  if (lc($opts{syntax}) eq 'oracle') {
-    return "NUMBER($l)";
-  } else {
-    return "NUMERIC($l)";
-  }
+  return "NUMERIC($l)";
 }
-sub boolean {
+sub boolean { ### TODO REMOVE
   my ($l)=@_;
-  if (lc($opts{syntax}) eq 'postgres') {
-    return "BOOLEAN";
-  } else {
-    return "NUMBER(1)";
-  }
+  return "BOOLEAN";
 }
 
 sub mkdump {
-  if (lc($opts{syntax}) eq 'postgres') {
-    return join("\t",map {
-      if (defined) {
-        my $x=$_;
-        $x=~s/[\t\n]/ /g;
-        $x=~s/(\\|\r)/\\$1/g;
-        $x
-      } else {
-        "\\N"
-      }
-    } @_)."\n";
-  } else {
-    return join("\t",map {
-      if (defined) {
-        my $x=$_;
-        $x=~s/[\t\n]/ /g;
-        $x
-      } else {
-        ''
-      }
-    } @_)."\n";
-  }
+  return join("\t",map {
+    if (defined) {
+      my $x=$_;
+      $x=~s/[\t\n]/ /g;
+      $x=~s/(\\|\r)/\\$1/g;
+      $x
+    } else {
+      "\\N"
+    }
+  } @_)."\n";
 }
 sub mkload {
   my ($f,$opts)=@_;
@@ -307,13 +283,6 @@ sub column_spec {
           $target_id=$1;
         }
         my $comment = "Updating PMLREF column: $table/$column refers to nodes in $target of type $target_type";
-        if ($opts{syntax} eq 'postgres') {
-          $fh{'#POST_SQL'}->print("\\echo $comment\n") unless $opts{loader} eq 'file_list';
-        } elsif ($opts{syntax} eq 'oracle') {
-          $fh{'#POST_SQL'}->print("prompt $comment\n");
-        } else {
-          $fh{'#POST_SQL'}->print("-- $comment\n");
-        }
         my $col = $column;
         $col=~s/\.rf$//;
         # Possible fix for #329 - table name is renamed twice
@@ -365,25 +334,7 @@ EOF
 # EOF
 #         }
         unless ($target eq $root_name) {
-          if ($opts{syntax} eq 'oracle') {
-            my $execute = join("\n",map {qq(  EXECUTE IMMEDIATE '$_';)} grep /\S/, split /;\s*\n/, $sql)."\n";
-            $sql = <<"EOF"
-DECLARE
-  tab VARCHAR(40);
-BEGIN
-  BEGIN
-    SELECT "table" INTO tab FROM "#PMLTABLES" WHERE "type"='$target_type';
-  EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-      tab := '$target_type';
-  END;
-$execute
-END;
-/
-
-EOF
-          } elsif ($opts{syntax} eq 'postgres') {
-            $sql =~ s/'/''/g;
+          $sql =~ s/'/''/g;
             my $execute = join("\n",map {qq(EXECUTE (''$_'');)} grep !/^\s*--/, grep /\S/, split /;\s*\n/, $sql);
             $sql = <<"EOF"
 CREATE OR REPLACE FUNCTION pml2base__update_pmlref() RETURNS integer AS '
@@ -402,7 +353,6 @@ SELECT pml2base__update_pmlref();
 DROP FUNCTION pml2base__update_pmlref();
 
 EOF
-          }
         }
         $fh{'#POST_SQL'}->print($sql);
         $index_id++;
@@ -516,10 +466,7 @@ sub convert_schema {
   $file_table = $root_name."__#files";
   $references_table = $root_name."__#references";
   my $pmlref_table = $root_name."__#pmlref_map";
-  $opts{loader} //= 'SH';
-  die "driver $opts{driver} and loader $opts{loader} is not supported" if $opts{loader} eq 'file_list' && ! $opts{driver} eq 'postgres';
-  open $fh{'#INIT_SH'},'>',get_full_path(to_filename("init",'sh')) || die "$!" if $opts{loader} eq 'SH';
-  open $fh{'#INIT_LIST'},'>',get_full_path(to_filename("init",'list')) || die "$!" if $opts{loader} eq 'file_list';
+  open $fh{'#INIT_LIST'},'>',get_full_path(to_filename("init",'list')) || die "$!";
   unless ($opts{'no-schema'}) {
     open $fh{'#INIT_SQL'},'>',get_full_path(to_filename("init",'sql'))  || die "$!";
     open $fh{'#DELETE_SQL'},'>',get_full_path(to_filename("delete",'sql'))  || die "$!";
@@ -533,165 +480,10 @@ sub convert_schema {
 
   my ($db_cmd,$ldr_cmd,$extra_flags);
   $extra_flags='';
-  if ($opts{syntax} eq 'oracle') {
-    $db_cmd = 'echo quit | sqlplus';
-    $ldr_cmd = 'sqlldr';
-  } elsif ($opts{syntax} eq 'postgres') {
-    $db_cmd = 'psql';
-    $ldr_cmd = 'psql';
-  } elsif ($opts{syntax} eq 'db2') {
-    $db_cmd = 'db2';
-    $ldr_cmd = 'db2';
-  }
+  $db_cmd = 'psql';
+  $ldr_cmd = 'psql';
   if ($opts{'schema'} and !$opts{'incremental'}) {
     $extra_flags.=' --init|--finish'
-  }
-  if(exists $fh{'#INIT_SH'}) {
-  $fh{'#INIT_SH'}->print(<<"EOF");
-#!/bin/bash
-
-if [ -z "\$1" ]; then
-
-  echo "Usage: \$0$extra_flags -u|--user <db_user> [-d|--database <db_name>] [-w|--password <db_password>] [-h|--host <db_host>] [-p|--port <db_port>] -- [ <db_options> ]"
-
-  exit 1;
-fi
-db_cmd='$db_cmd'
-loader_cmd='$ldr_cmd'
-
-EOF
-
-  $fh{'#INIT_SH'}->print(<<'EOF');
-while [ $# -gt 0 ]; do
-    case "$1" in
-        -u|--user) user=$2; shift 2; ;;
-        -d|--database) db=$2; shift 2; ;;
-        -w|--password) password=$2; shift 2; ;;
-        -h|--host) host=$2; shift 2; ;;
-        -p|--port) port=$2; shift 2; ;;
-        -c|--db-cmd) db_cmd=$2; shift 2; ;;
-        -l|--loader-cmd) loader_cmd=$2; shift 2; ;;
-        --init|--finish) task=$2; shift 2; ;;
-        --) shift ; break ;;
-        *) echo "Unknown argument: $1" ; exit 1 ;;
-    esac
-done
-
-if [ -z $user ]; then
-  echo "Required parameter: -u|--user <db_user> missing"
-  exit 1;
-fi
-if [ -z $db ]; then
-  echo "Required parameter: -d|--database <db_name> missing"
-  exit 1;
-fi
-
-EOF
-  }
-
-  if (lc($opts{syntax}) eq 'postgres') {
-    if(exists $fh{'#INIT_SH'}) {
-      $fh{'#INIT_SH'}->print(<<'EOF');
-    sql_files=""
-    export PGUSER=$user
-    export PGDATABASE=$db
-    [ -n $host ] && export PGHOST=$host
-    [ -n $port ] && export PGPORT=$port
-    if [ -n "$password" ]; then
-      [ -n "$TMPDIR" ] || TMPDIR="/tmp"
-      PGPASSFILE="${TMPDIR}/pgpass.$USER.$$.conf"
-      [ -f "$PGPASSFILE" ] && rm "$PGPASSFILE"
-      touch "$PGPASSFILE"; chmod 600 "$PGPASSFILE"
-      cat <<EOP >> $PGPASSFILE
-$host:$port:$db:$user:$password
-EOP
-      export PGPASSFILE
-    fi
-    run_sql_commands() {
-      sql_files="$sql_files '$1'"
-    }
-    run_loader_commands() {
-      sql_files="$sql_files '$1'"
-    }
-    finish() {
-      load_cmd=$db_cmd
-      [ -n "$@" ] && load_cmd="$db_cmd $@"
-      eval cat $sql_files | eval "$load_cmd";
-      [ -n "$password" ] && rm -f "$PGPASSFILE"
-      echo "Finished!"
-    }
-EOF
-    }
-  } elsif (lc($opts{syntax}) eq 'oracle') {
-    $fh{'#INIT_SH'}->print(<<'EOF');
-    ora_login="${user}";
-    [ -n "$password" ] && ora_login="${ora_login}/${password}";
-    ora_login="${ora_login}@";
-    if [ -n "$host" ]; then
-      ora_login="${ora_login}${host}";
-      [ -n "$port" ] && ora_login="${ora_login}:${port}";
-      ora_login="${ora_login}/";
-    fi
-    ora_login="${ora_login}$db";
-
-    run_sql_commands() {
-      echo "Running Oracle SQL commands from '$1'"
-      eval "$db_cmd -L -S '${ora_login}' @'$1' \"$@\""
-      sleep 0.2;
-    }
-    run_loader_commands() {
-      echo "Running Oracle SQL Loader commands from '$1'"
-      eval "$loader_cmd SILENT=ALL USERID='${ora_login}' CONTROL='$1'"
-    }
-    finish() {
-      echo "Finished!"
-    }
-EOF
-  } elsif (lc($opts{syntax}) eq 'db2') {
-    $fh{'#INIT_SH'}->print(<<'EOF');
-    #FIXME: setup host/port (if it makes sense for DB2)
-    connect="$db_cmd connect to '$db' USER '$user'"
-    if [ -n $password ]; then
-      connect="$connect USING '$password'"
-    fi
-    eval "$connect"
-    run_sql_commands() {
-      echo "Running DB2 SQL commands from '$1'"
-      eval "$db_cmd -t -f '$1' \"$@\""
-      sleep 0.2;
-    }
-    run_loader_commands() {
-      echo "Running Oracle SQL Loader commands from '$1'"
-      eval "$db_cmd -t -f '$1' \"$@\""
-      sleep 0.2;
-    }
-    finish() {
-      eval "$db_cmd disconnect current"
-      echo "Finished!"
-    }
-EOF
-  } else {
-    $fh{'#INIT_SH'}->print(<<'EOF');
-    run_sql_commands() {
-      echo "Should run SQL commands from '$1' (doing nothing)"
-    }
-    run_loader_commands() {
-      echo "Should run SQL Loader commands from '$1' (doing nothing)"
-    }
-    finish() {
-      echo "Finished (doing nothing)!"
-      echo
-      echo "This script is a dummy stub: when this script was generated, the SQL flavour was not known!"
-    }
-EOF
-  }
-
-  if ($opts{'schema'} and !$opts{'incremental'}) {
-    if(exists $fh{'#INIT_SH'}) {
-      $fh{'#INIT_SH'}->print(<<'EOF');
-if [ "@${task}" = "@--init" ]; then
-EOF
-    }
   }
 
   $schema{$node_table} = {
@@ -723,13 +515,8 @@ EOF
 
 
   unless ($opts{'no-schema'}) {
-    if(exists $fh{'#INIT_SH'}) {
-      $fh{'#INIT_SH'}->print(mkload(to_filename("delete",'sql'),{quiet=>1}));
-      $fh{'#INIT_SH'}->print(mkload(to_filename("init",'sql')));
-    } elsif(exists $fh{'#INIT_LIST'}) {
-      $fh{'#INIT_LIST'}->print(to_filename("delete",'sql')."\n");
-      $fh{'#INIT_LIST'}->print(to_filename("init",'sql')."\n");
-    }
+    $fh{'#INIT_LIST'}->print(to_filename("delete",'sql')."\n");
+    $fh{'#INIT_LIST'}->print(to_filename("init",'sql')."\n");
     dump_schema($schema);
     for my $decl ($schema->node_types) {
       my $tab = table_name($decl,1);
@@ -751,11 +538,7 @@ EOF
                             qq{, "target_layer" }.varchar(128).
                             qq{, "target_table" }.varchar(MAX_NAME_LENGTH).
                             qq{, "target_type" }.varchar(128).qq{);\n\n});
-    if (lc($opts{syntax}) eq 'postgres') {
-      $fh{'#DELETE_SQL'}->print(qq{DROP TABLE IF EXISTS "$pmlref_table";\n\n});
-    } else {
-      $fh{'#DELETE_SQL'}->print(qq{DROP TABLE "$pmlref_table";\n\n});
-    }
+    $fh{'#DELETE_SQL'}->print(qq{DROP TABLE IF EXISTS "$pmlref_table";\n\n});
     for my $k (sort keys %{$opts{ref}}) {
       my ($t1,$t2) = split /:/,$opts{ref}{$k};
       unless ($t2) {
@@ -923,82 +706,28 @@ sub dump_schema {
   $flags |= HYBRID if $opts{hybrid};
   $flags |= NO_TREE_TABLE if $opts{no_tree_table};
 
-  if (lc($opts{syntax}) eq 'postgres') {
-    my $schema_dump = "${root_name}__schema.dump";
-    my $blob;
-    $schema->write({string=>\$blob});
-    open(my $fh, '>', get_full_path($schema_dump));
-    my $r=$root_name;
+  my $schema_dump = "${root_name}__schema.dump";
+  my $blob;
+  $schema->write({string=>\$blob});
+  open(my $fh, '>', get_full_path($schema_dump));
+  my $r=$root_name;
 
-    s{(\\|\n|\r|\^)}{\\$1}g for $r,$filename,$data_dir,$blob;
-    print $fh ($r.'^',
-               $filename.'^',
-               $data_dir.'^',
-               $flags.'^',
-               $blob
-              );
-    close $fh;
-    my $ctl = "${root_name}__pml_init.ctl";
-    open $fh, ($append ? '>>' : '>'), get_full_path($ctl);
+  s{(\\|\n|\r|\^)}{\\$1}g for $r,$filename,$data_dir,$blob;
+  print $fh ($r.'^',
+             $filename.'^',
+             $data_dir.'^',
+             $flags.'^',
+             $blob
+            );
+  close $fh;
+  my $ctl = "${root_name}__pml_init.ctl";
+  open $fh, ($append ? '>>' : '>'), get_full_path($ctl);
 
-
-    if(exists $fh{'#INIT_SH'}) {
-      print $fh <<"EOF";
-\\echo Loading PML meta-table
-\\copy "#PML" ("root", "schema_file", "data_dir", "flags", "schema") from '$schema_dump' delimiter '^'
-EOF
-      close $fh;
-      $fh{'#INIT_SH'}->print(mkdataload($ctl));
-    } elsif(exists $fh{'#INIT_LIST'}) {
-      print $fh <<"EOF";
+  print $fh <<"EOF";
 COPY "#PML" ("root", "schema_file", "data_dir", "flags", "schema") FROM '$schema_dump' DELIMITER '^'
 EOF
-      close $fh;
-      $fh{'#INIT_LIST'}->print("$ctl\n");
-    }
-    #print $fh{'#INIT_SH'}(qq{sleep 0.2; echo quit | sqlldr SILENT=ALL USERID="\$login" CONTROL="$ctl"\n});
-  } elsif (lc($opts{syntax}) eq 'oracle') {
-    my $schema_dump = $root_name."__schema.pml";
-    $schema->write({filename=>$schema_dump});
-    my $ctl = get_full_path($root_name."__pml_init.ctl");
-    open my $fh, '>', $ctl;
-    print $fh <<"EOF";
-LOAD DATA CHARACTERSET UTF8 LENGTH SEMANTICS CHAR
-INFILE *
-APPEND
-INTO TABLE "#PML"
-FIELDS TERMINATED BY ','
-(
- "root",
- "schema_file",
- "data_dir",
- "flags",
- "filename" FILLER,
- "schema" LOBFILE ("filename") TERMINATED BY EOF
-)
-BEGINDATA
-$root_name,$filename,$data_dir,$flags,$schema_dump
-EOF
-    close $fh;
-    $fh{'#INIT_SH'}->print(mkdataload($ctl));
-  } elsif (lc($opts{syntax}) eq 'db2') {
-    my $schema_pml = $root_name."__schema.pml";
-    my $schema_dump = $root_name."__schema.dump";
-    $schema->write({filename=>$schema_pml});
-    my $fh;
-    my $r=$root_name;
-    open $fh, '>', get_full_path($schema_dump);
-    print $fh qq{$r,$filename,$data_dir,$schema_pml\n};
-    close $fh;
-    my $ctl = to_filename("pml_init",'ctl');
-    open $fh, '>', get_full_path($ctl);
-    print $fh <<"EOF";
-IMPORT FROM  '$schema_dump' OF DEL LOBS FROM '.'
-COMMITCOUNT 400 INSERT INTO "#PML";
-EOF
-    close $fh;
-    $fh{'#INIT_SH'}->print(mkdataload($ctl));
-  }
+  close $fh;
+  $fh{'#INIT_LIST'}->print("$ctl\n");
 }
 
 sub analyze_string {
@@ -1471,13 +1200,8 @@ sub finish {
     warn("DATA_IDX EXCEEDED LIMIT: next $idx, limit $opts{'max-idx'}");
   }
   if ($opts{incremental}) {
-    if ($opts{syntax} eq 'postgres') {
-      $fh{'#POST_SQL'}->print(qq{UPDATE "#PML" SET ("last_idx","last_node_idx")=($idx,$node_idx)}.
-                                qq{ WHERE "root"='$root_name';\n\n});
-    } else {
-      $fh{'#POST_SQL'}->print(qq{UPDATE "#PML" SET ("last_idx","last_node_idx")=(SELECT $idx,$node_idx FROM DUAL)}.
-                                qq{ WHERE "root"='$root_name';\n\n});
-    }
+    $fh{'#POST_SQL'}->print(qq{UPDATE "#PML" SET ("last_idx","last_node_idx")=($idx,$node_idx)}.
+                            qq{ WHERE "root"='$root_name';\n\n});
   }
   if ($opts{'dump-rename-map'}) {
     open my $fh, '>:utf8', $opts{'dump-rename-map'};
@@ -1514,12 +1238,7 @@ sub finish {
       }
     }
     for my $desc (@tables) {
-      my $sugar = $opts{syntax} eq 'oracle' ? 'CONSTRAINTS' : '';
-      if (lc($opts{syntax}) eq 'postgres') {
-        $fh{'#DELETE_SQL'}->print(qq{DROP TABLE IF EXISTS "$desc->{table}" CASCADE;\n\n});
-      } else {
-        $fh{'#DELETE_SQL'}->print(qq{DROP TABLE "$desc->{table}" CASCADE $sugar;\n\n});
-      }
+      $fh{'#DELETE_SQL'}->print(qq{DROP TABLE IF EXISTS "$desc->{table}" CASCADE;\n\n});
     }
   }
   unless ($opts{'schema'}) {
@@ -1529,64 +1248,18 @@ sub finish {
       my $ctl=table2filename($t,'ctl');
       open LOAD_SQL,'>',get_full_path($ctl);
       my $replace = $opts{'no-schema'} ? "APPEND" : "REPLACE";
-      if (lc($opts{syntax}) eq 'postgres') {
-        my $cols = join ',', map { qq{"$_->[0]"} } @{$desc->{colspec}};
-        if(exists $fh{'#INIT_SH'}) {
-          print LOAD_SQL qq{\\echo Loading data to table "$t"\n};
-          print LOAD_SQL qq{\\copy "$t" ($cols) from '$dump'\n};
-        } elsif( exists $fh{'#INIT_LIST'}) {
-          print LOAD_SQL qq{COPY "$t" ($cols) FROM '$dump'\n};
-        }
-      } elsif (lc($opts{syntax}) eq 'oracle') {
-        my $cols = join ',', map { qq{"$_->[0]"}
-                                     .( $_->[1]=~/STRING/ ? q{CHAR(}.(($desc->{col}{$_->[0]}||0) || 1).q{)} : '')
-                                   }
-          @{$desc->{colspec}};
-        my $bad = table2filename($t,'bad');
-        my $rej = table2filename($t,'rej');
-        print LOAD_SQL <<"EOF";
-LOAD DATA CHARACTERSET UTF8 LENGTH SEMANTICS CHAR
-INFILE '$dump'
-BADFILE '$bad'
-DISCARDFILE '$rej'
-${replace}
-INTO TABLE "$t"
-FIELDS TERMINATED BY '\t'
-TRAILING NULLCOLS
-($cols)
-EOF
-      } elsif (lc($opts{syntax}) eq 'db2') {
-          print LOAD_SQL qq{IMPORT FROM '$dump' OF DEL MODIFIED BY COLDELX09 COMMITCOUNT 400 $replace INTO "$t";\n};
-      }
+      my $cols = join ',', map { qq{"$_->[0]"} } @{$desc->{colspec}};
+      print LOAD_SQL qq{COPY "$t" ($cols) FROM '$dump'\n};
       close LOAD_SQL;
-      if(exists $fh{'#INIT_SH'}) {
-        $fh{'#INIT_SH'}->print(mkdataload($ctl));
-      } elsif(exists $fh{'#INIT_LIST'}) {
-        $fh{'#INIT_LIST'}->print("$ctl\n");
-      }
+      $fh{'#INIT_LIST'}->print("$ctl\n");
     }
   }
   if ($opts{'no-schema'}) {
     if ($opts{incremental}) {
-      if(exists $fh{'#INIT_SH'}) {
-        $fh{'#INIT_SH'}->print(mkload(to_filename("postprocess",'sql')));
-      } elsif(exists $fh{'#INIT_LIST'}) {
-        $fh{'#INIT_LIST'}->print(to_filename("postprocess",'sql')."\n");
-      }
-    }
-  } else {
-    if ($opts{'schema'}  and !$opts{'incremental'}) {
-      if(exists $fh{'#INIT_SH'}) {
-        $fh{'#INIT_SH'}->print(q(elif [ "@${task}" = "@--finish" ]; then)."\n");
-        } elsif(exists $fh{'#INIT_LIST'}) {
-          ###TODO
-        }
-    }
-    if(exists $fh{'#INIT_SH'}) {
-      $fh{'#INIT_SH'}->print(mkload(to_filename("postprocess",'sql')));
-    } elsif(exists $fh{'#INIT_LIST'}) {
       $fh{'#INIT_LIST'}->print(to_filename("postprocess",'sql')."\n");
     }
+  } else {
+    $fh{'#INIT_LIST'}->print(to_filename("postprocess",'sql')."\n");
     unless ($opts{incremental}) {
       for my $desc (values %schema) {
         for my $col (@{$desc->{colspec}}) {
@@ -1597,25 +1270,9 @@ EOF
         }
       }
     }
-    if ($opts{syntax} eq 'postgres') {
-      for my $desc (values %schema) {
-        $fh{'#POST_SQL'}->print(qq{VACUUM FULL ANALYZE "$desc->{table}";\n\n});
-      }
+    for my $desc (values %schema) {
+      $fh{'#POST_SQL'}->print(qq{VACUUM FULL ANALYZE "$desc->{table}";\n\n});
     }
-    if ($opts{syntax} eq 'oracle') {
-      $fh{'#DELETE_SQL'}->print(qq{PURGE RECYCLEBIN;\n\n});
-      $fh{'#POST_SQL'}->print(qq{EXECUTE DBMS_STATS.GATHER_SCHEMA_STATS(NULL,DBMS_STATS.AUTO_SAMPLE_SIZE);\n\n});
-    }
-    if ($opts{'schema'} and !$opts{'incremental'}) {
-      if(exists $fh{'#INIT_SH'}) {
-        $fh{'#INIT_SH'}->print(q(fi)."\n");
-        } elsif(exists $fh{'#INIT_LIST'}) {
-          ###TODO
-        }
-    }
-  }
-  if(exists $fh{'#INIT_SH'}) {
-    $fh{'#INIT_SH'}->print(qq{\nfinish;\n});
   }
 
   if ($opts{'dump-idx'}) {
