@@ -20,8 +20,8 @@ sub DEFAULT_CONFIG {
     output_dir => File::Spec->catdir( $base_dir, 'sql_dump' ),
     resources  => File::Spec->catdir( $base_dir, 'resources' ),
     db         => {
-      host   => 'localhost',
-      port   => 5432
+      host => 'localhost',
+      port => 5432
     }
   };
 }
@@ -131,15 +131,19 @@ sub _load_config {
     $base_dir = abs_path($base_dir);
   }
 
+  $config->{db} = {} unless $config->{db};
+  $config->{db}->{name} = $config->{treebank_id} if ( $config->{treebank_id} && !$config->{db}->{name} );
+
   for ( grep { $config->{$_} } qw/data_dir resources output_dir/ ) {
     $config->{$_} = File::Spec->rel2abs( $config->{$_}, $base_dir );
   }
 
   if ( $config->{layers} ) {
     for my $lr ( @{ $config->{layers} } ) {
-      next unless exists $lr->{'related-schema'};
-      $lr->{'related-schema'} =
-        [ map { File::Spec->rel2abs( $_, $config->{resources} ) } @{ $lr->{'related-schema'} } ];
+      $lr->{'related-schema'} = [ map { File::Spec->rel2abs( $_, $config->{resources} ) } @{ $lr->{'related-schema'} } ]
+        if $lr->{'related-schema'};
+      $lr->{filelist} = File::Spec->rel2abs( $lr->{filelist}, $base_dir )
+        if $lr->{filelist} && !File::Spec->file_name_is_absolute( $lr->{filelist} );
     }
   }
 

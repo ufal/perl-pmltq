@@ -79,11 +79,12 @@ sub run {
       };
   }
 
-  my $resources_dir = @schemas > 1
-    ? $self->common_prefix( map { dirname(File::Spec->canonpath( $_->get_url )) } @schemas )
-    : dirname($schemas[0]->get_url);
+  my $resources_dir =
+      @schemas > 1
+    ? $self->common_prefix( map { dirname( File::Spec->canonpath( $_->get_url ) ) } @schemas )
+    : dirname( $schemas[0]->get_url );
 
-  $_->set_url(File::Spec->abs2rel($_->get_url, $resources_dir)) for (@schemas);
+  $_->set_url( File::Spec->abs2rel( $_->get_url, $resources_dir ) ) for (@schemas);
 
   # resolve refs
   $self->try_resolve_references( \@layers, \@schemas );
@@ -100,10 +101,10 @@ sub run {
 
   my $yaml = YAML::Tiny->new(
     {
-      name   => $treebank_id,
-      title  => $treebank_title,
-      resources => $resources_dir,
-      layers => \@layers
+      treebank_id => $treebank_id,
+      title       => $treebank_title,
+      resources   => $resources_dir,
+      layers      => \@layers
     }
   );
 
@@ -122,7 +123,7 @@ sub run {
 }
 
 sub common_prefix {
-  my $self = shift;
+  my $self  = shift;
   my @paths = @_;
   my %prefixes;
 
@@ -130,9 +131,7 @@ sub common_prefix {
     my @parts  = File::Spec->splitdir($_);
     my $prefix = shift @parts;
     ++$prefixes{$prefix};
-    for (@parts) {
-      ++$prefixes{$prefix = File::Spec->catdir($prefix, $_)}
-    }
+    ++$prefixes{ $prefix = File::Spec->catdir( $prefix, $_ ) } for (@parts);
   }
   return first { $prefixes{$_} == @paths } reverse sort keys %prefixes;
 }

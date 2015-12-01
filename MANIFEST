@@ -97,6 +97,7 @@ share/static/loading.html
 share/static/menubar/menu.css
 share/static/menubar/menu.js
 t/00-compile.t
+t/convert_command.t
 t/init_command.t
 t/lib/PML.pm
 t/lib/TredMacro.pm
