@@ -9,8 +9,10 @@ Revision history for {{$dist->name}}
 
  [BUG FIXES]
  - Fixed invalid use of Treex::PML::Factory->createList
+ - Fixed loading user-defined relations with the same name but different PML schema
 
  [DOCUMENTATION]
+ - Added TravisCI and Coveralls badge
 
  [ENHANCEMENTS]
  - Fixed sql errors when dropping tables
