@@ -81,7 +81,7 @@ subtest 'Test glob loading' => sub {
 };
 
 subtest 'Test filelist loading' => sub {
-  my (undef, $filelist) = tempfile( OPEN => 0 );
+  my (undef, $filelist) = tempfile();
   write_file($filelist, "\n" . join("\n", @files) . "\n");
 
   my $cmd = PMLTQ::Command::convert->new(

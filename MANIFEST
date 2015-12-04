@@ -26,14 +26,6 @@ lib/PMLTQ/Grammar.pm
 lib/PMLTQ/Loader.pm
 lib/PMLTQ/NG2PMLTQ.pm
 lib/PMLTQ/PML2BASE.pm
-lib/PMLTQ/PML2BASE/PDT.pm
-lib/PMLTQ/PML2BASE/PDT/DumpData.pm
-lib/PMLTQ/PML2BASE/PDT/DumpData/adata.pm
-lib/PMLTQ/PML2BASE/PDT/DumpData/tdata.pm
-lib/PMLTQ/PML2BASE/PDT/MakeTable.pm
-lib/PMLTQ/PML2BASE/Treex.pm
-lib/PMLTQ/PML2BASE/Treex/DumpData.pm
-lib/PMLTQ/PML2BASE/Treex/MakeTable.pm
 lib/PMLTQ/ParserError.pm
 lib/PMLTQ/Planner.pm
 lib/PMLTQ/Relation.pm

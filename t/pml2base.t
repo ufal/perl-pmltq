@@ -9,6 +9,8 @@ use File::Basename 'dirname';
 use lib dirname(__FILE__);
 use lib File::Spec->rel2abs( File::Spec->catdir( dirname(__FILE__), 'lib' ) );
 
+plan skip_all => 'Author testing only' unless $ENV{AUTHOR_TESTING};
+
 BEGIN {
   require 'test_commands.pl';    # Load subs to test commands
 }
