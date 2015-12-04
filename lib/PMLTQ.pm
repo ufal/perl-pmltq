@@ -6,7 +6,7 @@ package PMLTQ;
 
 =for html
 <a href="https://travis-ci.org/ufal/perl-pmltq"><img src="https://travis-ci.org/ufal/perl-pmltq.svg?branch=master" alt="Build Status"></a>
-<a href="https://coveralls.io/github/ufal/perl-pmltq?branch=travis_ci"><img src="https://coveralls.io/repos/ufal/perl-pmltq/badge.svg?branch=travis_ci&amp;service=github" alt="Coverage Status"></a>
+<a href="https://coveralls.io/github/ufal/perl-pmltq?branch=master"><img src="https://coveralls.io/repos/ufal/perl-pmltq/badge.svg?branch=master&amp;service=github" alt="Coverage Status"></a>
 <a href="https://badge.fury.io/pl/PMLTQ"><img src="https://badge.fury.io/pl/PMLTQ.svg" alt="CPAN version"></a>
 
 =end :prelude
