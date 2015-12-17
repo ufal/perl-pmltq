@@ -6,6 +6,7 @@ Revision history for {{$dist->name}}
  [BUG FIXES]
 
  [DOCUMENTATION]
+- Add documentation for config file and commands
 
  [ENHANCEMENTS]
 
