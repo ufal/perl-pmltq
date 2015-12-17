@@ -6,9 +6,17 @@ Revision history for {{$dist->name}}
  [BUG FIXES]
 
  [DOCUMENTATION]
-- Add documentation for config file and commands
 
  [ENHANCEMENTS]
+
+1.0.1
+ - Released: 2015-12-17 15:09:11 UTC
+
+ [DOCUMENTATION]
+ - Add documentation for config file and commands
+
+ [STATISTICS]
+ - code churn: 2 files changed, 204 insertions(+), 13 deletions(-)
 
 1.0.0
  - Released: 2015-12-04 13:59:01 UTC
