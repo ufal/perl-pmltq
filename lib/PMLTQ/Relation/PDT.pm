@@ -24,6 +24,8 @@ require PMLTQ::Relation::PDT::TEParentIterator;
 
 ######## A Layer
 
+=over 5
+
 =item DiveAuxCP($node)
 
 You can use this function as a C<through> argument to GetEParents and
@@ -210,6 +212,8 @@ sub TGetEParents {
 =item GetEChildren($node?)
 
 Return a list of nodes linguistically dependant on a given node.
+
+=back
 
 =cut
 

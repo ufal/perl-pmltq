@@ -35,6 +35,8 @@ MSG
   $dbh->disconnect;
 }
 
+=encoding utf8
+
 =head1 SYNOPSIS
 
   pmltq load <treebank_config> <sql_dir>

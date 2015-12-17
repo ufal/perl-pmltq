@@ -2932,4 +2932,6 @@ PMLTQ::SQLEvaluator.
 For format=html, returns the same information in a small HTML
 document.
 
+=back
+
 =cut
