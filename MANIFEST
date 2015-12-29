@@ -96,6 +96,7 @@ t/lib/TredMacro.pm
 t/lib/bootstrap.pl
 t/lib/test_commands.pl
 t/pml2base.t
+t/pod.t
 t/queries/pdt_test/_filter-complex-multiple.tq
 t/queries/pdt_test/_filter-complex-quote-set.tq
 t/queries/pdt_test/_user-defined-a-node-echild.tq
