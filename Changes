@@ -4,6 +4,15 @@ Revision history for {{$dist->name}}
  [API CHANGES]
 
  [BUG FIXES]
+
+ [DOCUMENTATION]
+
+ [ENHANCEMENTS]
+
+1.1.0
+ - Released: 2015-12-29 15:26:05 UTC
+
+ [BUG FIXES]
  - Fixing path resolution
  - Fix endline in version command
 
@@ -12,6 +21,9 @@ Revision history for {{$dist->name}}
 
  [ENHANCEMENTS]
  - Hack conversion of Lingua::Interset::FeatureStructure
+
+ [STATISTICS]
+ - code churn: 11 files changed, 40 insertions(+), 8 deletions(-)
 
 1.0.1
  - Released: 2015-12-17 15:09:11 UTC
