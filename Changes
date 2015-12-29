@@ -5,6 +5,7 @@ Revision history for {{$dist->name}}
 
  [BUG FIXES]
  - Fixing path resolution
+ - Fix endline in version command
 
  [DOCUMENTATION]
  - Fix several POD errors and add POD testing

@@ -9,7 +9,7 @@ has usage => sub { shift->extract_usage };
 
 sub run {
   my $self = shift;
-  print $PMLTQ::VERSION || 'DEV' . "\n";
+  print( ( $PMLTQ::VERSION || 'DEV' ) . "\n" );
 }
 
 =head1 SYNOPSIS
