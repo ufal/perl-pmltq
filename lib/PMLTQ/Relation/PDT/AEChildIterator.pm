@@ -16,7 +16,6 @@ use PMLTQ::Relation {
   test_code         => q( grep($_ == $start, PMLTQ::Relation::PDT::AGetEParents($end,\&PMLTQ::Relation::PDT::ADiveAuxCP)) ? 1 : 0 ),
 };
 
-
 sub get_node_list {
   my ($self, $node) = @_;
   my $type   = $node->type->get_base_type_name;

@@ -135,14 +135,15 @@ sub _load_config {
   $config->{db}->{name} = $config->{treebank_id} if ( $config->{treebank_id} && !$config->{db}->{name} );
 
   for ( grep { $config->{$_} } qw/data_dir resources output_dir/ ) {
-    $config->{$_} = File::Spec->rel2abs( $config->{$_}, $base_dir );
+    $config->{$_} = abs_path( File::Spec->rel2abs( $config->{$_}, $base_dir ) );
   }
 
   if ( $config->{layers} ) {
     for my $lr ( @{ $config->{layers} } ) {
-      $lr->{'related-schema'} = [ map { File::Spec->rel2abs( $_, $config->{resources} ) } @{ $lr->{'related-schema'} } ]
+      $lr->{'related-schema'} =
+        [ map { abs_path( File::Spec->rel2abs( $_, $config->{resources} ) ) } @{ $lr->{'related-schema'} } ]
         if $lr->{'related-schema'};
-      $lr->{filelist} = File::Spec->rel2abs( $lr->{filelist}, $base_dir )
+      $lr->{filelist} = abs_path( File::Spec->rel2abs( $lr->{filelist}, $base_dir ) )
         if $lr->{filelist} && !File::Spec->file_name_is_absolute( $lr->{filelist} );
     }
   }
@@ -354,3 +355,5 @@ option C<db_name: 'abc'>.
         t-node/coref_gram.rf: t-node
     - name: tdata
       data: **/*.t.gz
+
+=cut

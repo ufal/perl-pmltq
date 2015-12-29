@@ -418,7 +418,7 @@ sub _abs2rel {
 sub abs2rel {
   my ($file)=@_;
   my $ret = _abs2rel($file);
-  croak "Incorrect --data-dir value '$opts{'data-dir'}' (resolved to '$ret') or invalid filename '$file'\n"
+  croak "Incorrect --data_dir value '$opts{'data-dir'}' (resolved to '$ret') or invalid filename '$file'\n"
     ."Explanation: Paths stored in the database should not start with ../ since this breaks URLs"
       if $ret=~m{^\.\.};
   return $ret;
