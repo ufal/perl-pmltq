@@ -1,5 +1,6 @@
 package PMLTQ::Command::verify;
-
+our $AUTHORITY = 'cpan:MICHALS';
+$PMLTQ::Command::verify::VERSION = '1.1.0';
 # ABSTRACT: Check if database exists and that it contains some data
 
 use PMLTQ::Base 'PMLTQ::Command';
@@ -27,6 +28,23 @@ sub run {
   $dbh->disconnect;
 }
 
+
+1;
+
+__END__
+
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+PMLTQ::Command::verify - Check if database exists and that it contains some data
+
+=head1 VERSION
+
+version 1.1.0
+
 =head1 SYNOPSIS
 
   pmltq verify <treebank_config>
@@ -47,6 +65,33 @@ Path to configuration file. If a treebank_config is --, config is readed from ST
 
 =back
 
-=cut
+=head1 AUTHORS
 
-1;
+=over 4
+
+=item *
+
+Petr Pajas <pajas@ufal.mff.cuni.cz>
+
+=item *
+
+Jan Štěpánek <stepanek@ufal.mff.cuni.cz>
+
+=item *
+
+Michal Sedlák <sedlak@ufal.mff.cuni.cz>
+
+=item *
+
+Matyáš Kopp <matyas.kopp@gmail.com>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2015 by Institute of Formal and Applied Linguistics (http://ufal.mff.cuni.cz).
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
