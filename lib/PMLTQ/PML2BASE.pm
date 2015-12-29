@@ -899,7 +899,7 @@ sub traverse_data {
       } else {
         # HACK for Interset structure
         if (ref $v && UNIVERSAL::DOES::does($value, 'Lingua::Interset::FeatureStructure')) {
-          $v = [ map { $_ . '=' . $v->{$_} } keys $v ] if ref $v eq 'HASH';
+          $v = [ map { $_ . '=' . $v->{$_} } keys %$v ] if ref $v eq 'HASH';
           $v = join ('|', @$v) if ref $v eq 'ARRAY';
         }
         my ($key,$value) = col_val($d,$table,$n,$v);
