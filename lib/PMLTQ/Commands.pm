@@ -177,7 +177,7 @@ These commands are available by default.
 
   $ pmltq convert
 
-Uses L<PMLTQ::Command::covert> to convert data in the C<data_dir> based on
+Uses L<PMLTQ::Command::convert> to convert data in the C<data_dir> based on
 layers configuration
 
 =head2 delete
