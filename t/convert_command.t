@@ -7,6 +7,8 @@ use File::Spec;
 use File::Basename qw/dirname basename/;
 use lib File::Spec->rel2abs( File::Spec->catdir( dirname(__FILE__), 'lib' ) );
 
+plan skip_all => 'Author testing only' unless $ENV{AUTHOR_TESTING};
+
 BEGIN {
   require 'bootstrap.pl';    ## no critic
 }
