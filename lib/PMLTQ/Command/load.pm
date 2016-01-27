@@ -55,7 +55,7 @@ Load treebank to database
 
 Path to configuration file. If a treebank_config is --, config is readed from STDIN.
 
-Path to ïnput directory.
+Path to input directory.
 
 =back
 

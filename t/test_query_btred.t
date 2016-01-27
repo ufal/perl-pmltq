@@ -116,7 +116,6 @@ for my $treebank ( treebanks() ) {
 # for my $treebank (@treebanks) {
 
 #   for my $query ($doc->trees) {
-#     # PŘÍMO DOTAZ VRAZIT DO EVALUATORU
 #     my $qfile = $query->get_id();
 #     my ($layer) = basename($qfile) =~ m/^(.)/;
 #     my @files = glob(File::Spec->catfile($treebanks_dir, $treebank, 'data', "*.$layer.gz"));
