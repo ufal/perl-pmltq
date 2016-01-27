@@ -8,6 +8,7 @@ Revision history for {{$dist->name}}
  [DOCUMENTATION]
 
  [ENHANCEMENTS]
+ - Fixing installing many dependencies which are used only for development
 
 1.1.0
  - Released: 2015-12-29 15:26:05 UTC
