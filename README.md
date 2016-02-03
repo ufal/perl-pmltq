@@ -20,10 +20,10 @@ TrEd (http://ufal.mff.cuni.cz/tred).
 
 # AUTHORS
 
-- Petr Pajas &lt;pajas@ufal.mff.cuni.cz>
-- Jan Štěpánek &lt;stepanek@ufal.mff.cuni.cz>
-- Michal Sedlák &lt;sedlak@ufal.mff.cuni.cz>
-- Matyáš Kopp &lt;matyas.kopp@gmail.com>
+- Petr Pajas <pajas@ufal.mff.cuni.cz>
+- Jan Štěpánek <stepanek@ufal.mff.cuni.cz>
+- Michal Sedlák <sedlak@ufal.mff.cuni.cz>
+- Matyáš Kopp <matyas.kopp@gmail.com>
 
 # COPYRIGHT AND LICENSE
 
