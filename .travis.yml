@@ -53,8 +53,8 @@ before_script:
   - coverage-setup
 
 script:
-  #- prove -j$(test-jobs) $(test-files)   # parallel testing
-  - dzil test -j$(test-jobs) # parallel testing
+  - prove -j$(test-jobs) $(test-files)   # parallel testing
+  # - dzil test -j$(test-jobs) # bad idea to use - not in builded distribution
 
 after_success:
   - coverage-report
