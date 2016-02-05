@@ -8,7 +8,15 @@ Revision history for {{$dist->name}}
  [DOCUMENTATION]
 
  [ENHANCEMENTS]
+
+1.2.0
+ - Released: 2016-02-05 20:40:08 UTC
+
+ [ENHANCEMENTS]
  - Fixing installing many dependencies which are used only for development
+
+ [STATISTICS]
+ - code churn: 225 files changed, 10467 insertions(+), 10462 deletions(-)
 
 1.1.0
  - Released: 2015-12-29 15:26:05 UTC
