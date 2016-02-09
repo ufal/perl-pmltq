@@ -47,7 +47,11 @@ sub check_client_version {
 
 sub new {
   my ($class,$query_tree,$opts)=@_;
-  require Sys::SigAction;
+  if ($^O eq 'MSWin32') {
+    die "Not supported OS, PMLTQ::SQLEvaluator requires Sys::SigAction\n";
+  } else {
+    require Sys::SigAction;
+  }
 
   my $self = bless {
     dbi => $opts->{dbi},
