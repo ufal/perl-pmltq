@@ -4,10 +4,19 @@ Revision history for {{$dist->name}}
  [API CHANGES]
 
  [BUG FIXES]
- - fixing required Sys::SigAction installation under Windows
+
  [DOCUMENTATION]
 
  [ENHANCEMENTS]
+
+1.2.1
+ - Released: 2016-02-09 20:57:58 UTC
+
+ [BUG FIXES]
+ - fixing required Sys::SigAction installation under Windows
+
+ [STATISTICS]
+ - code churn: 3 files changed, 9 insertions(+), 3 deletions(-)
 
 1.2.0
  - Released: 2016-02-05 20:40:08 UTC
