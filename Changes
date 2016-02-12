@@ -4,10 +4,19 @@ Revision history for {{$dist->name}}
  [API CHANGES]
 
  [BUG FIXES]
-  - fixing building script
+
  [DOCUMENTATION]
 
  [ENHANCEMENTS]
+
+1.2.2
+ - Released: 2016-02-12 09:03:27 UTC
+
+ [BUG FIXES]
+ - fixing building script
+
+ [STATISTICS]
+ - code churn: 2 files changed, 3 insertions(+), 2 deletions(-)
 
 1.2.1
  - Released: 2016-02-09 20:57:58 UTC
