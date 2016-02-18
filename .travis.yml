@@ -10,6 +10,11 @@ perl:
   - '5.18'
   - '5.20'
   - 'blead'
+  - 'system'
+
+os:
+  - 'linux'
+  - 'osx'
 
 env:
   global:
