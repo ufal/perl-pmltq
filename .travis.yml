@@ -41,7 +41,7 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then source ~/travis-perl-helpers/init    ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then build-perl ;fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then [ `perlbrew lib list` ] || perlbrew lib create travis ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; perlbrew use $PERLBREW_PERL@travis ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then perlbrew use $PERLBREW_PERL@travis ; fi
   - perl -V
   - cpan-install ExtUtils::MakeMaker~6.31 Dist::Zilla
   - "cpan-install $(dzil authordeps --missing --versions | grep -v '^inc::' | sed -e's/ = 0$//' -e's/ = /~/')"
