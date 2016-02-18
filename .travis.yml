@@ -23,6 +23,7 @@ matrix:
         - 'HARNESS_PERL_SWITCHES="-MDevel::Cover=+ignore,local,^t/"'
     - os: osx
       perl: 'system'
+      sudo: true
   allow_failures:
     - perl: blead
 
