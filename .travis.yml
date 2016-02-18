@@ -44,8 +44,11 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then [ `perlbrew lib list` ] || perlbrew lib create travis ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then perlbrew use $PERLBREW_PERL@travis ; fi
   - perl -V
-  - cpan-install ExtUtils::MakeMaker~6.31 Dist::Zilla
-  - "cpan-install $(dzil authordeps --missing --versions | grep -v '^inc::' | sed -e's/ = 0$//' -e's/ = /~/')"
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cpan-install ExtUtils::MakeMaker~6.31 Dist::Zilla ; fi
+  - "if [[ $TRAVIS_OS_NAME == 'linux' ]]; then cpan-install $(dzil authordeps --missing --versions | grep -v '^inc::' | sed -e's/ = 0$//' -e's/ = /~/') ; fi "
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cpan ExtUtils::MakeMaker~6.31 Dist::Zilla ; fi
+  - "if [[ $TRAVIS_OS_NAME == 'osx' ]]; then cpan $(dzil authordeps --missing --versions | grep -v '^inc::' | sed -e's/ = 0$//' -e's/ = /~/') ; fi "
+
   #- dzil build --in="$(pwd)/build_dir"
   #- cd build_dir
 
