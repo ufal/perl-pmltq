@@ -34,6 +34,7 @@ before_install:
   - git fetch --unshallow || true
   - git fetch origin master:master
   - git fetch origin releases:releases
+  - git fetch origin new_travis_settings:new_travis_settings # temporary
   - git clone --depth=1 git://github.com/travis-perl/helpers ~/travis-perl-helpers
   - source ~/travis-perl-helpers/init
   - build-perl
