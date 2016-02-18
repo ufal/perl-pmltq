@@ -10,11 +10,6 @@ perl:
   - '5.18'
   - '5.20'
   - 'blead'
-  - 'system'
-
-os:
-  - 'linux'
-  - 'osx'
 
 env:
   global:
@@ -26,6 +21,8 @@ matrix:
       env:
         - COVERAGE=1
         - 'HARNESS_PERL_SWITCHES="-MDevel::Cover=+ignore,local,^t/"'
+    - os: osx
+      perl: 'system'
   allow_failures:
     - perl: blead
 
@@ -41,10 +38,10 @@ before_install:
   - git fetch origin releases:releases
   - git fetch origin new_travis_settings:new_travis_settings # temporary
   - git clone --depth=1 git://github.com/travis-perl/helpers ~/travis-perl-helpers
-  - source ~/travis-perl-helpers/init
-  - build-perl
-  - '[ `perlbrew lib list` ] || perlbrew lib create travis'
-  - perlbrew use $PERLBREW_PERL@travis
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then source ~/travis-perl-helpers/init    ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then build-perl ;fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then '[ `perlbrew lib list` ] || perlbrew lib create travis' ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; perlbrew use $PERLBREW_PERL@travis ; fi
   - perl -V
   - cpan-install ExtUtils::MakeMaker~6.31 Dist::Zilla
   - "cpan-install $(dzil authordeps --missing --versions | grep -v '^inc::' | sed -e's/ = 0$//' -e's/ = /~/')"
