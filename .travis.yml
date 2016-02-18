@@ -11,10 +11,6 @@ perl:
   - '5.20'
   - 'blead'
 
-os:
-  - linux
-  - osx
-
 env:
   global:
     - PG_PORT=5432
