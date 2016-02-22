@@ -263,5 +263,21 @@ sub TGetEChildren { # node
   return @sons;
 } # TGetEChildren
 
+
+
+
+sub ThisAddress {
+  my ($node) = @_;
+  my $type = $node->type;
+  my ($id_attr) = $type && $type->find_members_by_role('#ID');
+
+  return  '#' . $node->{ $id_attr->get_name }
+}
+
+sub ThisAddressNTRED {
+  my ($node) = @_;
+  return  '#???'
+}
+
 1;
 
