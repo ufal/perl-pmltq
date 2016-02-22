@@ -3,6 +3,7 @@ package PMLTQ::Command::query;
 # ABSTRACT: WIP: Executes query on treebank
 
 use PMLTQ::Base 'PMLTQ::Command';
+use PMLTQ;
 use Cwd;
 use File::Spec;
 
@@ -15,6 +16,7 @@ use HTTP::Request::Common;
 use LWP::UserAgent;
 use File::Temp;
 use Encode;
+use Pod::Usage 'pod2usage';
 
 my $extension_dir;
 my %opts;
