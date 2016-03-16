@@ -1,5 +1,6 @@
 package PMLTQ::SQLEvaluator;
-
+our $AUTHORITY = 'cpan:MATY';
+$PMLTQ::SQLEvaluator::VERSION = '1.2.3';
 # ABSTRACT: SQL evaluator of PML-TQ queries which can use PostreSQL as a backend
 
 use 5.006;
@@ -441,21 +442,22 @@ sub connect {
     alarm(20);
     $self->{layout_version} = $cfg->{layout_version}||0;
 
-    require DBD::Pg;
-    import DBD::Pg qw(:async);
-
+    #require DBD::Pg;
+    #import DBD::Pg qw(:async);
+    require Mojo::Pg;
     my $string = 'dbi:Pg:'
                          .($cfg->{host} ? 'host='.$cfg->{host}.';' : '' )
                          .($cfg->{database} ? "database=".$cfg->{database}.';' : '')
                          .($cfg->{port} ? "port=".$cfg->{port} : '');
-    $self->{dbi} = DBI->connect($string,
-                        $cfg->{username},
-                        $cfg->{password},
-                        { RaiseError => 1,
-                          AutoCommit=>0, 
-                          ReadOnly => 1
-                        }
-                       );
+    # $self->{dbi} = DBI->connect($string,
+    #                     $cfg->{username},
+    #                     $cfg->{password},
+    #                     { RaiseError => 1,
+    #                       AutoCommit=>0, 
+    #                       ReadOnly => 1
+    #                     }
+    #                    );
+    $self->{pg} = Mojo::Pg->new('postgresql://'.$string);
     alarm(0);
     die "Connection failed" if not $self->{dbi};
   };
@@ -2763,3 +2765,48 @@ sub DESTROY {
 }
 
 1; # End of PMLTQ::SQLEvaluator
+
+__END__
+
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+PMLTQ::SQLEvaluator - SQL evaluator of PML-TQ queries which can use PostreSQL as a backend
+
+=head1 VERSION
+
+version 1.2.3
+
+=head1 AUTHORS
+
+=over 4
+
+=item *
+
+Petr Pajas <pajas@ufal.mff.cuni.cz>
+
+=item *
+
+Jan Štěpánek <stepanek@ufal.mff.cuni.cz>
+
+=item *
+
+Michal Sedlák <sedlak@ufal.mff.cuni.cz>
+
+=item *
+
+Matyáš Kopp <matyas.kopp@gmail.com>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2015 by Institute of Formal and Applied Linguistics (http://ufal.mff.cuni.cz).
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut

@@ -90,6 +90,7 @@ share/static/menubar/menu.css
 share/static/menubar/menu.js
 t/00-compile.t
 t/pod.t
+xt/author/async_sqlevaluator.t
 xt/author/convert_command.t
 xt/author/init_command.t
 xt/author/lib/PML.pm

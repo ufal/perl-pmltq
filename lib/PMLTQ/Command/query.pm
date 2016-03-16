@@ -1,5 +1,6 @@
 package PMLTQ::Command::query;
-
+our $AUTHORITY = 'cpan:MATY';
+$PMLTQ::Command::query::VERSION = '1.2.3';
 # ABSTRACT: WIP: Executes query on treebank
 
 use PMLTQ::Base 'PMLTQ::Command';
@@ -558,6 +559,23 @@ sub apply_filter {
   $filter->{finish}->($filter) if $filter;
 }
 
+
+1;
+
+__END__
+
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+PMLTQ::Command::query - WIP: Executes query on treebank
+
+=head1 VERSION
+
+version 1.2.3
+
 =head1 SYNOPSIS
 
   pmltq query [--server <URL_or_server_ID> ] [ <options> ] [ --stdin | --query-file <filename> | --query <query> | <query> ]
@@ -568,7 +586,6 @@ sub apply_filter {
 or
 
   pmltq query [options] [ --print-servers|-P | --node-types | --relations ]
-
 
 =head1 DESCRIPTION
 
@@ -695,6 +712,33 @@ Print some extended information (e.g. evaluation benchmarks).
 
 =back
 
-=cut
+=head1 AUTHORS
 
-1;
+=over 4
+
+=item *
+
+Petr Pajas <pajas@ufal.mff.cuni.cz>
+
+=item *
+
+Jan Štěpánek <stepanek@ufal.mff.cuni.cz>
+
+=item *
+
+Michal Sedlák <sedlak@ufal.mff.cuni.cz>
+
+=item *
+
+Matyáš Kopp <matyas.kopp@gmail.com>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2015 by Institute of Formal and Applied Linguistics (http://ufal.mff.cuni.cz).
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
