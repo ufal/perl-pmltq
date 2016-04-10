@@ -9,6 +9,16 @@ Revision history for {{$dist->name}}
 
  [ENHANCEMENTS]
 
+1.2.3
+ - Released: 2016-04-10 20:21:02 UTC
+
+ [BUG FIXES]
+ - fixing wrong dependencies
+ - fixing undefined functions
+
+ [STATISTICS]
+ - code churn: 3 files changed, 19 insertions(+), 1 deletion(-)
+
 1.2.2
  - Released: 2016-02-12 09:03:27 UTC
 
