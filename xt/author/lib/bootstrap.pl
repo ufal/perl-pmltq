@@ -265,7 +265,7 @@ sub sort_results {
 }
 
 sub sql_test_query {
-  my ( $name, $treebank_name, $evaluator, $query ) = @_;
+  my ( $name, $treebank_name, $evaluator, $query) = @_;
 
   my ( $result, $query_tree );
   lives_ok {
@@ -273,8 +273,13 @@ sub sql_test_query {
     $result = $evaluator->run( {} );
   }
   "evaluation of ($name) on $treebank_name";
+  test_results($name, $treebank_name, $evaluator, $query, $query_tree, $result);
+}
 
-  if ( defined $result ) {
+
+sub test_results {
+  my ($name, $treebank_name, $evaluator, $query, $query_tree, $result) = @_;
+ if ( defined $result ) {
 
     if ( !$result ) {
       fail("Result match for ($name) on $treebank_name is empty and that shouldn't happen.");
@@ -300,6 +305,7 @@ $query
 Result: $@
 MSG
   }
+
 }
 
 sub test_queries_for {
@@ -307,7 +313,7 @@ sub test_queries_for {
 
   my $evaluator = init_sql_evaluator($treebank_name);
   lives_ok { $evaluator->connect() } 'Connection to database successful';
-  next unless $evaluator->{dbi};
+  next unless $evaluator->{pg};
 
   for my $query ( load_queries($treebank_name) ) {
     my $name = $query->{name};

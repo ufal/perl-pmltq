@@ -427,7 +427,7 @@ sub get_type_decl_for_node {
 
 sub connect {
   my ($self)=@_;
-  return $self->{dbi} if $self->{dbi};
+  return $self->{pg} if $self->{pg};
   my $cfg = $self->{connect};
   require DBI;
   # this is taken from http://search.cpan.org/~lbaxter/Sys-SigAction/dbd-oracle-timeout.POD
@@ -441,43 +441,71 @@ sub connect {
     alarm(20);
     $self->{layout_version} = $cfg->{layout_version}||0;
 
-    require DBD::Pg;
-    import DBD::Pg qw(:async);
-
-    my $string = 'dbi:Pg:'
-                         .($cfg->{host} ? 'host='.$cfg->{host}.';' : '' )
-                         .($cfg->{database} ? "database=".$cfg->{database}.';' : '')
-                         .($cfg->{port} ? "port=".$cfg->{port} : '');
-    $self->{dbi} = DBI->connect($string,
-                        $cfg->{username},
-                        $cfg->{password},
-                        { RaiseError => 1,
-                          AutoCommit=>0, 
-                          ReadOnly => 1
-                        }
-                       );
+    #require DBD::Pg;
+    #import DBD::Pg qw(:async);
+    require Mojo::Pg;
+    # my $string = 'dbi:Pg:'
+    #                      .($cfg->{host} ? 'host='.$cfg->{host}.';' : '' )
+    #                      .($cfg->{database} ? "database=".$cfg->{database}.';' : '')
+    #                      .($cfg->{port} ? "port=".$cfg->{port} : '');
+    # $self->{dbi} = DBI->connect($string,
+    #                     $cfg->{username},
+    #                     $cfg->{password},
+    #                     { RaiseError => 1,
+    #                       AutoCommit=>0, 
+    #                       ReadOnly => 1
+    #                     }
+    #                    );
+    $self->{pg} = Mojo::Pg->new("postgresql://$cfg->{username}"
+      .($cfg->{password} ? ":$cfg->{password}" : '')
+      .'@'
+      ."$cfg->{host}"
+      .($cfg->{port} ? ":".$cfg->{port} : '')
+      ."/$cfg->{database}?"
+      .'RaiseError=1'
+      .'&ReadOnly=1'
+      .'&AutoCommit=0'
+      );
     alarm(0);
-    die "Connection failed" if not $self->{dbi};
+    # die "Connection failed" if not $self->{dbi};
+    die "Connection failed" if not $self->{pg};
   };
   alarm(0);
   if ($@) {
     print STDERR "$@";
-    undef $self->{dbi};
+    undef $self->{pg};
     die "Unable to connect to the database.";
   }
-  return $self->{dbi};
+  return $self->{pg};
 }
 
 sub run {
   my ($self,$opts)=@_;
   delete $self->{results};
   $opts||={};
-  my $dbi  = $self->{dbi} ||
+  my $pg  = $self->{pg} ||
     $self->connect ||
     die("Not connected to DBI!\n");
   my $timeout = $opts->{timeout};
   my $t0 = new Benchmark;
   # my $limit = abs(int( $self->{returns_nodes} ? $opts->{node_limit} : $opts->{row_limit} ));
+
+##TMP
+  if($opts->{cb} and ! $opts->{use_cursor}) { # callback
+    $self->run_sql_query($self->{sth},{
+    #    ($limit ? (limit=> $limit) : ()),
+        timeout => $timeout,
+        timeout_callback => $opts->{timeout_callback},
+        RaiseError => 1,
+        return_sth => $opts->{return_sth},
+        use_cursor => $opts->{use_cursor},
+        cb => $opts->{cb}
+    });
+    return;
+  }
+##/TMP
+
+
   my $results = eval {
     if ($opts->{use_cursor}) {
       my $buffer = $self->cursor_next(1); # just pre-fill the buffer
@@ -490,9 +518,11 @@ sub run {
         RaiseError => 1,
         return_sth => $opts->{return_sth},
         use_cursor => $opts->{use_cursor},
+        (exists $opts->{cb} ? (cb => $opts->{cb}):())
       })
     }
   };
+
   if ($@) {
     my $err = $@;
     $err=~s/\n/ /g;
@@ -645,7 +675,7 @@ EOF
 
 sub close_cursor {
   my ($self)=@_;
-  my $dbi = $self->{dbi} || die "Not connected to DBI!\n";
+  my $dbi = $self->{pg} || die "Not connected to DBI!\n";
   my $cursor = delete $self->{cursor};
   return unless $cursor;
   my $close = delete $cursor->{close};
@@ -678,7 +708,7 @@ sub cursor_next {
             my $ratio = $cursor->{ratio} ? ($cursor->{ratio}[0]/$cursor->{ratio}[1]) : undef;
             $size=$ratio ? int($size/$ratio)+1 : $size;
           }
-          $sth = $cursor->{sth} = $self->{dbi}->prepare(qq{FETCH $size FROM "$csr"},{ pg_async => 1 });
+          $sth = $cursor->{sth} = $self->{pg}->{dbh}->prepare(qq{FETCH $size FROM "$csr"},{ pg_async => 1 });
 #         print STDERR "New sth for $size: $sth\n";
         }
         my $opts = { timeout => $cursor->{timeout}, update_timeout=>1 };
@@ -727,12 +757,12 @@ sub cursor_next {
 sub run_sql_query {
   my ($self, $sql_or_sth, $opts)=@_;
   # print STDERR "run_sql_query: $sql_or_sth\n" if ($self->{debug} and !ref($sql_or_sth));
-
-  my $dbi = $self->{dbi} || die "Not connected to DBI!\n";
-  local $dbi->{RaiseError} = $opts->{RaiseError};
-  local $dbi->{LongReadLen} = $opts->{LongReadLen} if exists($opts->{LongReadLen});
+  my $dbi = $self->{pg}->db || die "Not connected to DBI!\n";
+  local $dbi->{pg}->{options}->{RaiseError} = $opts->{RaiseError};
+  local $dbi->{pg}->{options}->{LongReadLen} = $opts->{LongReadLen} if exists($opts->{LongReadLen});
   require Time::HiRes;
   my $canceled = 0;
+
   if ($opts->{use_cursor}) {
 #    print STDERR "Use cursor\n";
     $self->close_cursor if $self->{cursor};
@@ -746,20 +776,20 @@ sub run_sql_query {
     my $csr = "pmltq_".$$;
     $cursor->{name}=$csr;
     eval {
-      $dbi->do(qq{DECLARE "$csr" CURSOR FOR }.$sql_or_sth);
+      $dbi->query(qq{DECLARE "$csr" CURSOR FOR }.$sql_or_sth);
     };
     my $err = $@;
     if ($err) {
-      $dbi->rollback();
+      $dbi->{dbh}->rollback();
       die $err;
     }
 
     $cursor->{close} = sub {
-      eval { $dbi->do(qq{CLOSE "$csr"}) };
-      $dbi->rollback() if $@;
+      eval { $dbi->query(qq{CLOSE "$csr"}) };
+      $dbi->{dbh}->rollback() if $@;
     };
     if ($opts->{return_sth}) {
-      $cursor->{sth} = $dbi->prepare(qq{FETCH $size FROM "$csr"},{ pg_async => 1 });
+      $cursor->{sth} = $dbi->{dbh}->prepare(qq{FETCH $size FROM "$csr"},{ pg_async => 1 });
       if ($opts->{prepare_only}) {
         $self->{sth} = $cursor->{sth};
       }
@@ -769,10 +799,19 @@ sub run_sql_query {
       return;
     }
   }
-  my $sth = ref($sql_or_sth) ? $sql_or_sth : $dbi->prepare( $sql_or_sth,{ pg_async => 1 } );
+
+  my $sth = ref($sql_or_sth) ? $sql_or_sth : $dbi->{dbh}->prepare( $sql_or_sth,{ pg_async => 1 } );
+### TMP
+  if($opts->{cb}) {
+    $dbi->query($self->{sql} => $opts->{cb});
+    return;
+  }
+### END TMP
+
   if ($opts->{use_cursor}) {
     $self->{cursor}{sth}=$sth;
   }
+
   if ($opts->{prepare_only}) {
     if ( $opts->{return_sth} ) {
       return $self->{sth} = $sth;
@@ -804,7 +843,7 @@ sub run_sql_query {
   };
   my $err = $@;
   if ($err) {
-    $dbi->rollback();
+    $dbi->{dbh}->rollback();
     die $err;
   #} else {
     #$dbi->commit();
@@ -2759,7 +2798,7 @@ sub DESTROY {
   my $self = shift;
 
   # Make sure we disconnect from database when destroyed
-  $self->{dbi}->disconnect() if $self->{dbi};
+  $self->{pg}->db->disconnect() if $self->{pg};
 }
 
 1; # End of PMLTQ::SQLEvaluator
