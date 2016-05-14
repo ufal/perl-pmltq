@@ -8,6 +8,11 @@ use DBI;
 use File::Slurp;
 use Pod::Usage 'pod2usage';
 
+use JSON;
+use LWP::UserAgent;
+use HTTP::Cookies;
+use URI::WithBase;
+
 has config => sub { die 'Command has no configuration'; };
 
 has usage => sub {'Usage: '};
@@ -150,6 +155,47 @@ sub prompt_yn {
   );
 
   return $input;
+}
+
+# WEB
+
+sub ua {
+  my $self = shift;
+  my $ua =  LWP::UserAgent->new();
+  return $ua;
+}
+
+sub login {
+  my ($self,$ua) = @_;
+  my $url = URI::WithBase->new('/',$self->config->{web_api}->{url});
+  $url->path_segments('api','auth');
+  my $res = $self->request($ua,'POST',$url->abs->as_string,{auth => {password => $self->config->{web_api}->{password}, username => $self->config->{web_api}->{user}}});
+  my $cookie_jar = HTTP::Cookies->new();
+  $cookie_jar->extract_cookies($res);
+  $ua->cookie_jar($cookie_jar);
+}
+
+sub request {
+  my ($self,$ua,$method, $url,$data) = @_;
+  my $JSON = JSON->new->utf8;
+  my $req = HTTP::Request->new( $method => $url );
+  $req->content_type('application/json');
+  $req->content($JSON->encode($data)) if $data;
+  my $res = eval { $ua->request( $req ); };
+  confess($@) if $@;
+  unless ( $res->is_success ) {
+    if($res->code() == 502) {
+      print STDERR "Error while executing query.\n";
+    } else {
+      print STDERR "Error reported by PML-TQ server:\n\n" . $res->content . "\n";
+    }
+    return;
+  }
+  if(wantarray) {
+    my $json = $res->decoded_content;
+    return ($res,$json ? $JSON->decode($json) : undef);
+  }
+  return $res;
 }
 
 1;
