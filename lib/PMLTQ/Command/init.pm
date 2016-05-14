@@ -75,6 +75,7 @@ sub run {
     push @layers, {
       name       => $schema->get_root_name,
       data       => '<change this to point to files relative to the data_dir>',
+      path       => '<change this to point to files relative to the data directory on server>',
       references => {%$refs}
       };
   }
@@ -104,7 +105,18 @@ sub run {
       treebank_id => $treebank_id,
       title       => $treebank_title,
       resources   => $resources_dir,
-      layers      => \@layers
+      layers      => \@layers,
+      description => '',
+      public      => 0,
+      free        => 0,
+      featured    => 0,
+      web_api     =>
+        {
+          url      => '',
+          dbserver => '',
+          user     => '',
+          password => ''
+        }
     }
   );
 
