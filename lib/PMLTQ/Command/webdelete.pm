@@ -1,6 +1,6 @@
-package PMLTQ::Command::webverify;
+package PMLTQ::Command::webdelete;
 
-# ABSTRACT: Check if treebank is setted in web interface
+# ABSTRACT: Remove treebank from web interface
 
 use PMLTQ::Base 'PMLTQ::Command';
 
@@ -10,19 +10,22 @@ sub run {
   my $self = shift;
   my $ua = $self->ua;
   $self->login($ua);
-  
   my $json = JSON->new;
   my $treebank = $self->get_treebank($ua);
-  print $treebank ? $json->pretty->encode($treebank) : "";
+  if($treebank) {
+    $self->request_treebank($treebank,$ua,'DELETE');
+  } else {
+    print STDERR "Treebank '".$self->config->{title}."' is not at ".$self->config->{web_api}->{url}.".\n"
+  }
 }
 
 =head1 SYNOPSIS
 
-  pmltq webverify <treebank_config>
+  pmltq webdelete <treebank_config>
 
 =head1 DESCRIPTION
 
-Check if treebank is setted in web interface.
+Remove treebank from web interface.
 
 =head1 OPTIONS
 

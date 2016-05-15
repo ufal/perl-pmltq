@@ -198,4 +198,21 @@ sub request {
   return $res;
 }
 
+sub get_treebank {
+  my ($self,$ua) = @_;
+  my $data;
+  my $url = URI::WithBase->new('/',$self->config->{web_api}->{url});
+  $url->path_segments('api','admin', 'treebanks');
+  (undef,$data) = $self->request($ua,'GET',$url->abs->as_string);
+  my ($treebank) = grep {$_->{name} eq $self->config->{treebank_id}} @{ $data // []};
+  return $treebank;
+}
+
+sub request_treebank {
+  my ($self,$treebank,$ua,$method,$data) = @_;
+  my $url = URI::WithBase->new('/',$self->config->{web_api}->{url});
+  $url->path_segments('api','admin', 'treebanks',$treebank->{id});
+  (undef,$data) = $self->request($ua,$method,$url->abs->as_string,$data);
+}
+
 1;

@@ -113,7 +113,6 @@ sub run {
       web_api     =>
         {
           url      => '',
-          dbserver => '',
           user     => '',
           password => ''
         }
