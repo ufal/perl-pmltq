@@ -180,7 +180,12 @@ sub request {
   my $JSON = JSON->new->utf8;
   my $req = HTTP::Request->new( $method => $url );
   $req->content_type('application/json');
-  $req->content($JSON->encode($data)) if $data;
+  if($data) {
+    $data = $JSON->encode($data);
+    $data =~ s/"false"/false/g;
+    $data =~ s/"true"/true/g;
+    $req->content($data); 
+  }
   my $res = eval { $ua->request( $req ); };
   confess($@) if $@;
   unless ( $res->is_success ) {
@@ -213,6 +218,25 @@ sub request_treebank {
   my $url = URI::WithBase->new('/',$self->config->{web_api}->{url});
   $url->path_segments('api','admin', 'treebanks',$treebank->{id});
   (undef,$data) = $self->request($ua,$method,$url->abs->as_string,$data);
+}
+
+sub create_treebank_param {
+  my ($self) = @_;
+  return {
+    title => $self->config->{title},
+    name => $self->config->{treebank_id},
+    homepage => $self->config->{homepage},
+    description => $self->config->{description},
+    manuals => $self->config->{manuals},
+    dataSources => [map { {layer => $_->{name},path => $_->{path} } }@{$self->config->{layers}}],
+    tags => $self->config->{tags}, ## TODO test tags
+    languages => $self->config->{languages}, ## TODO use lang abbr
+    serverId => $self->config->{serverId}, ## TODO use server name
+    database => $self->config->{db}->{name},
+    isFree => $self->config->{isFree} // "false",
+    isPublic => $self->config->{isPublic} // "false",
+    isFeatured => $self->config->{isFeatured} // "false",
+  }
 }
 
 1;

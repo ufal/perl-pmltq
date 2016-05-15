@@ -107,9 +107,9 @@ sub run {
       resources   => $resources_dir,
       layers      => \@layers,
       description => '',
-      public      => 0,
-      free        => 0,
-      featured    => 0,
+      isPublic      => 'false',
+      isFree        => 'false',
+      isFeatured    => 'false',
       web_api     =>
         {
           url      => '',
