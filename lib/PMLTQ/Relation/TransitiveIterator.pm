@@ -1,7 +1,12 @@
 package PMLTQ::Relation::TransitiveIterator;
 <<<<<<< HEAD
+<<<<<<< HEAD
 our $AUTHORITY = 'cpan:MATY';
 $PMLTQ::Relation::TransitiveIterator::VERSION = '1.2.3';
+=======
+our $AUTHORITY = 'cpan:MICHALS';
+$PMLTQ::Relation::TransitiveIterator::VERSION = '1.1.0';
+>>>>>>> 8de022e02ca25a48172558767e8e4ea04fb89b1c
 =======
 our $AUTHORITY = 'cpan:MICHALS';
 $PMLTQ::Relation::TransitiveIterator::VERSION = '1.1.0';
@@ -145,7 +150,11 @@ PMLTQ::Relation::TransitiveIterator - Iterates over nodes that are transitive
 =head1 VERSION
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 version 1.2.3
+=======
+version 1.1.0
+>>>>>>> 8de022e02ca25a48172558767e8e4ea04fb89b1c
 =======
 version 1.1.0
 >>>>>>> 8de022e02ca25a48172558767e8e4ea04fb89b1c

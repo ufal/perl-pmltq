@@ -1,7 +1,12 @@
 package PMLTQ::PML2BASE;
 <<<<<<< HEAD
+<<<<<<< HEAD
 our $AUTHORITY = 'cpan:MATY';
 $PMLTQ::PML2BASE::VERSION = '1.2.3';
+=======
+our $AUTHORITY = 'cpan:MICHALS';
+$PMLTQ::PML2BASE::VERSION = '1.1.0';
+>>>>>>> 8de022e02ca25a48172558767e8e4ea04fb89b1c
 =======
 our $AUTHORITY = 'cpan:MICHALS';
 $PMLTQ::PML2BASE::VERSION = '1.1.0';
@@ -1356,7 +1361,11 @@ PMLTQ::PML2BASE - Convert from PML to SQL
 =head1 VERSION
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 version 1.2.3
+=======
+version 1.1.0
+>>>>>>> 8de022e02ca25a48172558767e8e4ea04fb89b1c
 =======
 version 1.1.0
 >>>>>>> 8de022e02ca25a48172558767e8e4ea04fb89b1c

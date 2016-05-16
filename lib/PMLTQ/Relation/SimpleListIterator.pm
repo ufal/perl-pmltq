@@ -1,7 +1,12 @@
 package PMLTQ::Relation::SimpleListIterator;
 <<<<<<< HEAD
+<<<<<<< HEAD
 our $AUTHORITY = 'cpan:MATY';
 $PMLTQ::Relation::SimpleListIterator::VERSION = '1.2.3';
+=======
+our $AUTHORITY = 'cpan:MICHALS';
+$PMLTQ::Relation::SimpleListIterator::VERSION = '1.1.0';
+>>>>>>> 8de022e02ca25a48172558767e8e4ea04fb89b1c
 =======
 our $AUTHORITY = 'cpan:MICHALS';
 $PMLTQ::Relation::SimpleListIterator::VERSION = '1.1.0';
@@ -74,7 +79,11 @@ PMLTQ::Relation::SimpleListIterator - Base class for all iterators that iterates
 =head1 VERSION
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 version 1.2.3
+=======
+version 1.1.0
+>>>>>>> 8de022e02ca25a48172558767e8e4ea04fb89b1c
 =======
 version 1.1.0
 >>>>>>> 8de022e02ca25a48172558767e8e4ea04fb89b1c

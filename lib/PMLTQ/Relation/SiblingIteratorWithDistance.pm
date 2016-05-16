@@ -1,7 +1,12 @@
 package PMLTQ::Relation::SiblingIteratorWithDistance;
 <<<<<<< HEAD
+<<<<<<< HEAD
 our $AUTHORITY = 'cpan:MATY';
 $PMLTQ::Relation::SiblingIteratorWithDistance::VERSION = '1.2.3';
+=======
+our $AUTHORITY = 'cpan:MICHALS';
+$PMLTQ::Relation::SiblingIteratorWithDistance::VERSION = '1.1.0';
+>>>>>>> 8de022e02ca25a48172558767e8e4ea04fb89b1c
 =======
 our $AUTHORITY = 'cpan:MICHALS';
 $PMLTQ::Relation::SiblingIteratorWithDistance::VERSION = '1.1.0';
@@ -133,7 +138,11 @@ PMLTQ::Relation::SiblingIteratorWithDistance - Iterates over siblings given node
 =head1 VERSION
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 version 1.2.3
+=======
+version 1.1.0
+>>>>>>> 8de022e02ca25a48172558767e8e4ea04fb89b1c
 =======
 version 1.1.0
 >>>>>>> 8de022e02ca25a48172558767e8e4ea04fb89b1c

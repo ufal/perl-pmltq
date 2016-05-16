@@ -1,7 +1,12 @@
 package PMLTQ::Command::load;
 <<<<<<< HEAD
+<<<<<<< HEAD
 our $AUTHORITY = 'cpan:MATY';
 $PMLTQ::Command::load::VERSION = '1.2.3';
+=======
+our $AUTHORITY = 'cpan:MICHALS';
+$PMLTQ::Command::load::VERSION = '1.1.0';
+>>>>>>> 8de022e02ca25a48172558767e8e4ea04fb89b1c
 =======
 our $AUTHORITY = 'cpan:MICHALS';
 $PMLTQ::Command::load::VERSION = '1.1.0';
@@ -57,7 +62,11 @@ PMLTQ::Command::load - Load treebank to database
 =head1 VERSION
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 version 1.2.3
+=======
+version 1.1.0
+>>>>>>> 8de022e02ca25a48172558767e8e4ea04fb89b1c
 =======
 version 1.1.0
 >>>>>>> 8de022e02ca25a48172558767e8e4ea04fb89b1c
