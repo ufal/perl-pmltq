@@ -1,6 +1,11 @@
 package PMLTQ::Relation::SameTreeIterator;
+<<<<<<< HEAD
 our $AUTHORITY = 'cpan:MATY';
 $PMLTQ::Relation::SameTreeIterator::VERSION = '1.2.3';
+=======
+our $AUTHORITY = 'cpan:MICHALS';
+$PMLTQ::Relation::SameTreeIterator::VERSION = '1.1.0';
+>>>>>>> 8de022e02ca25a48172558767e8e4ea04fb89b1c
 # ABSTRACT: Evaluates condition on nodes of current tree
 
 use 5.006;
@@ -37,7 +42,11 @@ PMLTQ::Relation::SameTreeIterator - Evaluates condition on nodes of current tree
 
 =head1 VERSION
 
+<<<<<<< HEAD
 version 1.2.3
+=======
+version 1.1.0
+>>>>>>> 8de022e02ca25a48172558767e8e4ea04fb89b1c
 
 =head1 AUTHORS
 

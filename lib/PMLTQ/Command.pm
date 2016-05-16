@@ -1,6 +1,11 @@
 package PMLTQ::Command;
+<<<<<<< HEAD
 our $AUTHORITY = 'cpan:MATY';
 $PMLTQ::Command::VERSION = '1.2.3';
+=======
+our $AUTHORITY = 'cpan:MICHALS';
+$PMLTQ::Command::VERSION = '1.1.0';
+>>>>>>> 8de022e02ca25a48172558767e8e4ea04fb89b1c
 # ABSTRACT: Command base class
 
 use PMLTQ::Base -base;
@@ -167,7 +172,11 @@ PMLTQ::Command - Command base class
 
 =head1 VERSION
 
+<<<<<<< HEAD
 version 1.2.3
+=======
+version 1.1.0
+>>>>>>> 8de022e02ca25a48172558767e8e4ea04fb89b1c
 
 =head1 AUTHORS
 
