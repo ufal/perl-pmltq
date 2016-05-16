@@ -20,6 +20,9 @@ lib/PMLTQ/Command/load.pm
 lib/PMLTQ/Command/query.pm
 lib/PMLTQ/Command/verify.pm
 lib/PMLTQ/Command/version.pm
+lib/PMLTQ/Command/webdelete.pm
+lib/PMLTQ/Command/webload.pm
+lib/PMLTQ/Command/webverify.pm
 lib/PMLTQ/Commands.pm
 lib/PMLTQ/Common.pm
 lib/PMLTQ/Grammar.pm
