@@ -12,6 +12,7 @@ use JSON;
 use LWP::UserAgent;
 use HTTP::Cookies;
 use URI::WithBase;
+use URI::Encode qw(uri_encode);
 
 has config => sub { die 'Command has no configuration'; };
 
@@ -161,8 +162,8 @@ sub prompt_yn {
 
 sub ua {
   my $self = shift;
-  my $ua =  LWP::UserAgent->new();
-  return $ua;
+  $self->{ua} =  LWP::UserAgent->new() unless $self->{ua};
+  return $self->{ua};
 }
 
 sub login {
@@ -222,6 +223,47 @@ sub request_treebank {
 
 sub create_treebank_param {
   my ($self) = @_;
+  my (@langs,@tags,@server);
+  my @searches = (
+    {
+      results => \@langs,
+      configpath => ['languages'],
+      api => 'languages',
+      compare => 'code',
+      error => "Unknown language code '\%s'\n"
+    },
+    {
+      results => \@tags,
+      configpath => ['tags'],
+      api => 'tags',
+      compare => 'name',
+      error => "Unknown tag '\%s'\n"
+    },
+    {
+      results => \@server,
+      configpath => ['web_api','dbserver'],
+      api => 'servers',
+      compare => 'name',
+      no_url_filter => 1,
+      error => "Unknown server name '\%s'\n",
+    },
+  );
+  for my $search (@searches) {
+    my $config_values = $self->config;
+    for my $path (@{$search->{configpath}}) {
+      $config_values = $config_values->{$path};
+    }
+    $config_values = $config_values ? (ref $config_values ? $config_values : [$config_values] )  : [];
+    for my $text (@{$config_values}) {
+      my $res = $self->_search_param($text,$search);
+      if($res) {
+        push @{$search->{results}}, $res->{id};
+      } else {
+        print STDERR sprintf($search->{error},$text);
+      }
+    }
+  }
+
   return {
     title => $self->config->{title},
     name => $self->config->{treebank_id},
@@ -229,14 +271,26 @@ sub create_treebank_param {
     description => $self->config->{description},
     manuals => $self->config->{manuals},
     dataSources => [map { {layer => $_->{name},path => $_->{path} } }@{$self->config->{layers}}],
-    tags => $self->config->{tags}, ## TODO test tags
-    languages => $self->config->{languages}, ## TODO use lang abbr
-    serverId => $self->config->{serverId}, ## TODO use server name
+    tags => \@tags,
+    languages => \@langs,
+    serverId => $server[0],
     database => $self->config->{db}->{name},
     isFree => $self->config->{isFree} // "false",
     isPublic => $self->config->{isPublic} // "false",
     isFeatured => $self->config->{isFeatured} // "false",
   }
+}
+
+sub _search_param {
+  my $self = shift;
+  my $text = shift;
+  my $opts = shift;
+  my $url = URI::WithBase->new('/',$self->config->{web_api}->{url});
+  $url->path_segments('api', 'admin', $opts->{api});
+  my $data;
+  (undef,$data) = $self->request($self->{ua}, 'GET', $url->abs->as_string.($opts->{no_url_filter} ? '' : "?filter=".URI::Encode::uri_encode("{\"q\":\"$text\"}")), {});
+  my ($res) = grep {$_->{$opts->{compare}} eq $text } @$data;
+  return $res;
 }
 
 1;
