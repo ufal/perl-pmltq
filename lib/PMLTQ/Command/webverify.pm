@@ -3,6 +3,7 @@ package PMLTQ::Command::webverify;
 # ABSTRACT: Check if treebank is setted in web interface
 
 use PMLTQ::Base 'PMLTQ::Command';
+use File::Path qw( make_path );
 
 has usage => sub { shift->extract_usage };
 
@@ -13,7 +14,34 @@ sub run {
   
   my $json = JSON->new;
   my $treebank = $self->get_treebank($ua);
-  print $treebank ? $json->pretty->encode($treebank) : "";
+  if($treebank) {
+    print $json->pretty->encode($treebank);
+    if (my $test_query = $self->config->{test_query}) {
+      if($test_query->{result_dir} && not(-d $test_query->{result_dir})) {
+        make_path($test_query->{result_dir}) or die "Unable to create directory ".$test_query->{result_dir}."\n" ; 
+      }
+      my $i=0;
+      for my $query (@{$test_query->{queries} // []}) {
+        my $text = $query->{query};
+        my $filename = File::Spec->catfile($test_query->{result_dir} // '.',  $query->{filename} // $i);
+        unless($text) {
+          print STDERR "Error in config file: Empty query\n";
+          next;
+        }
+        my $result = $self->evaluate_query($treebank->{id},$text);
+        if($result =~ m!</svg>!) {
+          print STDERR "There is no text field in SVG result $filename ('$text') => check print server log\n" unless $result =~ m!</text>!
+        }
+
+        open(my $fh, '>', $filename) or die "Could not open file '$filename' $!";
+        print $fh $result;
+        close $fh;
+        $i++;
+      }
+    }
+  } else {
+    print STDERR "Unknown treebank\n";
+  }
 }
 
 =head1 SYNOPSIS

@@ -177,10 +177,11 @@ sub login {
 }
 
 sub request {
-  my ($self,$ua,$method, $url,$data) = @_;
+  my ($self,$ua,$method, $url,$data,$content_type) = @_;
   my $JSON = JSON->new->utf8;
   my $req = HTTP::Request->new( $method => $url );
-  $req->content_type('application/json');
+  $req->content_type($content_type // 
+                     'application/json');
   if($data) {
     $data = $JSON->encode($data);
     $data =~ s/"false"/false/g;
@@ -198,6 +199,7 @@ sub request {
     return;
   }
   if(wantarray) {
+    return ($res,$res->decoded_content) unless $res->content_type eq 'application/json';
     my $json = $res->decoded_content;
     return ($res,$json ? $JSON->decode($json) : undef);
   }
@@ -293,4 +295,30 @@ sub _search_param {
   return $res;
 }
 
+
+sub evaluate_query {
+  my ($self,$tb_id,$query) = @_;
+  my $url = URI::WithBase->new('/',$self->config->{web_api}->{url});
+  $url->path_segments('api', 'treebanks', $tb_id, 'query');
+  my $data;
+  (undef,$data) = $self->request($self->{ua}, 'POST', $url->abs->as_string, {filter => "true", limit => 100, query => $query, timeout => 30});
+  my $result = '';
+  unless($data) {
+    print STDERR "Error while executing query: $query\n";
+  } else {
+    my $results = $data->{results};
+    if(@$results) {
+      if($data->{nodes}) { # tree result
+        $url = URI::WithBase->new('/',$self->config->{web_api}->{url});
+        $url->path_segments('api', 'treebanks', $tb_id, 'svg');
+        (undef,$result) = $self->request($self->{ua}, 'POST', $url->abs->as_string, {nodes => $results->[0], tree => 0});
+      } else { # filter result
+        $result = join("\n",map {join("\t",@$_)} @$results) . "\n";
+      }  
+    } else {
+      print STDERR "Empty result for: $query\n";
+    }
+  }
+  return $result;  
+}
 1;
