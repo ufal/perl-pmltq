@@ -177,11 +177,10 @@ sub login {
 }
 
 sub request {
-  my ($self,$ua,$method, $url,$data,$content_type) = @_;
+  my ($self,$ua,$method, $url,$data) = @_;
   my $JSON = JSON->new->utf8;
   my $req = HTTP::Request->new( $method => $url );
-  $req->content_type($content_type // 
-                     'application/json');
+  $req->content_type('application/json;charset=UTF-8');
   if($data) {
     $data = $JSON->encode($data);
     $data =~ s/"false"/false/g;

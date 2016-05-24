@@ -30,7 +30,8 @@ sub run {
         }
         my $result = $self->evaluate_query($treebank->{id},$text);
         if($result =~ m!</svg>!) {
-          print STDERR "There is no text field in SVG result $filename ('$text') => check print server log\n" unless $result =~ m!</text>!
+          print STDERR "There is no text field in SVG result $filename ('$text') => check print server log (wrong styles?)\n" unless $result =~ m!</text>!;
+          print STDERR "There is no node field in SVG result $filename ('$text') => check print server log (wrong file path?)\n" unless $result =~ m!<ellipse!;
         }
 
         open(my $fh, '>', $filename) or die "Could not open file '$filename' $!";
