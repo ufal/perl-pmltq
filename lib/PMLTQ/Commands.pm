@@ -355,5 +355,10 @@ option C<db_name: 'abc'>.
         t-node/coref_gram.rf: t-node
     - name: tdata
       data: **/*.t.gz
+  
+  web_api:
+    user: webuser
+    password: pwd
+    url: 'https://serviceurl.com/'
 
 =cut
