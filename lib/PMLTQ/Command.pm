@@ -191,9 +191,9 @@ sub request {
   confess($@) if $@;
   unless ( $res->is_success ) {
     if($res->code() == 502) {
-      print STDERR "Error while executing query.\n";
+      die "Error while executing query.\n";
     } else {
-      print STDERR "Error reported by PML-TQ server:\n\n" . $res->content . "\n";
+      die "Error reported by PML-TQ server:\n\n" . $res->content . "\n";
     }
     return;
   }
@@ -231,14 +231,16 @@ sub create_treebank_param {
       configpath => ['languages'],
       api => 'languages',
       compare => 'code',
-      error => "Unknown language code '\%s'\n"
+      error => "Unknown language code '\%s'\n",
+      min => 0
     },
     {
       results => \@tags,
       configpath => ['tags'],
       api => 'tags',
       compare => 'name',
-      error => "Unknown tag '\%s'\n"
+      error => "Unknown tag '\%s'\n",
+      min => 0
     },
     {
       results => \@server,
@@ -247,6 +249,7 @@ sub create_treebank_param {
       compare => 'name',
       no_url_filter => 1,
       error => "Unknown server name '\%s'\n",
+      min => 1
     },
   );
   for my $search (@searches) {
@@ -260,9 +263,10 @@ sub create_treebank_param {
       if($res) {
         push @{$search->{results}}, $res->{id};
       } else {
-        print STDERR sprintf($search->{error},$text);
+        die "ERROR: " . sprintf($search->{error},$text);
       }
     }
+    die "ERROR: " . $search->{min} . " " . join("-",@{$search->{configpath}}) . " is required\n" unless @{$search->{results}} >= $search->{min} ;
   }
 
   return {
