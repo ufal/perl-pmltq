@@ -8,6 +8,7 @@ Revision history for {{$dist->name}}
  [DOCUMENTATION]
 
  [ENHANCEMENTS]
+ - added treebank publishing through PMLTQ::Server REST API 
 
 1.2.3
  - Released: 2016-04-10 20:21:02 UTC
