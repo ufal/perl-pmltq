@@ -19,7 +19,6 @@ sub run {
   } else { # CREATING NEW TREEBANK
     my $url = URI::WithBase->new('/',$self->config->{web_api}->{url});
     $url->path_segments('api', 'admin', 'treebanks');
-    use Data::Dumper; print STDERR Dumper($treebank_param);
     my $data;
     (undef,$data) = $self->request($ua, 'POST', $url->abs->as_string, $treebank_param); 
   }
