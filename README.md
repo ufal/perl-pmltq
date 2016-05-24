@@ -4,7 +4,7 @@ PMLTQ - Query engine and query language for trees in PML format
 
 # VERSION
 
-version 1.1.0
+version 1.2.4
 
 <div>
     <a href="https://travis-ci.org/ufal/perl-pmltq"><img src="https://travis-ci.org/ufal/perl-pmltq.svg?branch=master" alt="Build Status"></a>
@@ -20,10 +20,10 @@ TrEd (http://ufal.mff.cuni.cz/tred).
 
 # AUTHORS
 
-- Petr Pajas <pajas@ufal.mff.cuni.cz>
-- Jan Štěpánek <stepanek@ufal.mff.cuni.cz>
-- Michal Sedlák <sedlak@ufal.mff.cuni.cz>
-- Matyáš Kopp <matyas.kopp@gmail.com>
+- Petr Pajas &lt;pajas@ufal.mff.cuni.cz>
+- Jan Štěpánek &lt;stepanek@ufal.mff.cuni.cz>
+- Michal Sedlák &lt;sedlak@ufal.mff.cuni.cz>
+- Matyáš Kopp &lt;matyas.kopp@gmail.com>
 
 # COPYRIGHT AND LICENSE
 

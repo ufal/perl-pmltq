@@ -8,6 +8,12 @@ use DBI;
 use File::Slurp;
 use Pod::Usage 'pod2usage';
 
+use JSON;
+use LWP::UserAgent;
+use HTTP::Cookies;
+use URI::WithBase;
+use URI::Encode qw(uri_encode);
+
 has config => sub { die 'Command has no configuration'; };
 
 has usage => sub {'Usage: '};
@@ -152,4 +158,170 @@ sub prompt_yn {
   return $input;
 }
 
+# WEB
+
+sub ua {
+  my $self = shift;
+  $self->{ua} =  LWP::UserAgent->new() unless $self->{ua};
+  return $self->{ua};
+}
+
+sub login {
+  my ($self,$ua) = @_;
+  my $url = URI::WithBase->new('/',$self->config->{web_api}->{url});
+  $url->path_segments('api','auth');
+  my $res = $self->request($ua,'POST',$url->abs->as_string,{auth => {password => $self->config->{web_api}->{password}, username => $self->config->{web_api}->{user}}});
+  my $cookie_jar = HTTP::Cookies->new();
+  $cookie_jar->extract_cookies($res);
+  $ua->cookie_jar($cookie_jar);
+}
+
+sub request {
+  my ($self,$ua,$method, $url,$data) = @_;
+  my $JSON = JSON->new->utf8;
+  my $req = HTTP::Request->new( $method => $url );
+  $req->content_type('application/json;charset=UTF-8');
+  if($data) {
+    $data = $JSON->encode($data);
+    $data =~ s/"false"/false/g;
+    $data =~ s/"true"/true/g;
+    $req->content($data); 
+  }
+  my $res = eval { $ua->request( $req ); };
+  confess($@) if $@;
+  unless ( $res->is_success ) {
+    if($res->code() == 502) {
+      die "Error while executing query.\n";
+    } else {
+      die "Error reported by PML-TQ server:\n\n" . $res->content . "\n";
+    }
+    return;
+  }
+  if(wantarray) {
+    return ($res,$res->decoded_content) unless $res->content_type eq 'application/json';
+    my $json = $res->decoded_content;
+    return ($res,$json ? $JSON->decode($json) : undef);
+  }
+  return $res;
+}
+
+sub get_treebank {
+  my ($self,$ua) = @_;
+  my $data;
+  my $url = URI::WithBase->new('/',$self->config->{web_api}->{url});
+  $url->path_segments('api','admin', 'treebanks');
+  (undef,$data) = $self->request($ua,'GET',$url->abs->as_string);
+  my ($treebank) = grep {$_->{name} eq $self->config->{treebank_id}} @{ $data // []};
+  return $treebank;
+}
+
+sub request_treebank {
+  my ($self,$treebank,$ua,$method,$data) = @_;
+  my $url = URI::WithBase->new('/',$self->config->{web_api}->{url});
+  $url->path_segments('api','admin', 'treebanks',$treebank->{id});
+  (undef,$data) = $self->request($ua,$method,$url->abs->as_string,$data);
+}
+
+sub create_treebank_param {
+  my ($self) = @_;
+  my (@langs,@tags,@server);
+  my @searches = (
+    {
+      results => \@langs,
+      configpath => ['languages'],
+      api => 'languages',
+      compare => 'code',
+      error => "Unknown language code '\%s'\n",
+      min => 0
+    },
+    {
+      results => \@tags,
+      configpath => ['tags'],
+      api => 'tags',
+      compare => 'name',
+      error => "Unknown tag '\%s'\n",
+      min => 0
+    },
+    {
+      results => \@server,
+      configpath => ['web_api','dbserver'],
+      api => 'servers',
+      compare => 'name',
+      no_url_filter => 1,
+      error => "Unknown server name '\%s'\n",
+      min => 1
+    },
+  );
+  for my $search (@searches) {
+    my $config_values = $self->config;
+    for my $path (@{$search->{configpath}}) {
+      $config_values = $config_values->{$path};
+    }
+    $config_values = $config_values ? (ref $config_values ? $config_values : [$config_values] )  : [];
+    for my $text (@{$config_values}) {
+      my $res = $self->_search_param($text,$search);
+      if($res) {
+        push @{$search->{results}}, $res->{id};
+      } else {
+        die "ERROR: " . sprintf($search->{error},$text);
+      }
+    }
+    die "ERROR: " . $search->{min} . " " . join("-",@{$search->{configpath}}) . " is required\n" unless @{$search->{results}} >= $search->{min} ;
+  }
+
+  return {
+    title => $self->config->{title},
+    name => $self->config->{treebank_id},
+    homepage => $self->config->{homepage},
+    description => $self->config->{description},
+    manuals => $self->config->{manuals},
+    dataSources => [map { {layer => $_->{name},path => $_->{path} } }@{$self->config->{layers}}],
+    tags => \@tags,
+    languages => \@langs,
+    serverId => $server[0],
+    database => $self->config->{db}->{name},
+    isFree => $self->config->{isFree} // "false",
+    isPublic => $self->config->{isPublic} // "false",
+    isFeatured => $self->config->{isFeatured} // "false",
+  }
+}
+
+sub _search_param {
+  my $self = shift;
+  my $text = shift;
+  my $opts = shift;
+  my $url = URI::WithBase->new('/',$self->config->{web_api}->{url});
+  $url->path_segments('api', 'admin', $opts->{api});
+  my $data;
+  (undef,$data) = $self->request($self->{ua}, 'GET', $url->abs->as_string.($opts->{no_url_filter} ? '' : "?filter=".URI::Encode::uri_encode("{\"q\":\"$text\"}")), {});
+  my ($res) = grep {$_->{$opts->{compare}} eq $text } @$data;
+  return $res;
+}
+
+
+sub evaluate_query {
+  my ($self,$tb_id,$query) = @_;
+  my $url = URI::WithBase->new('/',$self->config->{web_api}->{url});
+  $url->path_segments('api', 'treebanks', $tb_id, 'query');
+  my $data;
+  (undef,$data) = $self->request($self->{ua}, 'POST', $url->abs->as_string, {filter => "true", limit => 100, query => $query, timeout => 30});
+  my $result = '';
+  unless($data) {
+    print STDERR "Error while executing query: $query\n";
+  } else {
+    my $results = $data->{results};
+    if(@$results) {
+      if($data->{nodes}) { # tree result
+        $url = URI::WithBase->new('/',$self->config->{web_api}->{url});
+        $url->path_segments('api', 'treebanks', $tb_id, 'svg');
+        (undef,$result) = $self->request($self->{ua}, 'POST', $url->abs->as_string, {nodes => $results->[0], tree => 0});
+      } else { # filter result
+        $result = join("\n",map {join("\t",@$_)} @$results) . "\n";
+      }  
+    } else {
+      print STDERR "Empty result for: $query\n";
+    }
+  }
+  return $result;  
+}
 1;

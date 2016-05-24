@@ -11,8 +11,11 @@ sub run {
   my $config = $self->config;
 
   my $dbh = $self->sys_db;
-  $dbh->do("DROP DATABASE \"$config->{db}->{name}\";") or die $dbh->errstr;
+  $dbh->do("SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$config->{db}->{name}' AND pid <> pg_backend_pid();"); # disconnect all connections to deleted database
+  $dbh->do("DROP DATABASE \"$config->{db}->{name}\";");
+  my $error = $dbh->errstr;
   $dbh->disconnect;
+  die $error if $error;
 }
 
 =head1 SYNOPSIS
