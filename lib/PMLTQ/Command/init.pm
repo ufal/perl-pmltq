@@ -75,7 +75,7 @@ sub run {
     push @layers, {
       name       => $schema->get_root_name,
       data       => '<change this to point to files relative to the data_dir>',
-      path       => '<change this to point to files relative to the data directory on server>',
+      COMMENT_path       => '<change this to point to files relative to the data directory on server>',
       references => {%$refs}
       };
   }
@@ -102,24 +102,65 @@ sub run {
 
   my $yaml = YAML::Tiny->new(
     {
-      treebank_id => $treebank_id,
-      title       => $treebank_title,
-      resources   => $resources_dir,
-      layers      => \@layers,
-      description => '',
-      isPublic      => 'false',
-      isFree        => 'false',
-      isFeatured    => 'false',
-      web_api     =>
+      treebank_id        => $treebank_id,
+      COMMENT_data_dir   => '',
+      resources          => $resources_dir,
+      COMMENT_output_dir => '',
+      db                 =>
         {
-          url      => '',
-          user     => '',
-          password => ''
+          name             => $treebank_id,
+          COMMENT_host     => 'localhost',
+          COMMENT_port     => 5432,
+          COMMENT_user     => '',
+          COMMENT_password => ''
+        },
+      COMMENT_sys_db       => 'postgres',
+      layers               => \@layers,
+      title                => $treebank_title,
+      COMMENT_homepage   => '',
+      COMMENT_description => '',
+      COMMENT_isFree        => 'false',
+      COMMENT_isPublic      => 'false',
+      COMMENT_isFeatured    => 'false',
+      COMMENT_web_api     =>
+        {
+          COMMENT_dbserver => '',
+          COMMENT_url      => '',
+          COMMENT_user     => '',
+          COMMENT_password => ''
+        },
+      COMMENT_manuals      =>
+        [
+          {
+            COMMENT_title => '',
+            COMMENT_url   => ''
+          }
+        ],
+      COMMENT_tags         =>
+        [
+          'COMMENT_mytag'
+        ],
+      COMMENT_language     => 'lang code',
+      COMMENT_text_query   =>
+        {
+          COMMENT_result_dir => 'webverify_query_results',
+          COMMENT_queries    =>
+            [
+              {
+                COMMENT_filename => '01.svg',
+                COMMENT_query    => 'a-node [];'
+              }
+            ]
         }
     }
   );
 
-  say $yaml->write_string;
+  my $result = $yaml->write_string;
+
+  $result =~ s/\n( *[-]? *)COMMENT_/\n#$1/g;
+  $result =~ s/\n#(.*?)\n( *-)/\n#$1\n#$2/g;
+  
+  say $result;
 
   my $save = $self->prompt_yn( 'Save?', { default => 0 } );
 
@@ -129,7 +170,10 @@ sub run {
         default => 'pmltq.yml'
       }
     );
-    $yaml->write($filename);
+    #$yaml->write($filename);
+    open(my $fh, '>', $filename) or die "Could not open file '$filename' $!";
+    print $fh $result;
+    close $fh;
   }
 }
 

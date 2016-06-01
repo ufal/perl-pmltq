@@ -22,7 +22,7 @@ sub DEFAULT_CONFIG {
     db         => {
       host => 'localhost',
       port => 5432
-    }
+    },
     isFree => 'false',
     isPublic => 'false',
     isFeatured => 'false',
