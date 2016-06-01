@@ -280,9 +280,9 @@ sub create_treebank_param {
     languages => \@langs,
     serverId => $server[0],
     database => $self->config->{db}->{name},
-    isFree => $self->config->{isFree} // "false",
-    isPublic => $self->config->{isPublic} // "false",
-    isFeatured => $self->config->{isFeatured} // "false",
+    isFree => $self->config->{isFree},
+    isPublic => $self->config->{isPublic},
+    isFeatured => $self->config->{isFeatured},
   }
 }
 
