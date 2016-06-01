@@ -102,11 +102,11 @@ sub run {
 
   my $yaml = YAML::Tiny->new(
     {
-      treebank_id        => $treebank_id,
-      COMMENT_data_dir   => '',
-      resources          => $resources_dir,
-      COMMENT_output_dir => '',
-      db                 =>
+      treebank_id         => $treebank_id,
+      COMMENT_data_dir    => '',
+      resources           => $resources_dir,
+      COMMENT_output_dir  => '',
+      db                  =>
         {
           name             => $treebank_id,
           COMMENT_host     => 'localhost',
@@ -114,14 +114,14 @@ sub run {
           COMMENT_user     => '',
           COMMENT_password => ''
         },
-      COMMENT_sys_db       => 'postgres',
-      layers               => \@layers,
-      title                => $treebank_title,
-      COMMENT_homepage   => '',
+      COMMENT_sys_db      => 'postgres',
+      layers              => \@layers,
+      title               => $treebank_title,
+      COMMENT_homepage    => '',
       COMMENT_description => '',
-      COMMENT_isFree        => 'false',
-      COMMENT_isPublic      => 'false',
-      COMMENT_isFeatured    => 'false',
+      COMMENT_isFree      => 'false',
+      COMMENT_isPublic    => 'false',
+      COMMENT_isFeatured  => 'false',
       COMMENT_web_api     =>
         {
           COMMENT_dbserver => '',
@@ -136,12 +136,12 @@ sub run {
             COMMENT_url   => ''
           }
         ],
-      COMMENT_tags         =>
+      COMMENT_tags        =>
         [
           'COMMENT_mytag'
         ],
-      COMMENT_language     => 'lang code',
-      COMMENT_text_query   =>
+      COMMENT_language    => 'lang code',
+      COMMENT_text_query  =>
         {
           COMMENT_result_dir => 'webverify_query_results',
           COMMENT_queries    =>
