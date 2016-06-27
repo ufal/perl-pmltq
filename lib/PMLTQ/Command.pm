@@ -185,7 +185,7 @@ sub request {
     $data = $JSON->encode($data);
     $data =~ s/"false"/false/g;
     $data =~ s/"true"/true/g;
-    $req->content($data); 
+    $req->content($data);
   }
   my $res = eval { $ua->request( $req ); };
   confess($@) if $@;
@@ -280,9 +280,9 @@ sub create_treebank_param {
     languages => \@langs,
     serverId => $server[0],
     database => $self->config->{db}->{name},
-    isFree => $self->config->{isFree} // "false",
-    isPublic => $self->config->{isPublic} // "false",
-    isFeatured => $self->config->{isFeatured} // "false",
+    isFree => $self->config->{isFree},
+    isPublic => $self->config->{isPublic},
+    isFeatured => $self->config->{isFeatured},
   }
 }
 
@@ -317,11 +317,11 @@ sub evaluate_query {
         (undef,$result) = $self->request($self->{ua}, 'POST', $url->abs->as_string, {nodes => $results->[0], tree => 0});
       } else { # filter result
         $result = join("\n",map {join("\t",@$_)} @$results) . "\n";
-      }  
+      }
     } else {
       print STDERR "Empty result for: $query\n";
     }
   }
-  return $result;  
+  return $result;
 }
 1;
