@@ -11,14 +11,14 @@ sub run {
   my $self = shift;
   my $ua = $self->ua;
   $self->login($ua);
-  
+
   my $json = JSON->new;
   my $treebank = $self->get_treebank($ua);
   if($treebank) {
     print $json->pretty->encode($treebank);
     if (my $test_query = $self->config->{test_query}) {
       if($test_query->{result_dir} && not(-d $test_query->{result_dir})) {
-        make_path($test_query->{result_dir}) or die "Unable to create directory ".$test_query->{result_dir}."\n" ; 
+        make_path($test_query->{result_dir}) or die "Unable to create directory ".$test_query->{result_dir}."\n" ;
       }
       my $i=0;
       for my $query (@{$test_query->{queries} // []}) {
