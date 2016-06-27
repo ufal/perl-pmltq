@@ -185,7 +185,7 @@ sub request {
     $data = $JSON->encode($data);
     $data =~ s/"false"/false/g;
     $data =~ s/"true"/true/g;
-    $req->content($data); 
+    $req->content($data);
   }
   my $res = eval { $ua->request( $req ); };
   confess($@) if $@;
@@ -317,11 +317,11 @@ sub evaluate_query {
         (undef,$result) = $self->request($self->{ua}, 'POST', $url->abs->as_string, {nodes => $results->[0], tree => 0});
       } else { # filter result
         $result = join("\n",map {join("\t",@$_)} @$results) . "\n";
-      }  
+      }
     } else {
       print STDERR "Empty result for: $query\n";
     }
   }
-  return $result;  
+  return $result;
 }
 1;
