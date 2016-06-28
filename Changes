@@ -4,12 +4,22 @@ Revision history for {{$dist->name}}
  [API CHANGES]
 
  [BUG FIXES]
+
+ [DOCUMENTATION]
+
+ [ENHANCEMENTS]
+
+1.3.1
+ - Released: 2016-06-28 12:50:19 UTC
+
+ [BUG FIXES]
  - Fix wrong dependency (List::Util)
 
  [DOCUMENTATION]
  - Added commands documentation
 
- [ENHANCEMENTS]
+ [STATISTICS]
+ - code churn: 7 files changed, 253 insertions(+), 33 deletions(-)
 
 1.3.0
  - Released: 2016-05-24 19:01:53 UTC
