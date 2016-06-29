@@ -9,11 +9,23 @@ Revision history for {{$dist->name}}
 
  [ENHANCEMENTS]
 
+1.3.1
+ - Released: 2016-06-28 12:50:19 UTC
+
+ [BUG FIXES]
+ - Fix wrong dependency (List::Util)
+
+ [DOCUMENTATION]
+ - Added commands documentation
+
+ [STATISTICS]
+ - code churn: 7 files changed, 253 insertions(+), 33 deletions(-)
+
 1.3.0
  - Released: 2016-05-24 19:01:53 UTC
 
  [ENHANCEMENTS]
- - added treebank publishing through PMLTQ::Server REST API 
+ - added treebank publishing through PMLTQ::Server REST API
 
  [STATISTICS]
  - code churn: 12 files changed, 380 insertions(+), 9 deletions(-)
