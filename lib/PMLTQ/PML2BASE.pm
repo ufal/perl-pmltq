@@ -141,10 +141,6 @@ sub destroy {
   undef $relations;
 }
 
-sub numeric { ### TODO REMOVE
-  my ($l)=@_;
-  return "NUMERIC($l)";
-}
 sub boolean { ### TODO REMOVE
   my ($l)=@_;
   return "BOOLEAN";
@@ -259,7 +255,7 @@ sub column_spec {
     if (first { !/^(?:0|-?[1-9][0-9]*(?:\.[0-9]*[1-9])?)$/ } $decl->get_values) {
       return [$column => "VARCHAR($max)".$constraint,$create_index];
     } else {
-      return [$column => numeric($max).$constraint,$create_index];
+      return [$column => "NUMERIC($max)".$constraint,$create_index];
     }
   } elsif ($decl_is == PML_CDATA_DECL) {
     my $format = $decl->get_format;
