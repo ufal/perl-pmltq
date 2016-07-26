@@ -141,10 +141,6 @@ sub destroy {
   undef $relations;
 }
 
-sub varchar { ### TODO REMOVE
-  my ($l,$non_ascii)=@_;
-  return "VARCHAR($l)";
-}
 sub numeric { ### TODO REMOVE
   my ($l)=@_;
   return "NUMERIC($l)";
@@ -261,7 +257,7 @@ sub column_spec {
   if ($decl_is == PML_CHOICE_DECL || $decl_is == PML_CONSTANT_DECL) {
     my $max = max(map length, $decl->get_values);
     if (first { !/^(?:0|-?[1-9][0-9]*(?:\.[0-9]*[1-9])?)$/ } $decl->get_values) {
-      return [$column => varchar($max).$constraint,$create_index];
+      return [$column => "VARCHAR($max)".$constraint,$create_index];
     } else {
       return [$column => numeric($max).$constraint,$create_index];
     }
@@ -534,11 +530,11 @@ sub convert_schema {
     #                             qq{, "target_type" }.varchar(128).
     #                             qq{, "pmref" }.boolean().qq{);\n});
     $fh{'#INIT_SQL'}->print(qq{CREATE TABLE "$pmlref_table" (}.
-                               qq{ "ref_type" }.varchar(128).
-                            qq{, "ref_table" }.varchar(MAX_NAME_LENGTH).
-                            qq{, "target_layer" }.varchar(128).
-                            qq{, "target_table" }.varchar(MAX_NAME_LENGTH).
-                            qq{, "target_type" }.varchar(128).qq{);\n\n});
+                               qq{ "ref_type" }."VARCHAR(128)".
+                            qq{, "ref_table" }."VARCHAR(".MAX_NAME_LENGTH.")".
+                            qq{, "target_layer" }."VARCHAR(128)".
+                            qq{, "target_table" }."VARCHAR(".MAX_NAME_LENGTH.")".
+                            qq{, "target_type" }."VARCHAR(128)".qq{);\n\n});
     $fh{'#DELETE_SQL'}->print(qq{DROP TABLE IF EXISTS "$pmlref_table";\n\n});
     for my $k (sort keys %{$opts{ref}}) {
       my ($t1,$t2) = split /:/,$opts{ref}{$k};
@@ -1230,7 +1226,7 @@ sub finish {
                                        my $non_ascii = $desc->{non_ascii}{$c}||=0;
                                        warn ("length for $c in $desc->{table} is 0; changing to 1\n") if !$l;
                                        $l||=1;
-                                       $t=~s/STRING\(\)/varchar($l,$non_ascii)/ieg;
+                                       $t=~s/STRING\(\)/VARCHAR($l)/ieg;
                                      }
                                      $t=~s/ FOREIGN KEY.*$//;
                                      qq{"$c" $t}
