@@ -141,11 +141,6 @@ sub destroy {
   undef $relations;
 }
 
-sub boolean { ### TODO REMOVE
-  my ($l)=@_;
-  return "BOOLEAN";
-}
-
 sub mkdump {
   return join("\t",map {
     if (defined) {
@@ -260,7 +255,7 @@ sub column_spec {
   } elsif ($decl_is == PML_CDATA_DECL) {
     my $format = $decl->get_format;
     return [$column => 'INT'.$constraint,$create_index] if $format =~ /(integer$|int$|short$|byte|long)/i;
-    return [$column => boolean().$constraint,$create_index] if $format eq 'boolean';
+    return [$column => 'BOOLEAN'.$constraint,$create_index] if $format eq 'boolean';
     return [$column => 'FLOAT'.$constraint,$create_index] if $format =~ /(decimal$|float$|double$)/i;
     if ($format eq 'PMLREF') {
       my ($target,$target_type) = get_pmlref_target_info($decl,$table,$column,1);
@@ -490,7 +485,7 @@ sub convert_schema {
       ["#idx", 'INT NOT NULL PRIMARY KEY',0],
       ["file", 'STRING()',0],
       ["tree_no", 'INT',0],
-      ["top", boolean(),0],
+      ["top", 'BOOLEAN',0],
      ],
     col => { file=>0 },
   };
