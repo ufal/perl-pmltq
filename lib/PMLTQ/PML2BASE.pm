@@ -1217,7 +1217,7 @@ sub finish {
                                        my $non_ascii = $desc->{non_ascii}{$c}||=0;
                                        warn ("length for $c in $desc->{table} is 0; changing to 1\n") if !$l;
                                        $l||=1;
-                                       $t=~s/STRING\(\)/VARCHAR($l)/ieg;
+                                       $t=~s/STRING\(\)/VARCHAR($l)/ig;
                                      }
                                      $t=~s/ FOREIGN KEY.*$//;
                                      qq{"$c" $t}
