@@ -432,7 +432,7 @@ sub convert_schema {
   $schema = shift;
   my ($opts)=@_;
   if ($opts{'load-rename-map'}) {
-    open my $fh, '<:utf8', $opts{'load-rename-map'} or die "Cannot load rename map: $!\n";
+    open my $fh, '<:encoding(UTF-8)', $opts{'load-rename-map'} or die "Cannot load rename map: $!\n";
     while (<$fh>) {
       chomp;
       my ($k,$v)=split /\t/,$_;
@@ -661,7 +661,7 @@ sub convert_schema {
     }
   }
   if ($opts{'load-col-info'}) {
-    open my $fh, '<:utf8', $opts{'load-col-info'} or die "Cannot load rename map: $!\n";
+    open my $fh, '<:encoding(UTF-8)', $opts{'load-col-info'} or die "Cannot load rename map: $!\n";
     while (<$fh>) {
       chomp;
       my ($table,$column,$length,$non_ascii)=split /\t/,$_;
@@ -1197,7 +1197,7 @@ sub finish {
                             qq{ WHERE "root"='$root_name';\n\n});
   }
   if ($opts{'dump-rename-map'}) {
-    open my $fh, '>:utf8', $opts{'dump-rename-map'};
+    open my $fh, '>:encoding(UTF-8)', $opts{'dump-rename-map'};
     my ($k,$v);
     while (($k,$v)=each %{$opts{'rename-type'}}) {
       print $fh "$k\t$v\n";
@@ -1239,11 +1239,11 @@ sub finish {
       my $t = $desc->{table};
       my $dump = table2filename($t);
       my $ctl=table2filename($t,'ctl');
-      open LOAD_SQL,'>',get_full_path($ctl);
+      open my $LOAD_SQL,'>',get_full_path($ctl);
       my $replace = $opts{'no-schema'} ? "APPEND" : "REPLACE";
       my $cols = join ',', map { qq{"$_->[0]"} } @{$desc->{colspec}};
-      print LOAD_SQL qq{COPY "$t" ($cols) FROM '$dump'\n};
-      close LOAD_SQL;
+      print $LOAD_SQL qq{COPY "$t" ($cols) FROM '$dump'\n};
+      close $LOAD_SQL;
       $fh{'#INIT_LIST'}->print("$ctl\n");
     }
   }
@@ -1274,7 +1274,7 @@ sub finish {
     close $fh;
   }
   if ($opts{'dump-col-info'}) {
-    open my $fh, '>:utf8', get_full_path($opts{'dump-col-info'});
+    open my $fh, '>:encoding(UTF-8)', get_full_path($opts{'dump-col-info'});
     foreach my $table (keys %schema) {
       if ($schema{$table}{col}) {
         foreach my $column (keys %{$schema{$table}{col}}) {
