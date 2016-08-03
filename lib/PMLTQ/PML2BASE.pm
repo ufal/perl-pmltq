@@ -1041,7 +1041,7 @@ sub traverse_subtree {
   my $lvl=0;
   my %hash;
   my $tree=$node;
-    while ($node) {
+  while ($node) {
     my $parent = $node->parent;
     unless (defined $hash{$node}) {
       $hash{$node} = {};
