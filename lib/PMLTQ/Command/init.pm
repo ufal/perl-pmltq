@@ -141,7 +141,7 @@ sub run {
           'COMMENT_mytag'
         ],
       COMMENT_language    => 'lang code',
-      COMMENT_text_query  =>
+      COMMENT_test_query  =>
         {
           COMMENT_result_dir => 'webverify_query_results',
           COMMENT_queries    =>
