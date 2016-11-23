@@ -17,6 +17,8 @@ all: rails html
 
 html: pmltq_doc.html
 
+tutweb: pmltq_tutorial_web_client.html
+
 print: pmltq_doc.fo
 
 htmltex: pmltq_doc.html tex
@@ -35,6 +37,15 @@ pmltq_doc.html: pmltq_doc.xml
            --stringparam html.stylesheet blue.css \
            --stringparam tex.math.in.alt latex \
         -o pmltq_doc.html $(XSL) pmltq_doc.xml 
+
+pmltq_tutorial_web_client.html: pmltq_tutorial_web_client.xml
+	xsltproc --xinclude \
+           --param ignore.image.scaling 1 \
+	   --stringparam use.role.for.mediaobject 1 \
+           --stringparam preferred.mediaobjectrole html \
+           --stringparam html.stylesheet blue.css \
+           --stringparam tex.math.in.alt latex \
+        -o pmltq_tutorial_web_client.html $(XSL) pmltq_tutorial_web_client.xml 
 
 pmltq_doc.fo: pmltq_doc.xml
 	xsltproc --xinclude \
