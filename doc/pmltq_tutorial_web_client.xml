@@ -252,7 +252,7 @@
     <section id="web-interface-getting-started">
       <title>Getting started</title>
 
-      <para>The PML-TQ search servers provide a client interface in the form
+      <para>The PML-TQ provides a client interface in the form
       of a web application that can be accessed by any web browser capable of
       combining JavaScript, CSS, and SVG (<ulink
       url="http://www.w3.org/Graphics/SVG/">Scalable Vector Graphics</ulink>),
@@ -267,21 +267,107 @@
 
     <!--https://lindat.mff.cuni.cz/services/pmltq/#!/home-->
 
-      <figure id="fig-screenshot-web-lindat-main">
-        <title>The PML-TQ web-service at Lindat/Clarin web pages</title>
-
-        <mediaobject>
-          <imageobject role="html">
-            <imagedata align="center" fileref="images/screenshot_web_lindat_main.png"
-                       format="PNG" />
-          </imageobject>
-        </mediaobject>
-      </figure>
+    <para>To access the PML-TQ servers hosted at Lindat/Clarin servers,
+      go to <ulink url="http://lindat.cz">lindat.cz</ulink> and in the
+      top menu, click on&nbsp;
+      <inlinemediaobject>
+        <imageobject role="html">
+          <imagedata contentdepth="20pt"
+                      fileref="images/callouts/TreeQuery.png" format="PNG" />
+        </imageobject>
+        <textobject>
+          <phrase>TreeQuery</phrase>
+        </textobject>
+        </inlinemediaobject>. A starting PML-TQ
+      web page will be displayed (see
+      <xref linkend="fig-screenshot-web-lindat-main"/>).</para>
     
-      <para>Results of queries with output filters are displayed as an HTML
+    <figure id="fig-screenshot-web-lindat-main">
+      <title>The PML-TQ web-service at Lindat/Clarin web pages</title>
+
+      <mediaobject>
+        <imageobject role="html">
+          <imagedata width="67%" scalefit="1" align="center" fileref="images/screenshot_web_lindat_main.png"
+                      format="PNG" />
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <!-- ToDo: Login -->
+      
+    <para>Below, you can see two lists – a list of recently used treebanks and a list
+      of featured treebanks. Clicking on any of the listed treebanks will
+      connect you directly to the server for the given treebank.</para>
+    
+    <para>A list of all available treebanks can be accessed by clicking on&nbsp;
+      <inlinemediaobject>
+        <imageobject role="html">
+          <imagedata contentdepth="20pt"
+                      fileref="images/callouts/BrowseTreebanks.png" format="PNG" />
+        </imageobject>
+        <textobject>
+          <phrase>Browse Treebanks</phrase>
+        </textobject>
+        </inlinemediaobject>, as demonstrated in <xref linkend="fig-screenshot-web-lindat-browse-treebanks"/>.</para>
+    
+    <figure id="fig-screenshot-web-lindat-browse-treebanks">
+      <title>The list of available treebanks at Lindat/Clarin web pages</title>
+
+      <mediaobject>
+        <imageobject role="html">
+          <imagedata width="67%" scalefit="1" align="center" fileref="images/screenshot_web_lindat_browse_treebanks.png"
+                      format="PNG" />
+        </imageobject>
+      </mediaobject>
+    </figure>
+    
+    <para>Here, you can filter the treebanks according to their public availability (i.e. accessibility of the server without login),
+      language and other tags. By clicking on a single treebank from the (filtered) list below, you will get connected to the search
+      server for the respective treebank. For example, if you select the Prague Dependency Treebank&nbsp;3.0 (PDT&nbsp;3.0), you will get to
+      the following web page (<xref linkend="fig-screenshot-web-lindat-pdt30-help"/>):</para>
+
+    <figure id="fig-screenshot-web-lindat-pdt30-help">
+      <title>The help page for the PDT&nbsp;3.0 treebank</title>
+
+      <mediaobject>
+        <imageobject role="html">
+          <imagedata width="67%" scalefit="1" align="center" fileref="images/screenshot_web_lindat_pdt30_help.png"
+                      format="PNG" />
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>It is a very short introduction to the query language that should help you start searching in the treebank if you do not
+      wish to read through this lengthy tutorial. To proceed to the page where you can actually enter
+      a search query, click on&nbsp;<guibutton>
+      <inlinemediaobject>
+        <imageobject role="html">
+          <imagedata contentdepth="15pt"
+                      fileref="images/callouts/button-query.png" format="PNG" />
+        </imageobject>
+        <textobject>
+          <phrase>Query</phrase>
+        </textobject>
+        </inlinemediaobject></guibutton>. </para>
+
+    <para>The following web page will be displayed (<xref linkend="fig-screenshot-web-lindat-pdt30-start"/>):</para>
+
+    <figure id="fig-screenshot-web-lindat-pdt30-start">
+      <title>The start page for searching in the PDT&nbsp;3.0 treebank</title>
+
+      <mediaobject>
+        <imageobject role="html">
+          <imagedata width="67%" scalefit="1" align="center" fileref="images/screenshot_web_lindat_pdt30_start.png"
+                      format="PNG" />
+        </imageobject>
+      </mediaobject>
+    </figure>
+    
+    <!--
+    <para>Results of queries with output filters are displayed as an HTML
       table, queries without filters are rendered using SVG with the matching
       nodes highlighted by colours. A simple toolbar is displayed above the
-      tree, with buttons for scaling the SVG image and displaying next, Nth,
+      tree, with buttons for scaling the SVG image and displaying the next, Nth,
       or previous match. For each matching node a button in a corresponding
       color is created above the displayed tree; by pressing the button, the
       tree containing the particular node can be displayed, which is useful
@@ -292,7 +378,7 @@
       displayed. The <literal>&lt;</literal> and <literal>&gt;</literal> links
       preceding the file name can be used to display neighboring trees from
       the same document.</para>
-
+    -->
   </section>
    
     <section>
@@ -300,7 +386,7 @@
 
       <para>Now we may create our first simple query. We shall search for all
       nodes of the type <literal>t-node</literal> (tectogrammatical nodes in
-      PDT 2.0) that whose attribute <literal>functor</literal> equals to
+      PDT 3.0) whose attribute <literal>functor</literal> equals to
       <literal>DPHR</literal>. In TrEd, the query can be created in several
       ways:</para>
 

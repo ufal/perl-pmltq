@@ -40,7 +40,6 @@ pmltq_doc.html: pmltq_doc.xml
 
 pmltq_tutorial_web_client.html: pmltq_tutorial_web_client.xml
 	xsltproc --xinclude \
-           --param ignore.image.scaling 1 \
 	   --stringparam use.role.for.mediaobject 1 \
            --stringparam preferred.mediaobjectrole html \
            --stringparam html.stylesheet blue.css \
