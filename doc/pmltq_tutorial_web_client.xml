@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
-"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY screenshotwidth "60">
+]>
 <article lang="en">
   <articleinfo>
     <authorgroup>
@@ -240,8 +242,7 @@
     queries from the PML-TQ WEB-based client, searching treebanks hosted at <ulink
       url="http://lindat.cz">the Lindat/Clarin web pages</ulink>.</para>
 
-    <para>As our examples, we use queries over the Prague Dependency Treebank
-    3.0 and the British National Corpus sample;
+    <para>As our examples, we use queries over the Prague Dependency Treebank&nbsp;3.0;
     conceptually similar queries can be applied to most other treebanks,
     although the node types and attributes will be probably different.</para>
 
@@ -287,7 +288,7 @@
 
       <mediaobject>
         <imageobject role="html">
-          <imagedata width="67%" scalefit="1" align="center" fileref="images/screenshot_web_lindat_main.png"
+          <imagedata width="&screenshotwidth;%" scalefit="1" align="center" fileref="images/screenshot_web_lindat_main.png"
                       format="PNG" />
         </imageobject>
       </mediaobject>
@@ -315,7 +316,7 @@
 
       <mediaobject>
         <imageobject role="html">
-          <imagedata width="67%" scalefit="1" align="center" fileref="images/screenshot_web_lindat_browse_treebanks.png"
+          <imagedata width="&screenshotwidth;%" scalefit="1" align="center" fileref="images/screenshot_web_lindat_browse_treebanks.png"
                       format="PNG" />
         </imageobject>
       </mediaobject>
@@ -331,7 +332,7 @@
 
       <mediaobject>
         <imageobject role="html">
-          <imagedata width="67%" scalefit="1" align="center" fileref="images/screenshot_web_lindat_pdt30_help.png"
+          <imagedata width="&screenshotwidth;%" scalefit="1" align="center" fileref="images/screenshot_web_lindat_pdt30_help.png"
                       format="PNG" />
         </imageobject>
       </mediaobject>
@@ -357,7 +358,7 @@
 
       <mediaobject>
         <imageobject role="html">
-          <imagedata width="67%" scalefit="1" align="center" fileref="images/screenshot_web_lindat_pdt30_start.png"
+          <imagedata width="&screenshotwidth;%" scalefit="1" align="center" fileref="images/screenshot_web_lindat_pdt30_start.png"
                       format="PNG" />
         </imageobject>
       </mediaobject>
@@ -386,76 +387,101 @@
 
       <para>Now we may create our first simple query. We shall search for all
       nodes of the type <literal>t-node</literal> (tectogrammatical nodes in
-      PDT 3.0) whose attribute <literal>functor</literal> equals to
-      <literal>DPHR</literal>. In TrEd, the query can be created in several
+      PDT&nbsp;3.0) whose attribute <literal>functor</literal> equals to
+      <literal>PRED</literal> (Predicate). In the web client, the query can be created in two
       ways:</para>
 
       <itemizedlist>
         <listitem>
-          <para>Method 1: Press <keysym>Insert</keysym> or <guibutton>
-          <inlinemediaobject>
-              <imageobject role="html">
-                <imagedata contentdepth="10pt"
-                           fileref="pmltq_icons/add_node.png" format="PNG" />
-              </imageobject>
+          <para>Method 1: Click on&nbsp;
+             <inlinemediaobject>
+                <imageobject role="html">
+                   <imagedata contentdepth="20pt"
+                      fileref="images/callouts/toolbar-NodeTypes.png" format="PNG" />
+                </imageobject>
+                <textobject>
+                   <phrase>Node Types</phrase>
+                </textobject>
+             </inlinemediaobject> in the toolbar; a list of available nodes for PDT&nbsp;3.0 is displayed:
+    <figure id="fig-screenshot-web-lindat-pdt30-nodetypes">
+      <title>A part of the list of available node types for PDT&nbsp;3.0</title>
 
-              <textobject>
-                <phrase>Add node</phrase>
-              </textobject>
-            </inlinemediaobject> </guibutton> on the toolbar to create a new
-          selector, choose <literal>t-node</literal> from the offered list of
-          node types and confirm with <guibutton>OK</guibutton>.</para>
+      <mediaobject>
+        <imageobject role="html">
+          <imagedata align="center" fileref="images/screenshot_web_lindat_pdt30_node_types_menu_cut.png"
+                      format="PNG" />
+        </imageobject>
+      </mediaobject>
+    </figure>
+      
+    Choose <literal>t-node</literal>. The string <literal>t-node</literal> will be copied to the text area below the toolbar.
+    </para>
+    <para>
+      Properties of a node follow its type, enclosed in square brackets: type&nbsp;<literal>[</literal> and choose
+      a t-node attribute <literal>functor</literal> 
+      from menu&nbsp;<inlinemediaobject>
+                <imageobject role="html">
+                   <imagedata contentdepth="20pt"
+                      fileref="images/callouts/toolbar-Attributes.png" format="PNG" />
+                </imageobject>
+                <textobject>
+                   <phrase>Attributes</phrase>
+                </textobject>
+                </inlinemediaobject> in the toolbar. Next, select operator <literal>=</literal> from the <literal>Comparison</literal> group
+              in the&nbsp;<inlinemediaobject>
+                <imageobject role="html">
+                   <imagedata contentdepth="20pt"
+                      fileref="images/callouts/toolbar-Operators.png" format="PNG" />
+                </imageobject>
+                <textobject>
+                   <phrase>Operators</phrase>
+                </textobject>
+             </inlinemediaobject> menu in the toolbar, and type <literal>"PRED"</literal>. Finish by closing the definition of the t-node by&nbsp;<literal>]</literal>.
+    <xref linkend="fig-screenshot-web-lindat-pdt30-query-PRED"/> shows how the query should look like (the spaces are optional).
+    <figure id="fig-screenshot-web-lindat-pdt30-query-PRED">
+      <title>A simple query searching for Predicates in PDT&nbsp;3.0</title>
 
-          <para>Then press <keysym>=</keysym> or <guibutton>
-          <inlinemediaobject>
-              <imageobject role="html">
-                <imagedata contentdepth="10pt"
-                           fileref="pmltq_icons/test_equality.png"
-                           format="PNG" />
-              </imageobject>
-
-              <textobject>
-                <phrase>Equality</phrase>
-              </textobject>
-            </inlinemediaobject> </guibutton> to create a new atomic
-          constraint, and fill <literal>functor</literal> as
-          <literal>a</literal> and <literal>"DPHR"</literal> as
-          <literal>b</literal> in the form (both the attribute name and its
-          value can be selected from a list). <mediaobject>
-              <imageobject role="html">
-                <imagedata align="center"
-                           fileref="tred_new_equality_test_s.png" format="PNG" />
-              </imageobject>
-            </mediaobject></para>
-        </listitem>
+      <mediaobject>
+        <imageobject role="html">
+          <imagedata align="center" fileref="images/screenshot_web_lindat_pdt30_query_PRED_cut.png"
+                      format="PNG" />
+        </imageobject>
+      </mediaobject>
+    </figure>
+  </para>
+</listitem>
 
         <listitem>
-          <para>Method 2: Press <keysym>e</keysym> or <guibutton>
-          <inlinemediaobject>
-              <imageobject role="html">
-                <imagedata contentdepth="10pt" fileref="icons/edit_file.png"
-                           format="PNG" />
-              </imageobject>
+          <para>Method 2: In the query text area, start typing <literal>t-</literal>. The popup menu with possible node types will be offered:
+    <figure id="fig-screenshot-web-lindat-pdt30-node-type-hints-t-layer-cut">
+      <title>List of available node types for PDT&nbsp;3.0 containing the string <literal>t-</literal></title>
 
-              <textobject>
-                <phrase>Edit query</phrase>
-              </textobject>
-            </inlinemediaobject> </guibutton> to open the query text editor
-          and type <programlisting>t-node [ functor='DPHR' ]</programlisting>
-          into the text field.</para>
+      <mediaobject>
+        <imageobject role="html">
+          <imagedata align="center" fileref="images/screenshot_web_lindat_pdt30_node_type_hints_t-layer_cut.png"
+                      format="PNG" />
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    Choose <literal>t-node</literal> and continue typing the query, i.e. <literal>[ fu</literal>. After you start typing the name of the attribute,
+    another popup window with possible attributes is offered:
+    <figure id="fig-screenshot-web-lindat-pdt30-attribute-hints-functor-cut">
+      <title>List of available attribute names in PDT&nbsp;3.0 containing the string <literal>fu</literal></title>
+
+      <mediaobject>
+        <imageobject role="html">
+          <imagedata align="center" fileref="images/screenshot_web_lindat_pdt30_attribute_hints_functor_cut.png"
+                      format="PNG" />
+        </imageobject>
+      </mediaobject>
+    </figure>
+    
+    Choose <literal>functor</literal> and finish typing the rest of the query, i.e. <literal>="functor"]</literal>.
+    The resulting query should be the same as in <xref linkend="fig-screenshot-web-lindat-pdt30-query-PRED"/> (and again, the spaces are optional). 
+  </para>
         </listitem>
 
-        <listitem>
-          <para>Method 3: Open the query text editor as above, but use helper
-          buttons below the text field to build the text of the query: Press
-          <guibutton>Type</guibutton> and select <literal>t-node</literal>,
-          Press <guibutton>[ ]</guibutton>, put the cursor between the
-          brackets by clicking there or by pressing the <keysym>left
-          arrow</keysym> two times, press <guibutton>Attribute</guibutton> and
-          select <literal>functor</literal> and finally press
-          <guibutton>=</guibutton> and select
-          <literal>"DPHR"</literal>.</para>
-        </listitem>
       </itemizedlist>
 
       <para>The result in TrEd will look like this:</para>
