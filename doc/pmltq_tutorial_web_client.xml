@@ -2,6 +2,7 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
 "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 <!ENTITY screenshotwidth "60">
+<!ENTITY cutshotscale "100">
 ]>
 <article lang="en">
   <articleinfo>
@@ -408,7 +409,7 @@
 
       <mediaobject>
         <imageobject role="html">
-          <imagedata align="center" fileref="images/screenshot_web_lindat_pdt30_node_types_menu_cut.png"
+          <imagedata scale="&cutshotscale;" align="center" fileref="images/screenshot_web_lindat_pdt30_node_types_menu_cut.png"
                       format="PNG" />
         </imageobject>
       </mediaobject>
@@ -443,7 +444,7 @@
 
       <mediaobject>
         <imageobject role="html">
-          <imagedata align="center" fileref="images/screenshot_web_lindat_pdt30_query_PRED_cut.png"
+          <imagedata scale="&cutshotscale;" align="center" fileref="images/screenshot_web_lindat_pdt30_query_PRED_cut.png"
                       format="PNG" />
         </imageobject>
       </mediaobject>
@@ -458,7 +459,7 @@
 
       <mediaobject>
         <imageobject role="html">
-          <imagedata align="center" fileref="images/screenshot_web_lindat_pdt30_node_type_hints_t-layer_cut.png"
+          <imagedata scale="&cutshotscale;" align="center" fileref="images/screenshot_web_lindat_pdt30_node_type_hints_t-layer_cut.png"
                       format="PNG" />
         </imageobject>
       </mediaobject>
@@ -471,7 +472,7 @@
 
       <mediaobject>
         <imageobject role="html">
-          <imagedata align="center" fileref="images/screenshot_web_lindat_pdt30_attribute_hints_functor_cut.png"
+          <imagedata scale="&cutshotscale;" align="center" fileref="images/screenshot_web_lindat_pdt30_attribute_hints_functor_cut.png"
                       format="PNG" />
         </imageobject>
       </mediaobject>
@@ -484,6 +485,34 @@
 
       </itemizedlist>
 
+      <section>
+        <title>Executing the query</title>
+        <para>
+          To execute the query, press&nbsp;&nbsp;<inlinemediaobject>
+                <imageobject role="html">
+                   <imagedata contentdepth="20pt"
+                      fileref="images/callouts/ExecuteQuery.png" format="PNG" />
+                </imageobject>
+                <textobject>
+                   <phrase>Execute Query</phrase>
+                </textobject>
+                </inlinemediaobject> below the query text area. The query gets processed by the server and the result
+              is displayed. <xref linkend="fig-screenshot-web-lindat-pdt30-query-PRED"/> shows the first matching tree.
+        </para>
+    <figure id="fig-screenshot-web-lindat-pdt30-query-PRED-result">
+      <title>A result tree for the query searching for Predicates in PDT&nbsp;3.0</title>
+
+      <mediaobject>
+        <imageobject role="html">
+          <imagedata width="&screenshotwidth;%" scalefit="1" align="center" fileref="images/screenshot_web_lindat_pdt30_query_PRED_result.png"
+                      format="PNG" />
+        </imageobject>
+      </mediaobject>
+    </figure>
+        
+        
+      </section>
+      
       <para>The result in TrEd will look like this:</para>
 
       <mediaobject>
