@@ -498,7 +498,6 @@
                 </textobject>
                 </inlinemediaobject> below the query text area. The query gets processed by the server and the result
               is displayed. <xref linkend="fig-screenshot-web-lindat-pdt30-query-PRED"/> shows the first matching tree.
-        </para>
     <figure id="fig-screenshot-web-lindat-pdt30-query-PRED-result">
       <title>A result tree for the query searching for Predicates in PDT&nbsp;3.0</title>
 
@@ -510,123 +509,80 @@
       </mediaobject>
     </figure>
         
+    The corresponding sentence is displayed just above the tree. Try clicking on the individual words of the sentence and see the animation marking the corresponding nodes in the tree.
+    </para>
         
-      </section>
-      
-      <para>The result in TrEd will look like this:</para>
-
-      <mediaobject>
-        <imageobject role="html">
-          <imagedata align="center" fileref="tutorial_queries_1.png"
-                     format="PNG" />
-        </imageobject>
-      </mediaobject>
-
-      <para>To start the search now, press <keysym>Space</keysym> or
-      <guibutton> <inlinemediaobject>
-          <imageobject role="html">
-            <imagedata contentdepth="10pt"
-                       fileref="pmltq_icons/search_filter.png" format="PNG" />
-          </imageobject>
-
-          <textobject>
-            <phrase>Query</phrase>
-          </textobject>
-        </inlinemediaobject> </guibutton> or <guibutton> <inlinemediaobject>
-          <imageobject role="html">
-            <imagedata contentdepth="10pt" fileref="pmltq_icons/search.png"
-                       format="PNG" />
-          </imageobject>
-
-          <textobject>
-            <phrase>Search</phrase>
-          </textobject>
-        </inlinemediaobject> </guibutton>. After a while, a window will pop up
-      indicating whether some results have been found, and pressing
-      <literal>Display</literal> will show the first result in a new view:
-      <mediaobject>
-          <imageobject role="html">
-            <imagedata align="center" fileref="tred_first_result_s.png"
-                       format="PNG" />
-          </imageobject>
-        </mediaobject> To see the full sentence in the text field above the
-      trees , click on the result view on the right. Next result can be
-      displayed by pressing the key <keysym>n</keysym> or <guibutton>
-      <inlinemediaobject>
-          <imageobject role="html">
-            <imagedata contentdepth="10pt"
-                       fileref="pmltq_icons/search_next.png" format="PNG" />
-          </imageobject>
-
-          <textobject>
-            <phrase>Next match</phrase>
-          </textobject>
-        </inlinemediaobject> </guibutton>.</para>
-
-      <note>
+      <para>Buttons <inlinemediaobject>
+                <imageobject role="html">
+                   <imagedata contentdepth="20pt"
+                      fileref="images/callouts/ResultPrevious.png" format="PNG" />
+                </imageobject>
+                <textobject>
+                   <phrase>Previous</phrase>
+                </textobject>
+                </inlinemediaobject> and <inlinemediaobject>
+                <imageobject role="html">
+                   <imagedata contentdepth="20pt"
+                      fileref="images/callouts/ResultNext.png" format="PNG" />
+                </imageobject>
+                <textobject>
+                   <phrase>Next</phrase>
+                </textobject>
+                </inlinemediaobject> can be used to navigate among the results, and buttons <inlinemediaobject>
+                <imageobject role="html">
+                   <imagedata contentdepth="20pt"
+                      fileref="images/callouts/TreePrevious.png" format="PNG" />
+                </imageobject>
+                <textobject>
+                   <phrase>&lt;&lt;</phrase>
+                </textobject>
+                </inlinemediaobject> and <inlinemediaobject>
+                <imageobject role="html">
+                   <imagedata contentdepth="20pt"
+                      fileref="images/callouts/TreeNext.png" format="PNG" />
+                </imageobject>
+                <textobject>
+                   <phrase>&gt;&gt;</phrase>
+                </textobject>
+                </inlinemediaobject> to see context sentences/trees. To go directly to the N-th result,
+              change the number of the current result (<inlinemediaobject>
+                <imageobject role="html">
+                   <imagedata contentdepth="20pt"
+                      fileref="images/callouts/ResultNumber.png" format="PNG" />
+                </imageobject>
+                <textobject>
+                   <phrase>1 of 100</phrase>
+                </textobject>
+                </inlinemediaobject>) to a desired number (make sure that the focus is in
+              the result number field) and – in the list of matching nodes – click on <inlinemediaobject>
+                <imageobject role="html">
+                   <imagedata contentdepth="20pt"
+                      fileref="images/callouts/MatchingNode1.png" format="PNG" />
+                </imageobject>
+                <textobject>
+                   <phrase>1 t-node</phrase>
+                </textobject>
+                </inlinemediaobject>. The corresponding matching node in the given result is displayed (and highlighted in the same colour, in this case green).
+            </para>
+            
+       <note>
         <para>By default, the search engine returns up to 100 matches (in no
         particular order), which should be more than sufficient for viewing a
-        few matching examples. This limit can be changed in the search engine
-        configuration (displayed by pressing <keysym>C</keysym> or <guibutton>
-        <inlinemediaobject>
-            <imageobject role="html">
-              <imagedata contentdepth="10pt" fileref="icons/configure.png"
-                         format="PNG" />
-            </imageobject>
-
-            <textobject>
-              <phrase>Configure</phrase>
-            </textobject>
-          </inlinemediaobject> </guibutton>, but raising this limit may slow
+        few matching examples. This limit can be changed on the right side above the query text area (&nbsp;<inlinemediaobject>
+                <imageobject role="html">
+                   <imagedata contentdepth="20pt"
+                      fileref="images/callouts/ResultLimit.png" format="PNG" />
+                </imageobject>
+                <textobject>
+                   <phrase>Result Limit</phrase>
+                </textobject>
+                </inlinemediaobject>), but raising this limit may slow down
         the search. We shall later see how to compute the number of all
         matches, using output filters.</para>
       </note>
 
-      <para>Press <keysym>p</keysym> or <guibutton> <inlinemediaobject>
-          <imageobject role="html">
-            <imagedata contentdepth="10pt"
-                       fileref="pmltq_icons/search_previous.png" format="PNG" />
-          </imageobject>
-
-          <textobject>
-            <phrase>Previous match</phrase>
-          </textobject>
-        </inlinemediaobject> </guibutton> to go back to the previous match and
-      press <guibutton> <inlinemediaobject>
-          <imageobject role="html">
-            <imagedata contentdepth="10pt" fileref="icons/apply.png"
-                       format="PNG" />
-          </imageobject>
-
-          <textobject>
-            <phrase>This match</phrase>
-          </textobject>
-        </inlinemediaobject> </guibutton> to return the current match to
-      view.</para>
-
-      <para>Note that the result view contains not only the matching tree but
-      the complete document, so it is possible to see the tree preceding or
-      following the currently matching tree by pressing <keysym>Page
-      Up</keysym>/<guibutton> <inlinemediaobject>
-          <imageobject role="html">
-            <imagedata contentdepth="10pt" fileref="icons/1leftarrow.png"
-                       format="PNG" />
-          </imageobject>
-
-          <textobject>
-            <phrase>Previous Tree</phrase>
-          </textobject>
-        </inlinemediaobject> </guibutton> or <keysym>Page
-      Down</keysym>/<guibutton> <inlinemediaobject>
-          <imageobject role="html">
-            <imagedata contentdepth="10pt" fileref="icons/1rightarrow.png"
-                       format="PNG" />
-          </imageobject>
-
-          <textobject>
-            <phrase>Next Tree</phrase>
-          </textobject>
-        </inlinemediaobject> </guibutton>, respectively.</para>
+              </section>
+    
     </section>
 
     <section>
