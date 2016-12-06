@@ -626,7 +626,7 @@
       <programlisting>t-node $a := [ functor="PRED", child $b ];
 t-node $b := [ functor="PAT" ];</programlisting>
       or 
-      <programlisting>t-node $a := [ functor='PRED' ];
+      <programlisting>t-node $a := [ functor="PRED" ];
 t-node $b := [ functor="PAT", parent $a ];</programlisting>
       naming the two nodes
       <literal>$a</literal> and <literal>$b</literal> and either indicating
@@ -637,181 +637,28 @@ t-node $b := [ functor="PAT", parent $a ];</programlisting>
     <section>
       <title>Disjunctions, regular expressions and set enumerations</title>
 
-      <para>We now extend our query expression to cover also t-nodes with
-      functor <literal>CPHR</literal>. This can be done in three different
-      ways:</para>
+      <para>We now extend our query to cover t-nodes not only with
+        functor <literal>PAT</literal> (Patient) but also <literal>ADDR</literal> (Addressee).
+        This can be done in three different ways:</para>
 
-      <para>Using a disjunction: <programlisting>t-node [ functor='DPHR' or functor='CPHR', t-node [ ] ]</programlisting>
-      Apart from editing the query, this can be created using the GUI e.g. in
-      the following steps: <orderedlist>
-          <listitem>
-            <para>Select the top query node (the one with the
-            <literal>functor="DPHR"</literal> constraint</para>
-          </listitem>
+      <para>Using a disjunction:
+        <programlisting>t-node [ functor="PRED", t-node [ functor="PAT" or functor="ADDR" ] ]</programlisting>
+      </para>
 
-          <listitem>
-            <para>Press <keysym>h</keysym> or <guibutton> <inlinemediaobject>
-                <imageobject role="html">
-                  <imagedata contentdepth="10pt"
-                             fileref="pmltq_icons/toggle_hide_subtree.png"
-                             format="PNG" />
-                </imageobject>
-
-                <textobject>
-                  <phrase>(Un)Expand</phrase>
-                </textobject>
-              </inlinemediaobject> </guibutton> to expand the constraints to
-            auxiliary nodes in the query tree. The result will look like
-            this:</para>
-
-            <mediaobject>
-              <imageobject role="html">
-                <imagedata align="center" fileref="tutorial_queries_1.png"
-                           format="PNG" />
-              </imageobject>
-            </mediaobject>
-          </listitem>
-
-          <listitem>
-            <para>Select the auxiliary node representing the constraint
-            <literal>functor="DPHR"</literal> and press <keysym>o</keysym> or
-            <guibutton> <inlinemediaobject>
-                <imageobject role="html">
-                  <imagedata contentdepth="10pt" fileref="pmltq_icons/or.png"
-                             format="PNG" />
-                </imageobject>
-
-                <textobject>
-                  <phrase>OR</phrase>
-                </textobject>
-              </inlinemediaobject> </guibutton> to create an auxiliary
-            <literal>OR</literal> node above it.</para>
-          </listitem>
-
-          <listitem>
-            <para>Select the <literal>OR</literal> node and press
-            <keysym>=</keysym> or <guibutton> <inlinemediaobject>
-                <imageobject role="html">
-                  <imagedata contentdepth="10pt"
-                             fileref="pmltq_icons/test_equality.png"
-                             format="PNG" />
-                </imageobject>
-
-                <textobject>
-                  <phrase>Equality</phrase>
-                </textobject>
-              </inlinemediaobject> </guibutton> to create a new equality
-            constraint and as above, fill <literal>functor</literal> as
-            <literal>a</literal> and <literal>"CPHR"</literal> as
-            <literal>b</literal> in the form. Alternatively, you can select
-            the node <literal>functor="DPHR"</literal>, press <keycombo
-                action="simul">
-                <keysym>Ctrl</keysym>
-
-                <keysym>Insert</keysym>
-              </keycombo> or <guibutton> <inlinemediaobject>
-                <imageobject role="html">
-                  <imagedata contentdepth="10pt" fileref="icons/editcopy.png"
-                             format="PNG" />
-                </imageobject>
-
-                <textobject>
-                  <phrase>Copy</phrase>
-                </textobject>
-              </inlinemediaobject> </guibutton> to copy it into the clipboard,
-            then select the <literal>OR</literal> node and press <keycombo
-                action="simul">
-                <keysym>Shift</keysym>
-
-                <keysym>Insert</keysym>
-              </keycombo> or <guibutton> <inlinemediaobject>
-                <imageobject role="html">
-                  <imagedata contentdepth="10pt" fileref="icons/editpaste.png"
-                             format="PNG" />
-                </imageobject>
-
-                <textobject>
-                  <phrase>Paste</phrase>
-                </textobject>
-              </inlinemediaobject> </guibutton> to paste it. Then press
-            <keysym>Enter</keysym> or double-click the node or just the word
-            <literal>"DPHR"</literal> on one of the two nodes and change
-            <literal>"DPHR"</literal> to <literal>"CPHR"</literal>.</para>
-          </listitem>
-
-          <listitem>
-            <para>The result will look like this: <mediaobject>
-                <imageobject role="html">
-                  <imagedata align="center" fileref="tutorial_queries_2b.png"
-                             format="PNG" />
-                </imageobject>
-
-                <imageobject role="fo">
-                  <imagedata align="center" fileref="tutorial_queries_2b.pdf"
-                             format="PDF" />
-                </imageobject>
-              </mediaobject> Selecting the top t-node and pressing
-            <keysym>h</keysym> or <guibutton> <inlinemediaobject>
-                <imageobject role="html">
-                  <imagedata contentdepth="10pt"
-                             fileref="pmltq_icons/toggle_hide_subtree.png"
-                             format="PNG" />
-                </imageobject>
-
-                <textobject>
-                  <phrase>(Un)Expand</phrase>
-                </textobject>
-              </inlinemediaobject> </guibutton> hides the auxiliary nodes, and
-            gives this: <mediaobject>
-                <imageobject role="html">
-                  <imagedata align="center" fileref="tutorial_queries_2c.png"
-                             format="PNG" />
-                </imageobject>
-              </mediaobject></para>
-          </listitem>
-        </orderedlist></para>
-
-      <para>Using a regular expression: <programlisting>t-node [ functor ~ '[CD]PHR', t-node [ ] ]</programlisting>
+      <para>Using a regular expression:
+        <programlisting>t-node [ functor="PRED", t-node [ functor ~ "^(PAT|ADDR)$" ] ]</programlisting>
       Symbol <literal>~</literal> (tilde) denotes a binary relation between
       two values that is true if and only if the value on the left interpreted
       as string matches the value on the right interpreted as regular
-      expression. The regular expression <literal>[CD]PHR</literal> is matched
-      by any string containing either <literal>CPHR</literal> or
-      <literal>DPHR</literal> as a substring. If, for example,
-      <literal>XDPHR</literal> were a possible functor value, we would have to
-      be more precise and rewrite the expression as <programlisting>t-node [ functor ~ "^[CD]PHR$", t-node [ ] ]</programlisting>
-      Since <literal>^</literal> and <literal>$</literal> meta-characters are
-      only matched by the start and end of a string, the value of
-      <literal>functor</literal> now must be exactly <literal>CPHR</literal>
-      or <literal>DPHR</literal>.</para>
+      expression.</para>
 
-      <para>Creating a regular expression test graphically in TrEd is similar
-      to creating an equality test: either press <keysym>~</keysym> key or the
-      <guibutton> <inlinemediaobject>
-          <imageobject role="html">
-            <imagedata contentdepth="10pt"
-                       fileref="pmltq_icons/test_regexp.png" format="PNG"
-                       valign="middle" />
-          </imageobject>
-
-          <textobject>
-            <phrase>RegExp</phrase>
-          </textobject>
-        </inlinemediaobject> </guibutton> toolbar button. Do not forget to
-      enclose the regular expression (field labeled <literal>b</literal> in
-      the dialog) into apostrophes or quotes since in the PML-TQ syntax it is
-      just a literal string.</para>
-
-      <para>Using a set enumeration: <programlisting>t-node [ functor in { "CPHR", "DPHR" }, t-node [ ] ]</programlisting></para>
-
-      <para>The relation <literal>in</literal> asserts that the value computed
+      <para>Using a set enumeration:
+        <programlisting>t-node [ functor="PRED", t-node [ functor in { "PAT", "ADDR" } ] ]</programlisting>
+        The relation <literal>in</literal> asserts that the value computed
       from the expression on the left equals to a value of some of the
-      expressions listed in the set enumeration on the right.</para>
+      expressions listed in the set enumeration on the right.
+      </para>
 
-      <para>The query text editor provides a button <guibutton>in { ...
-      }</guibutton> that, for attributes with a fixed set of possible values,
-      allows the enumeration to be created by selecting the desired values
-      from a list.</para>
     </section>
 
     <section>
