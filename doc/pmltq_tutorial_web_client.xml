@@ -589,41 +589,46 @@
       <title>A query with two nodes</title>
 
       <para>We shall now make the query more complex by adding another node to
-      it. We shall ask for a t-node with functor "DPHR" that has a child
-      (since DPHR t-nodes are often leaves, it may be interesting to see what
-      children we get).</para>
+      it. We shall ask for a t-node with functor "PRED" (Predicate) that has a child with
+      functor "PAT" (Patient).</para>
+    
+    <para>
+      To add a node to an existing one in the query, you need to specify
+      a type of relation of the new node to the existing one. The list of
+      available relations can be accessed through <inlinemediaobject>
+                <imageobject role="html">
+                   <imagedata contentdepth="20pt"
+                      fileref="images/callouts/toolbar-Relations.png" format="PNG" />
+                </imageobject>
+                <textobject>
+                   <phrase>Relations</phrase>
+                </textobject>
+                </inlinemediaobject> in the toolbar (see <xref linkend="fig-screenshot-web-lindat-pdt30-relations-menu-cut"/>).
 
-      <para>To add a new child, select the only node in our query tree and
-      press <keysym>Insert</keysym> or <guibutton> <inlinemediaobject>
-          <imageobject role="html">
-            <imagedata contentdepth="10pt" fileref="pmltq_icons/add_node.png"
-                       format="PNG" />
-          </imageobject>
+    <figure id="fig-screenshot-web-lindat-pdt30-relations-menu-cut">
+      <title>A part of the list of available standard relations between nodes in PML-TQ</title>
 
-          <textobject>
-            <phrase>Add node</phrase>
-          </textobject>
-        </inlinemediaobject> </guibutton> on the toolbar. Now a pop-up window
-      shows asking for a type of relation the new node to the existing node.
-      The default value is <literal>child</literal>. Since this is what we
-      want, click <guibutton>OK</guibutton>. TrEd automatically assumes the
-      new query node to be a selector for nodes of the type
-      <literal>t-node</literal>, since, according to the PML schema of the
-      tectogrammatical layer, a <literal>t-node</literal> can only have a
-      <literal>t-node</literal> for its child; otherwise it would offer a list
-      of nodes types to choose from.</para>
-
-      <para>In text form, the query can be equivalently expressed as
-      <programlisting>t-node [ functor='DPHR', t-node [ ] ]</programlisting>
-      or <programlisting>t-node [ functor='DPHR', child t-node [ ] ]</programlisting>
-      These forms use nesting of node selectors, the first form makes use of
-      the fact that the default relation of a nested selector to the selector
-      in which it is nested is <literal>child</literal>.</para>
-
-      <para>The query can also be expressed without nesting, using names,
-      either as <programlisting>t-node $a := [ functor='DPHR', child $b ];
-t-node $b := [ ];</programlisting> or <programlisting>t-node $a := [ functor='DPHR' ];
-t-node $b := [ parent $a ];</programlisting> naming the two nodes
+      <mediaobject>
+        <imageobject role="html">
+          <imagedata scale="&cutshotscale;" align="center" fileref="images/screenshot_web_lindat_pdt30_relations_menu_cut.png"
+                      format="PNG" />
+        </imageobject>
+      </mediaobject>
+    </figure>
+              
+      The default value is <literal>child</literal>, so the following two queries
+      are equivalent:
+      <programlisting>t-node [ functor="PRED", t-node [ functor="PAT" ] ]</programlisting>
+      or
+      <programlisting>t-node [ functor="PRED", child t-node [ functor="PAT" ] ]</programlisting>
+      These forms of the query use nesting of node selectors. The query can also be expressed without nesting, using names,
+      either as
+      <programlisting>t-node $a := [ functor="PRED", child $b ];
+t-node $b := [ functor="PAT" ];</programlisting>
+      or 
+      <programlisting>t-node $a := [ functor='PRED' ];
+t-node $b := [ functor="PAT", parent $a ];</programlisting>
+      naming the two nodes
       <literal>$a</literal> and <literal>$b</literal> and either indicating
       that <literal>$a</literal> has a child $b or that <literal>$b</literal>
       has a parent $a.</para>
