@@ -50,9 +50,11 @@
     interface.</para>
   
     <para>This tutorial focuses on the WEB-based interface. For a tutorial
-      dedicated to the TrEd client, go to <ulink  url="https://ufal.mff.cuni.cz/pmltq/doc/pmltq_doc.html#tutorial">the PML-TQ website</ulink>.</para>
+      dedicated to the TrEd client, as well as for further information on the query
+      language, please refer to <ulink  url="https://ufal.mff.cuni.cz/pmltq/doc/pmltq_doc.html">the PML-TQ manual</ulink>.</para>
 
-    <para>Main features:</para>
+    <section>
+      <title>PML-TQ main features</title>
 
     <orderedlist>
       <listitem>
@@ -235,6 +237,7 @@
     </glossary>
 -->
   </section>
+</section>
 
   <section id="tutorial">
     <title>Tutorial</title>
@@ -479,12 +482,30 @@
     </figure>
     
     Choose <literal>functor</literal> and finish typing the rest of the query, i.e. <literal>="functor"]</literal>.
-    The resulting query should be the same as in <xref linkend="fig-screenshot-web-lindat-pdt30-query-PRED"/> (and again, the spaces are optional). 
+    <para>
+    The resulting query should be the same as in <xref linkend="fig-screenshot-web-lindat-pdt30-query-PRED"/> (again, the spaces are optional), i.e.:
+     <programlisting>t-node [ functor="PRED" ]</programlisting>
+     <keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-KVJI">try the query</ulink></keysym></para>
   </para>
         </listitem>
-
+        
       </itemizedlist>
 
+       <note>
+        <para>Throughout the tutorial, you can use the button <keysym>try the query</keysym> placed
+          below examples to go directly to the web client and try the example. Such permanent links
+          to queries in the web client can be created by clicking on <inlinemediaobject>
+                <imageobject role="html">
+                   <imagedata contentdepth="20pt"
+                      fileref="images/callouts/PermanentLink.png" format="PNG" />
+                </imageobject>
+                <textobject>
+                   <phrase>Permanent Link</phrase>
+                </textobject>
+                </inlinemediaobject> on the right side below the query text area.</para>
+      </note>
+    </section>      
+      
       <section>
         <title>Executing the query</title>
         <para>
@@ -581,7 +602,6 @@
         matches, using output filters.</para>
       </note>
 
-              </section>
     
     </section>
 
@@ -619,15 +639,23 @@
       The default value is <literal>child</literal>, so the following two queries
       are equivalent:
       <programlisting>t-node [ functor="PRED", t-node [ functor="PAT" ] ]</programlisting>
+      <keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-OMAE">try the query</ulink></keysym></para>
+    <para>
       or
       <programlisting>t-node [ functor="PRED", child t-node [ functor="PAT" ] ]</programlisting>
+      <keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-DJFE">try the query</ulink></keysym></para>
+    <para>
       These forms of the query use nesting of node selectors. The query can also be expressed without nesting, using names,
       either as
       <programlisting>t-node $a := [ functor="PRED", child $b ];
 t-node $b := [ functor="PAT" ];</programlisting>
+      <keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-5JL9">try the query</ulink></keysym></para>
+    <para>
       or 
       <programlisting>t-node $a := [ functor="PRED" ];
 t-node $b := [ functor="PAT", parent $a ];</programlisting>
+      <keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-HNYG">try the query</ulink></keysym></para>
+      <para>
       naming the two nodes
       <literal>$a</literal> and <literal>$b</literal> and either indicating
       that <literal>$a</literal> has a child $b or that <literal>$b</literal>
@@ -643,18 +671,21 @@ t-node $b := [ functor="PAT", parent $a ];</programlisting>
 
       <para>Using a disjunction:
         <programlisting>t-node [ functor="PRED", t-node [ functor="PAT" or functor="ADDR" ] ]</programlisting>
+        <keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-0ZPS">try the query</ulink></keysym>
       </para>
 
       <para>Using a regular expression:
         <programlisting>t-node [ functor="PRED", t-node [ functor ~ "^(PAT|ADDR)$" ] ]</programlisting>
-      Symbol <literal>~</literal> (tilde) denotes a binary relation between
+        <keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-AAZA">try the query</ulink></keysym></para>
+      <para>Symbol <literal>~</literal> (tilde) denotes a binary relation between
       two values that is true if and only if the value on the left interpreted
       as string matches the value on the right interpreted as regular
       expression.</para>
 
       <para>Using a set enumeration:
         <programlisting>t-node [ functor="PRED", t-node [ functor in { "PAT", "ADDR" } ] ]</programlisting>
-        The relation <literal>in</literal> asserts that the value computed
+        <keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-BXXQ">try the query</ulink></keysym></para>
+      <para>The relation <literal>in</literal> asserts that the value computed
       from the expression on the left equals to a value of some of the
       expressions listed in the set enumeration on the right.
       </para>
@@ -704,7 +735,7 @@ t-node [
   ],
   a/lex.rf $B
 ];
-</programlisting>
+</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-UPLP">try the query</ulink></keysym>
 
         <para>PML references are also used in PDT&nbsp;3.0 to represent
         grammatical coreference links (attribute
@@ -720,11 +751,11 @@ t-node [
 
         <programlisting>
 t-node $referring := [
- a/lex.rf $referring_lex := [],
+ a/lex.rf a-node $referring_lex := [],
  coref_gram.rf t-node $referred := [
-   a/lex.rf $referred_lex := [ order-follows $referring_lex ],
+   a/lex.rf a-node $referred_lex := [ order-follows $referring_lex ],
  ]
-]</programlisting>
+]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-7R5H">try the query</ulink></keysym>
 
         <para>In the previous example, the two t-nodes were directly connected by
         a grammatical-coreference link. If we want to look for nodes connected
@@ -738,11 +769,11 @@ t-node $referring := [
 
         <programlisting>
 t-node $referring := [
- a/lex.rf $referring_lex := [],
+ a/lex.rf a-node $referring_lex := [],
  coref_gram.rf{1,} t-node $referred := [
-   a/lex.rf $referred_lex := [ order-follows $referring_lex ],
+   a/lex.rf a-node $referred_lex := [ order-follows $referring_lex ],
  ]
-]</programlisting>
+]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-LDCJ">try the query</ulink></keysym>
 
         <para>Note that in the case of a cyclic chain of PML references, the
         chains maximum length is the number of distinct nodes in the chain
@@ -755,7 +786,7 @@ t-node $referring := [
         <programlisting>
 t-node $t := [
  coref_gram.rf{1,} $t
-]</programlisting>
+]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-FNOO">try the query</ulink></keysym>
       </section>
 
       <section>
@@ -789,20 +820,20 @@ t-node [
   gram/sempos="v",
   echild t-node [ functor="ACT" ],
   echild t-node [ functor="EFF" ],
-]</programlisting>
+]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-6XZG">try the query</ulink></keysym>
 
         <programlisting>
 # a t-node with two effective parents (common modifier of coordinated nodes)
 t-node [
   eparent t-node [ ],
   eparent t-node [ ],
-]</programlisting>
+]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-VIFG">try the query</ulink></keysym>
 
         <programlisting>
 # a verb with no actant
 t-node $a := [ gram/sempos="v",
   ! echild t-node [ functor in { "ACT","PAT","ADDR","ORIG","EFF" } ]
-]</programlisting>
+]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-KD0U">try the query</ulink></keysym>
 
         <programlisting>
 # reversed effective dependency on a-layer and t-layer
@@ -816,17 +847,17 @@ a-node $A := [
 t-node [
   a/lex.rf $B,
   echild t-node [ a/lex.rf $A ]
-];</programlisting>
+];</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-E7EV">try the query</ulink></keysym>
 
         <para>Just like PML reference relations, specific relations can be
         used in the transitive form by setting minimum and maximum bounds, for
         example:</para>
 
         <programlisting># effective descendant
-t-node [ echild{1,} t-node [ ] ]</programlisting>
+t-node [ echild{1,} t-node [ ] ]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-TVPA">try the query</ulink></keysym>
 
         <programlisting># effective grand-grand child
-t-node [ echild{2,2} t-node [ ] ]</programlisting>
+t-node [ echild{2,2} t-node [ ] ]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-KFAG">try the query</ulink></keysym>
       </section>
     </section>
 
@@ -855,7 +886,7 @@ t-node [ echild{2,2} t-node [ ] ]</programlisting>
     type = "PART_WHOLE",
     target_node.rf t-node [ ]
   ]
-]</programlisting>
+]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-N60N">try the query</ulink></keysym>
 
       <para>The intermediate <literal>member</literal> selector matches one
       element of the <literal>bridging</literal> list at a time and tests its
@@ -873,7 +904,7 @@ t-node [ echild{2,2} t-node [ ] ]</programlisting>
     discourse_type = "opp",
     target_node.rf t-node [ same-tree-as $s ]
   ]
-]</programlisting>
+]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-JLE9">try the query</ulink></keysym>
     
       <!--para>More details and further examples are given in <xref
       linkend="member_selectors" />.</para-->
@@ -888,7 +919,7 @@ t-node [ echild{2,2} t-node [ ] ]</programlisting>
       predicates without a subject on the analytical layer of PDT&nbsp;3.0, we could use the following
       query</para>
 
-      <programlisting>a-node [ afun="Pred", 0x echild a-node [ afun="Sb" ] ]</programlisting>
+      <programlisting>a-node [ afun="Pred", 0x echild a-node [ afun="Sb" ] ]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-DNC3">try the query</ulink></keysym>
 
       <para>The query finds an a-node with <literal>afun="Pred"</literal> that
       has no effective children with <literal>afun="Sb"</literal>. This is
@@ -900,7 +931,7 @@ t-node [ echild{2,2} t-node [ ] ]</programlisting>
       subject or one object, but not both, we could use the following
       query:</para>
 
-      <programlisting>a-node [ afun="Pred", 1x echild a-node [ afun in {"Sb","Obj"} ] ]</programlisting>
+      <programlisting>a-node [ afun="Pred", 1x echild a-node [ afun in {"Sb","Obj"} ] ]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-ECL6">try the query</ulink></keysym>
 
       <para>The nodes matched by subqueries are not part of the result match
       (in our example, the match would consist of the predicate nodes only,
@@ -918,11 +949,12 @@ t-node [ echild{2,2} t-node [ ] ]</programlisting>
       <para>Subqueries are also created using boolean operators, such as
       negation:</para>
 
-      <programlisting>a-node [ afun="Pred", ! echild a-node [ afun="Sb" ] ]</programlisting>
+      <programlisting>a-node [ afun="Pred", ! echild a-node [ afun="Sb" ] ]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-XRBI">try the query</ulink></keysym>
 
       <para>In this example, the selector <literal>! echild a-node [ afun="Sb"
       ]</literal> is automatically turned into a (still negated) subquery with
-      one and more occurrences; the query becomes: <programlisting>a-node [ afun="Pred", ! 1+x echild a-node [ afun="Sb" ] ]</programlisting></para>
+      one and more occurrences; the query becomes: <programlisting>a-node [ afun="Pred", ! 1+x echild a-node [ afun="Sb" ] ]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-WPPZ">try the query</ulink></keysym>
+      </para>
 
       <para>A common use of subqueries is also constraining nodes on a
       descending path from one node to another. Let us for example formulate a
@@ -979,7 +1011,7 @@ t-node $N:= [
     !functor = "RSTR",
     descendant $R
   ],
-];</programlisting>
+];</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-XOEY">try the query</ulink></keysym>
 
       <para>Note how the condition <xref linkend="subq-i2" />. is expressed:
       we say that there is no descendant of $N dominating $R whose
@@ -1047,7 +1079,7 @@ t-node $N:= [
       <programlisting>t-node [
   10-x same-tree-as t-node [],
   functor="DPHR", # the rest of your query
-]</programlisting>
+]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-V43E">try the query</ulink></keysym>
 
       <para>This selects t-nodes with <literal>functor="DPHR"</literal> in
       trees with at most 10 other t-nodes. Using functions (<xref linkend="section-functions" xrefstyle="template:see below"/>), this can be
@@ -1056,7 +1088,7 @@ t-node $N:= [
       <programlisting>t-root [
   descendants() &lt;= 10,
   descendant t-node [ functor="DPHR" ]
-]</programlisting>
+]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-VWRZ">try the query</ulink></keysym>
 
       <para>but note that in this case the <literal>t-root</literal> appears
       as a node in the result set. To avoid it, we can write</para>
@@ -1064,7 +1096,7 @@ t-node $N:= [
       <programlisting>t-node [
   functor="DPHR",
   1x ancestor t-root [ descendants() &lt;= 10 ]
-]</programlisting>
+]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-3QXX">try the query</ulink></keysym>
 
       <para>For treebanks that do not have a special node type for the root
       node, we can write e.g.:</para>
@@ -1138,16 +1170,16 @@ t-node $N:= [
       on implementation.</para>
 
       <programlisting># a leaf node (using functions)
-t-node [ sons()=0 ]</programlisting>
+t-node [ sons()=0 ]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-YTAY">try the query</ulink></keysym>
 
       <programlisting># a leaf node (using a subquery)
-t-node [ 0x child t-node [ ] ]</programlisting>
+t-node [ 0x child t-node [ ] ]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-FCCC">try the query</ulink></keysym>
 
       <programlisting># right-most child
-t-node [ rbrothers()=0 ]</programlisting>
+t-node [ rbrothers()=0 ]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-8QOL">try the query</ulink></keysym>
 
       <programlisting># left-most child
-t-node [ lbrothers()=0 ]</programlisting>
+t-node [ lbrothers()=0 ]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-PCRC">try the query</ulink></keysym>
 
       <programlisting># first leaf node in a subtree of $t (using functions)
 t-node $t := [
@@ -1155,13 +1187,13 @@ t-node $t := [
     sons()=0,
     depth_first_order()-depth()=depth_first_order($t)-depth($t)
   ]
-]</programlisting>
+]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-TYVS">try the query</ulink></keysym>
 
       <programlisting># first leaf node in a subtree of $t (using a subquery)
 t-node $t := [
   descendant t-node $d := [ sons()=0 ],
   0x descendant [ sons()=0, depth-first-precedes $d ],
-]</programlisting>
+]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-JQXY">try the query</ulink></keysym>
 
       <programlisting># last leaf node in a subtree of $t
 t-node $t := [
@@ -1169,13 +1201,13 @@ t-node $t := [
     sons()=0,
     depth_first_order()-depth()=depth_first_order($t)+descendants($t)-1-depth($t)
   ]
-]</programlisting>
+]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-P9BX">try the query</ulink></keysym>
 
       <programlisting># last leaf node in a subtree of $t (using a subquery)
 t-node $t := [
   descendant t-node $d := [ sons()=0 ],
   0x descendant [ depth-first-follows $d ],
-]</programlisting>
+]</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-MEJV">try the query</ulink></keysym>
     </section>
 
     <section id="section-output-filters">
@@ -1196,8 +1228,8 @@ t-node $t := [
       query in the treebank:</para>
 
       <programlisting># counting occurrences
-t-node [ functor="DPHR" ]
-&gt;&gt; count()</programlisting>
+t-node [ functor="PRED" ]
+&gt;&gt; count()</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-WP0O">try the query</ulink></keysym>
 
       <para>The group functions <literal>min()</literal>,
       <literal>max()</literal>, and <literal>avg()</literal>, can be used to
@@ -1208,7 +1240,7 @@ t-node [ functor="DPHR" ]
 
       <programlisting>
 t-node $n := [ functor="PRED" ]
-&gt;&gt; max(sons($n))</programlisting>
+&gt;&gt; max(sons($n))</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-GXVZ">try the query</ulink></keysym>
 
       <para>The following query computes maximum, minimum and average size of
       a tectogrammatical tree:</para>
@@ -1216,7 +1248,7 @@ t-node $n := [ functor="PRED" ]
       <programlisting>
 t-root $n := [ ]
 &gt;&gt; descendants($n)
-&gt;&gt; max(), min(), avg()</programlisting>
+&gt;&gt; max(), min(), avg()</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-NESG">try the query</ulink></keysym>
 
       <para>The above query uses two filters: the first extracts the number of
       descendants from each node matched by the selector
@@ -1231,7 +1263,7 @@ t-root $n := [ ]
       <programlisting>
 t-node $n := [ ]
 &gt;&gt; for $n.functor
-   give $1, count()</programlisting>
+   give $1, count()</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-DKF0">try the query</ulink></keysym>
 
       <para>Note that <literal>$1</literal> in the <literal>give</literal>
       clause refers to the first (and only) key used in the
@@ -1249,7 +1281,7 @@ t-node $n := [ ]
       <programlisting>t-node $n := [ ]
 &gt;&gt; for $n.functor
    give $1, count()
-   sort by $2 desc, $1</programlisting>
+   sort by $2 desc, $1</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-7UV1">try the query</ulink></keysym>
 
       <para>The <literal>for</literal> clause can be used to create groups not
       only by attribute values, but also by some of the matching nodes. For
@@ -1262,7 +1294,7 @@ t-node $referring := [
   coref_gram.rf t-node $referred := [  ]
 ];
 &gt;&gt;  for $referring give count()
-&gt;&gt; max()</programlisting>
+&gt;&gt; max()</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-EW5L">try the query</ulink></keysym>
 
       <para>The selective part of the query matches every pair of
       tectogrammatical nodes that are linked by a grammatical-coreference
@@ -1307,7 +1339,7 @@ a-node $a:= [ ]
    sort by $1, $3
 &gt;&gt; filter $3 &lt;= 3
 &gt;&gt; $1, $2, $3
-</programlisting>
+</programlisting><keysym><ulink url="http://hdl.handle.net/11346/PMLTQ-YY1E">try the query</ulink></keysym>
     </section>
   </section>
 

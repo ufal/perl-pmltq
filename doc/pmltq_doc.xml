@@ -796,9 +796,9 @@ t-node [
 
         <programlisting>
 t-node $referring := [
- a/lex.rf $referring_lex := [],
+ a/lex.rf a-node $referring_lex := [],
  coref_gram.rf t-node $referred := [
-   a/lex.rf $referred_lex := [ order-follows $referring_lex ],
+   a/lex.rf a-node $referred_lex := [ order-follows $referring_lex ],
  ]
 ]</programlisting>
 
@@ -814,9 +814,9 @@ t-node $referring := [
 
         <programlisting>
 t-node $referring := [
- a/lex.rf $referring_lex := [],
+ a/lex.rf a-node $referring_lex := [],
  coref_gram.rf{1,} t-node $referred := [
-   a/lex.rf $referred_lex := [ order-follows $referring_lex ],
+   a/lex.rf a-node $referred_lex := [ order-follows $referring_lex ],
  ]
 ]</programlisting>
 
