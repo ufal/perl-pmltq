@@ -1186,48 +1186,28 @@ t-node $t := [
       selective part of the query and start with <literal>&gt;&gt;</literal>.
       Filters can be chained: the first filter extracts data from the matching
       nodes and all subsequent filters operate on the output from the
-      immediately preceding filter. Details can be found in the <link
-      linkend="outputFilter">PML-TQ Syntax Reference</link> and <xref
-      linkend="agg_functions" />.</para>
-
-      <para>The TrEd GUI does not provide any graphical builder for
-      output-filter nor does it represent the filters graphically. To enter a
-      filter, open the entire query in the query editor (press <keycombo
-          action="simul">
-          <keysym>Ctrl</keysym>
-
-          <keysym>E</keysym>
-        </keycombo> or <guibutton> <inlinemediaobject>
-          <imageobject role="html">
-            <imagedata contentdepth="10pt" fileref="icons/edit_file.png"
-                       format="PNG" />
-          </imageobject>
-
-          <textobject>
-            <phrase>Edit query</phrase>
-          </textobject>
-        </inlinemediaobject> </guibutton> on the toolbar), place the cursor at
-      the end of the query and enter the filter code. Various buttons in the
-      editor can be used to insert special symbols, and templates for
-      functions and common constructions.</para>
+      immediately preceding filter. Details can be found in the PML-TQ manual,
+      sections <ulink  url="https://ufal.mff.cuni.cz/pmltq/doc/pmltq_doc.html#outputFilter">PML-TQ Syntax Reference</ulink>
+      and <ulink  url="https://ufal.mff.cuni.cz/pmltq/doc/pmltq_doc.html#agg_functions">Group Functions</ulink>.
+      </para>
 
       <para>One of the simplest filters uses the group function
       <literal>count()</literal> to compute the total number of matches of the
       query in the treebank:</para>
 
       <programlisting># counting occurrences
-t-node [ functor='DPHR' ]
+t-node [ functor="DPHR" ]
 &gt;&gt; count()</programlisting>
 
       <para>The group functions <literal>min()</literal>,
       <literal>max()</literal>, and <literal>avg()</literal>, can be used to
       compute maximum, minimum, and average values of data extracted from the
       matching nodes. For example: to compute a maximum number of child nodes
-      of a t-node with the functor <literal>DPHR</literal>, we can use the
+      of a t-node with the functor <literal>PRED</literal>, we can use the
       following:</para>
 
       <programlisting>
-t-node $n := [ functor='DPHR' ]
+t-node $n := [ functor="PRED" ]
 &gt;&gt; max(sons($n))</programlisting>
 
       <para>The following query computes maximum, minimum and average size of
@@ -1306,13 +1286,14 @@ t-node $referring := [
       by following the function arguments by an <literal>over</literal>
       clause. Here we show an example where we use one of the ranking group
       functions (<literal>row_number()</literal>) to select just a few top
-      ranking rows from each group. Please refer to <xref
-      linkend="grouping_explained" /> for more examples.</para>
+      ranking rows from each group. Please refer to the PML-TQ manual, section
+      <ulink  url="https://ufal.mff.cuni.cz/pmltq/doc/pmltq_doc.html#grouping_explained">Group functions explained</ulink>
+      for more examples.</para>
 
       <para>In the following query we extract the syntactic label
       (<literal>afun</literal>) and the part of speech (the first position of
       the morphological tag) from every node on the analytical
-      (morphosyntactical) layer of PDT 2.0. Then we apply further filters to
+      (morphosyntactical) layer of PDT&nbsp;3.0. Then we apply further filters to
       output in order to obtain the three most frequent parts of speech for
       each <literal>afun</literal>. If several parts of speech occur the same
       number of times for a given afun, we sample those three that come first
@@ -1322,9 +1303,9 @@ t-node $referring := [
 a-node $a:= [ ]
 &gt;&gt; $a.afun, substr($a.m/tag,0,1)  # get afun and part of speech (POS)
 &gt;&gt; for $1,$2 give $1, $2, count() # count occurrences of POS for each afun
-&gt;&gt; $1, $2, row_number(over $1 sort by ($3 desc, $2)) # get the rank of each POS over the afun
+&gt;&gt; $1, $2, row_number(over $1 sort by $3 desc, $2) # get the rank of each POS over the afun
    sort by $1, $3
-&gt;&gt; filter $4 &lt;= 3
+&gt;&gt; filter $3 &lt;= 3
 &gt;&gt; $1, $2, $3
 </programlisting>
     </section>

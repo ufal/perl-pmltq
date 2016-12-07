@@ -1447,9 +1447,9 @@ t-node $referring := [
 a-node $a:= [ ]
 &gt;&gt; $a.afun, substr($a.m/tag,0,1)  # get afun and part of speech (POS)
 &gt;&gt; for $1,$2 give $1, $2, count() # count occurrences of POS for each afun
-&gt;&gt; $1, $2, row_number(over $1 sort by ($3 desc, $2)) # get the rank of each POS over the afun
+&gt;&gt; $1, $2, row_number(over $1 sort by $3 desc, $2) # get the rank of each POS over the afun
    sort by $1, $3
-&gt;&gt; filter $4 &lt;= 3
+&gt;&gt; filter $3 &lt;= 3
 &gt;&gt; $1, $2, $3
 </programlisting>
     </section>
