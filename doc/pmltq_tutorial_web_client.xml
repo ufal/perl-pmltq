@@ -885,43 +885,29 @@ t-node [ echild{2,2} t-node [ ] ]</programlisting>
 
       <para>Sometimes it is useful to test existence, non-existence or number
       of occurrences of a node related to our query. For example, to find all
-      predicates without a subject in PDT 2.0, we could use the following
+      predicates without a subject on the analytical layer of PDT&nbsp;3.0, we could use the following
       query</para>
 
-      <programlisting>a-node [ afun='Pred', 0x echild a-node [ afun='Sb' ] ]</programlisting>
+      <programlisting>a-node [ afun="Pred", 0x echild a-node [ afun="Sb" ] ]</programlisting>
 
-      <para>The query finds an a-node with <literal>afun='Pred'</literal> that
-      has no effective children with <literal>afun='Sb'</literal>. This is
+      <para>The query finds an a-node with <literal>afun="Pred"</literal> that
+      has no effective children with <literal>afun="Sb"</literal>. This is
       expressed using a selector preceded by a restriction on number of
       occurrences (0x - zero times), which is called a subquery.</para>
-
-      <para>To create a subquery graphically in TrEd, simply create the
-      selector <literal>echild a-node [ afun='Sb' ]</literal> as usual and
-      then, with the corresponding query subtree selected, press
-      <keysym>x</keysym> or <guibutton> <inlinemediaobject>
-          <imageobject role="html">
-            <imagedata contentdepth="10pt" fileref="pmltq_icons/subquery.png"
-                       format="PNG" valign="middle" />
-          </imageobject>
-
-          <textobject>
-            <phrase>Occurrences</phrase>
-          </textobject>
-        </inlinemediaobject> </guibutton>.</para>
 
       <para>Of course, we could constrain the number of occurrences to a
       non-zero value, too. For example, to find all predicates that govern one
       subject or one object, but not both, we could use the following
       query:</para>
 
-      <programlisting>a-node [ afun='Pred', 1x echild a-node [ afun in {'Sb','Obj'} ] ]</programlisting>
+      <programlisting>a-node [ afun="Pred", 1x echild a-node [ afun in {"Sb","Obj"} ] ]</programlisting>
 
       <para>The nodes matched by subqueries are not part of the result match
       (in our example, the match would consist of the predicate nodes only,
       the subjects or objects would not be included).</para>
 
       <para>The number of occurrences of a subquery can be constrained not
-      only to a single number (0 in our example) but to any finite union of
+      only to a single number but to any finite union of
       bounded or partially unbounded intervals of positive integers; e.g.
       <literal>0|2..4|6+x</literal> restricts the number of occurrences to
       zero, two to four, or six or more, eliminating one and five. While the
@@ -932,27 +918,11 @@ t-node [ echild{2,2} t-node [ ] ]</programlisting>
       <para>Subqueries are also created using boolean operators, such as
       negation:</para>
 
-      <programlisting>a-node [ afun='Pred', ! echild a-node [ afun='Sb' ] ]</programlisting>
+      <programlisting>a-node [ afun="Pred", ! echild a-node [ afun="Sb" ] ]</programlisting>
 
-      <para>In this example, the selector <literal>! echild a-node [ afun='Sb'
+      <para>In this example, the selector <literal>! echild a-node [ afun="Sb"
       ]</literal> is automatically turned into a (still negated) subquery with
-      one and more occurrences; the query becomes: <programlisting>a-node [ afun='Pred', ! 1+x echild a-node [ afun='Sb' ] ]</programlisting></para>
-
-      <para>To create this query graphically, create the selector
-      <literal>echild a-node [ afun='Sb' ]</literal> as usual, then select the
-      query node corresponding to <literal>a-node [ afun='Pred' ]</literal>,
-      create a negation node (press <keysym>!</keysym> or <guibutton>
-      <inlinemediaobject>
-          <imageobject role="html">
-            <imagedata contentdepth="10pt" fileref="pmltq_icons/not.png"
-                       format="PNG" valign="middle" />
-          </imageobject>
-
-          <textobject>
-            <phrase>NOT</phrase>
-          </textobject>
-        </inlinemediaobject> </guibutton>) and drag the query subtree
-      corresponding to the subject onto the negation node.</para>
+      one and more occurrences; the query becomes: <programlisting>a-node [ afun="Pred", ! 1+x echild a-node [ afun="Sb" ] ]</programlisting></para>
 
       <para>A common use of subqueries is also constraining nodes on a
       descending path from one node to another. Let us for example formulate a
