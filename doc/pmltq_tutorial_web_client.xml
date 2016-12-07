@@ -1050,7 +1050,7 @@ t-node $N:= [
 ]</programlisting>
 
       <para>This selects t-nodes with <literal>functor="DPHR"</literal> in
-      trees with at most 10 other t-nodes. Using functions, this can be
+      trees with at most 10 other t-nodes. Using functions (<xref linkend="section-functions" xrefstyle="template:see below"/>), this can be
       written as</para>
 
       <programlisting>t-root [
@@ -1078,7 +1078,7 @@ t-node $N:= [
 ]</programlisting>
     </section>
 
-    <section>
+    <section id="section-functions">
       <title>Functions</title>
 
       <para>PML-TQ provides a set of built-in functions that can be used in
@@ -1092,7 +1092,7 @@ t-node $N:= [
         </listitem>
 
         <listitem>
-          <para>functions related information about documents</para>
+          <para>functions related to information about the document</para>
         </listitem>
 
         <listitem>
@@ -1104,12 +1104,34 @@ t-node $N:= [
         </listitem>
 
         <listitem>
-          <para>group functions (applicable only in output filters)</para>
+          <para>group functions (applicable only in output filters (<xref linkend="section-output-filters" xrefstyle="template:see below"/>)</para>
         </listitem>
       </itemizedlist>
 
-      <para>For description of all individual functions, refer to <xref
-      linkend="functions" />. Here, we only give a few examples demonstrating
+      <para>In the web client, lists of available functions can be accessed via
+             <inlinemediaobject>
+                <imageobject role="html">
+                   <imagedata contentdepth="20pt"
+                      fileref="images/callouts/toolbar-Functions.png" format="PNG" />
+                </imageobject>
+                <textobject>
+                   <phrase>Node Types</phrase>
+                </textobject>
+             </inlinemediaobject> in the toolbar, see <xref linkend="fig-screenshot-web-lindat-pdt30-functions"/>.
+    <figure id="fig-screenshot-web-lindat-pdt30-functions">
+      <title>A part of the list of available functions in PML-TQ</title>
+
+      <mediaobject>
+        <imageobject role="html">
+          <imagedata scale="&cutshotscale;" align="center" fileref="images/screenshot_web_lindat_pdt30_functions_menu_cut.png"
+                      format="PNG" />
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+      For description of all individual functions, refer to
+        <ulink  url="https://ufal.mff.cuni.cz/pmltq/doc/pmltq_doc.html#functions">the PML-TQ manual</ulink>.
+        Here, we only give a few examples demonstrating
       the use of some of the functions from the first category on a few common
       query constructions, usually also expressible by means of subqueries.
       Whether it is more efficient to use functions than subqueries may depend
@@ -1117,49 +1139,6 @@ t-node $N:= [
 
       <programlisting># a leaf node (using functions)
 t-node [ sons()=0 ]</programlisting>
-
-      <para>The above query can be created graphically in TrEd by creating a
-      <literal>t-node</literal> selector (press <keysym>Insert</keysym> or
-      <guibutton> <inlinemediaobject>
-          <imageobject role="html">
-            <imagedata contentdepth="10pt" fileref="pmltq_icons/add_node.png"
-                       format="PNG" />
-          </imageobject>
-
-          <textobject>
-            <phrase>Add node</phrase>
-          </textobject>
-        </inlinemediaobject> </guibutton> on the toolbar and select a node
-      type (<guilabel>t-node</guilabel> in our example) from the list), then
-      create an equality constraint by pressing <keysym>=</keysym> or
-      <guibutton> <inlinemediaobject>
-          <imageobject role="html">
-            <imagedata contentdepth="10pt"
-                       fileref="pmltq_icons/test_equality.png" format="PNG" />
-          </imageobject>
-
-          <textobject>
-            <phrase>Equality</phrase>
-          </textobject>
-        </inlinemediaobject> </guibutton> and fill-in
-      <literal>sons()</literal> as <guilabel>a</guilabel> and
-      <literal>0</literal> as <guilabel>a</guilabel>.</para>
-
-      <para>Alternatively, type the query in the text form editor (opened by
-      pressing <keysym>e</keysym> or <guibutton> <inlinemediaobject>
-          <imageobject role="html">
-            <imagedata contentdepth="10pt" fileref="icons/edit_file.png"
-                       format="PNG" />
-          </imageobject>
-
-          <textobject>
-            <phrase>Edit query</phrase>
-          </textobject>
-        </inlinemediaobject> </guibutton>). The function names with argument
-      templates can be inserted using the <guilabel>Functions</guilabel>
-      button in the editor.</para>
-
-      <para>Other queries involving functions can be created similarly.</para>
 
       <programlisting># a leaf node (using a subquery)
 t-node [ 0x child t-node [ ] ]</programlisting>
@@ -1199,7 +1178,7 @@ t-node $t := [
 ]</programlisting>
     </section>
 
-    <section>
+    <section id="section-output-filters">
       <title>Output filters</title>
 
       <para>Output filters are used for extracting data from the nodes matched
