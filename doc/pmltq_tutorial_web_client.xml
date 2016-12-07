@@ -984,8 +984,9 @@ t-node $N:= [
       <para>Note how the condition <xref linkend="subq-i2" />. is expressed:
       we say that there is no descendant of $N dominating $R whose
       <literal>functor</literal> would not equal <literal>RSTR</literal>.
-      Thus, we have rewritten the original condition of the form
-      <inlineequation id="eq-subq1">
+      Thus, we have rewritten the original condition of the form <phrase role="math">∀x C(x,N,R)</phrase>
+      as <phrase role="math">¬ ∃x ¬C(x,N,R)</phrase>.
+      <!--inlineequation id="eq-subq1">
           <?dbtex delims='no'?>
 
           <alt role="tex">\[\forall x C(x,N,R) \]</alt>
@@ -1021,7 +1022,8 @@ t-node $N:= [
               <phrase role="math">¬ ∃x ¬C(x,N,R)</phrase>
             </textobject>
           </inlinemediaobject>
-        </inlineequation>.</para>
+        </inlineequation-->
+       </para>
 
       <!-- <programlisting>t-node [ functor='DPHR', 2+x child t-node [ ] ]</programlisting> -->
 
@@ -1044,23 +1046,23 @@ t-node $N:= [
 
       <programlisting>t-node [
   10-x same-tree-as t-node [],
-  functor='DPHR', # the rest of your query
+  functor="DPHR", # the rest of your query
 ]</programlisting>
 
-      <para>This selects t-nodes with <literal>functor='DPHR'</literal> in
+      <para>This selects t-nodes with <literal>functor="DPHR"</literal> in
       trees with at most 10 other t-nodes. Using functions, this can be
       written as</para>
 
       <programlisting>t-root [
   descendants() &lt;= 10,
-  descendant t-node [ functor='DPHR' ]
+  descendant t-node [ functor="DPHR" ]
 ]</programlisting>
 
       <para>but note that in this case the <literal>t-root</literal> appears
       as a node in the result set. To avoid it, we can write</para>
 
       <programlisting>t-node [
-  functor='DPHR',
+  functor="DPHR",
   1x ancestor t-root [ descendants() &lt;= 10 ]
 ]</programlisting>
 
@@ -1068,7 +1070,7 @@ t-node $N:= [
       node, we can write e.g.:</para>
 
       <programlisting>node [
-  functor='DPHR',
+  functor="DPHR",
   1x ancestor node [
     depth() = 0, # the root
     descendants() &lt;= 10
