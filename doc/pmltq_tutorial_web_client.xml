@@ -834,44 +834,49 @@ t-node [ echild{2,2} t-node [ ] ]</programlisting>
       <title>Querying labeled references using the <literal>member</literal>
       selector</title>
 
-      <para>The member selector is useful for querying some types of
+    <para>The <literal>member</literal> selector is useful for querying some types of
       complex-valued node attributes, e.g. lists of complex structures. In PDT&nbsp;3.0,
       there are three such attributes, representing discourse relations (attribute <literal>discourse</literal>),
       textual coreference (<literal>coref_text</literal>) and bridging anaphora (<literal>bridging</literal>).</para>
 
-      <para>Each node in CoNLL-2009 ST data can be annotated as an argument of
-      some other node, called predicate. The argument node carries an
-      attribute <literal>apreds</literal> which is a list of all predicates it
-      belongs to. The list consists of structures with two members: a PML
-      reference to the predicate node (<literal>apreds/target.rf</literal>)
-      and an argument label <literal>apreds/label</literal>. The set of
-      argument labels differs from language to language; for Czech data, the
-      labels correspond to tectogrammatical functors and the predicates to
-      effective parents.</para>
-
-      <para>So, each structure in the list represents one labeled semantic
+      <para>For example, attribute <literal>bridging</literal> is a list of structures, each consisting of two members:
+        a PML reference to the anaphor node (<literal>bridging/target_node.rf</literal>)
+        and the type of the relation (<literal>bridging/type</literal>).
+        So, each structure in the list represents one labeled semantic
       relation. To be able to combine constraints on the target node
-      (predicate) with the label of the relation that points to it, we must
+      (anaphor) with the type of the relation that points to it, we must
       use a feature of PML-TQ called <literal>member</literal>
       selectors.</para>
 
-      <para>The following example finds a PAT argument and its corresponding
-      predicate:</para>
+    <para>The following query searches for bridging relations of type <literal>PART_WHOLE</literal>.</para>
 
-      <programlisting>node $arg := [
-  member apreds [
-    label = 'PAT',
-    target.rf node $pred := [ ]
+      <programlisting>t-node [
+  member bridging [
+    type = "PART_WHOLE",
+    target_node.rf t-node [ ]
   ]
 ]</programlisting>
 
       <para>The intermediate <literal>member</literal> selector matches one
-      element of the <literal>apreds</literal> list at a time and tests its
-      label. If the label matches, the nested node selector for the
-      <literal>target.rf</literal> PML-reference relation takes action.</para>
+      element of the <literal>bridging</literal> list at a time and tests its
+      type. If the type matches, the nested node selector for the
+      <literal>target_node.rf</literal> PML-reference relation takes action.</para>
 
-      <para>More details and further examples are given in <xref
-      linkend="member_selectors" />.</para>
+    <para>Similarly, we can search for discourse relations of a given discourse type.
+      The following example searches for discourse relations of discourse
+      type <literal>opp</literal> (opposition). The query also specifies that
+      the target node is in the same tree as the start node, thus searching only for
+      intra-sentential discourse relations.</para>
+
+      <programlisting>t-node $s:= [
+  member discourse [
+    discourse_type = "opp",
+    target_node.rf t-node [ same-tree-as $s ]
+  ]
+]</programlisting>
+    
+      <!--para>More details and further examples are given in <xref
+      linkend="member_selectors" />.</para-->
     </section>
 
     <section>
