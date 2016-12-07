@@ -686,8 +686,8 @@ t-node $b := [ functor="PAT", parent $a ];</programlisting>
         containing the reference, optionally followed by
         <literal>-&gt;</literal> (in order to prevent a collision with a
         similarly named built-in or implementation specific relations). For
-        example, in PDT 2.0, the nodes on the t-layer are connected to nodes
-        on the a-layer using a PML references in the attributes
+        example, in PDT&nbsp;3.0, nodes on the t-layer are connected to nodes
+        on the a-layer using PML references in the attributes
         <literal>a/lex.rf</literal> and <literal>a/aux.rf</literal>. The
         following query uses the <literal>a/lex.rf</literal> PML reference as
         a relation:</para>
@@ -706,9 +706,8 @@ t-node [
 ];
 </programlisting>
 
-        <para>PML references are also used in PDT 2.0 to represent textual and
-        grammatical coreference links (attributes
-        <literal>coref_text.rf</literal> and
+        <para>PML references are also used in PDT&nbsp;3.0 to represent
+        grammatical coreference links (attribute
         <literal>coref_gram.rf</literal>). For example, the following query
         searches for a grammatical coreference where referring node precedes
         the referred node. The query defines selectors for two
@@ -727,7 +726,7 @@ t-node $referring := [
  ]
 ]</programlisting>
 
-        <para>In the last example, the two t-nodes were directly connected by
+        <para>In the previous example, the two t-nodes were directly connected by
         a grammatical-coreference link. If we want to look for nodes connected
         by a chain of grammatical-coreference links, we can do it by using a
         transitive closure of the relation <literal>coref_gram.rf</literal>,
@@ -745,18 +744,13 @@ t-node $referring := [
  ]
 ]</programlisting>
 
-        <para>In TrEd, a relation can be made transitive by specifying the
-        minimum and/or maximum bound; this can be done e.g. by double-clicking
-        on an existing relation arrow.</para>
-
         <para>Note that in the case of a cyclic chain of PML references, the
         chains maximum length is the number of distinct nodes in the chain
         plus one (i.e. the chain is allowed to start and end on the same node,
         but it is not allowed to continue another round along the cycle). For
         example, the following query searches for a cycle in the annotation of
-        textual coreference in the PDT 2.0 tectogrammatical annotation
-        (indeed, there is one cycle of length 2 left there by a
-        mistake):</para>
+        grammatical coreference in the PDT&nbsp;3.0 tectogrammatical annotation
+        (and does not find anything, as there are no such cycles in PDT&nbsp;3.0):</para>
 
         <programlisting>
 t-node $t := [
@@ -776,8 +770,8 @@ t-node $t := [
         reference relation).</para>
 
         <para>The current implementation defines two relations specific for
-        the PDT 2.0 annotation: <literal>echild</literal> and
-        <literal>eparent</literal>. These relations can be used both on
+        the PDT&nbsp;3.0 annotation: <literal>echild</literal> and
+        <literal>eparent</literal>. These relations can be used both on the
         tectogrammatical and analytical layer and represent the effective
         dependency, rather than technical dependency represented by the
         built-in relations <literal>child</literal> and
@@ -790,11 +784,11 @@ t-node $t := [
         <para>Here are a few examples of queries using these relations:</para>
 
         <programlisting>
-# a semantic verb with an ACT(or) and EFF(ect)
+# a semantic verb with ACT (Actor) and EFF (Effect)
 t-node [
-  gram/sempos='v',
-  echild t-node [ functor='ACT' ],
-  echild t-node [ functor='EFF' ],
+  gram/sempos="v",
+  echild t-node [ functor="ACT" ],
+  echild t-node [ functor="EFF" ],
 ]</programlisting>
 
         <programlisting>
@@ -806,17 +800,17 @@ t-node [
 
         <programlisting>
 # a verb with no actant
-t-node $a := [ gram/sempos='v',
-  ! echild t-node [ functor in { 'ACT','PAT','ADDR','ORIG','EFF' } ]
+t-node $a := [ gram/sempos="v",
+  ! echild t-node [ functor in { "ACT","PAT","ADDR","ORIG","EFF" } ]
 ]</programlisting>
 
         <programlisting>
 # reversed effective dependency on a-layer and t-layer
 # excluding numeric constructions
 a-node $A := [
-  m/tag !~ '^C',
+  m/tag !~ "^C",
   echild a-node $B := [
-    m/tag !~ '^C'
+    m/tag !~ "^C"
   ]
 ];
 t-node [
