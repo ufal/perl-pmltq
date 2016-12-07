@@ -835,9 +835,9 @@ t-node [ echild{2,2} t-node [ ] ]</programlisting>
       selector</title>
 
       <para>The member selector is useful for querying some types of
-      complex-valued node attributes, e.g. lists of complex structures. Such
-      attributes do not occur in PDT 2.0, but do occur for example in
-      CoNLL-2009 Shared Task data when converted to PML.</para>
+      complex-valued node attributes, e.g. lists of complex structures. In PDT&nbsp;3.0,
+      there are three such attributes, representing discourse relations (attribute <literal>discourse</literal>),
+      textual coreference (<literal>coref_text</literal>) and bridging anaphora (<literal>bridging</literal>).</para>
 
       <para>Each node in CoNLL-2009 ST data can be annotated as an argument of
       some other node, called predicate. The argument node carries an
