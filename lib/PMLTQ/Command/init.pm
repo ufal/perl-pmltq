@@ -120,6 +120,7 @@ sub run {
       COMMENT_homepage    => '',
       COMMENT_description => '',
       COMMENT_isFree      => 'false',
+      COMMENT_isAllLogged => 'false',
       COMMENT_isPublic    => 'false',
       COMMENT_isFeatured  => 'false',
       COMMENT_web_api     =>

@@ -24,6 +24,7 @@ sub DEFAULT_CONFIG {
       port => 5432
     },
     isFree => 'false',
+    isAllLogged => 'false',
     isPublic => 'false',
     isFeatured => 'false',
   };
@@ -357,6 +358,12 @@ Treebank description visible at the web.
 =item C<isFree>
 
 Boolean value (C<true>, C<false>) sets if the logging in is not required for querying treebank.
+
+Defaults: B<false>
+
+=item C<isAllLogged>
+
+Boolean value (C<true>, C<false>) sets if treebank is queryable for all logged in users.
 
 Defaults: B<false>
 

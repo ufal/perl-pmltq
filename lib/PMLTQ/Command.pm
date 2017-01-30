@@ -281,6 +281,7 @@ sub create_treebank_param {
     serverId => $server[0],
     database => $self->config->{db}->{name},
     isFree => $self->config->{isFree},
+    isAllLogged => $self->config->{isAllLogged},
     isPublic => $self->config->{isPublic},
     isFeatured => $self->config->{isFeatured},
   }
