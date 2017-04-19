@@ -24,7 +24,7 @@ use LWP::UserAgent;
 use HTTP::Request;
 use File::Temp;
 use JSON;
-use YAML ();
+use YAML::Tiny;
 
 my $ua = LWP::UserAgent->new;
 $ua->agent("Tree_Query_CGI/1.0 ");
@@ -390,7 +390,7 @@ sub _dump_all_info {
     } else { ## dump text for everything else
         print($cgi->header(-type=>'text/plain',
                            -charset=>'UTF-8'));
-        print YAML::Dump(\%dump);
+        print YAML::Tiny::Dump(\%dump);
     }
 }
 
