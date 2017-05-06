@@ -423,7 +423,7 @@ Language code
 
 =item C<result_dir>
 
-Directory where sould be saved results of test queries (SVG and text files)
+Directory where should be saved results of test queries (SVG and text files)
 
 =item C<queries>
 
@@ -431,7 +431,7 @@ Directory where sould be saved results of test queries (SVG and text files)
 
 =item C<filename>
 
-Filename where sould be the result saved
+Name of the file where the results should be saved
 
 =item C<query>
 
