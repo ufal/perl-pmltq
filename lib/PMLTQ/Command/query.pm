@@ -310,6 +310,7 @@ sub http_search {
        :
        (
         Content_Type => 'application/json;charset=UTF-8',
+        User_Agent => 'PML-TQ CLI',
         Content => JSON->new->utf8->encode({
           query => $q,
           limit => $opts{limit},
