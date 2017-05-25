@@ -17,6 +17,7 @@ use LWP::UserAgent;
 use File::Temp;
 use Encode;
 use Pod::Usage 'pod2usage';
+use JSON;
 
 my $extension_dir;
 my %opts;
@@ -53,6 +54,8 @@ sub run {
   'filters|F=s',
   'no-filters',
 
+  'old-api',
+
   'netgraph-query|G=s',
 
   'print-servers|P',
@@ -86,7 +89,6 @@ sub run {
     $opts{'pmltq-extension-dir'} ||
     File::Spec->catfile($ENV{HOME},'.tred.d','extensions', 'pmltq');
   Treex::PML::AddResourcePath(File::Spec->catfile($extension_dir,'resources'));
-
   if ($opts{ntred}) {
     ntred_search();
   } elsif ($opts{jtred}) {
@@ -220,11 +222,16 @@ sub pmltq_http_search {
 
 
   if ($type eq 'http') {
+    #if($opts{'old-api'}){
     http_search($conf->{url},$query,{ 'node-types'=>$opts{'node-types'},
               'relations'=>$opts{'relations'},
               debug=>$opts{debug},
-              %auth
+              %auth,
+              'old-api'=>$opts{'old-api'}
              });
+    #} else { ## NEW API
+    #  print STDERR "TODO NEW API\n";
+    #}
   } else {
     require PMLTQ::SQLEvaluator;
     my $evaluator = PMLTQ::SQLEvaluator->new(undef,{connect => $conf, debug=>$opts{debug},
@@ -245,7 +252,7 @@ sub pmltq_http_search {
 sub get_server_conf {
   my ($configs,$id)=@_;
   my ($conf,$type);
-  if ($id =~ /^http:/) {
+  if ($id =~ /^https?:/) {
     $type = 'http';
     $conf = {url => $id};
   } else {
@@ -270,15 +277,19 @@ sub http_search {
        $auth{username}, $auth{password})
     if $opts->{username};
   $ua->agent("PMLTQ/1.0 ");
-  $url.='/' unless $url=~m{^https?://.+/};
+  $url.='/' unless $url=~m{^https?://.+/$};
+  my $METHOD = \&POST;
   if ($opts->{'node-types'}) {
-    $url = qq{${url}nodetypes};
+    $url = $opts->{'old-api'} ? qq{${url}nodetypes} : qq{${url}node-types};
+    $METHOD = \&GET unless $opts->{'old-api'};
     $query = '';
   } elsif ($opts->{'relations'}) {
     $url = qq{${url}relations};
+    $METHOD = \&GET unless $opts->{'old-api'};
     $query = '';
   } elsif ($opts->{'other'}) {
     $url = qq{${url}other};
+     die "Unknown option --other in new api\n" unless $opts->{'old-api'};
     $query = '';
   } else {
     $url = qq{${url}query};
@@ -287,17 +298,32 @@ sub http_search {
   my $q = $query; Encode::_utf8_off($q);
   binmode STDOUT;
   my $sub = $opts->{callback} || sub { print $_[0] };
-  my $res = $ua->request(POST($url, [
-      query => $q,
-      format => 'text',
-      limit => $opts{limit},
-      row_limit => $opts{limit},
-      timeout => $opts{timeout},
-     ]),$sub ,1024*8 );
+  my $res = $ua->request($METHOD->($url, 
+    $opts->{'old-api'} ?
+      ([
+        query => $q,
+        format => 'text',
+        limit => $opts{limit},
+        row_limit => $opts{limit},
+        timeout => $opts{timeout},
+       ])
+       :
+       (
+        Content_Type => 'application/json;charset=UTF-8',
+        Content => JSON->new->utf8->encode({
+          query => $q,
+          limit => $opts{limit},
+          # row_limit => $opts{limit}, #TODO: currently not working
+          timeout => $opts{timeout}
+        })
+       )
+     ),$sub ,1024*8 );
   unless ($res->is_success) {
     die $res->status_line."\n".$res->content."\n";
   }
 }
+
+
 
 sub search {
   my ($evaluator,$query)=@_;
