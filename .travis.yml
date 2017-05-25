@@ -47,6 +47,7 @@ before_install:
 
 install:
   - "cpan-install $(dzil listdeps --missing --versions | grep -v '^inc::' | sed -e's/ = 0$//' -e's/ = /~/')"
+  - "cpan-install $(dzil listdeps --develop --missing --versions | grep -v '^inc::' | sed -e's/ = 0$//' -e's/ = /~/')"
   - cpan-install --deps
   - cpan-install --coverage
 
