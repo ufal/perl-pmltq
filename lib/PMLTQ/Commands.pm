@@ -1,5 +1,6 @@
 package PMLTQ::Commands;
-
+our $AUTHORITY = 'cpan:MATY';
+$PMLTQ::Commands::VERSION = '1.3.2';
 # ABSTRACT: PMLTQ command line interface
 
 use PMLTQ::Base -strict;
@@ -157,7 +158,19 @@ sub _load_config {
 
 1;
 
-=encoding utf8
+__END__
+
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+PMLTQ::Commands - PMLTQ command line interface
+
+=head1 VERSION
+
+version 1.3.2
 
 =head1 SYNOPSIS
 
@@ -469,9 +482,7 @@ Following table shows which options are used in commands.
 
 =back
 
-=begin html
-
-<table>
+=for html <table>
 <tr><td></td><th>convert</th><th>delete</th><th>init</th><th>initdb</th><th>load</th><th>verify</th><th>webdelete</th><th>webload</th><th>webverify</th></tr>
 <tr><td>treebank_id</td><th>*</th><th>*</th><th>-</th><th>*</th><th>*</th><th>*</th><th>*</th><th>*</th><th>*</th></tr>
 <tr><td>data_dir</td><th>+</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th></tr>
@@ -500,8 +511,6 @@ Following table shows which options are used in commands.
 <tr><td>test_query-result_dir</td><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>+</th></tr>
 <tr><td>test_query-queries</td><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>+</th></tr>
 </table>
-
-=end html
 
 =head2 Example:
 
@@ -541,5 +550,34 @@ Following table shows which options are used in commands.
   tags:
     - mytag1
     - mytag2
+
+=head1 AUTHORS
+
+=over 4
+
+=item *
+
+Petr Pajas <pajas@ufal.mff.cuni.cz>
+
+=item *
+
+Jan Štěpánek <stepanek@ufal.mff.cuni.cz>
+
+=item *
+
+Michal Sedlák <sedlak@ufal.mff.cuni.cz>
+
+=item *
+
+Matyáš Kopp <matyas.kopp@gmail.com>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2015 by Institute of Formal and Applied Linguistics (http://ufal.mff.cuni.cz).
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
 =cut
