@@ -399,6 +399,9 @@ sub new {
     $roots = [$query_tree];
   } else {
     require PMLTQ::Planner;
+    if ($clone_before_plan) {
+      $query_tree=Treex::PML::FSFormat->clone_subtree($query_tree);
+    }
     @query_nodes=PMLTQ::Common::FilterQueryNodes($query_tree); # same order as @orig_nodes
     %orig2query = map { $orig_nodes[$_] => $query_nodes[$_] } 0..$#orig_nodes;
     PMLTQ::Planner::name_all_query_nodes($query_tree); # need for planning
