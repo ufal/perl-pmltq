@@ -1,5 +1,6 @@
 package PMLTQ::BtredEvaluator;
-
+our $AUTHORITY = 'cpan:MATY';
+$PMLTQ::BtredEvaluator::VERSION = '1.3.2';
 # ABSTRACT: Pure perl evaluator of PML-TQ queries based on headless implementation of TrEd called Btred
 
 use 5.006;
@@ -318,7 +319,7 @@ sub new {
   my %have;
   my $query_pos;
   #######################
-
+print STDERR "BTREDEVAL\n";
 
   my @debug;
   my %name2pos;
@@ -389,6 +390,7 @@ sub new {
   my @orig_nodes=PMLTQ::Common::FilterQueryNodes($query_tree);
   my @query_nodes;
   my %orig2query;
+print STDERR "PMLTQ::BtredEvaluator !!!\n";
   if ($opts->{no_plan}) {
     $roots = ($type eq 'q-query.type') ? [ $query_tree->children ] : [$query_tree];
     @query_nodes=@orig_nodes;
@@ -399,6 +401,9 @@ sub new {
     $roots = [$query_tree];
   } else {
     require PMLTQ::Planner;
+    if ($clone_before_plan) {
+      $query_tree=Treex::PML::FSFormat->clone_subtree($query_tree);
+    }
     @query_nodes=PMLTQ::Common::FilterQueryNodes($query_tree); # same order as @orig_nodes
     %orig2query = map { $orig_nodes[$_] => $query_nodes[$_] } 0..$#orig_nodes;
     PMLTQ::Planner::name_all_query_nodes($query_tree); # need for planning
@@ -3202,6 +3207,18 @@ sub plan_query {
 
 __END__
 
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+PMLTQ::BtredEvaluator - Pure perl evaluator of PML-TQ queries based on headless implementation of TrEd called Btred
+
+=head1 VERSION
+
+version 1.3.2
+
 =head1 IMPLEMENTATION
 
 1. find in the query graph an oriented sceleton tree, possibly using
@@ -3305,3 +3322,34 @@ if ($clone_before_plan) {
   #$query_tree=Treex::PML::Factory->createFSFormat()->clone_subtree($query_tree); ???????
   $query_tree=Treex::PML::FSFormat->clone_subtree($query_tree);
 }
+
+=head1 AUTHORS
+
+=over 4
+
+=item *
+
+Petr Pajas <pajas@ufal.mff.cuni.cz>
+
+=item *
+
+Jan Štěpánek <stepanek@ufal.mff.cuni.cz>
+
+=item *
+
+Michal Sedlák <sedlak@ufal.mff.cuni.cz>
+
+=item *
+
+Matyáš Kopp <matyas.kopp@gmail.com>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2015 by Institute of Formal and Applied Linguistics (http://ufal.mff.cuni.cz).
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
