@@ -1,13 +1,10 @@
-Revision history for {{$dist->name}}
+Revision history for PMLTQ
 
-{{$NEXT}}
- [API CHANGES]
+1.3.2
+ - Released: 2017-06-15 07:56:34 UTC
 
- [BUG FIXES]
-
- [DOCUMENTATION]
-
- [ENHANCEMENTS]
+ [STATISTICS]
+ - code churn: 156 files changed, 8692 insertions(+), 16 deletions(-)
 
 1.3.1
  - Released: 2016-06-28 12:50:19 UTC
