@@ -1,17 +1,8 @@
 package PMLTQ::Relation::DepthFirstRangeIterator;
-
+our $AUTHORITY = 'cpan:MATY';
+$PMLTQ::Relation::DepthFirstRangeIterator::VERSION = '1.3.2';
 # ABSTRACT: Iterates tree using depth first search in given boundaries
 
-=head1 SYNOPSIS
-
-This iterator returns nodes preceding the start node if their depth-first-
-order distance from it falls into the range [-LMAX,-LMIN] and following the
-start node in their depth-first-order distance from it falls into the range
-[RMIN,RMAX]; note that the arguments for LMIN,LMAX must be negative values.
-For example, given (LMIN,LMAX,RMIN,RMAX) = (-1,-3,1,4), the iterator returns
-first three nodes preceding and first four nodes following the start node
-
-=cut
 
 use 5.006;
 use strict;
@@ -137,3 +128,57 @@ sub reset {
 }
 
 1; # End of PMLTQ::Relation::DepthFirstRangeIterator
+
+__END__
+
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+PMLTQ::Relation::DepthFirstRangeIterator - Iterates tree using depth first search in given boundaries
+
+=head1 VERSION
+
+version 1.3.2
+
+=head1 SYNOPSIS
+
+This iterator returns nodes preceding the start node if their depth-first-
+order distance from it falls into the range [-LMAX,-LMIN] and following the
+start node in their depth-first-order distance from it falls into the range
+[RMIN,RMAX]; note that the arguments for LMIN,LMAX must be negative values.
+For example, given (LMIN,LMAX,RMIN,RMAX) = (-1,-3,1,4), the iterator returns
+first three nodes preceding and first four nodes following the start node
+
+=head1 AUTHORS
+
+=over 4
+
+=item *
+
+Petr Pajas <pajas@ufal.mff.cuni.cz>
+
+=item *
+
+Jan Štěpánek <stepanek@ufal.mff.cuni.cz>
+
+=item *
+
+Michal Sedlák <sedlak@ufal.mff.cuni.cz>
+
+=item *
+
+Matyáš Kopp <matyas.kopp@gmail.com>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2015 by Institute of Formal and Applied Linguistics (http://ufal.mff.cuni.cz).
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
