@@ -262,6 +262,9 @@ sub get_server_conf {
     die "Didn't find server configuration named '$id'!\nUse $0 --print-servers and then $0 --server <config-id|URL>\n"
       unless $conf_el;
     $conf = $conf_el->value;
+    $conf->{url} = URI::WithBase->new('/',$conf->{url});
+    $conf->{url}->path_segments('api', 'treebanks', $conf->{treebank});
+    $conf->{url} = $conf->{url}->abs->as_string;
     $type = $conf_el->name;
   }
   return ($conf,$type);
@@ -628,7 +631,7 @@ instances distributed over an SGE cluster).
 =item B<--server|-s> URL_or_ID
 
 If used with SQL-based engine, this option can be used to specify a
-URL (http://hostname:port) to a pmltq http server, or an ID of a
+URL (http://hostname/APIpath/treebanks/treebankID) to a pmltq http server, or an ID of a
 pre-configured SQL or HTTP server (use B<--print-servers> to get a
 list).
 
