@@ -55,6 +55,7 @@ sub run {
   'no-filters',
 
   'old-api',
+  'output-json',
 
   'netgraph-query|G=s',
 
@@ -227,7 +228,8 @@ sub pmltq_http_search {
               'relations'=>$opts{'relations'},
               debug=>$opts{debug},
               %auth,
-              'old-api'=>$opts{'old-api'}
+              'old-api'=>$opts{'old-api'},
+              'output-json'=>$opts{'output-json'}
              });
     #} else { ## NEW API
     #  print STDERR "TODO NEW API\n";
@@ -297,7 +299,7 @@ sub http_search {
   $ua->timeout($opts{timeout}+2) if $opts{timeout};
   my $q = $query; Encode::_utf8_off($q);
   binmode STDOUT;
-  my $sub = $opts->{callback} || sub { print $_[0] };
+  my $sub = $opts->{callback} || sub { print $opts{'output-json'} ? ($_[0]) : (map {join("\t",@$_)."\n"} @{JSON::from_json($_[0])->{results}}) };
   my $res = $ua->request($METHOD->($url, 
     $opts->{'old-api'} ?
       ([
