@@ -292,7 +292,7 @@ sub http_search {
   } else {
     $ua = $self->ua;
     $ua->agent("PMLTQ/1.0 ");
-    $self->login($ua,\%auth);
+    $self->login($ua,\%auth) if $opts->{username};
   }
   $url.='/' unless $url=~m{^https?://.+/$};
   my $METHOD = \&POST;
