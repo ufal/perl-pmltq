@@ -1,11 +1,12 @@
 package PMLTQ::Command::convert;
-
+our $AUTHORITY = 'cpan:MATY';
+$PMLTQ::Command::convert::VERSION = '1.4.0';
 # ABSTRACT: Converts PML files to SQL
 
 use PMLTQ::Base 'PMLTQ::Command';
 
 use File::Path qw( make_path );
-use File::Slurp 'read_file';
+use File::Slurp 'read_text';
 use PMLTQ::Command;
 use PMLTQ::PML2BASE;
 use Treex::PML;
@@ -71,10 +72,24 @@ sub load_filelist {
   die "Filelist '$filelist' does not exists or is not readable!" unless -r $filelist;
 
   map { File::Spec->file_name_is_absolute($_) ? $_ : File::Spec->catfile( $self->config->{data_dir}, $_ ) }
-    grep { $_ !~ m/^\s*$/ } read_file( $filelist, chomp => 1, binmode => ':utf8' );
+    grep { $_ !~ m/^\s*$/ } read_text( $filelist, ':utf8' );
 }
 
 1;
+
+__END__
+
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+PMLTQ::Command::convert - Converts PML files to SQL
+
+=head1 VERSION
+
+version 1.4.0
 
 =head1 SYNOPSIS
 
@@ -94,5 +109,33 @@ Path to configuration file. If a treebank_config is --, config is read from STDI
 
 =back
 
-=cut
+=head1 AUTHORS
 
+=over 4
+
+=item *
+
+Petr Pajas <pajas@ufal.mff.cuni.cz>
+
+=item *
+
+Jan Štěpánek <stepanek@ufal.mff.cuni.cz>
+
+=item *
+
+Michal Sedlák <sedlak@ufal.mff.cuni.cz>
+
+=item *
+
+Matyáš Kopp <matyas.kopp@gmail.com>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2015 by Institute of Formal and Applied Linguistics (http://ufal.mff.cuni.cz).
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
