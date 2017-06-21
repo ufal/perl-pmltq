@@ -167,10 +167,11 @@ sub ua {
 }
 
 sub login {
-  my ($self,$ua) = @_;
-  my $url = URI::WithBase->new('/',$self->config->{web_api}->{url});
+  my ($self,$ua,$auth) = @_;
+  my $url = URI::WithBase->new('/',$auth->{baseurl}||$self->config->{web_api}->{url});
   $url->path_segments('api','auth');
-  my $res = $self->request($ua,'POST',$url->abs->as_string,{auth => {password => $self->config->{web_api}->{password}, username => $self->config->{web_api}->{user}}});
+
+  my $res = $self->request($ua,'POST',$url->abs->as_string,{auth => {password => $auth->{password} || $self->config->{web_api}->{password}, username => $auth->{username} || $self->config->{web_api}->{user}}});
   my $cookie_jar = HTTP::Cookies->new();
   $cookie_jar->extract_cookies($res);
   $ua->cookie_jar($cookie_jar);
