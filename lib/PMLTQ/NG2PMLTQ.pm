@@ -1,26 +1,8 @@
 package PMLTQ::NG2PMLTQ;
-
+our $AUTHORITY = 'cpan:MATY';
+$PMLTQ::NG2PMLTQ::VERSION = '1.4.0';
 # ABSTRACT: [DEPRECATED] Conversion functions from NetGraph to PML-TQ
 
-=head1 SYNOPSIS
-
-   use PMLTQ::NG2PMLTQ qw(ng2pmtq);
-   my $pmltq_query_string = ng2pmltq( $netgraph_query_string, { options });
-
-=head1 DESCRIPTION
-
-This module provides the function C<ng2pmltq> which takes a NetGraph
-query and attempts to translate it to an equivalent PMLTQ query.
-
-=head2 EXPORT
-
-None by default. Optionally exports the function C<ng2pmltq>.
-
-=head2 EXPORT TAGS
-
-The tag C<:all> exports the function C<ng2pmltq>.
-
-=cut
 
 use 5.006;
 use strict;
@@ -336,3 +318,66 @@ sub parse_condition {
 
 
 1; # End of PMLTQ::NG2PMLTQ
+
+__END__
+
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+PMLTQ::NG2PMLTQ - [DEPRECATED] Conversion functions from NetGraph to PML-TQ
+
+=head1 VERSION
+
+version 1.4.0
+
+=head1 SYNOPSIS
+
+   use PMLTQ::NG2PMLTQ qw(ng2pmtq);
+   my $pmltq_query_string = ng2pmltq( $netgraph_query_string, { options });
+
+=head1 DESCRIPTION
+
+This module provides the function C<ng2pmltq> which takes a NetGraph
+query and attempts to translate it to an equivalent PMLTQ query.
+
+=head2 EXPORT
+
+None by default. Optionally exports the function C<ng2pmltq>.
+
+=head2 EXPORT TAGS
+
+The tag C<:all> exports the function C<ng2pmltq>.
+
+=head1 AUTHORS
+
+=over 4
+
+=item *
+
+Petr Pajas <pajas@ufal.mff.cuni.cz>
+
+=item *
+
+Jan Štěpánek <stepanek@ufal.mff.cuni.cz>
+
+=item *
+
+Michal Sedlák <sedlak@ufal.mff.cuni.cz>
+
+=item *
+
+Matyáš Kopp <matyas.kopp@gmail.com>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2015 by Institute of Formal and Applied Linguistics (http://ufal.mff.cuni.cz).
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut

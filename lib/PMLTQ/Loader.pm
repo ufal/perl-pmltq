@@ -1,21 +1,8 @@
 package PMLTQ::Loader;
-
+our $AUTHORITY = 'cpan:MATY';
+$PMLTQ::Loader::VERSION = '1.4.0';
 # ABSTRACT: Module loader for L<PMLTQ::Relation|PMLTQ::Relation>s inspired by L<Mojo::Loader>
 
-=head1 SYNOPSIS
-
-  use PMLTQ::Loader qw/find_modules load_class/;
-  for my $module (find_modules('PMLTQ::Relation')) {
-    print "Loading module: '$module'\n";
-    load_class($module);
-  }
-
-=head1 DESCRIPTION
-
-L<PMLTQ::Loader|PMLTQ::Loader> is a class loader and a part of the module
-framework allowing users to define their own PML-TQ relations.
-
-=cut
 
 use PMLTQ::Base -strict;
 
@@ -67,3 +54,61 @@ sub find_modules {
 }
 
 1;
+
+__END__
+
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+PMLTQ::Loader - Module loader for L<PMLTQ::Relation|PMLTQ::Relation>s inspired by L<Mojo::Loader>
+
+=head1 VERSION
+
+version 1.4.0
+
+=head1 SYNOPSIS
+
+  use PMLTQ::Loader qw/find_modules load_class/;
+  for my $module (find_modules('PMLTQ::Relation')) {
+    print "Loading module: '$module'\n";
+    load_class($module);
+  }
+
+=head1 DESCRIPTION
+
+L<PMLTQ::Loader|PMLTQ::Loader> is a class loader and a part of the module
+framework allowing users to define their own PML-TQ relations.
+
+=head1 AUTHORS
+
+=over 4
+
+=item *
+
+Petr Pajas <pajas@ufal.mff.cuni.cz>
+
+=item *
+
+Jan Štěpánek <stepanek@ufal.mff.cuni.cz>
+
+=item *
+
+Michal Sedlák <sedlak@ufal.mff.cuni.cz>
+
+=item *
+
+Matyáš Kopp <matyas.kopp@gmail.com>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2015 by Institute of Formal and Applied Linguistics (http://ufal.mff.cuni.cz).
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
