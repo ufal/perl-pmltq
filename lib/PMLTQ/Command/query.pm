@@ -260,6 +260,10 @@ sub get_server_conf {
   if ($id =~ /^https?:/) {
     $type = 'http';
     $conf = {url => $id};
+    unless($oldapi) {
+      $conf->{baseurl} = $id;
+      $conf->{baseurl} =~ s@api/treebanks.*?$@@;
+    }
   } else {
     my $conf_el = first { $_->value->{id} eq $id }  SeqV($configs);
     die "Didn't find server configuration named '$id'!\nUse $0 --print-servers and then $0 --server <config-id|URL>\n"
