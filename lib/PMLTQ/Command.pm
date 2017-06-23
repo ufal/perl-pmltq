@@ -206,13 +206,18 @@ sub request {
   return $res;
 }
 
-sub get_treebank {
-  my ($self,$ua) = @_;
+sub get_all_treebanks {
+  my ($self,$ua, $apiurl) = @_;
   my $data;
-  my $url = URI::WithBase->new('/',$self->config->{web_api}->{url});
+  my $url = URI::WithBase->new('/',$apiurl || $self->config->{web_api}->{url});
   $url->path_segments('api','admin', 'treebanks');
   (undef,$data) = $self->request($ua,'GET',$url->abs->as_string);
-  my ($treebank) = grep {$_->{name} eq $self->config->{treebank_id}} @{ $data // []};
+  return $data // [];
+}
+
+sub get_treebank {
+  my ($self,$ua) = @_;
+  my ($treebank) = grep {$_->{name} eq $self->config->{treebank_id}} @{ $self->get_all_treebanks($ua)};
   return $treebank;
 }
 
@@ -325,5 +330,15 @@ sub evaluate_query {
     }
   }
   return $result;
+}
+
+sub user2admin_format { # converts getted treebank json to treebank configuration format
+  my ($self, $treebank) = @_;
+  return {
+    id => $treebank->{name},
+    tags => [map  {$_->{name}} @{$treebank->{tags}}],
+    language => $treebank->{languages}->[0]->{code}, 
+    map {$_ => $treebank->{$_}} qw/title isFree isAllLogged isFeatured isPublic homepage description documentation dataSources manuals/
+  }
 }
 1;
