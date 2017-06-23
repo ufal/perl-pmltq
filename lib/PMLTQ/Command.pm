@@ -341,4 +341,22 @@ sub user2admin_format { # converts getted treebank json to treebank configuratio
     map {$_ => $treebank->{$_}} qw/title isFree isAllLogged isFeatured isPublic homepage description documentation dataSources manuals/
   }
 }
+
+
+sub get_nodetypes {
+  my ($self, $treebank) = @_;
+  my $url = URI::WithBase->new('/',$self->config->{web_api}->{url});
+  $url->path_segments('api', 'treebanks', $treebank->{name}, 'node-types');
+  my $data;
+  (undef,$data) = $self->request($self->{ua}, 'GET', $url->abs->as_string);
+  return $data->{types}
+}
+
+sub get_test_queries {
+  my ($self, $treebank) = @_;
+  # get node types
+  my ($type) = @{$self->get_nodetypes($treebank)};
+  return [{filename=>"$type.svg", query => "$type [];"}, {filename=>"${type}_count.txt", query => "$type []; >> count()"}]
+}
+
 1;

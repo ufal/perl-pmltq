@@ -32,7 +32,14 @@ sub run {
             ),"\n";
   } elsif($subcommand eq 'single') {
     my $treebank = $self->get_treebank($ua);
-    print YAML::Tiny->new(merge( $config, $self->user2admin_format($treebank)))->write_string;
+    print YAML::Tiny->new(merge(
+                                merge( $config, $self->user2admin_format($treebank)),
+                                {test_query => {
+                                  result_dir => 'query_result_'.$treebank->{name},
+                                  queries => $self->get_test_queries($treebank)
+                                  }}
+                                )
+                         )->write_string;
   }
 }
 
