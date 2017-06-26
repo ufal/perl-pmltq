@@ -13,8 +13,6 @@ sub run {
   my $self = shift;
   my $subcommand = shift;
   my $config = $self->config;
-#possible subcommands: list (filter by ids, filter by tags, filter by date ???), single
-#possible output: yaml, json, 
   unless($subcommand){
     die "Subcommand must be set." 
   }
@@ -35,7 +33,7 @@ sub run {
     print YAML::Tiny->new(merge(
                                 merge( $config, $self->user2admin_format($treebank)),
                                 {test_query => {
-                                  result_dir => 'query_result_'.$treebank->{name},
+                                  result_dir => 'query_results/'.$treebank->{name},
                                   queries => $self->get_test_queries($treebank)
                                   }}
                                 )
@@ -58,6 +56,16 @@ sub run {
 =item B<api_url>
 
 Url to pmltq service
+
+=back
+
+=head1 EXAMPLES
+
+=over 5
+
+=item Creates and executes simple queries on all treebanks on web
+
+for tb in `./script/pmltq webtreebank list`; do  echo "$tb"; ./script/pmltq webtreebank single --treebank_id=$tb | ./script/pmltq webverify -c --; sleep 60; done
 
 =back
 
