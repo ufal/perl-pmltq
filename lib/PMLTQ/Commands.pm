@@ -174,6 +174,7 @@ sub _load_config {
     pmltq delete
     pmltq webload
     pmltq webdelete
+    pmltq webtreebank
     pmltq webverify
 
   Options (for all commands):
@@ -239,6 +240,10 @@ Uses L<PMLTQ::Command::webdelete> to delete treebank from web interface
 =head2 webload
 
 Uses L<PMLTQ::Command::webload> to load treebank to web interface
+
+=head2 webtreebank
+
+Uses L<PMLTQ::Command::webtreebank> to get list of treebanks or single treebank info
 
 =head2 webverify
 
