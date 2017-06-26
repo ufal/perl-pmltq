@@ -167,6 +167,7 @@ sub _load_config {
   Usage: pmltq COMMAND [OPTIONS]
 
     pmltq version
+    pmltq configuration
     pmltq init schema1.xml schema2.xml
     pmltq convert
     pmltq load
@@ -185,6 +186,13 @@ sub _load_config {
 =head1 COMMANDS
 
 These commands are available by default.
+
+=head2 configuration
+
+  $ pmltq convert
+
+Uses L<PMLTQ::Command::configuration> to to get current configuration
+
 
 =head2 convert
 

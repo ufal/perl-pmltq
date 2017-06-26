@@ -160,6 +160,7 @@ lib/PMLTQ/Base.pm
 lib/PMLTQ/BtredEvaluator.pm
 lib/PMLTQ/CGI.pm
 lib/PMLTQ/Command.pm
+lib/PMLTQ/Command/configuration.pm
 lib/PMLTQ/Command/convert.pm
 lib/PMLTQ/Command/delete.pm
 lib/PMLTQ/Command/init.pm
