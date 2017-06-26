@@ -170,6 +170,7 @@ lib/PMLTQ/Command/verify.pm
 lib/PMLTQ/Command/version.pm
 lib/PMLTQ/Command/webdelete.pm
 lib/PMLTQ/Command/webload.pm
+lib/PMLTQ/Command/webtreebank.pm
 lib/PMLTQ/Command/webverify.pm
 lib/PMLTQ/Commands.pm
 lib/PMLTQ/Common.pm
