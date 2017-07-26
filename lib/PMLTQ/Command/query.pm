@@ -67,6 +67,7 @@ sub run {
 
   'limit|L=i',
   'timeout|t=i',
+  'history|H',
 
   'quiet|q',
   'help|h=s@',
@@ -336,7 +337,8 @@ sub http_search {
           query => $q,
           limit => $opts{limit},
           # row_limit => $opts{limit}, #TODO: currently not working
-          timeout => $opts{timeout}
+          timeout => $opts{timeout},
+          nohistory => !!$opts{history}
         })
        )
      ),$sub ,1024*8 );
@@ -711,6 +713,10 @@ Password for a HTTP or SQL PML-TQ service.
 
 Only applicable to SQL-based engine.
 Specify maximum number of results (i.e. rows printed by pmltq).
+
+=item B<--history|-H>
+
+Sets whether should be query logged to users query history on server.
 
 =item B<--timeout|-t> seconds
 

@@ -8,6 +8,7 @@ Revision history for {{$dist->name}}
  [DOCUMENTATION]
 
  [ENHANCEMENTS]
+ - Added history logging option
 
 1.4.0
  - Released: 2017-06-26 09:15:20 UTC
