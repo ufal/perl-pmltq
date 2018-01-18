@@ -4,7 +4,7 @@ PMLTQ - Query engine and query language for trees in PML format
 
 # VERSION
 
-version 1.3.1
+version 1.4.0
 
 <div>
     <a href="https://travis-ci.org/ufal/perl-pmltq"><img src="https://travis-ci.org/ufal/perl-pmltq.svg?branch=master" alt="Build Status"></a>
