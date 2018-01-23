@@ -1,0 +1,4430 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<adata xmlns="http://ufal.mff.cuni.cz/pdt/pml/">
+<head>
+<schema href="adata_30_schema.xml" />
+<references>
+<reffile id="m" name="mdata" href="cmpr9410_001.m.xml" />
+<reffile id="w" name="wdata" href="cmpr9410_001.w.xml" />
+</references>
+</head>
+<meta>
+<annotation_info>
+<desc>Manual annotation</desc>
+</annotation_info>
+</meta>
+<trees>
+<LM id="a-cmpr9410-001-p2s1">
+<s.rf>m#m-cmpr9410-001-p2s1</s.rf>
+<ord>0</ord>
+<children id="a-cmpr9410-001-p2s1w2">
+<m.rf>m#m-cmpr9410-001-p2s1w2</m.rf>
+<afun>ExD</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p2s1w1">
+<m.rf>m#m-cmpr9410-001-p2s1w1</m.rf>
+<afun>Atr</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p2s1w3">
+<m.rf>m#m-cmpr9410-001-p2s1w3</m.rf>
+<afun>AuxP</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p2s1w4">
+<m.rf>m#m-cmpr9410-001-p2s1w4</m.rf>
+<afun>Atr</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+</children>
+</children>
+<sentence>Celní unie v ohrožení</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p3s1">
+<s.rf>m#m-cmpr9410-001-p3s1</s.rf>
+<ord>0</ord>
+<children id="a-cmpr9410-001-p3s1w3">
+<m.rf>m#m-cmpr9410-001-p3s1w3</m.rf>
+<afun>ExD</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p3s1w1">
+<m.rf>m#m-cmpr9410-001-p3s1w1</m.rf>
+<afun>Atr</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p3s1w2">
+<m.rf>m#m-cmpr9410-001-p3s1w2</m.rf>
+<afun>Atr</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p3s1w4">
+<m.rf>m#m-cmpr9410-001-p3s1w4</m.rf>
+<afun>Atr</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p3s1w5">
+<m.rf>m#m-cmpr9410-001-p3s1w5</m.rf>
+<afun>Atr</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p3s1w6">
+<m.rf>m#m-cmpr9410-001-p3s1w6</m.rf>
+<afun>AuxP</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p3s1w8">
+<m.rf>m#m-cmpr9410-001-p3s1w8</m.rf>
+<afun>Atr</afun>
+<ord>8</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p3s1w7">
+<m.rf>m#m-cmpr9410-001-p3s1w7</m.rf>
+<afun>Atr</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+</LM>
+</children>
+</children>
+<sentence>Nová striktní omezení vlády SR proti českým exportérům</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p4s1">
+<s.rf>m#m-cmpr9410-001-p4s1</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p4s1w13">
+<m.rf>m#m-cmpr9410-001-p4s1w13</m.rf>
+<afun>Pred</afun>
+<ord>13</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p4s1w1">
+<m.rf>m#m-cmpr9410-001-p4s1w1</m.rf>
+<afun>AuxP</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p4s1w4">
+<m.rf>m#m-cmpr9410-001-p4s1w4</m.rf>
+<afun>Adv</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p4s1w3">
+<m.rf>m#m-cmpr9410-001-p4s1w3</m.rf>
+<afun>Atr</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p4s1w2">
+<m.rf>m#m-cmpr9410-001-p4s1w2</m.rf>
+<afun>AuxZ</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p4s1w5">
+<m.rf>m#m-cmpr9410-001-p4s1w5</m.rf>
+<afun>Atr</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p4s1w6">
+<m.rf>m#m-cmpr9410-001-p4s1w6</m.rf>
+<afun>Atr</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p4s1w7">
+<m.rf>m#m-cmpr9410-001-p4s1w7</m.rf>
+<afun>Obj</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p4s1w8">
+<m.rf>m#m-cmpr9410-001-p4s1w8</m.rf>
+<afun>AuxP</afun>
+<ord>8</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p4s1w10">
+<m.rf>m#m-cmpr9410-001-p4s1w10</m.rf>
+<afun>Atr</afun>
+<ord>10</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p4s1w9">
+<m.rf>m#m-cmpr9410-001-p4s1w9</m.rf>
+<afun>Atr</afun>
+<ord>9</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s1w12">
+<m.rf>m#m-cmpr9410-001-p4s1w12</m.rf>
+<afun>Atr</afun>
+<ord>12</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p4s1w11">
+<m.rf>m#m-cmpr9410-001-p4s1w11</m.rf>
+<afun>Atr</afun>
+<ord>11</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+</children>
+</children>
+</children>
+</children>
+</children>
+</LM>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p4s1w14">
+<m.rf>m#m-cmpr9410-001-p4s1w14</m.rf>
+<afun>Adv</afun>
+<ord>14</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s1w15">
+<m.rf>m#m-cmpr9410-001-p4s1w15</m.rf>
+<afun>Pnom</afun>
+<ord>15</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s1w16">
+<m.rf>m#m-cmpr9410-001-p4s1w16</m.rf>
+<afun>Sb</afun>
+<ord>16</ord>
+<clause_number>1</clause_number>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p4s1w17">
+<m.rf>m#m-cmpr9410-001-p4s1w17</m.rf>
+<afun>AuxK</afun>
+<ord>17</ord>
+<clause_number>0</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s1w18">
+<m.rf>m#m-cmpr9410-001-p4s1w18</m.rf>
+<afun>AuxK</afun>
+<ord>18</ord>
+<clause_number>0</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s1w19">
+<m.rf>m#m-cmpr9410-001-p4s1w19</m.rf>
+<afun>AuxK</afun>
+<ord>19</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>Z téměř tří desítek smluv upravujících vztahy mezi oběma subjekty celního soustátí jsou okamžitě vypověditelné všechny...</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p4s2">
+<s.rf>m#m-cmpr9410-001-p4s2</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p4s2w2">
+<m.rf>m#m-cmpr9410-001-p4s2w2</m.rf>
+<afun>AuxP</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p4s2w5">
+<m.rf>m#m-cmpr9410-001-p4s2w5</m.rf>
+<afun>Apos</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p4s2w1">
+<m.rf>m#m-cmpr9410-001-p4s2w1</m.rf>
+<afun>AuxZ</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s2w3">
+<m.rf>m#m-cmpr9410-001-p4s2w3</m.rf>
+<afun>ExD</afun>
+<is_member>1</is_member>
+<ord>3</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p4s2w4">
+<m.rf>m#m-cmpr9410-001-p4s2w4</m.rf>
+<afun>Atr</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p4s2w6">
+<m.rf>m#m-cmpr9410-001-p4s2w6</m.rf>
+<afun>ExD</afun>
+<is_member>1</is_member>
+<ord>6</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p4s2w7">
+<m.rf>m#m-cmpr9410-001-p4s2w7</m.rf>
+<afun>Atr</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p4s2w19">
+<m.rf>m#m-cmpr9410-001-p4s2w19</m.rf>
+<afun>Coord</afun>
+<ord>19</ord>
+<clause_number>0</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p4s2w8">
+<m.rf>m#m-cmpr9410-001-p4s2w8</m.rf>
+<afun>AuxX</afun>
+<ord>8</ord>
+<clause_number>0</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s2w11">
+<m.rf>m#m-cmpr9410-001-p4s2w11</m.rf>
+<afun>Atr</afun>
+<is_member>1</is_member>
+<ord>11</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p4s2w9">
+<m.rf>m#m-cmpr9410-001-p4s2w9</m.rf>
+<afun>Sb</afun>
+<ord>9</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s2w10">
+<m.rf>m#m-cmpr9410-001-p4s2w10</m.rf>
+<afun>Adv</afun>
+<ord>10</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s2w12">
+<m.rf>m#m-cmpr9410-001-p4s2w12</m.rf>
+<afun>Obj</afun>
+<ord>12</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p4s2w17">
+<m.rf>m#m-cmpr9410-001-p4s2w17</m.rf>
+<afun>Atr</afun>
+<ord>17</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p4s2w14">
+<m.rf>m#m-cmpr9410-001-p4s2w14</m.rf>
+<afun>Coord</afun>
+<ord>14</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p4s2w13">
+<m.rf>m#m-cmpr9410-001-p4s2w13</m.rf>
+<afun>Atr</afun>
+<is_member>1</is_member>
+<ord>13</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s2w15">
+<m.rf>m#m-cmpr9410-001-p4s2w15</m.rf>
+<afun>Atr</afun>
+<is_member>1</is_member>
+<ord>15</ord>
+<clause_number>2</clause_number>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p4s2w16">
+<m.rf>m#m-cmpr9410-001-p4s2w16</m.rf>
+<afun>Atr</afun>
+<ord>16</ord>
+<clause_number>2</clause_number>
+</LM>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p4s2w18">
+<m.rf>m#m-cmpr9410-001-p4s2w18</m.rf>
+<afun>AuxX</afun>
+<ord>18</ord>
+<clause_number>0</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s2w21">
+<m.rf>m#m-cmpr9410-001-p4s2w21</m.rf>
+<afun>Atr</afun>
+<is_member>1</is_member>
+<ord>21</ord>
+<clause_number>3</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p4s2w20">
+<m.rf>m#m-cmpr9410-001-p4s2w20</m.rf>
+<afun>Sb</afun>
+<ord>20</ord>
+<clause_number>3</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s2w23">
+<m.rf>m#m-cmpr9410-001-p4s2w23</m.rf>
+<afun>Obj</afun>
+<ord>23</ord>
+<clause_number>3</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p4s2w22">
+<m.rf>m#m-cmpr9410-001-p4s2w22</m.rf>
+<afun>Atr</afun>
+<ord>22</ord>
+<clause_number>3</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s2w25">
+<m.rf>m#m-cmpr9410-001-p4s2w25</m.rf>
+<afun>Atr</afun>
+<ord>25</ord>
+<clause_number>3</clause_number>
+<children id="a-cmpr9410-001-p4s2w24">
+<m.rf>m#m-cmpr9410-001-p4s2w24</m.rf>
+<afun>Atr</afun>
+<ord>24</ord>
+<clause_number>3</clause_number>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p4s2w26">
+<m.rf>m#m-cmpr9410-001-p4s2w26</m.rf>
+<afun>AuxK</afun>
+<ord>26</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>Až na jednu jedinou, tu hlavní, která proklamativně zakotvuje existenci Česko - Slovenské celní unie, a která má výpovědní lhůtu jeden rok.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p4s3">
+<s.rf>m#m-cmpr9410-001-p4s3</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p4s3w4">
+<m.rf>m#m-cmpr9410-001-p4s3w4</m.rf>
+<afun>Pred</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p4s3w1">
+<m.rf>m#m-cmpr9410-001-p4s3w1</m.rf>
+<afun>AuxP</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p4s3w2">
+<m.rf>m#m-cmpr9410-001-p4s3w2</m.rf>
+<afun>Adv</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p4s3w3">
+<m.rf>m#m-cmpr9410-001-p4s3w3</m.rf>
+<afun>Sb</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s3w6">
+<m.rf>m#m-cmpr9410-001-p4s3w6</m.rf>
+<afun>AuxC</afun>
+<ord>6</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p4s3w5">
+<m.rf>m#m-cmpr9410-001-p4s3w5</m.rf>
+<afun>AuxX</afun>
+<ord>5</ord>
+<clause_number>0</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s3w28">
+<m.rf>m#m-cmpr9410-001-p4s3w28</m.rf>
+<afun>Obj</afun>
+<ord>27</ord>
+<clause_number>4</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p4s3w8">
+<m.rf>m#m-cmpr9410-001-p4s3w8</m.rf>
+<afun>AuxC</afun>
+<ord>8</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p4s3w7">
+<m.rf>m#m-cmpr9410-001-p4s3w7</m.rf>
+<afun>AuxY</afun>
+<ord>7</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s3w12">
+<m.rf>m#m-cmpr9410-001-p4s3w12</m.rf>
+<afun>Adv</afun>
+<ord>11</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p4s3w10">
+<m.rf>m#m-cmpr9410-001-p4s3w10</m.rf>
+<afun>Adv</afun>
+<ord>9</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s3w11">
+<m.rf>m#m-cmpr9410-001-p4s3w11</m.rf>
+<afun>Adv</afun>
+<ord>10</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s3w13">
+<m.rf>m#m-cmpr9410-001-p4s3w13</m.rf>
+<afun>Sb</afun>
+<ord>12</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s3w15">
+<m.rf>m#m-cmpr9410-001-p4s3w15</m.rf>
+<afun>AuxC</afun>
+<ord>14</ord>
+<clause_number>3</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p4s3w14">
+<m.rf>m#m-cmpr9410-001-p4s3w14</m.rf>
+<afun>AuxX</afun>
+<ord>13</ord>
+<clause_number>0</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s3w17">
+<m.rf>m#m-cmpr9410-001-p4s3w17</m.rf>
+<afun>Obj</afun>
+<ord>16</ord>
+<clause_number>3</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p4s3w16">
+<m.rf>m#m-cmpr9410-001-p4s3w16</m.rf>
+<afun>Sb</afun>
+<ord>15</ord>
+<clause_number>3</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s3w18">
+<m.rf>m#m-cmpr9410-001-p4s3w18</m.rf>
+<afun>Pnom</afun>
+<ord>17</ord>
+<clause_number>3</clause_number>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p4s3w19">
+<m.rf>m#m-cmpr9410-001-p4s3w19</m.rf>
+<afun>AuxX</afun>
+<ord>18</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p4s3w20">
+<m.rf>m#m-cmpr9410-001-p4s3w20</m.rf>
+<afun>Adv</afun>
+<ord>19</ord>
+<clause_number>4</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s3w21">
+<m.rf>m#m-cmpr9410-001-p4s3w21</m.rf>
+<afun>AuxV</afun>
+<ord>20</ord>
+<clause_number>4</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s3w24">
+<m.rf>m#m-cmpr9410-001-p4s3w24</m.rf>
+<afun>AuxP</afun>
+<ord>23</ord>
+<clause_number>4</clause_number>
+<children id="a-cmpr9410-001-p4s3w25">
+<m.rf>m#m-cmpr9410-001-p4s3w25</m.rf>
+<afun>Adv</afun>
+<ord>24</ord>
+<clause_number>4</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p4s3w23">
+<m.rf>m#m-cmpr9410-001-p4s3w23</m.rf>
+<afun>AuxZ</afun>
+<ord>22</ord>
+<clause_number>4</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s3w27">
+<m.rf>m#m-cmpr9410-001-p4s3w27</m.rf>
+<afun>Atr</afun>
+<ord>26</ord>
+<clause_number>4</clause_number>
+<children id="a-cmpr9410-001-p4s3w26">
+<m.rf>m#m-cmpr9410-001-p4s3w26</m.rf>
+<afun>Atr</afun>
+<ord>25</ord>
+<clause_number>4</clause_number>
+</children>
+</LM>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p4s3w30">
+<m.rf>m#m-cmpr9410-001-p4s3w30</m.rf>
+<afun>Obj</afun>
+<ord>29</ord>
+<clause_number>4</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p4s3w22">
+<m.rf>m#m-cmpr9410-001-p4s3w22</m.rf>
+<afun>AuxT</afun>
+<ord>21</ord>
+<clause_number>4</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s3w29">
+<m.rf>m#m-cmpr9410-001-p4s3w29</m.rf>
+<afun>Adv</afun>
+<ord>28</ord>
+<clause_number>4</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s3w32">
+<m.rf>m#m-cmpr9410-001-p4s3w32</m.rf>
+<afun>Obj</afun>
+<ord>31</ord>
+<clause_number>4</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p4s3w31">
+<m.rf>m#m-cmpr9410-001-p4s3w31</m.rf>
+<afun>Atr</afun>
+<ord>30</ord>
+<clause_number>4</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p4s3w33">
+<m.rf>m#m-cmpr9410-001-p4s3w33</m.rf>
+<afun>AuxP</afun>
+<ord>32</ord>
+<clause_number>4</clause_number>
+<children id="a-cmpr9410-001-p4s3w34">
+<m.rf>m#m-cmpr9410-001-p4s3w34</m.rf>
+<afun>Atr</afun>
+<ord>33</ord>
+<clause_number>4</clause_number>
+<children id="a-cmpr9410-001-p4s3w35">
+<m.rf>m#m-cmpr9410-001-p4s3w35</m.rf>
+<afun>AuxP</afun>
+<ord>34</ord>
+<clause_number>4</clause_number>
+<children id="a-cmpr9410-001-p4s3w37">
+<m.rf>m#m-cmpr9410-001-p4s3w37</m.rf>
+<afun>Atr</afun>
+<ord>36</ord>
+<clause_number>4</clause_number>
+<children id="a-cmpr9410-001-p4s3w36">
+<m.rf>m#m-cmpr9410-001-p4s3w36</m.rf>
+<afun>Atr</afun>
+<ord>35</ord>
+<clause_number>4</clause_number>
+</children>
+</children>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p4s3w38">
+<m.rf>m#m-cmpr9410-001-p4s3w38</m.rf>
+<afun>AuxK</afun>
+<ord>37</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>V praxi to znamená, že i kdyby hnedka zítra řekla ČR, že smlouva je pasé, přesto by se teprve v březnu příštího roku mohla legislativně zbavit svých závazků vůči partnerovi z bývalé ČSFR.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p6s1">
+<s.rf>m#m-cmpr9410-001-p6s1</s.rf>
+<ord>0</ord>
+<children id="a-cmpr9410-001-p6s1w2">
+<m.rf>m#m-cmpr9410-001-p6s1w2</m.rf>
+<afun>ExD</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p6s1w1">
+<m.rf>m#m-cmpr9410-001-p6s1w1</m.rf>
+<afun>Atr</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+<sentence>Kazimír Jánoška</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p8s1">
+<s.rf>m#m-cmpr9410-001-p8s1</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p8s1w10">
+<m.rf>m#m-cmpr9410-001-p8s1w10</m.rf>
+<afun>Coord</afun>
+<ord>10</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p8s1w11">
+<m.rf>m#m-cmpr9410-001-p8s1w11</m.rf>
+<afun>Pred</afun>
+<is_member>1</is_member>
+<ord>11</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p8s1w1">
+<m.rf>m#m-cmpr9410-001-p8s1w1</m.rf>
+<afun>AuxP</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p8s1w2">
+<m.rf>m#m-cmpr9410-001-p8s1w2</m.rf>
+<afun>Adv</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p8s1w3">
+<m.rf>m#m-cmpr9410-001-p8s1w3</m.rf>
+<afun>Atr</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p8s1w4">
+<m.rf>m#m-cmpr9410-001-p8s1w4</m.rf>
+<afun>AuxP</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p8s1w7">
+<m.rf>m#m-cmpr9410-001-p8s1w7</m.rf>
+<afun>Coord</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p8s1w5">
+<m.rf>m#m-cmpr9410-001-p8s1w5</m.rf>
+<afun>Atr</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p8s1w6">
+<m.rf>m#m-cmpr9410-001-p8s1w6</m.rf>
+<afun>Atr</afun>
+<is_member>1</is_member>
+<ord>6</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p8s1w8">
+<m.rf>m#m-cmpr9410-001-p8s1w8</m.rf>
+<afun>Atr</afun>
+<is_member>1</is_member>
+<ord>8</ord>
+<clause_number>1</clause_number>
+</LM>
+</children>
+</children>
+</children>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p8s1w9">
+<m.rf>m#m-cmpr9410-001-p8s1w9</m.rf>
+<afun>AuxT</afun>
+<ord>9</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p8s1w13">
+<m.rf>m#m-cmpr9410-001-p8s1w13</m.rf>
+<afun>AuxC</afun>
+<ord>13</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p8s1w12">
+<m.rf>m#m-cmpr9410-001-p8s1w12</m.rf>
+<afun>AuxX</afun>
+<ord>12</ord>
+<clause_number>0</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p8s1w24">
+<m.rf>m#m-cmpr9410-001-p8s1w24</m.rf>
+<afun>Sb</afun>
+<ord>24</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p8s1w14">
+<m.rf>m#m-cmpr9410-001-p8s1w14</m.rf>
+<afun>Sb</afun>
+<ord>14</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p8s1w18">
+<m.rf>m#m-cmpr9410-001-p8s1w18</m.rf>
+<afun>Atr</afun>
+<ord>18</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p8s1w16">
+<m.rf>m#m-cmpr9410-001-p8s1w16</m.rf>
+<afun>Atr</afun>
+<ord>16</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p8s1w15">
+<m.rf>m#m-cmpr9410-001-p8s1w15</m.rf>
+<afun>Adv</afun>
+<ord>15</ord>
+<clause_number>2</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p8s1w17">
+<m.rf>m#m-cmpr9410-001-p8s1w17</m.rf>
+<afun>Atr</afun>
+<ord>17</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p8s1w19">
+<m.rf>m#m-cmpr9410-001-p8s1w19</m.rf>
+<afun>AuxP</afun>
+<ord>19</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p8s1w21">
+<m.rf>m#m-cmpr9410-001-p8s1w21</m.rf>
+<afun>Coord</afun>
+<ord>21</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p8s1w20">
+<m.rf>m#m-cmpr9410-001-p8s1w20</m.rf>
+<afun>Atr</afun>
+<is_member>1</is_member>
+<ord>20</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p8s1w22">
+<m.rf>m#m-cmpr9410-001-p8s1w22</m.rf>
+<afun>Atr</afun>
+<is_member>1</is_member>
+<ord>22</ord>
+<clause_number>2</clause_number>
+</LM>
+</children>
+</children>
+</LM>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p8s1w23">
+<m.rf>m#m-cmpr9410-001-p8s1w23</m.rf>
+<afun>AuxV</afun>
+<ord>23</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p8s1w26">
+<m.rf>m#m-cmpr9410-001-p8s1w26</m.rf>
+<afun>Adv</afun>
+<ord>26</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p8s1w25">
+<m.rf>m#m-cmpr9410-001-p8s1w25</m.rf>
+<afun>AuxY</afun>
+<ord>25</ord>
+<clause_number>2</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p8s1w28">
+<m.rf>m#m-cmpr9410-001-p8s1w28</m.rf>
+<afun>Obj</afun>
+<ord>28</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p8s1w27">
+<m.rf>m#m-cmpr9410-001-p8s1w27</m.rf>
+<afun>AuxZ</afun>
+<ord>27</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p8s1w31">
+<m.rf>m#m-cmpr9410-001-p8s1w31</m.rf>
+<afun>Coord</afun>
+<ord>31</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p8s1w30">
+<m.rf>m#m-cmpr9410-001-p8s1w30</m.rf>
+<afun>Atr</afun>
+<is_member>1</is_member>
+<ord>30</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p8s1w29">
+<m.rf>m#m-cmpr9410-001-p8s1w29</m.rf>
+<afun>Atr</afun>
+<ord>29</ord>
+<clause_number>2</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p8s1w32">
+<m.rf>m#m-cmpr9410-001-p8s1w32</m.rf>
+<afun>Atr</afun>
+<is_member>1</is_member>
+<ord>32</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p8s1w33">
+<m.rf>m#m-cmpr9410-001-p8s1w33</m.rf>
+<afun>Atr</afun>
+<ord>33</ord>
+<clause_number>2</clause_number>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p8s1w34">
+<m.rf>m#m-cmpr9410-001-p8s1w34</m.rf>
+<afun>AuxK</afun>
+<ord>34</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>Na pozadí vývoje v posledních dnech a týdnech se však zdá, že litera výše uvedené mezinárodní smlouvy mezi ČR a SR bude mít co nevidět pouze sílu psaného slova a ničeho jiného.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p8s2">
+<s.rf>m#m-cmpr9410-001-p8s2</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p8s2w19">
+<m.rf>m#m-cmpr9410-001-p8s2w19</m.rf>
+<afun>Coord</afun>
+<ord>19</ord>
+<clause_number>0</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p8s2w5">
+<m.rf>m#m-cmpr9410-001-p8s2w5</m.rf>
+<afun>Pred</afun>
+<is_member>1</is_member>
+<ord>5</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p8s2w2">
+<m.rf>m#m-cmpr9410-001-p8s2w2</m.rf>
+<afun>Sb</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p8s2w1">
+<m.rf>m#m-cmpr9410-001-p8s2w1</m.rf>
+<afun>Atr</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p8s2w3">
+<m.rf>m#m-cmpr9410-001-p8s2w3</m.rf>
+<afun>AuxV</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p8s2w4">
+<m.rf>m#m-cmpr9410-001-p8s2w4</m.rf>
+<afun>AuxY</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p8s2w6">
+<m.rf>m#m-cmpr9410-001-p8s2w6</m.rf>
+<afun>AuxP</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p8s2w7">
+<m.rf>m#m-cmpr9410-001-p8s2w7</m.rf>
+<afun>Adv</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p8s2w10">
+<m.rf>m#m-cmpr9410-001-p8s2w10</m.rf>
+<afun>Adv</afun>
+<ord>10</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p8s2w8">
+<m.rf>m#m-cmpr9410-001-p8s2w8</m.rf>
+<afun>AuxZ</afun>
+<ord>8</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p8s2w11">
+<m.rf>m#m-cmpr9410-001-p8s2w11</m.rf>
+<afun>Atr</afun>
+<ord>11</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p8s2w9">
+<m.rf>m#m-cmpr9410-001-p8s2w9</m.rf>
+<afun>Atr</afun>
+<ord>9</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p8s2w12">
+<m.rf>m#m-cmpr9410-001-p8s2w12</m.rf>
+<afun>ExD</afun>
+<ord>12</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p8s2w13">
+<m.rf>m#m-cmpr9410-001-p8s2w13</m.rf>
+<afun>Coord</afun>
+<is_parenthesis_root>1</is_parenthesis_root>
+<ord>13</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p8s2w14">
+<m.rf>m#m-cmpr9410-001-p8s2w14</m.rf>
+<afun>ExD</afun>
+<is_member>1</is_member>
+<ord>14</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p8s2w16">
+<m.rf>m#m-cmpr9410-001-p8s2w16</m.rf>
+<afun>ExD</afun>
+<is_member>1</is_member>
+<ord>16</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p8s2w15">
+<m.rf>m#m-cmpr9410-001-p8s2w15</m.rf>
+<afun>AuxZ</afun>
+<ord>15</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p8s2w17">
+<m.rf>m#m-cmpr9410-001-p8s2w17</m.rf>
+<afun>ExD</afun>
+<ord>17</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p8s2w18">
+<m.rf>m#m-cmpr9410-001-p8s2w18</m.rf>
+<afun>AuxX</afun>
+<ord>18</ord>
+<clause_number>0</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p8s2w22">
+<m.rf>m#m-cmpr9410-001-p8s2w22</m.rf>
+<afun>Pred</afun>
+<is_member>1</is_member>
+<ord>22</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p8s2w20">
+<m.rf>m#m-cmpr9410-001-p8s2w20</m.rf>
+<afun>AuxP</afun>
+<ord>20</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p8s2w21">
+<m.rf>m#m-cmpr9410-001-p8s2w21</m.rf>
+<afun>Adv</afun>
+<ord>21</ord>
+<clause_number>2</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p8s2w24">
+<m.rf>m#m-cmpr9410-001-p8s2w24</m.rf>
+<afun>Sb</afun>
+<ord>24</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p8s2w23">
+<m.rf>m#m-cmpr9410-001-p8s2w23</m.rf>
+<afun>Atr</afun>
+<ord>23</ord>
+<clause_number>2</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p8s2w25">
+<m.rf>m#m-cmpr9410-001-p8s2w25</m.rf>
+<afun>Obj</afun>
+<ord>25</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p8s2w26">
+<m.rf>m#m-cmpr9410-001-p8s2w26</m.rf>
+<afun>Atr</afun>
+<ord>26</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p8s2w28">
+<m.rf>m#m-cmpr9410-001-p8s2w28</m.rf>
+<afun>Atr</afun>
+<ord>28</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p8s2w27">
+<m.rf>m#m-cmpr9410-001-p8s2w27</m.rf>
+<afun>Atr</afun>
+<ord>27</ord>
+<clause_number>2</clause_number>
+</children>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p8s2w29">
+<m.rf>m#m-cmpr9410-001-p8s2w29</m.rf>
+<afun>AuxK</afun>
+<ord>29</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>Celní unie bude sice existovat na papíře ještě dalších dvanáct měsíců (a třeba i déle), ale v praxi dostanou vzájemné vztahy punc tvrdosti mezinárodního obchodu.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p9s1">
+<s.rf>m#m-cmpr9410-001-p9s1</s.rf>
+<ord>0</ord>
+<children id="a-cmpr9410-001-p9s1w1">
+<m.rf>m#m-cmpr9410-001-p9s1w1</m.rf>
+<afun>Pred</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p9s1w2">
+<m.rf>m#m-cmpr9410-001-p9s1w2</m.rf>
+<afun>Sb</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+<sentence>Poroste administrativa</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p10s1">
+<s.rf>m#m-cmpr9410-001-p10s1</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p10s1w5">
+<m.rf>m#m-cmpr9410-001-p10s1w5</m.rf>
+<afun>Pred</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p10s1w1">
+<m.rf>m#m-cmpr9410-001-p10s1w1</m.rf>
+<afun>Obj</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p10s1w2">
+<m.rf>m#m-cmpr9410-001-p10s1w2</m.rf>
+<afun>AuxP</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p10s1w4">
+<m.rf>m#m-cmpr9410-001-p10s1w4</m.rf>
+<afun>Atr</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p10s1w3">
+<m.rf>m#m-cmpr9410-001-p10s1w3</m.rf>
+<afun>Atr</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p10s1w7">
+<m.rf>m#m-cmpr9410-001-p10s1w7</m.rf>
+<afun>Sb</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p10s1w6">
+<m.rf>m#m-cmpr9410-001-p10s1w6</m.rf>
+<afun>Atr</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p10s1w8">
+<m.rf>m#m-cmpr9410-001-p10s1w8</m.rf>
+<afun>Atr</afun>
+<ord>8</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p10s1w9">
+<m.rf>m#m-cmpr9410-001-p10s1w9</m.rf>
+<afun>Atr</afun>
+<ord>9</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p10s1w13">
+<m.rf>m#m-cmpr9410-001-p10s1w13</m.rf>
+<afun>Atr</afun>
+<ord>13</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p10s1w10">
+<m.rf>m#m-cmpr9410-001-p10s1w10</m.rf>
+<afun>AuxX</afun>
+<ord>10</ord>
+<clause_number>0</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p10s1w11">
+<m.rf>m#m-cmpr9410-001-p10s1w11</m.rf>
+<afun>Sb</afun>
+<ord>11</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p10s1w12">
+<m.rf>m#m-cmpr9410-001-p10s1w12</m.rf>
+<afun>AuxT</afun>
+<ord>12</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p10s1w14">
+<m.rf>m#m-cmpr9410-001-p10s1w14</m.rf>
+<afun>Obj</afun>
+<ord>14</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p10s1w16">
+<m.rf>m#m-cmpr9410-001-p10s1w16</m.rf>
+<afun>AuxP</afun>
+<ord>16</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p10s1w17">
+<m.rf>m#m-cmpr9410-001-p10s1w17</m.rf>
+<afun>Adv</afun>
+<ord>17</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p10s1w15">
+<m.rf>m#m-cmpr9410-001-p10s1w15</m.rf>
+<afun>AuxZ</afun>
+<ord>15</ord>
+<clause_number>2</clause_number>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p10s1w21">
+<m.rf>m#m-cmpr9410-001-p10s1w21</m.rf>
+<afun>Obj</afun>
+<ord>21</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p10s1w18">
+<m.rf>m#m-cmpr9410-001-p10s1w18</m.rf>
+<afun>Atr</afun>
+<ord>18</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p10s1w19">
+<m.rf>m#m-cmpr9410-001-p10s1w19</m.rf>
+<afun>Atr</afun>
+<ord>19</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p10s1w20">
+<m.rf>m#m-cmpr9410-001-p10s1w20</m.rf>
+<afun>Atr</afun>
+<ord>20</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p10s1w22">
+<m.rf>m#m-cmpr9410-001-p10s1w22</m.rf>
+<afun>AuxP</afun>
+<ord>22</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p10s1w23">
+<m.rf>m#m-cmpr9410-001-p10s1w23</m.rf>
+<afun>Atr</afun>
+<ord>23</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p10s1w25">
+<m.rf>m#m-cmpr9410-001-p10s1w25</m.rf>
+<afun>Atr</afun>
+<ord>25</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p10s1w24">
+<m.rf>m#m-cmpr9410-001-p10s1w24</m.rf>
+<afun>Atr</afun>
+<ord>24</ord>
+<clause_number>2</clause_number>
+</children>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p10s1w26">
+<m.rf>m#m-cmpr9410-001-p10s1w26</m.rf>
+<afun>AuxK</afun>
+<ord>26</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>Jistotu v tomto směru dávají nejnovější kroky vlády SR, která se rozhodla zavést již před časem avizovanou desetiprocentní dovozní přirážku na zboží zahraniční provenience.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p10s2">
+<s.rf>m#m-cmpr9410-001-p10s2</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p10s2w17">
+<m.rf>m#m-cmpr9410-001-p10s2w17</m.rf>
+<afun>Coord</afun>
+<ord>17</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p10s2w18">
+<m.rf>m#m-cmpr9410-001-p10s2w18</m.rf>
+<afun>Pred</afun>
+<is_member>1</is_member>
+<ord>18</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p10s2w1">
+<m.rf>m#m-cmpr9410-001-p10s2w1</m.rf>
+<afun>AuxC</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p10s2w2">
+<m.rf>m#m-cmpr9410-001-p10s2w2</m.rf>
+<afun>Adv</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p10s2w7">
+<m.rf>m#m-cmpr9410-001-p10s2w7</m.rf>
+<afun>Obj</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p10s2w3">
+<m.rf>m#m-cmpr9410-001-p10s2w3</m.rf>
+<afun>AuxP</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p10s2w5">
+<m.rf>m#m-cmpr9410-001-p10s2w5</m.rf>
+<afun>Atr</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p10s2w4">
+<m.rf>m#m-cmpr9410-001-p10s2w4</m.rf>
+<afun>Atr</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p10s2w6">
+<m.rf>m#m-cmpr9410-001-p10s2w6</m.rf>
+<afun>Atr</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p10s2w10">
+<m.rf>m#m-cmpr9410-001-p10s2w10</m.rf>
+<afun>AtvV</afun>
+<is_parenthesis_root>1</is_parenthesis_root>
+<ord>10</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p10s2w8">
+<m.rf>m#m-cmpr9410-001-p10s2w8</m.rf>
+<afun>AuxG</afun>
+<ord>8</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p10s2w9">
+<m.rf>m#m-cmpr9410-001-p10s2w9</m.rf>
+<afun>AuxY</afun>
+<ord>9</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p10s2w11">
+<m.rf>m#m-cmpr9410-001-p10s2w11</m.rf>
+<afun>Atr</afun>
+<ord>11</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p10s2w12">
+<m.rf>m#m-cmpr9410-001-p10s2w12</m.rf>
+<afun>AuxG</afun>
+<ord>12</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p10s2w13">
+<m.rf>m#m-cmpr9410-001-p10s2w13</m.rf>
+<afun>AuxX</afun>
+<ord>13</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p10s2w14">
+<m.rf>m#m-cmpr9410-001-p10s2w14</m.rf>
+<afun>AuxP</afun>
+<ord>14</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p10s2w16">
+<m.rf>m#m-cmpr9410-001-p10s2w16</m.rf>
+<afun>Adv</afun>
+<ord>16</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p10s2w15">
+<m.rf>m#m-cmpr9410-001-p10s2w15</m.rf>
+<afun>Atr</afun>
+<ord>15</ord>
+<clause_number>2</clause_number>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p10s2w19">
+<m.rf>m#m-cmpr9410-001-p10s2w19</m.rf>
+<afun>AuxC</afun>
+<ord>19</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p10s2w22">
+<m.rf>m#m-cmpr9410-001-p10s2w22</m.rf>
+<afun>ExD</afun>
+<ord>22</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p10s2w20">
+<m.rf>m#m-cmpr9410-001-p10s2w20</m.rf>
+<afun>Atr</afun>
+<ord>20</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p10s2w21">
+<m.rf>m#m-cmpr9410-001-p10s2w21</m.rf>
+<afun>Atr</afun>
+<ord>21</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p10s2w23">
+<m.rf>m#m-cmpr9410-001-p10s2w23</m.rf>
+<afun>Atr</afun>
+<ord>23</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p10s2w27">
+<m.rf>m#m-cmpr9410-001-p10s2w27</m.rf>
+<afun>Atr</afun>
+<ord>27</ord>
+<clause_number>3</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p10s2w24">
+<m.rf>m#m-cmpr9410-001-p10s2w24</m.rf>
+<afun>AuxX</afun>
+<ord>24</ord>
+<clause_number>0</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p10s2w25">
+<m.rf>m#m-cmpr9410-001-p10s2w25</m.rf>
+<afun>Sb</afun>
+<ord>25</ord>
+<clause_number>3</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p10s2w26">
+<m.rf>m#m-cmpr9410-001-p10s2w26</m.rf>
+<afun>AuxT</afun>
+<ord>26</ord>
+<clause_number>3</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p10s2w32">
+<m.rf>m#m-cmpr9410-001-p10s2w32</m.rf>
+<afun>Obj</afun>
+<ord>32</ord>
+<clause_number>3</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p10s2w31">
+<m.rf>m#m-cmpr9410-001-p10s2w31</m.rf>
+<afun>Adv</afun>
+<ord>31</ord>
+<clause_number>3</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p10s2w29">
+<m.rf>m#m-cmpr9410-001-p10s2w29</m.rf>
+<afun>Atr</afun>
+<ord>29</ord>
+<clause_number>3</clause_number>
+<children id="a-cmpr9410-001-p10s2w28">
+<m.rf>m#m-cmpr9410-001-p10s2w28</m.rf>
+<afun>Adv</afun>
+<ord>28</ord>
+<clause_number>3</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p10s2w30">
+<m.rf>m#m-cmpr9410-001-p10s2w30</m.rf>
+<afun>Atr</afun>
+<ord>30</ord>
+<clause_number>3</clause_number>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p10s2w34">
+<m.rf>m#m-cmpr9410-001-p10s2w34</m.rf>
+<afun>Obj</afun>
+<ord>34</ord>
+<clause_number>3</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p10s2w33">
+<m.rf>m#m-cmpr9410-001-p10s2w33</m.rf>
+<afun>Atr</afun>
+<ord>33</ord>
+<clause_number>3</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p10s2w35">
+<m.rf>m#m-cmpr9410-001-p10s2w35</m.rf>
+<afun>AuxP</afun>
+<ord>35</ord>
+<clause_number>3</clause_number>
+<children id="a-cmpr9410-001-p10s2w37">
+<m.rf>m#m-cmpr9410-001-p10s2w37</m.rf>
+<afun>Atr</afun>
+<ord>37</ord>
+<clause_number>3</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p10s2w36">
+<m.rf>m#m-cmpr9410-001-p10s2w36</m.rf>
+<afun>Atr</afun>
+<ord>36</ord>
+<clause_number>3</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p10s2w38">
+<m.rf>m#m-cmpr9410-001-p10s2w38</m.rf>
+<afun>AuxP</afun>
+<ord>38</ord>
+<clause_number>3</clause_number>
+<children id="a-cmpr9410-001-p10s2w39">
+<m.rf>m#m-cmpr9410-001-p10s2w39</m.rf>
+<afun>Atr</afun>
+<ord>39</ord>
+<clause_number>3</clause_number>
+</children>
+</LM>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</children>
+</LM>
+</children>
+</children>
+</LM>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p10s2w40">
+<m.rf>m#m-cmpr9410-001-p10s2w40</m.rf>
+<afun>AuxK</afun>
+<ord>40</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>Byť má na tento krok určité právo (jako člen GATT), v daném okamžiku však vyznívá jako tvrdé politické rozhodnutí vlády, která se snaží velice rezolutními administrativními kroky zredukovat mnohamilionové pasívum v obchodní výměně s ČR.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p11s1">
+<s.rf>m#m-cmpr9410-001-p11s1</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p11s1w4">
+<m.rf>m#m-cmpr9410-001-p11s1w4</m.rf>
+<afun>Pred</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p11s1w1">
+<m.rf>m#m-cmpr9410-001-p11s1w1</m.rf>
+<afun>AuxP</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p11s1w2">
+<m.rf>m#m-cmpr9410-001-p11s1w2</m.rf>
+<afun>Adv</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p11s1w3">
+<m.rf>m#m-cmpr9410-001-p11s1w3</m.rf>
+<afun>Atr</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p11s1w7">
+<m.rf>m#m-cmpr9410-001-p11s1w7</m.rf>
+<afun>Sb</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p11s1w6">
+<m.rf>m#m-cmpr9410-001-p11s1w6</m.rf>
+<afun>Obj</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p11s1w5">
+<m.rf>m#m-cmpr9410-001-p11s1w5</m.rf>
+<afun>Atr</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p11s1w13">
+<m.rf>m#m-cmpr9410-001-p11s1w13</m.rf>
+<afun>Coord</afun>
+<ord>13</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p11s1w9">
+<m.rf>m#m-cmpr9410-001-p11s1w9</m.rf>
+<afun>AuxP</afun>
+<ord>9</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p11s1w10">
+<m.rf>m#m-cmpr9410-001-p11s1w10</m.rf>
+<afun>Adv</afun>
+<is_member>1</is_member>
+<ord>10</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p11s1w8">
+<m.rf>m#m-cmpr9410-001-p11s1w8</m.rf>
+<afun>AuxZ</afun>
+<ord>8</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p11s1w12">
+<m.rf>m#m-cmpr9410-001-p11s1w12</m.rf>
+<afun>Atr</afun>
+<ord>12</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p11s1w11">
+<m.rf>m#m-cmpr9410-001-p11s1w11</m.rf>
+<afun>Atr</afun>
+<ord>11</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p11s1w15">
+<m.rf>m#m-cmpr9410-001-p11s1w15</m.rf>
+<afun>AuxP</afun>
+<ord>15</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p11s1w17">
+<m.rf>m#m-cmpr9410-001-p11s1w17</m.rf>
+<afun>Adv</afun>
+<is_member>1</is_member>
+<ord>17</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p11s1w14">
+<m.rf>m#m-cmpr9410-001-p11s1w14</m.rf>
+<afun>AuxZ</afun>
+<ord>14</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p11s1w16">
+<m.rf>m#m-cmpr9410-001-p11s1w16</m.rf>
+<afun>Atr</afun>
+<ord>16</ord>
+<clause_number>1</clause_number>
+</LM>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p11s1w18">
+<m.rf>m#m-cmpr9410-001-p11s1w18</m.rf>
+<afun>AuxK</afun>
+<ord>18</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>Podle regulí GATT lze toto opatření přijmout maximálně na období šesti měsíců a pouze u vybraných položek.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p11s2">
+<s.rf>m#m-cmpr9410-001-p11s2</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p11s2w3">
+<m.rf>m#m-cmpr9410-001-p11s2w3</m.rf>
+<afun>Coord</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p11s2w5">
+<m.rf>m#m-cmpr9410-001-p11s2w5</m.rf>
+<afun>Pred</afun>
+<is_member>1</is_member>
+<ord>5</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p11s2w2">
+<m.rf>m#m-cmpr9410-001-p11s2w2</m.rf>
+<afun>Sb</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p11s2w1">
+<m.rf>m#m-cmpr9410-001-p11s2w1</m.rf>
+<afun>Atr</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p11s2w4">
+<m.rf>m#m-cmpr9410-001-p11s2w4</m.rf>
+<afun>Obj</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p11s2w6">
+<m.rf>m#m-cmpr9410-001-p11s2w6</m.rf>
+<afun>AuxP</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p11s2w7">
+<m.rf>m#m-cmpr9410-001-p11s2w7</m.rf>
+<afun>Obj</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p11s2w9">
+<m.rf>m#m-cmpr9410-001-p11s2w9</m.rf>
+<afun>AuxC</afun>
+<ord>9</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p11s2w8">
+<m.rf>m#m-cmpr9410-001-p11s2w8</m.rf>
+<afun>AuxX</afun>
+<ord>8</ord>
+<clause_number>0</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p11s2w15">
+<m.rf>m#m-cmpr9410-001-p11s2w15</m.rf>
+<afun>Obj</afun>
+<ord>15</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p11s2w12">
+<m.rf>m#m-cmpr9410-001-p11s2w12</m.rf>
+<afun>Coord</afun>
+<ord>12</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p11s2w10">
+<m.rf>m#m-cmpr9410-001-p11s2w10</m.rf>
+<afun>Atr</afun>
+<ord>10</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p11s2w11">
+<m.rf>m#m-cmpr9410-001-p11s2w11</m.rf>
+<afun>Sb</afun>
+<is_member>1</is_member>
+<ord>11</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p11s2w13">
+<m.rf>m#m-cmpr9410-001-p11s2w13</m.rf>
+<afun>Sb</afun>
+<is_member>1</is_member>
+<ord>13</ord>
+<clause_number>2</clause_number>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p11s2w14">
+<m.rf>m#m-cmpr9410-001-p11s2w14</m.rf>
+<afun>AuxV</afun>
+<ord>14</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p11s2w18">
+<m.rf>m#m-cmpr9410-001-p11s2w18</m.rf>
+<afun>Obj</afun>
+<ord>18</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p11s2w17">
+<m.rf>m#m-cmpr9410-001-p11s2w17</m.rf>
+<afun>Atr</afun>
+<ord>17</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p11s2w16">
+<m.rf>m#m-cmpr9410-001-p11s2w16</m.rf>
+<afun>Adv</afun>
+<ord>16</ord>
+<clause_number>2</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p11s2w19">
+<m.rf>m#m-cmpr9410-001-p11s2w19</m.rf>
+<afun>AuxP</afun>
+<ord>19</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p11s2w20">
+<m.rf>m#m-cmpr9410-001-p11s2w20</m.rf>
+<afun>Atr</afun>
+<ord>20</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p11s2w21">
+<m.rf>m#m-cmpr9410-001-p11s2w21</m.rf>
+<afun>Atr</afun>
+<ord>21</ord>
+<clause_number>2</clause_number>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p11s2w22">
+<m.rf>m#m-cmpr9410-001-p11s2w22</m.rf>
+<afun>AuxP</afun>
+<ord>22</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p11s2w23">
+<m.rf>m#m-cmpr9410-001-p11s2w23</m.rf>
+<afun>Adv</afun>
+<ord>23</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p11s2w26">
+<m.rf>m#m-cmpr9410-001-p11s2w26</m.rf>
+<afun>Atr</afun>
+<ord>26</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p11s2w24">
+<m.rf>m#m-cmpr9410-001-p11s2w24</m.rf>
+<afun>Atr</afun>
+<ord>24</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p11s2w25">
+<m.rf>m#m-cmpr9410-001-p11s2w25</m.rf>
+<afun>Atr</afun>
+<ord>25</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p11s2w27">
+<m.rf>m#m-cmpr9410-001-p11s2w27</m.rf>
+<afun>AuxP</afun>
+<ord>27</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p11s2w29">
+<m.rf>m#m-cmpr9410-001-p11s2w29</m.rf>
+<afun>Atr</afun>
+<ord>29</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p11s2w28">
+<m.rf>m#m-cmpr9410-001-p11s2w28</m.rf>
+<afun>Atr</afun>
+<ord>28</ord>
+<clause_number>2</clause_number>
+</children>
+</children>
+</LM>
+</children>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</children>
+</children>
+</LM>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p11s2w30">
+<m.rf>m#m-cmpr9410-001-p11s2w30</m.rf>
+<afun>AuxK</afun>
+<ord>30</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>Tato skutečnost však nic nemění na faktu, že nadcházející týdny a měsíce budou znamenat neúměrně zvýšené nároky na administrativu podnikatelů při rozvíjení jejich obchodních aktivit se slovenskými partnery.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p12s1">
+<s.rf>m#m-cmpr9410-001-p12s1</s.rf>
+<ord>0</ord>
+<children id="a-cmpr9410-001-p12s1w1">
+<m.rf>m#m-cmpr9410-001-p12s1w1</m.rf>
+<afun>ExD</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p12s1w2">
+<m.rf>m#m-cmpr9410-001-p12s1w2</m.rf>
+<afun>AuxP</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p12s1w4">
+<m.rf>m#m-cmpr9410-001-p12s1w4</m.rf>
+<afun>Atr</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p12s1w3">
+<m.rf>m#m-cmpr9410-001-p12s1w3</m.rf>
+<afun>Atr</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+</children>
+</children>
+<sentence>Pravidla pro příští týdny</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p13s1">
+<s.rf>m#m-cmpr9410-001-p13s1</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p13s1w4">
+<m.rf>m#m-cmpr9410-001-p13s1w4</m.rf>
+<afun>Pred</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p13s1w2">
+<m.rf>m#m-cmpr9410-001-p13s1w2</m.rf>
+<afun>Adv</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p13s1w1">
+<m.rf>m#m-cmpr9410-001-p13s1w1</m.rf>
+<afun>AuxZ</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p13s1w3">
+<m.rf>m#m-cmpr9410-001-p13s1w3</m.rf>
+<afun>Atr</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p13s1w6">
+<m.rf>m#m-cmpr9410-001-p13s1w6</m.rf>
+<afun>Pnom</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p13s1w5">
+<m.rf>m#m-cmpr9410-001-p13s1w5</m.rf>
+<afun>Adv</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p13s1w8">
+<m.rf>m#m-cmpr9410-001-p13s1w8</m.rf>
+<afun>AuxC</afun>
+<ord>8</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p13s1w7">
+<m.rf>m#m-cmpr9410-001-p13s1w7</m.rf>
+<afun>AuxX</afun>
+<ord>7</ord>
+<clause_number>0</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p13s1w17">
+<m.rf>m#m-cmpr9410-001-p13s1w17</m.rf>
+<afun>Sb</afun>
+<ord>17</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p13s1w10">
+<m.rf>m#m-cmpr9410-001-p13s1w10</m.rf>
+<afun>Sb</afun>
+<ord>10</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p13s1w9">
+<m.rf>m#m-cmpr9410-001-p13s1w9</m.rf>
+<afun>Atr</afun>
+<ord>9</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p13s1w12">
+<m.rf>m#m-cmpr9410-001-p13s1w12</m.rf>
+<afun>Atr</afun>
+<ord>12</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p13s1w11">
+<m.rf>m#m-cmpr9410-001-p13s1w11</m.rf>
+<afun>Atr</afun>
+<ord>11</ord>
+<clause_number>2</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p13s1w13">
+<m.rf>m#m-cmpr9410-001-p13s1w13</m.rf>
+<afun>AuxP</afun>
+<ord>13</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p13s1w15">
+<m.rf>m#m-cmpr9410-001-p13s1w15</m.rf>
+<afun>Atr</afun>
+<ord>15</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p13s1w14">
+<m.rf>m#m-cmpr9410-001-p13s1w14</m.rf>
+<afun>Atr</afun>
+<ord>14</ord>
+<clause_number>2</clause_number>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p13s1w16">
+<m.rf>m#m-cmpr9410-001-p13s1w16</m.rf>
+<afun>AuxT</afun>
+<ord>16</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p13s1w19">
+<m.rf>m#m-cmpr9410-001-p13s1w19</m.rf>
+<afun>Obj</afun>
+<ord>19</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p13s1w18">
+<m.rf>m#m-cmpr9410-001-p13s1w18</m.rf>
+<afun>AuxZ</afun>
+<ord>18</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p13s1w20">
+<m.rf>m#m-cmpr9410-001-p13s1w20</m.rf>
+<afun>Atr</afun>
+<ord>20</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p13s1w21">
+<m.rf>m#m-cmpr9410-001-p13s1w21</m.rf>
+<afun>AuxP</afun>
+<ord>21</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p13s1w23">
+<m.rf>m#m-cmpr9410-001-p13s1w23</m.rf>
+<afun>Coord</afun>
+<ord>23</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p13s1w22">
+<m.rf>m#m-cmpr9410-001-p13s1w22</m.rf>
+<afun>Atr</afun>
+<is_member>1</is_member>
+<ord>22</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p13s1w25">
+<m.rf>m#m-cmpr9410-001-p13s1w25</m.rf>
+<afun>Atr</afun>
+<is_member>1</is_member>
+<ord>25</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p13s1w24">
+<m.rf>m#m-cmpr9410-001-p13s1w24</m.rf>
+<afun>Atr</afun>
+<ord>24</ord>
+<clause_number>2</clause_number>
+</children>
+</LM>
+</children>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p13s1w26">
+<m.rf>m#m-cmpr9410-001-p13s1w26</m.rf>
+<afun>AuxK</afun>
+<ord>26</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>Již několik dnů je všeobecně známo, že ochranářská opatření slovenské vlády proti českým exportérům se dotýkají zejména oblasti obchodu s potravinami a zemědělskými produkty.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p14s1">
+<s.rf>m#m-cmpr9410-001-p14s1</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p14s1w4">
+<m.rf>m#m-cmpr9410-001-p14s1w4</m.rf>
+<afun>Pred</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p14s1w2">
+<m.rf>m#m-cmpr9410-001-p14s1w2</m.rf>
+<afun>Obj</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p14s1w1">
+<m.rf>m#m-cmpr9410-001-p14s1w1</m.rf>
+<afun>Atr</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p14s1w3">
+<m.rf>m#m-cmpr9410-001-p14s1w3</m.rf>
+<afun>AuxT</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p14s1w5">
+<m.rf>m#m-cmpr9410-001-p14s1w5</m.rf>
+<afun>Sb</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p14s1w6">
+<m.rf>m#m-cmpr9410-001-p14s1w6</m.rf>
+<afun>AuxP</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p14s1w7">
+<m.rf>m#m-cmpr9410-001-p14s1w7</m.rf>
+<afun>Obj</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p14s1w16">
+<m.rf>m#m-cmpr9410-001-p14s1w16</m.rf>
+<afun>Apos</afun>
+<ord>16</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p14s1w9">
+<m.rf>m#m-cmpr9410-001-p14s1w9</m.rf>
+<afun>Atr</afun>
+<is_member>1</is_member>
+<ord>9</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p14s1w8">
+<m.rf>m#m-cmpr9410-001-p14s1w8</m.rf>
+<afun>Atr</afun>
+<ord>8</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p14s1w10">
+<m.rf>m#m-cmpr9410-001-p14s1w10</m.rf>
+<afun>AuxP</afun>
+<ord>10</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p14s1w14">
+<m.rf>m#m-cmpr9410-001-p14s1w14</m.rf>
+<afun>Coord</afun>
+<ord>14</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p14s1w11">
+<m.rf>m#m-cmpr9410-001-p14s1w11</m.rf>
+<afun>Atr</afun>
+<is_member>1</is_member>
+<ord>11</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p14s1w12">
+<m.rf>m#m-cmpr9410-001-p14s1w12</m.rf>
+<afun>AuxX</afun>
+<ord>12</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p14s1w13">
+<m.rf>m#m-cmpr9410-001-p14s1w13</m.rf>
+<afun>Atr</afun>
+<is_member>1</is_member>
+<ord>13</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p14s1w15">
+<m.rf>m#m-cmpr9410-001-p14s1w15</m.rf>
+<afun>Atr</afun>
+<is_member>1</is_member>
+<ord>15</ord>
+<clause_number>1</clause_number>
+</LM>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p14s1w17">
+<m.rf>m#m-cmpr9410-001-p14s1w17</m.rf>
+<afun>Atr</afun>
+<is_member>1</is_member>
+<ord>17</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p14s1w18">
+<m.rf>m#m-cmpr9410-001-p14s1w18</m.rf>
+<afun>Atr</afun>
+<ord>18</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p14s1w19">
+<m.rf>m#m-cmpr9410-001-p14s1w19</m.rf>
+<afun>AuxG</afun>
+<ord>19</ord>
+<clause_number>1</clause_number>
+</LM>
+</children>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p14s1w20">
+<m.rf>m#m-cmpr9410-001-p14s1w20</m.rf>
+<afun>Obj</afun>
+<ord>20</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p14s1w21">
+<m.rf>m#m-cmpr9410-001-p14s1w21</m.rf>
+<afun>AuxP</afun>
+<ord>21</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p14s1w23">
+<m.rf>m#m-cmpr9410-001-p14s1w23</m.rf>
+<afun>Atr</afun>
+<ord>23</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p14s1w22">
+<m.rf>m#m-cmpr9410-001-p14s1w22</m.rf>
+<afun>Atr</afun>
+<ord>22</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p14s1w24">
+<m.rf>m#m-cmpr9410-001-p14s1w24</m.rf>
+<afun>Atr</afun>
+<ord>24</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p14s1w26">
+<m.rf>m#m-cmpr9410-001-p14s1w26</m.rf>
+<afun>Atr</afun>
+<ord>26</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p14s1w25">
+<m.rf>m#m-cmpr9410-001-p14s1w25</m.rf>
+<afun>Atr</afun>
+<ord>25</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p14s1w27">
+<m.rf>m#m-cmpr9410-001-p14s1w27</m.rf>
+<afun>AuxP</afun>
+<ord>27</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p14s1w28">
+<m.rf>m#m-cmpr9410-001-p14s1w28</m.rf>
+<afun>Atr</afun>
+<ord>28</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p14s1w29">
+<m.rf>m#m-cmpr9410-001-p14s1w29</m.rf>
+<afun>AuxK</afun>
+<ord>29</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>Našemu listu se podařilo získat od představitelů slovenského Úřadu pro normalizaci, metrologii a zkušebnictví (ÚNMS SR) informaci o technickém zajištění propouštění potravinářských výrobků do SR.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p14s2">
+<s.rf>m#m-cmpr9410-001-p14s2</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p14s2w16">
+<m.rf>m#m-cmpr9410-001-p14s2w16</m.rf>
+<afun>Pred</afun>
+<ord>16</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p14s2w1">
+<m.rf>m#m-cmpr9410-001-p14s2w1</m.rf>
+<afun>AuxP</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p14s2w3">
+<m.rf>m#m-cmpr9410-001-p14s2w3</m.rf>
+<afun>Adv</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p14s2w2">
+<m.rf>m#m-cmpr9410-001-p14s2w2</m.rf>
+<afun>Atr</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p14s2w7">
+<m.rf>m#m-cmpr9410-001-p14s2w7</m.rf>
+<afun>Atr</afun>
+<ord>7</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p14s2w4">
+<m.rf>m#m-cmpr9410-001-p14s2w4</m.rf>
+<afun>AuxX</afun>
+<ord>4</ord>
+<clause_number>0</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p14s2w5">
+<m.rf>m#m-cmpr9410-001-p14s2w5</m.rf>
+<afun>Sb</afun>
+<ord>5</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p14s2w6">
+<m.rf>m#m-cmpr9410-001-p14s2w6</m.rf>
+<afun>AuxV</afun>
+<ord>6</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p14s2w9">
+<m.rf>m#m-cmpr9410-001-p14s2w9</m.rf>
+<afun>Obj</afun>
+<ord>9</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p14s2w8">
+<m.rf>m#m-cmpr9410-001-p14s2w8</m.rf>
+<afun>Adv</afun>
+<ord>8</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p14s2w10">
+<m.rf>m#m-cmpr9410-001-p14s2w10</m.rf>
+<afun>AuxP</afun>
+<ord>10</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p14s2w11">
+<m.rf>m#m-cmpr9410-001-p14s2w11</m.rf>
+<afun>Adv</afun>
+<ord>11</ord>
+<clause_number>2</clause_number>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p14s2w12">
+<m.rf>m#m-cmpr9410-001-p14s2w12</m.rf>
+<afun>AuxP</afun>
+<ord>12</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p14s2w15">
+<m.rf>m#m-cmpr9410-001-p14s2w15</m.rf>
+<afun>Adv</afun>
+<ord>15</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p14s2w13">
+<m.rf>m#m-cmpr9410-001-p14s2w13</m.rf>
+<afun>Atr</afun>
+<ord>13</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p14s2w14">
+<m.rf>m#m-cmpr9410-001-p14s2w14</m.rf>
+<afun>AuxG</afun>
+<ord>14</ord>
+<clause_number>2</clause_number>
+</children>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p14s2w17">
+<m.rf>m#m-cmpr9410-001-p14s2w17</m.rf>
+<afun>AuxK</afun>
+<ord>17</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>Z rozhodujících opatření, která by měla plně vstoupit v platnost po 1. dubnu vyjímáme:</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p15s1">
+<s.rf>m#m-cmpr9410-001-p15s1</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p15s1w7">
+<m.rf>m#m-cmpr9410-001-p15s1w7</m.rf>
+<afun>Pred</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p15s1w1">
+<m.rf>m#m-cmpr9410-001-p15s1w1</m.rf>
+<afun>AuxG</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p15s1w2">
+<m.rf>m#m-cmpr9410-001-p15s1w2</m.rf>
+<afun>AuxG</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p15s1w3">
+<m.rf>m#m-cmpr9410-001-p15s1w3</m.rf>
+<afun>AuxP</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p15s1w6">
+<m.rf>m#m-cmpr9410-001-p15s1w6</m.rf>
+<afun>Adv</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p15s1w4">
+<m.rf>m#m-cmpr9410-001-p15s1w4</m.rf>
+<afun>Atr</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p15s1w5">
+<m.rf>m#m-cmpr9410-001-p15s1w5</m.rf>
+<afun>AuxG</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p15s1w8">
+<m.rf>m#m-cmpr9410-001-p15s1w8</m.rf>
+<afun>AuxP</afun>
+<ord>8</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p15s1w10">
+<m.rf>m#m-cmpr9410-001-p15s1w10</m.rf>
+<afun>Adv</afun>
+<ord>10</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p15s1w9">
+<m.rf>m#m-cmpr9410-001-p15s1w9</m.rf>
+<afun>Atr</afun>
+<ord>9</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p15s1w11">
+<m.rf>m#m-cmpr9410-001-p15s1w11</m.rf>
+<afun>Sb</afun>
+<ord>11</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p15s1w12">
+<m.rf>m#m-cmpr9410-001-p15s1w12</m.rf>
+<afun>AuxP</afun>
+<ord>12</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p15s1w13">
+<m.rf>m#m-cmpr9410-001-p15s1w13</m.rf>
+<afun>Atr</afun>
+<ord>13</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p15s1w16">
+<m.rf>m#m-cmpr9410-001-p15s1w16</m.rf>
+<afun>Coord</afun>
+<ord>16</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p15s1w14">
+<m.rf>m#m-cmpr9410-001-p15s1w14</m.rf>
+<afun>Atr</afun>
+<is_member>1</is_member>
+<ord>14</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p15s1w15">
+<m.rf>m#m-cmpr9410-001-p15s1w15</m.rf>
+<afun>Atr</afun>
+<ord>15</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p15s1w17">
+<m.rf>m#m-cmpr9410-001-p15s1w17</m.rf>
+<afun>Atr</afun>
+<is_member>1</is_member>
+<ord>17</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p15s1w18">
+<m.rf>m#m-cmpr9410-001-p15s1w18</m.rf>
+<afun>Atr</afun>
+<ord>18</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p15s1w29">
+<m.rf>m#m-cmpr9410-001-p15s1w29</m.rf>
+<afun>Atr</afun>
+<ord>29</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p15s1w19">
+<m.rf>m#m-cmpr9410-001-p15s1w19</m.rf>
+<afun>AuxX</afun>
+<ord>19</ord>
+<clause_number>0</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p15s1w20">
+<m.rf>m#m-cmpr9410-001-p15s1w20</m.rf>
+<afun>AuxP</afun>
+<ord>20</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p15s1w22">
+<m.rf>m#m-cmpr9410-001-p15s1w22</m.rf>
+<afun>Adv</afun>
+<ord>22</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p15s1w21">
+<m.rf>m#m-cmpr9410-001-p15s1w21</m.rf>
+<afun>Atr</afun>
+<ord>21</ord>
+<clause_number>2</clause_number>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p15s1w25">
+<m.rf>m#m-cmpr9410-001-p15s1w25</m.rf>
+<afun>Apos</afun>
+<ord>25</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p15s1w23">
+<m.rf>m#m-cmpr9410-001-p15s1w23</m.rf>
+<afun>Atr</afun>
+<ord>23</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p15s1w24">
+<m.rf>m#m-cmpr9410-001-p15s1w24</m.rf>
+<afun>Sb</afun>
+<is_member>1</is_member>
+<ord>24</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p15s1w27">
+<m.rf>m#m-cmpr9410-001-p15s1w27</m.rf>
+<afun>Sb</afun>
+<is_member>1</is_member>
+<ord>27</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p15s1w26">
+<m.rf>m#m-cmpr9410-001-p15s1w26</m.rf>
+<afun>Atr</afun>
+<ord>26</ord>
+<clause_number>2</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p15s1w28">
+<m.rf>m#m-cmpr9410-001-p15s1w28</m.rf>
+<afun>AuxG</afun>
+<ord>28</ord>
+<clause_number>2</clause_number>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p15s1w31">
+<m.rf>m#m-cmpr9410-001-p15s1w31</m.rf>
+<afun>AuxP</afun>
+<ord>31</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p15s1w30">
+<m.rf>m#m-cmpr9410-001-p15s1w30</m.rf>
+<afun>AuxP</afun>
+<ord>30</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p15s1w35">
+<m.rf>m#m-cmpr9410-001-p15s1w35</m.rf>
+<afun>Coord</afun>
+<ord>35</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p15s1w32">
+<m.rf>m#m-cmpr9410-001-p15s1w32</m.rf>
+<afun>Adv</afun>
+<is_member>1</is_member>
+<ord>32</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p15s1w34">
+<m.rf>m#m-cmpr9410-001-p15s1w34</m.rf>
+<afun>Atr</afun>
+<ord>34</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p15s1w33">
+<m.rf>m#m-cmpr9410-001-p15s1w33</m.rf>
+<afun>Atr</afun>
+<ord>33</ord>
+<clause_number>2</clause_number>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p15s1w36">
+<m.rf>m#m-cmpr9410-001-p15s1w36</m.rf>
+<afun>Adv</afun>
+<is_member>1</is_member>
+<ord>36</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p15s1w37">
+<m.rf>m#m-cmpr9410-001-p15s1w37</m.rf>
+<afun>Atr</afun>
+<ord>37</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p15s1w38">
+<m.rf>m#m-cmpr9410-001-p15s1w38</m.rf>
+<afun>Atr</afun>
+<ord>38</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p15s1w39">
+<m.rf>m#m-cmpr9410-001-p15s1w39</m.rf>
+<afun>Atr</afun>
+<ord>39</ord>
+<clause_number>2</clause_number>
+</LM>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p15s1w40">
+<m.rf>m#m-cmpr9410-001-p15s1w40</m.rf>
+<afun>AuxP</afun>
+<ord>40</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p15s1w41">
+<m.rf>m#m-cmpr9410-001-p15s1w41</m.rf>
+<afun>Adv</afun>
+<ord>41</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p15s1w42">
+<m.rf>m#m-cmpr9410-001-p15s1w42</m.rf>
+<afun>Atr</afun>
+<ord>42</ord>
+<clause_number>2</clause_number>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p15s1w43">
+<m.rf>m#m-cmpr9410-001-p15s1w43</m.rf>
+<afun>Obj</afun>
+<ord>43</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p15s1w44">
+<m.rf>m#m-cmpr9410-001-p15s1w44</m.rf>
+<afun>AuxP</afun>
+<ord>44</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p15s1w45">
+<m.rf>m#m-cmpr9410-001-p15s1w45</m.rf>
+<afun>Atr</afun>
+<ord>45</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p15s1w46">
+<m.rf>m#m-cmpr9410-001-p15s1w46</m.rf>
+<afun>Atr</afun>
+<ord>46</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p15s1w48">
+<m.rf>m#m-cmpr9410-001-p15s1w48</m.rf>
+<afun>AuxP</afun>
+<ord>48</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p15s1w49">
+<m.rf>m#m-cmpr9410-001-p15s1w49</m.rf>
+<afun>Atr</afun>
+<ord>49</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p15s1w47">
+<m.rf>m#m-cmpr9410-001-p15s1w47</m.rf>
+<afun>AuxZ</afun>
+<ord>47</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p15s1w50">
+<m.rf>m#m-cmpr9410-001-p15s1w50</m.rf>
+<afun>Atr</afun>
+<ord>50</ord>
+<clause_number>2</clause_number>
+</LM>
+</children>
+</children>
+</LM>
+</children>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p15s1w51">
+<m.rf>m#m-cmpr9410-001-p15s1w51</m.rf>
+<afun>AuxK</afun>
+<ord>51</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>1) Do 31. března platí v plném rozsahu postup podle dohody ÚNMZ ČR a ÚNMS SR, na jejímž základě český výrobce (slovenský dovozce) získá na základě schválení české zkušebny a rozhodnutí Ministerstva zdravotnictví SR na ÚNMS SR potvrzení o platnosti rozhodnutí i na území SR.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p16s1">
+<s.rf>m#m-cmpr9410-001-p16s1</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p16s1w13">
+<m.rf>m#m-cmpr9410-001-p16s1w13</m.rf>
+<afun>Pred</afun>
+<ord>13</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p16s1w1">
+<m.rf>m#m-cmpr9410-001-p16s1w1</m.rf>
+<afun>AuxG</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p16s1w2">
+<m.rf>m#m-cmpr9410-001-p16s1w2</m.rf>
+<afun>AuxG</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p16s1w3">
+<m.rf>m#m-cmpr9410-001-p16s1w3</m.rf>
+<afun>AuxP</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p16s1w6">
+<m.rf>m#m-cmpr9410-001-p16s1w6</m.rf>
+<afun>Adv</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p16s1w4">
+<m.rf>m#m-cmpr9410-001-p16s1w4</m.rf>
+<afun>Atr</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p16s1w5">
+<m.rf>m#m-cmpr9410-001-p16s1w5</m.rf>
+<afun>AuxG</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p16s1w7">
+<m.rf>m#m-cmpr9410-001-p16s1w7</m.rf>
+<afun>AuxV</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p16s1w8">
+<m.rf>m#m-cmpr9410-001-p16s1w8</m.rf>
+<afun>Sb</afun>
+<ord>8</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p16s1w9">
+<m.rf>m#m-cmpr9410-001-p16s1w9</m.rf>
+<afun>Atr</afun>
+<ord>9</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p16s1w10">
+<m.rf>m#m-cmpr9410-001-p16s1w10</m.rf>
+<afun>Obj</afun>
+<ord>10</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p16s1w12">
+<m.rf>m#m-cmpr9410-001-p16s1w12</m.rf>
+<afun>Atr</afun>
+<ord>12</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p16s1w11">
+<m.rf>m#m-cmpr9410-001-p16s1w11</m.rf>
+<afun>Atr</afun>
+<ord>11</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p16s1w14">
+<m.rf>m#m-cmpr9410-001-p16s1w14</m.rf>
+<afun>AuxK</afun>
+<ord>14</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>2) Od 1. dubna nebude ÚNMS SR rozhodnutí české zkušebny potvrzovat.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p16s2">
+<s.rf>m#m-cmpr9410-001-p16s2</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p16s2w3">
+<m.rf>m#m-cmpr9410-001-p16s2w3</m.rf>
+<afun>Pred</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p16s2w2">
+<m.rf>m#m-cmpr9410-001-p16s2w2</m.rf>
+<afun>Sb</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p16s2w1">
+<m.rf>m#m-cmpr9410-001-p16s2w1</m.rf>
+<afun>Atr</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p16s2w4">
+<m.rf>m#m-cmpr9410-001-p16s2w4</m.rf>
+<afun>AuxP</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p16s2w8">
+<m.rf>m#m-cmpr9410-001-p16s2w8</m.rf>
+<afun>Apos</afun>
+<ord>8</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p16s2w7">
+<m.rf>m#m-cmpr9410-001-p16s2w7</m.rf>
+<afun>Adv</afun>
+<is_member>1</is_member>
+<ord>7</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p16s2w5">
+<m.rf>m#m-cmpr9410-001-p16s2w5</m.rf>
+<afun>Atr</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p16s2w6">
+<m.rf>m#m-cmpr9410-001-p16s2w6</m.rf>
+<afun>Atr</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p16s2w10">
+<m.rf>m#m-cmpr9410-001-p16s2w10</m.rf>
+<afun>Apos</afun>
+<is_member>1</is_member>
+<ord>10</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p16s2w9">
+<m.rf>m#m-cmpr9410-001-p16s2w9</m.rf>
+<afun>Adv</afun>
+<is_member>1</is_member>
+<ord>9</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p16s2w15">
+<m.rf>m#m-cmpr9410-001-p16s2w15</m.rf>
+<afun>Adv</afun>
+<is_member>1</is_member>
+<ord>15</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p16s2w11">
+<m.rf>m#m-cmpr9410-001-p16s2w11</m.rf>
+<afun>Atr</afun>
+<ord>11</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p16s2w13">
+<m.rf>m#m-cmpr9410-001-p16s2w13</m.rf>
+<afun>Coord</afun>
+<ord>13</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p16s2w12">
+<m.rf>m#m-cmpr9410-001-p16s2w12</m.rf>
+<afun>Atr</afun>
+<is_member>1</is_member>
+<ord>12</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p16s2w14">
+<m.rf>m#m-cmpr9410-001-p16s2w14</m.rf>
+<afun>Atr</afun>
+<is_member>1</is_member>
+<ord>14</ord>
+<clause_number>1</clause_number>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p16s2w16">
+<m.rf>m#m-cmpr9410-001-p16s2w16</m.rf>
+<afun>AuxG</afun>
+<ord>16</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p16s2w20">
+<m.rf>m#m-cmpr9410-001-p16s2w20</m.rf>
+<afun>Atr</afun>
+<ord>20</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p16s2w17">
+<m.rf>m#m-cmpr9410-001-p16s2w17</m.rf>
+<afun>AuxX</afun>
+<ord>17</ord>
+<clause_number>0</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p16s2w18">
+<m.rf>m#m-cmpr9410-001-p16s2w18</m.rf>
+<afun>Sb</afun>
+<ord>18</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p16s2w19">
+<m.rf>m#m-cmpr9410-001-p16s2w19</m.rf>
+<afun>AuxV</afun>
+<ord>19</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p16s2w22">
+<m.rf>m#m-cmpr9410-001-p16s2w22</m.rf>
+<afun>AuxP</afun>
+<ord>22</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p16s2w21">
+<m.rf>m#m-cmpr9410-001-p16s2w21</m.rf>
+<afun>AuxP</afun>
+<ord>21</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p16s2w24">
+<m.rf>m#m-cmpr9410-001-p16s2w24</m.rf>
+<afun>Adv</afun>
+<ord>24</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p16s2w23">
+<m.rf>m#m-cmpr9410-001-p16s2w23</m.rf>
+<afun>Atr</afun>
+<ord>23</ord>
+<clause_number>2</clause_number>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p16s2w26">
+<m.rf>m#m-cmpr9410-001-p16s2w26</m.rf>
+<afun>Obj</afun>
+<ord>26</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p16s2w25">
+<m.rf>m#m-cmpr9410-001-p16s2w25</m.rf>
+<afun>Atr</afun>
+<ord>25</ord>
+<clause_number>2</clause_number>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p16s2w27">
+<m.rf>m#m-cmpr9410-001-p16s2w27</m.rf>
+<afun>AuxK</afun>
+<ord>27</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>Tato funkce přejde na příslušnou slovenskou zkušebnu (SPPI - Slovenskou potravinářskou a zemědělskou inspekci), která bude vydávat na základě dodaných podkladů příslušné certifikáty.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p17s1">
+<s.rf>m#m-cmpr9410-001-p17s1</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p17s1w11">
+<m.rf>m#m-cmpr9410-001-p17s1w11</m.rf>
+<afun>Coord</afun>
+<ord>11</ord>
+<clause_number>0</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p17s1w1">
+<m.rf>m#m-cmpr9410-001-p17s1w1</m.rf>
+<afun>AuxG</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p17s1w2">
+<m.rf>m#m-cmpr9410-001-p17s1w2</m.rf>
+<afun>AuxG</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p17s1w10">
+<m.rf>m#m-cmpr9410-001-p17s1w10</m.rf>
+<afun>Pred</afun>
+<is_member>1</is_member>
+<ord>10</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p17s1w5">
+<m.rf>m#m-cmpr9410-001-p17s1w5</m.rf>
+<afun>Sb</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p17s1w4">
+<m.rf>m#m-cmpr9410-001-p17s1w4</m.rf>
+<afun>Atr</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p17s1w3">
+<m.rf>m#m-cmpr9410-001-p17s1w3</m.rf>
+<afun>Adv</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p17s1w6">
+<m.rf>m#m-cmpr9410-001-p17s1w6</m.rf>
+<afun>AuxP</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p17s1w7">
+<m.rf>m#m-cmpr9410-001-p17s1w7</m.rf>
+<afun>Atr</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p17s1w8">
+<m.rf>m#m-cmpr9410-001-p17s1w8</m.rf>
+<afun>Atr</afun>
+<ord>8</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p17s1w9">
+<m.rf>m#m-cmpr9410-001-p17s1w9</m.rf>
+<afun>Atr</afun>
+<ord>9</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+</children>
+</LM>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p17s1w14">
+<m.rf>m#m-cmpr9410-001-p17s1w14</m.rf>
+<afun>Pred</afun>
+<is_member>1</is_member>
+<ord>14</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p17s1w15">
+<m.rf>m#m-cmpr9410-001-p17s1w15</m.rf>
+<afun>AuxP</afun>
+<ord>15</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p17s1w16">
+<m.rf>m#m-cmpr9410-001-p17s1w16</m.rf>
+<afun>Adv</afun>
+<ord>16</ord>
+<clause_number>2</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p17s1w17">
+<m.rf>m#m-cmpr9410-001-p17s1w17</m.rf>
+<afun>Sb</afun>
+<ord>17</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p17s1w13">
+<m.rf>m#m-cmpr9410-001-p17s1w13</m.rf>
+<afun>Obj</afun>
+<ord>13</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p17s1w12">
+<m.rf>m#m-cmpr9410-001-p17s1w12</m.rf>
+<afun>Atr</afun>
+<ord>12</ord>
+<clause_number>2</clause_number>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p17s1w21">
+<m.rf>m#m-cmpr9410-001-p17s1w21</m.rf>
+<afun>Coord</afun>
+<ord>21</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p17s1w19">
+<m.rf>m#m-cmpr9410-001-p17s1w19</m.rf>
+<afun>Adv</afun>
+<is_member>1</is_member>
+<ord>19</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p17s1w18">
+<m.rf>m#m-cmpr9410-001-p17s1w18</m.rf>
+<afun>AuxZ</afun>
+<ord>18</ord>
+<clause_number>2</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p17s1w20">
+<m.rf>m#m-cmpr9410-001-p17s1w20</m.rf>
+<afun>AuxX</afun>
+<ord>20</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p17s1w22">
+<m.rf>m#m-cmpr9410-001-p17s1w22</m.rf>
+<afun>AuxP</afun>
+<ord>22</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p17s1w23">
+<m.rf>m#m-cmpr9410-001-p17s1w23</m.rf>
+<afun>Adv</afun>
+<is_member>1</is_member>
+<ord>23</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p17s1w25">
+<m.rf>m#m-cmpr9410-001-p17s1w25</m.rf>
+<afun>Atr</afun>
+<ord>25</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p17s1w24">
+<m.rf>m#m-cmpr9410-001-p17s1w24</m.rf>
+<afun>Atr</afun>
+<ord>24</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p17s1w26">
+<m.rf>m#m-cmpr9410-001-p17s1w26</m.rf>
+<afun>Atr</afun>
+<ord>26</ord>
+<clause_number>2</clause_number>
+</LM>
+</children>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p17s1w27">
+<m.rf>m#m-cmpr9410-001-p17s1w27</m.rf>
+<afun>AuxK</afun>
+<ord>27</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>3) Dosud vydaná rozhodnutí z doby trvání federace platí a toto zboží lze do SR dodávat i nadále, avšak po vydání příslušného certifikátu SPPI.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p18s1">
+<s.rf>m#m-cmpr9410-001-p18s1</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p18s1w6">
+<m.rf>m#m-cmpr9410-001-p18s1w6</m.rf>
+<afun>Pred</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p18s1w1">
+<m.rf>m#m-cmpr9410-001-p18s1w1</m.rf>
+<afun>AuxG</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p18s1w2">
+<m.rf>m#m-cmpr9410-001-p18s1w2</m.rf>
+<afun>AuxG</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p18s1w17">
+<m.rf>m#m-cmpr9410-001-p18s1w17</m.rf>
+<afun>Pnom</afun>
+<ord>17</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p18s1w3">
+<m.rf>m#m-cmpr9410-001-p18s1w3</m.rf>
+<afun>Adv</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p18s1w4">
+<m.rf>m#m-cmpr9410-001-p18s1w4</m.rf>
+<afun>Atr</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p18s1w5">
+<m.rf>m#m-cmpr9410-001-p18s1w5</m.rf>
+<afun>Atr</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p18s1w7">
+<m.rf>m#m-cmpr9410-001-p18s1w7</m.rf>
+<afun>Obj</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p18s1w9">
+<m.rf>m#m-cmpr9410-001-p18s1w9</m.rf>
+<afun>Atr</afun>
+<ord>9</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p18s1w8">
+<m.rf>m#m-cmpr9410-001-p18s1w8</m.rf>
+<afun>Atr</afun>
+<ord>8</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p18s1w10">
+<m.rf>m#m-cmpr9410-001-p18s1w10</m.rf>
+<afun>Atr</afun>
+<ord>10</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p18s1w11">
+<m.rf>m#m-cmpr9410-001-p18s1w11</m.rf>
+<afun>AuxP</afun>
+<ord>11</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p18s1w12">
+<m.rf>m#m-cmpr9410-001-p18s1w12</m.rf>
+<afun>Obj</afun>
+<ord>12</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p18s1w13">
+<m.rf>m#m-cmpr9410-001-p18s1w13</m.rf>
+<afun>Atr</afun>
+<ord>13</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p18s1w16">
+<m.rf>m#m-cmpr9410-001-p18s1w16</m.rf>
+<afun>Atr</afun>
+<ord>16</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p18s1w14">
+<m.rf>m#m-cmpr9410-001-p18s1w14</m.rf>
+<afun>Atr</afun>
+<ord>14</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p18s1w15">
+<m.rf>m#m-cmpr9410-001-p18s1w15</m.rf>
+<afun>Atr</afun>
+<ord>15</ord>
+<clause_number>1</clause_number>
+</LM>
+</children>
+</children>
+</children>
+</children>
+</children>
+</LM>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p18s1w18">
+<m.rf>m#m-cmpr9410-001-p18s1w18</m.rf>
+<afun>Sb</afun>
+<ord>18</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p18s1w19">
+<m.rf>m#m-cmpr9410-001-p18s1w19</m.rf>
+<afun>Atr</afun>
+<ord>19</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p18s1w20">
+<m.rf>m#m-cmpr9410-001-p18s1w20</m.rf>
+<afun>AuxK</afun>
+<ord>20</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>4) Usnesením vlády SR je koordinací všech akcí souvisejících se zajištěním certifikace dovážených potravinářských výrobků pověřen ÚNMS SR.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p18s2">
+<s.rf>m#m-cmpr9410-001-p18s2</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p18s2w1">
+<m.rf>m#m-cmpr9410-001-p18s2w1</m.rf>
+<afun>Pred</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p18s2w2">
+<m.rf>m#m-cmpr9410-001-p18s2w2</m.rf>
+<afun>AuxT</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p18s2w3">
+<m.rf>m#m-cmpr9410-001-p18s2w3</m.rf>
+<afun>AuxP</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p18s2w4">
+<m.rf>m#m-cmpr9410-001-p18s2w4</m.rf>
+<afun>Obj</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p18s2w5">
+<m.rf>m#m-cmpr9410-001-p18s2w5</m.rf>
+<afun>Atr</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p18s2w6">
+<m.rf>m#m-cmpr9410-001-p18s2w6</m.rf>
+<afun>Atr</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p18s2w7">
+<m.rf>m#m-cmpr9410-001-p18s2w7</m.rf>
+<afun>AuxP</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p18s2w8">
+<m.rf>m#m-cmpr9410-001-p18s2w8</m.rf>
+<afun>Atr</afun>
+<ord>8</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p18s2w11">
+<m.rf>m#m-cmpr9410-001-p18s2w11</m.rf>
+<afun>Atr</afun>
+<ord>11</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p18s2w9">
+<m.rf>m#m-cmpr9410-001-p18s2w9</m.rf>
+<afun>Atr</afun>
+<ord>9</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p18s2w10">
+<m.rf>m#m-cmpr9410-001-p18s2w10</m.rf>
+<afun>AuxG</afun>
+<ord>10</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p18s2w12">
+<m.rf>m#m-cmpr9410-001-p18s2w12</m.rf>
+<afun>Atr</afun>
+<ord>12</ord>
+<clause_number>1</clause_number>
+</LM>
+</children>
+</children>
+</children>
+</LM>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p18s2w13">
+<m.rf>m#m-cmpr9410-001-p18s2w13</m.rf>
+<afun>AuxK</afun>
+<ord>13</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>Jedná se o usnesení číslo 64 ze dne 1. února 1994.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p18s3">
+<s.rf>m#m-cmpr9410-001-p18s3</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p18s3w4">
+<m.rf>m#m-cmpr9410-001-p18s3w4</m.rf>
+<afun>Pred</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p18s3w1">
+<m.rf>m#m-cmpr9410-001-p18s3w1</m.rf>
+<afun>AuxP</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p18s3w3">
+<m.rf>m#m-cmpr9410-001-p18s3w3</m.rf>
+<afun>Adv</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p18s3w2">
+<m.rf>m#m-cmpr9410-001-p18s3w2</m.rf>
+<afun>Atr</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p18s3w5">
+<m.rf>m#m-cmpr9410-001-p18s3w5</m.rf>
+<afun>Sb</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p18s3w8">
+<m.rf>m#m-cmpr9410-001-p18s3w8</m.rf>
+<afun>Obj</afun>
+<ord>8</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p18s3w6">
+<m.rf>m#m-cmpr9410-001-p18s3w6</m.rf>
+<afun>AuxZ</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p18s3w7">
+<m.rf>m#m-cmpr9410-001-p18s3w7</m.rf>
+<afun>Atr</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+</LM>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p18s3w9">
+<m.rf>m#m-cmpr9410-001-p18s3w9</m.rf>
+<afun>AuxK</afun>
+<ord>9</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>Na tomto úřadě lze získat i potřebné informace.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p19s1">
+<s.rf>m#m-cmpr9410-001-p19s1</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p19s1w7">
+<m.rf>m#m-cmpr9410-001-p19s1w7</m.rf>
+<afun>Pred</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p19s1w1">
+<m.rf>m#m-cmpr9410-001-p19s1w1</m.rf>
+<afun>AuxG</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p19s1w2">
+<m.rf>m#m-cmpr9410-001-p19s1w2</m.rf>
+<afun>AuxG</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p19s1w5">
+<m.rf>m#m-cmpr9410-001-p19s1w5</m.rf>
+<afun>Sb</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p19s1w3">
+<m.rf>m#m-cmpr9410-001-p19s1w3</m.rf>
+<afun>Atr</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p19s1w4">
+<m.rf>m#m-cmpr9410-001-p19s1w4</m.rf>
+<afun>Atr</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p19s1w6">
+<m.rf>m#m-cmpr9410-001-p19s1w6</m.rf>
+<afun>AuxV</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p19s1w8">
+<m.rf>m#m-cmpr9410-001-p19s1w8</m.rf>
+<afun>AuxP</afun>
+<ord>8</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p19s1w11">
+<m.rf>m#m-cmpr9410-001-p19s1w11</m.rf>
+<afun>Adv</afun>
+<ord>11</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p19s1w9">
+<m.rf>m#m-cmpr9410-001-p19s1w9</m.rf>
+<afun>Atr</afun>
+<ord>9</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p19s1w10">
+<m.rf>m#m-cmpr9410-001-p19s1w10</m.rf>
+<afun>Atr</afun>
+<ord>10</ord>
+<clause_number>1</clause_number>
+</LM>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p19s1w14">
+<m.rf>m#m-cmpr9410-001-p19s1w14</m.rf>
+<afun>Coord</afun>
+<ord>14</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p19s1w13">
+<m.rf>m#m-cmpr9410-001-p19s1w13</m.rf>
+<afun>Obj</afun>
+<is_member>1</is_member>
+<ord>13</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p19s1w12">
+<m.rf>m#m-cmpr9410-001-p19s1w12</m.rf>
+<afun>Atr</afun>
+<ord>12</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p19s1w15">
+<m.rf>m#m-cmpr9410-001-p19s1w15</m.rf>
+<afun>Adv</afun>
+<is_member>1</is_member>
+<ord>15</ord>
+<clause_number>1</clause_number>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p19s1w16">
+<m.rf>m#m-cmpr9410-001-p19s1w16</m.rf>
+<afun>AuxK</afun>
+<ord>16</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>5) Slovenská celní správa bude vyžadovat u každé jednotlivé dodávky originální rozhodnutí či certifikát.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p19s2">
+<s.rf>m#m-cmpr9410-001-p19s2</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p19s2w4">
+<m.rf>m#m-cmpr9410-001-p19s2w4</m.rf>
+<afun>Pred</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p19s2w2">
+<m.rf>m#m-cmpr9410-001-p19s2w2</m.rf>
+<afun>Sb</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p19s2w1">
+<m.rf>m#m-cmpr9410-001-p19s2w1</m.rf>
+<afun>Atr</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p19s2w3">
+<m.rf>m#m-cmpr9410-001-p19s2w3</m.rf>
+<afun>Adv</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p19s2w5">
+<m.rf>m#m-cmpr9410-001-p19s2w5</m.rf>
+<afun>AuxP</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p19s2w6">
+<m.rf>m#m-cmpr9410-001-p19s2w6</m.rf>
+<afun>Adv</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p19s2w7">
+<m.rf>m#m-cmpr9410-001-p19s2w7</m.rf>
+<afun>Obj</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p19s2w9">
+<m.rf>m#m-cmpr9410-001-p19s2w9</m.rf>
+<afun>Atr</afun>
+<ord>9</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p19s2w8">
+<m.rf>m#m-cmpr9410-001-p19s2w8</m.rf>
+<afun>Atr</afun>
+<ord>8</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p19s2w10">
+<m.rf>m#m-cmpr9410-001-p19s2w10</m.rf>
+<afun>AuxK</afun>
+<ord>10</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>Tento postup si vyžádá v praxi zhotovování ověřených kopií.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p20s1">
+<s.rf>m#m-cmpr9410-001-p20s1</s.rf>
+<ord>0</ord>
+<children id="a-cmpr9410-001-p20s1w7">
+<m.rf>m#m-cmpr9410-001-p20s1w7</m.rf>
+<afun>Pred</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p20s1w1">
+<m.rf>m#m-cmpr9410-001-p20s1w1</m.rf>
+<afun>AuxG</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p20s1w2">
+<m.rf>m#m-cmpr9410-001-p20s1w2</m.rf>
+<afun>AuxG</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p20s1w3">
+<m.rf>m#m-cmpr9410-001-p20s1w3</m.rf>
+<afun>Sb</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p20s1w4">
+<m.rf>m#m-cmpr9410-001-p20s1w4</m.rf>
+<afun>Atr</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p20s1w6">
+<m.rf>m#m-cmpr9410-001-p20s1w6</m.rf>
+<afun>Atr</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p20s1w5">
+<m.rf>m#m-cmpr9410-001-p20s1w5</m.rf>
+<afun>Atr</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p20s1w9">
+<m.rf>m#m-cmpr9410-001-p20s1w9</m.rf>
+<afun>AuxP</afun>
+<ord>9</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p20s1w8">
+<m.rf>m#m-cmpr9410-001-p20s1w8</m.rf>
+<afun>AuxP</afun>
+<ord>8</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p20s1w10">
+<m.rf>m#m-cmpr9410-001-p20s1w10</m.rf>
+<afun>Adv</afun>
+<ord>10</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p20s1w11">
+<m.rf>m#m-cmpr9410-001-p20s1w11</m.rf>
+<afun>Atr</afun>
+<ord>11</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p20s1w12">
+<m.rf>m#m-cmpr9410-001-p20s1w12</m.rf>
+<afun>Atr</afun>
+<ord>12</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p20s1w14">
+<m.rf>m#m-cmpr9410-001-p20s1w14</m.rf>
+<afun>Atr</afun>
+<ord>14</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p20s1w13">
+<m.rf>m#m-cmpr9410-001-p20s1w13</m.rf>
+<afun>Atr</afun>
+<ord>13</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p20s1w15">
+<m.rf>m#m-cmpr9410-001-p20s1w15</m.rf>
+<afun>Atr</afun>
+<ord>15</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p20s1w17">
+<m.rf>m#m-cmpr9410-001-p20s1w17</m.rf>
+<afun>Atr</afun>
+<ord>17</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p20s1w16">
+<m.rf>m#m-cmpr9410-001-p20s1w16</m.rf>
+<afun>AuxG</afun>
+<ord>16</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p20s1w18">
+<m.rf>m#m-cmpr9410-001-p20s1w18</m.rf>
+<afun>Atr</afun>
+<ord>18</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p20s1w19">
+<m.rf>m#m-cmpr9410-001-p20s1w19</m.rf>
+<afun>AuxG</afun>
+<ord>19</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p20s1w21">
+<m.rf>m#m-cmpr9410-001-p20s1w21</m.rf>
+<afun>Atr</afun>
+<ord>21</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p20s1w20">
+<m.rf>m#m-cmpr9410-001-p20s1w20</m.rf>
+<afun>AuxX</afun>
+<ord>20</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p20s1w22">
+<m.rf>m#m-cmpr9410-001-p20s1w22</m.rf>
+<afun>AuxP</afun>
+<ord>22</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p20s1w23">
+<m.rf>m#m-cmpr9410-001-p20s1w23</m.rf>
+<afun>Adv</afun>
+<ord>23</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p20s1w24">
+<m.rf>m#m-cmpr9410-001-p20s1w24</m.rf>
+<afun>Atr</afun>
+<ord>24</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p20s1w25">
+<m.rf>m#m-cmpr9410-001-p20s1w25</m.rf>
+<afun>Atr</afun>
+<ord>25</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p20s1w26">
+<m.rf>m#m-cmpr9410-001-p20s1w26</m.rf>
+<afun>Atr</afun>
+<ord>26</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p20s1w27">
+<m.rf>m#m-cmpr9410-001-p20s1w27</m.rf>
+<afun>AuxP</afun>
+<ord>27</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p20s1w28">
+<m.rf>m#m-cmpr9410-001-p20s1w28</m.rf>
+<afun>Adv</afun>
+<ord>28</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p20s1w29">
+<m.rf>m#m-cmpr9410-001-p20s1w29</m.rf>
+<afun>Atr</afun>
+<ord>29</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p20s1w30">
+<m.rf>m#m-cmpr9410-001-p20s1w30</m.rf>
+<afun>Atr</afun>
+<ord>30</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p20s1w31">
+<m.rf>m#m-cmpr9410-001-p20s1w31</m.rf>
+<afun>Atr</afun>
+<ord>31</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p20s1w33">
+<m.rf>m#m-cmpr9410-001-p20s1w33</m.rf>
+<afun>Atr</afun>
+<ord>33</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p20s1w32">
+<m.rf>m#m-cmpr9410-001-p20s1w32</m.rf>
+<afun>AuxG</afun>
+<ord>32</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p20s1w34">
+<m.rf>m#m-cmpr9410-001-p20s1w34</m.rf>
+<afun>Atr</afun>
+<ord>34</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p20s1w35">
+<m.rf>m#m-cmpr9410-001-p20s1w35</m.rf>
+<afun>AuxG</afun>
+<ord>35</ord>
+<clause_number>0</clause_number>
+</children>
+</LM>
+</children>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</children>
+<sentence>6) Povinnost certifikace těchto výrobků vznikla na základě novelizace paragrafu 47 celního zákona 618/1992 SB., novelizovaného v zákoně 325 článek 8 ve znění zákona číslo 165/1993 Sb.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p21s1">
+<s.rf>m#m-cmpr9410-001-p21s1</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p21s1w6">
+<m.rf>m#m-cmpr9410-001-p21s1w6</m.rf>
+<afun>Pred</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p21s1w1">
+<m.rf>m#m-cmpr9410-001-p21s1w1</m.rf>
+<afun>AuxG</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p21s1w2">
+<m.rf>m#m-cmpr9410-001-p21s1w2</m.rf>
+<afun>AuxG</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p21s1w3">
+<m.rf>m#m-cmpr9410-001-p21s1w3</m.rf>
+<afun>AuxP</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p21s1w5">
+<m.rf>m#m-cmpr9410-001-p21s1w5</m.rf>
+<afun>Adv</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p21s1w4">
+<m.rf>m#m-cmpr9410-001-p21s1w4</m.rf>
+<afun>Atr</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p21s1w7">
+<m.rf>m#m-cmpr9410-001-p21s1w7</m.rf>
+<afun>AuxP</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p21s1w10">
+<m.rf>m#m-cmpr9410-001-p21s1w10</m.rf>
+<afun>Adv</afun>
+<ord>10</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p21s1w8">
+<m.rf>m#m-cmpr9410-001-p21s1w8</m.rf>
+<afun>Atr</afun>
+<ord>8</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p21s1w9">
+<m.rf>m#m-cmpr9410-001-p21s1w9</m.rf>
+<afun>AuxG</afun>
+<ord>9</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p21s1w11">
+<m.rf>m#m-cmpr9410-001-p21s1w11</m.rf>
+<afun>Sb</afun>
+<ord>11</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p21s1w13">
+<m.rf>m#m-cmpr9410-001-p21s1w13</m.rf>
+<afun>AuxC</afun>
+<ord>13</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p21s1w12">
+<m.rf>m#m-cmpr9410-001-p21s1w12</m.rf>
+<afun>AuxX</afun>
+<ord>12</ord>
+<clause_number>0</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p21s1w19">
+<m.rf>m#m-cmpr9410-001-p21s1w19</m.rf>
+<afun>Atr</afun>
+<ord>18</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p21s1w15">
+<m.rf>m#m-cmpr9410-001-p21s1w15</m.rf>
+<afun>AuxP</afun>
+<ord>14</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p21s1w16">
+<m.rf>m#m-cmpr9410-001-p21s1w16</m.rf>
+<afun>Adv</afun>
+<ord>15</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p21s1w18">
+<m.rf>m#m-cmpr9410-001-p21s1w18</m.rf>
+<afun>Atr</afun>
+<ord>17</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p21s1w17">
+<m.rf>m#m-cmpr9410-001-p21s1w17</m.rf>
+<afun>Atr</afun>
+<ord>16</ord>
+<clause_number>2</clause_number>
+</children>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p21s1w20">
+<m.rf>m#m-cmpr9410-001-p21s1w20</m.rf>
+<afun>Sb</afun>
+<ord>19</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p21s1w21">
+<m.rf>m#m-cmpr9410-001-p21s1w21</m.rf>
+<afun>Pnom</afun>
+<ord>20</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p21s1w23">
+<m.rf>m#m-cmpr9410-001-p21s1w23</m.rf>
+<afun>Coord</afun>
+<ord>22</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p21s1w22">
+<m.rf>m#m-cmpr9410-001-p21s1w22</m.rf>
+<afun>Adv</afun>
+<is_member>1</is_member>
+<ord>21</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p21s1w25">
+<m.rf>m#m-cmpr9410-001-p21s1w25</m.rf>
+<afun>Adv</afun>
+<is_member>1</is_member>
+<ord>24</ord>
+<clause_number>2</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p21s1w24">
+<m.rf>m#m-cmpr9410-001-p21s1w24</m.rf>
+<afun>Atr</afun>
+<ord>23</ord>
+<clause_number>2</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p21s1w26">
+<m.rf>m#m-cmpr9410-001-p21s1w26</m.rf>
+<afun>Atr</afun>
+<ord>25</ord>
+<clause_number>2</clause_number>
+<children id="a-cmpr9410-001-p21s1w27">
+<m.rf>m#m-cmpr9410-001-p21s1w27</m.rf>
+<afun>Atr</afun>
+<ord>26</ord>
+<clause_number>2</clause_number>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p21s1w28">
+<m.rf>m#m-cmpr9410-001-p21s1w28</m.rf>
+<afun>AuxK</afun>
+<ord>27</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>7) Ve všech případech vzniká od 1. dubna povinnost, aby při přechodu slovenských hranic byla dodávka vybavena originálem nebo ověřenou kopií certifikátu SPPI.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p22s1">
+<s.rf>m#m-cmpr9410-001-p22s1</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p22s1w11">
+<m.rf>m#m-cmpr9410-001-p22s1w11</m.rf>
+<afun>Pred</afun>
+<ord>11</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p22s1w1">
+<m.rf>m#m-cmpr9410-001-p22s1w1</m.rf>
+<afun>AuxG</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p22s1w2">
+<m.rf>m#m-cmpr9410-001-p22s1w2</m.rf>
+<afun>AuxG</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p22s1w4">
+<m.rf>m#m-cmpr9410-001-p22s1w4</m.rf>
+<afun>Obj</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p22s1w3">
+<m.rf>m#m-cmpr9410-001-p22s1w3</m.rf>
+<afun>Atr</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p22s1w5">
+<m.rf>m#m-cmpr9410-001-p22s1w5</m.rf>
+<afun>AuxC</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p22s1w6">
+<m.rf>m#m-cmpr9410-001-p22s1w6</m.rf>
+<afun>AuxP</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p22s1w8">
+<m.rf>m#m-cmpr9410-001-p22s1w8</m.rf>
+<afun>ExD</afun>
+<ord>8</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p22s1w7">
+<m.rf>m#m-cmpr9410-001-p22s1w7</m.rf>
+<afun>Atr</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+</children>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p22s1w9">
+<m.rf>m#m-cmpr9410-001-p22s1w9</m.rf>
+<afun>AuxV</afun>
+<ord>9</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p22s1w10">
+<m.rf>m#m-cmpr9410-001-p22s1w10</m.rf>
+<afun>Sb</afun>
+<ord>10</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p22s1w13">
+<m.rf>m#m-cmpr9410-001-p22s1w13</m.rf>
+<afun>AuxP</afun>
+<ord>13</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p22s1w14">
+<m.rf>m#m-cmpr9410-001-p22s1w14</m.rf>
+<afun>Adv</afun>
+<ord>14</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p22s1w12">
+<m.rf>m#m-cmpr9410-001-p22s1w12</m.rf>
+<afun>AuxZ</afun>
+<ord>12</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p22s1w15">
+<m.rf>m#m-cmpr9410-001-p22s1w15</m.rf>
+<afun>Atr</afun>
+<ord>15</ord>
+<clause_number>1</clause_number>
+</LM>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p22s1w16">
+<m.rf>m#m-cmpr9410-001-p22s1w16</m.rf>
+<afun>AuxK</afun>
+<ord>16</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>8) Stejné požadavky jako na dovážené výrobky bude SPPI uplatňovat i u výrobků tuzemských.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p23s1">
+<s.rf>m#m-cmpr9410-001-p23s1</s.rf>
+<ord>0</ord>
+<children id="a-cmpr9410-001-p23s1w1">
+<m.rf>m#m-cmpr9410-001-p23s1w1</m.rf>
+<afun>ExD</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p23s1w2">
+<m.rf>m#m-cmpr9410-001-p23s1w2</m.rf>
+<afun>AuxP</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p23s1w3">
+<m.rf>m#m-cmpr9410-001-p23s1w3</m.rf>
+<afun>Atr</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+</children>
+<sentence>Text k foto</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p24s1">
+<s.rf>m#m-cmpr9410-001-p24s1</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p24s1w1">
+<m.rf>m#m-cmpr9410-001-p24s1w1</m.rf>
+<afun>AuxC</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p24s1w2">
+<m.rf>m#m-cmpr9410-001-p24s1w2</m.rf>
+<afun>ExD</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p24s1w4">
+<m.rf>m#m-cmpr9410-001-p24s1w4</m.rf>
+<afun>ExD</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p24s1w3">
+<m.rf>m#m-cmpr9410-001-p24s1w3</m.rf>
+<afun>Atr</afun>
+<ord>3</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p24s1w6">
+<m.rf>m#m-cmpr9410-001-p24s1w6</m.rf>
+<afun>Atr</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p24s1w5">
+<m.rf>m#m-cmpr9410-001-p24s1w5</m.rf>
+<afun>Adv</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p24s1w7">
+<m.rf>m#m-cmpr9410-001-p24s1w7</m.rf>
+<afun>Obj</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p24s1w9">
+<m.rf>m#m-cmpr9410-001-p24s1w9</m.rf>
+<afun>Atr</afun>
+<ord>9</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p24s1w8">
+<m.rf>m#m-cmpr9410-001-p24s1w8</m.rf>
+<afun>Atr</afun>
+<ord>8</ord>
+<clause_number>1</clause_number>
+</children>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p24s1w10">
+<m.rf>m#m-cmpr9410-001-p24s1w10</m.rf>
+<afun>AuxK</afun>
+<ord>10</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>ŽE BY NOVÁ CESTA JAK ŘEŠIT PROBLÉMY CELNÍ UNIE?</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p24s2">
+<s.rf>m#m-cmpr9410-001-p24s2</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p24s2w4">
+<m.rf>m#m-cmpr9410-001-p24s2w4</m.rf>
+<afun>Coord</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p24s2w1">
+<m.rf>m#m-cmpr9410-001-p24s2w1</m.rf>
+<afun>ExD</afun>
+<is_member>1</is_member>
+<ord>1</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p24s2w2">
+<m.rf>m#m-cmpr9410-001-p24s2w2</m.rf>
+<afun>AuxP</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p24s2w3">
+<m.rf>m#m-cmpr9410-001-p24s2w3</m.rf>
+<afun>ExD</afun>
+<is_member>1</is_member>
+<ord>3</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p24s2w8">
+<m.rf>m#m-cmpr9410-001-p24s2w8</m.rf>
+<afun>Pred</afun>
+<is_member>1</is_member>
+<ord>8</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p24s2w5">
+<m.rf>m#m-cmpr9410-001-p24s2w5</m.rf>
+<afun>Obj</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p24s2w6">
+<m.rf>m#m-cmpr9410-001-p24s2w6</m.rf>
+<afun>AuxR</afun>
+<ord>6</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p24s2w7">
+<m.rf>m#m-cmpr9410-001-p24s2w7</m.rf>
+<afun>Sb</afun>
+<ord>7</ord>
+<clause_number>1</clause_number>
+</LM>
+</children>
+</LM>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p24s2w9">
+<m.rf>m#m-cmpr9410-001-p24s2w9</m.rf>
+<afun>AuxK</afun>
+<ord>9</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>Což o to, zkusit se to může.</sentence>
+</LM>
+<LM id="a-cmpr9410-001-p24s3">
+<s.rf>m#m-cmpr9410-001-p24s3</s.rf>
+<ord>0</ord>
+<children>
+<LM id="a-cmpr9410-001-p24s3w1">
+<m.rf>m#m-cmpr9410-001-p24s3w1</m.rf>
+<afun>Coord</afun>
+<ord>1</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p24s3w3">
+<m.rf>m#m-cmpr9410-001-p24s3w3</m.rf>
+<afun>Pred</afun>
+<is_member>1</is_member>
+<ord>3</ord>
+<clause_number>1</clause_number>
+<children>
+<LM id="a-cmpr9410-001-p24s3w2">
+<m.rf>m#m-cmpr9410-001-p24s3w2</m.rf>
+<afun>Sb</afun>
+<ord>2</ord>
+<clause_number>1</clause_number>
+</LM>
+<LM id="a-cmpr9410-001-p24s3w5">
+<m.rf>m#m-cmpr9410-001-p24s3w5</m.rf>
+<afun>Pnom</afun>
+<ord>5</ord>
+<clause_number>1</clause_number>
+<children id="a-cmpr9410-001-p24s3w4">
+<m.rf>m#m-cmpr9410-001-p24s3w4</m.rf>
+<afun>Adv</afun>
+<ord>4</ord>
+<clause_number>1</clause_number>
+</children>
+</LM>
+</children>
+</children>
+</LM>
+<LM id="a-cmpr9410-001-p24s3w6">
+<m.rf>m#m-cmpr9410-001-p24s3w6</m.rf>
+<afun>AuxK</afun>
+<ord>6</ord>
+<clause_number>0</clause_number>
+</LM>
+</children>
+<sentence>Ale šance je přesto minimální.</sentence>
+</LM>
+</trees>
+</adata>
