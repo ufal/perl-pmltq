@@ -41,20 +41,9 @@
     <structure name="m-node" role="#NODE">
       <member as_attribute="1" name="id" role="#ID" required="1"><cdata format="ID"/></member>
       <member name="src.rf"><cdata format="PMLREF"/></member>
-      <member name="form_change" type="m-form_change.type"/>
       <member name="form" required="1"><cdata format="any"/></member>
       <member name="lemma" required="1"><cdata format="any"/></member>
       <member name="tag" required="1"><cdata format="any"/></member>
     </structure>
   </type>
-
-  <type name="m-form_change.type">
-    <choice>
-      <value>ctcd</value>
-      <value>spell</value>
-      <value>insert</value>
-      <value>num_normalization</value>
-    </choice>
-  </type>
-
 </pml_schema>
