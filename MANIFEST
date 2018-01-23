@@ -246,8 +246,8 @@ t/pod.t
 xt/author/conversion_test_treebanks/mschema_test/data/cmpr9410_001.a.xml
 xt/author/conversion_test_treebanks/mschema_test/data/cmpr9410_001.m.xml
 xt/author/conversion_test_treebanks/mschema_test/pmltq.yml
-xt/author/conversion_test_treebanks/mschema_test/resources/adata_30_schema.xml
-xt/author/conversion_test_treebanks/mschema_test/resources/mdata_30_schema.xml
+xt/author/conversion_test_treebanks/mschema_test/resources/aschema.xml
+xt/author/conversion_test_treebanks/mschema_test/resources/mschema.xml
 xt/author/convert_command.t
 xt/author/init_command.t
 xt/author/lib/PML.pm

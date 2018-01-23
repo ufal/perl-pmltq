@@ -3,10 +3,10 @@
   xmlns="http://ufal.mff.cuni.cz/pdt/pml/schema/"
   version="1.1">
   <revision>1.0.0</revision>
-  <description>PDT 3.0 analytical trees</description>
+  <description>test schema</description>
   <reference name="mdata" readas="pml"/>
 
-  <import schema="mdata_30_schema.xml" type="m-node.type" minimal_revision="1.0.0"/>
+  <import schema="mschema.xml" type="m-node.type" minimal_revision="1.0.0"/>
 
   <derive type="m-node.type">
     <structure name="m-node">

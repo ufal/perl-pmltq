@@ -3,7 +3,7 @@
   xmlns="http://ufal.mff.cuni.cz/pdt/pml/schema/"
   version="1.1">
   <revision>1.0.0</revision>
-  <description>PDT 3.0 morphological annotation</description>
+  <description>test schema</description>
   
   <root name="mdata" type="m-mdata.type"/>
 
