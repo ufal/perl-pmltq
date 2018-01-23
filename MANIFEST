@@ -243,13 +243,11 @@ share/static/menubar/menu.css
 share/static/menubar/menu.js
 t/00-compile.t
 t/pod.t
-xt/author/conversion_test_treebanks/mschema_test/data/cmpr9410_001.a.gz
-xt/author/conversion_test_treebanks/mschema_test/data/cmpr9410_001.m.gz
-xt/author/conversion_test_treebanks/mschema_test/data/cmpr9410_001.w.gz
+xt/author/conversion_test_treebanks/mschema_test/data/cmpr9410_001.a.xml
+xt/author/conversion_test_treebanks/mschema_test/data/cmpr9410_001.m.xml
 xt/author/conversion_test_treebanks/mschema_test/pmltq.yml
 xt/author/conversion_test_treebanks/mschema_test/resources/adata_30_schema.xml
 xt/author/conversion_test_treebanks/mschema_test/resources/mdata_30_schema.xml
-xt/author/conversion_test_treebanks/mschema_test/resources/wdata_30_schema.xml
 xt/author/convert_command.t
 xt/author/init_command.t
 xt/author/lib/PML.pm

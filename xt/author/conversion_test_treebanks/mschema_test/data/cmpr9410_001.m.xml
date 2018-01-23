@@ -2,9 +2,6 @@
 <mdata xmlns="http://ufal.mff.cuni.cz/pdt/pml/">
  <head>
   <schema href="mdata_30_schema.xml" />
-  <references>
-   <reffile id="w" name="wdata" href="cmpr9410_001.w.xml" />
-  </references>
  </head>
  <meta>
   <lang>cs</lang>
@@ -15,36 +12,36 @@
  <s id="m-cmpr9410-001-p2s1">
   <m id="m-cmpr9410-001-p2s1w1">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p2s1w1</LM>
-   </w.rf>
+
+
+
    <form>Celní</form>
    <lemma>celní</lemma>
    <tag>AAFS1----1A----</tag>
   </m>
   <m id="m-cmpr9410-001-p2s1w2">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p2s1w2</LM>
-   </w.rf>
+
+
+
    <form>unie</form>
    <lemma>unie</lemma>
    <tag>NNFS1-----A----</tag>
   </m>
   <m id="m-cmpr9410-001-p2s1w3">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p2s1w3</LM>
-   </w.rf>
+
+
+
    <form>v</form>
    <lemma>v-1</lemma>
    <tag>RR--6----------</tag>
   </m>
   <m id="m-cmpr9410-001-p2s1w4">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p2s1w4</LM>
-   </w.rf>
+
+
+
    <form>ohrožení</form>
    <lemma>ohrožení_^(*4zit)</lemma>
    <tag>NNNS6-----A----</tag>
@@ -53,63 +50,63 @@
  <s id="m-cmpr9410-001-p3s1">
   <m id="m-cmpr9410-001-p3s1w1">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p3s1w1</LM>
-   </w.rf>
+
+
+
    <form>Nová</form>
    <lemma>nový</lemma>
    <tag>AANP1----1A----</tag>
   </m>
   <m id="m-cmpr9410-001-p3s1w2">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p3s1w2</LM>
-   </w.rf>
+
+
+
    <form>striktní</form>
    <lemma>striktní</lemma>
    <tag>AANP1----1A----</tag>
   </m>
   <m id="m-cmpr9410-001-p3s1w3">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p3s1w3</LM>
-   </w.rf>
+
+
+
    <form>omezení</form>
    <lemma>omezení_^(*3it)</lemma>
    <tag>NNNP1-----A----</tag>
   </m>
   <m id="m-cmpr9410-001-p3s1w4">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p3s1w4</LM>
-   </w.rf>
+
+
+
    <form>vlády</form>
    <lemma>vláda</lemma>
    <tag>NNFS2-----A----</tag>
   </m>
   <m id="m-cmpr9410-001-p3s1w5">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p3s1w5</LM>
-   </w.rf>
+
+
+
    <form>SR</form>
    <lemma>SR-1_:B_;G_^(Slovenská_republika)</lemma>
    <tag>NNFXX-----A---8</tag>
   </m>
   <m id="m-cmpr9410-001-p3s1w6">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p3s1w6</LM>
-   </w.rf>
+
+
+
    <form>proti</form>
    <lemma>proti-1</lemma>
    <tag>RR--3----------</tag>
   </m>
   <m id="m-cmpr9410-001-p3s1w7">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p3s1w7</LM>
-   </w.rf>
+
+
+
    <form_change>spell</form_change>
    <form>českým</form>
    <lemma>český</lemma>
@@ -117,9 +114,9 @@
   </m>
   <m id="m-cmpr9410-001-p3s1w8">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p3s1w8</LM>
-   </w.rf>
+
+
+
    <form>exportérům</form>
    <lemma>exportér</lemma>
    <tag>NNMP3-----A----</tag>
@@ -128,171 +125,171 @@
  <s id="m-cmpr9410-001-p4s1">
   <m id="m-cmpr9410-001-p4s1w1">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s1w1</LM>
-   </w.rf>
+
+
+
    <form>Z</form>
    <lemma>z-1</lemma>
    <tag>RR--2----------</tag>
   </m>
   <m id="m-cmpr9410-001-p4s1w2">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s1w2</LM>
-   </w.rf>
+
+
+
    <form>téměř</form>
    <lemma>téměř</lemma>
    <tag>Db-------------</tag>
   </m>
   <m id="m-cmpr9410-001-p4s1w3">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s1w3</LM>
-   </w.rf>
+
+
+
    <form>tří</form>
    <lemma>tři`3</lemma>
    <tag>ClXP2----------</tag>
   </m>
   <m id="m-cmpr9410-001-p4s1w4">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s1w4</LM>
-   </w.rf>
+
+
+
    <form>desítek</form>
    <lemma>desítka</lemma>
    <tag>NNFP2-----A----</tag>
   </m>
   <m id="m-cmpr9410-001-p4s1w5">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s1w5</LM>
-   </w.rf>
+
+
+
    <form>smluv</form>
    <lemma>smlouva</lemma>
    <tag>NNFP2-----A----</tag>
   </m>
   <m id="m-cmpr9410-001-p4s1w6">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s1w6</LM>
-   </w.rf>
+
+
+
    <form>upravujících</form>
    <lemma>upravující_^(*5ovat)</lemma>
    <tag>AGFP2-----A----</tag>
   </m>
   <m id="m-cmpr9410-001-p4s1w7">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s1w7</LM>
-   </w.rf>
+
+
+
    <form>vztahy</form>
    <lemma>vztah</lemma>
    <tag>NNIP4-----A----</tag>
   </m>
   <m id="m-cmpr9410-001-p4s1w8">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s1w8</LM>
-   </w.rf>
+
+
+
    <form>mezi</form>
    <lemma>mezi-1</lemma>
    <tag>RR--7----------</tag>
   </m>
   <m id="m-cmpr9410-001-p4s1w9">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s1w9</LM>
-   </w.rf>
+
+
+
    <form>oběma</form>
    <lemma>oba`2</lemma>
    <tag>ClXP7----------</tag>
   </m>
   <m id="m-cmpr9410-001-p4s1w10">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s1w10</LM>
-   </w.rf>
+
+
+
    <form>subjekty</form>
    <lemma>subjekt</lemma>
    <tag>NNIP7-----A----</tag>
   </m>
   <m id="m-cmpr9410-001-p4s1w11">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s1w11</LM>
-   </w.rf>
+
+
+
    <form>celního</form>
    <lemma>celní</lemma>
    <tag>AANS2----1A----</tag>
   </m>
   <m id="m-cmpr9410-001-p4s1w12">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s1w12</LM>
-   </w.rf>
+
+
+
    <form>soustátí</form>
    <lemma>soustátí</lemma>
    <tag>NNNS2-----A----</tag>
   </m>
   <m id="m-cmpr9410-001-p4s1w13">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s1w13</LM>
-   </w.rf>
+
+
+
    <form>jsou</form>
    <lemma>být</lemma>
    <tag>VB-P---3P-AA---</tag>
   </m>
   <m id="m-cmpr9410-001-p4s1w14">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s1w14</LM>
-   </w.rf>
+
+
+
    <form>okamžitě</form>
    <lemma>okamžitě_^(*1ý)</lemma>
    <tag>Dg-------1A----</tag>
   </m>
   <m id="m-cmpr9410-001-p4s1w15">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s1w15</LM>
-   </w.rf>
+
+
+
    <form>vypověditelné</form>
    <lemma>vypověditelný_^(*6ět)</lemma>
    <tag>AAFP1----1A----</tag>
   </m>
   <m id="m-cmpr9410-001-p4s1w16">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s1w16</LM>
-   </w.rf>
+
+
+
    <form>všechny</form>
    <lemma>všechen</lemma>
    <tag>PLFP1----------</tag>
   </m>
   <m id="m-cmpr9410-001-p4s1w17">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s1w17</LM>
-   </w.rf>
+
+
+
    <form>.</form>
    <lemma>.</lemma>
    <tag>Z:-------------</tag>
   </m>
   <m id="m-cmpr9410-001-p4s1w18">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s1w18</LM>
-   </w.rf>
+
+
+
    <form>.</form>
    <lemma>.</lemma>
    <tag>Z:-------------</tag>
   </m>
   <m id="m-cmpr9410-001-p4s1w19">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s1w19</LM>
-   </w.rf>
+
+
+
    <form>.</form>
    <lemma>.</lemma>
    <tag>Z:-------------</tag>
@@ -301,234 +298,234 @@
  <s id="m-cmpr9410-001-p4s2">
   <m id="m-cmpr9410-001-p4s2w1">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w1</LM>
-   </w.rf>
+
+
+
    <form>Až</form>
    <lemma>až-3_^(až_k_...,_až_dost)</lemma>
    <tag>TT-------------</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w2">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w2</LM>
-   </w.rf>
+
+
+
    <form>na</form>
    <lemma>na-1</lemma>
    <tag>RR--4----------</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w3">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w3</LM>
-   </w.rf>
+
+
+
    <form>jednu</form>
    <lemma>jeden`1</lemma>
    <tag>ClFS4----------</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w4">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w4</LM>
-   </w.rf>
+
+
+
    <form>jedinou</form>
    <lemma>jediný</lemma>
    <tag>AAFS4----1A----</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w5">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w5</LM>
-   </w.rf>
+
+
+
    <form>,</form>
    <lemma>,</lemma>
    <tag>Z:-------------</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w6">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w6</LM>
-   </w.rf>
+
+
+
    <form>tu</form>
    <lemma>ten</lemma>
    <tag>PDFS4----------</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w7">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w7</LM>
-   </w.rf>
+
+
+
    <form>hlavní</form>
    <lemma>hlavní</lemma>
    <tag>AAFS4----1A----</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w8">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w8</LM>
-   </w.rf>
+
+
+
    <form>,</form>
    <lemma>,</lemma>
    <tag>Z:-------------</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w9">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w9</LM>
-   </w.rf>
+
+
+
    <form>která</form>
    <lemma>který</lemma>
    <tag>P4FS1----------</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w10">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w10</LM>
-   </w.rf>
+
+
+
    <form>proklamativně</form>
    <lemma>proklamativně_^(*1í)</lemma>
    <tag>Dg-------1A----</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w11">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w11</LM>
-   </w.rf>
+
+
+
    <form>zakotvuje</form>
    <lemma>zakotvovat_:T</lemma>
    <tag>VB-S---3P-AA---</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w12">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w12</LM>
-   </w.rf>
+
+
+
    <form>existenci</form>
    <lemma>existence</lemma>
    <tag>NNFS4-----A----</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w13">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w13</LM>
-   </w.rf>
+
+
+
    <form>Česko</form>
    <lemma>Český_;m</lemma>
    <tag>A2--------A----</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w14">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w14</LM>
-   </w.rf>
+
+
+
    <form>-</form>
    <lemma>-</lemma>
    <tag>Z:-------------</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w15">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w15</LM>
-   </w.rf>
+
+
+
    <form>Slovenské</form>
    <lemma>slovenský</lemma>
    <tag>AAFS2----1A----</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w16">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w16</LM>
-   </w.rf>
+
+
+
    <form>celní</form>
    <lemma>celní</lemma>
    <tag>AAFS2----1A----</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w17">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w17</LM>
-   </w.rf>
+
+
+
    <form>unie</form>
    <lemma>unie</lemma>
    <tag>NNFS2-----A----</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w18">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w18</LM>
-   </w.rf>
+
+
+
    <form>,</form>
    <lemma>,</lemma>
    <tag>Z:-------------</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w19">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w19</LM>
-   </w.rf>
+
+
+
    <form>a</form>
    <lemma>a-1</lemma>
    <tag>J^-------------</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w20">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w20</LM>
-   </w.rf>
+
+
+
    <form>která</form>
    <lemma>který</lemma>
    <tag>P4FS1----------</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w21">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w21</LM>
-   </w.rf>
+
+
+
    <form>má</form>
    <lemma>mít</lemma>
    <tag>VB-S---3P-AA---</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w22">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w22</LM>
-   </w.rf>
+
+
+
    <form>výpovědní</form>
    <lemma>výpovědní</lemma>
    <tag>AAFS4----1A----</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w23">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w23</LM>
-   </w.rf>
+
+
+
    <form>lhůtu</form>
    <lemma>lhůta</lemma>
    <tag>NNFS4-----A----</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w24">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w24</LM>
-   </w.rf>
+
+
+
    <form>jeden</form>
    <lemma>jeden`1</lemma>
    <tag>ClIS4----------</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w25">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w25</LM>
-   </w.rf>
+
+
+
    <form>rok</form>
    <lemma>rok</lemma>
    <tag>NNIS4-----A----</tag>
   </m>
   <m id="m-cmpr9410-001-p4s2w26">
    <src.rf>manual</src.rf>
-   <w.rf>
-    <LM>w#w-cmpr9410-001-p4s2w26</LM>
-   </w.rf>
+
+
+
    <form>.</form>
    <lemma>.</lemma>
    <tag>Z:-------------</tag>

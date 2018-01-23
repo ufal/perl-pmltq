@@ -4,18 +4,6 @@
   version="1.1">
   <revision>1.0.0</revision>
   <description>PDT 3.0 morphological annotation</description>
-  <reference name="wdata" readas="pml"/>
-
-  <import schema="wdata_30_schema.xml" type="w-node.type" minimal_revision="1.0.0"/>
-  <import schema="wdata_30_schema.xml" type="bool.type"/>
-
-  <derive type="w-node.type">
-    <structure name="w-node">
-      <member as_attribute="1" name="id" role="#ID" required="1">
-        <cdata format="PMLREF"/>
-      </member>
-    </structure>
-  </derive>
   
   <root name="mdata" type="m-mdata.type"/>
 
@@ -53,9 +41,6 @@
     <structure name="m-node" role="#NODE">
       <member as_attribute="1" name="id" role="#ID" required="1"><cdata format="ID"/></member>
       <member name="src.rf"><cdata format="PMLREF"/></member>
-      <member name="w.rf">
-        <list ordered="1" role="#KNIT" type="w-node.type"><cdata format="PMLREF"/></list>
-      </member>
       <member name="form_change" type="m-form_change.type"/>
       <member name="form" required="1"><cdata format="any"/></member>
       <member name="lemma" required="1"><cdata format="any"/></member>

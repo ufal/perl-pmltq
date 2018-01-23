@@ -7,7 +7,6 @@
   <reference name="mdata" readas="pml"/>
 
   <import schema="mdata_30_schema.xml" type="m-node.type" minimal_revision="1.0.0"/>
-  <import schema="wdata_30_schema.xml" type="bool.type"/>
 
   <derive type="m-node.type">
     <structure name="m-node">
@@ -102,6 +101,13 @@
       <value>AuxG</value>
       <value>AuxK</value>
       <value>AuxX</value>
+    </choice>
+  </type>
+
+  <type name="bool.type">
+    <choice>
+      <value>0</value>
+      <value>1</value>
     </choice>
   </type>
 
