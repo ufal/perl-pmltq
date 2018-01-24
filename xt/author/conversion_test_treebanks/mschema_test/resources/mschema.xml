@@ -40,10 +40,6 @@
   <type name="m-node.type">
     <structure name="m-node" role="#NODE">
       <member as_attribute="1" name="id" role="#ID" required="1"><cdata format="ID"/></member>
-      <member name="src.rf"><cdata format="PMLREF"/></member>
-      <member name="form" required="1"><cdata format="any"/></member>
-      <member name="lemma" required="1"><cdata format="any"/></member>
-      <member name="tag" required="1"><cdata format="any"/></member>
     </structure>
   </type>
 </pml_schema>
