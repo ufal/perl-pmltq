@@ -15,7 +15,5 @@ layers: # description of all data layers
   - name: a
     data: *.a.xml
     references:
-      a-root/s.rf: '-'
       m-node/id: '-'
-      m-node/src.rf: '-'
-      w-node/id: '-'
+
