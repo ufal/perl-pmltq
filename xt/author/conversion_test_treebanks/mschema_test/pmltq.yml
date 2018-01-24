@@ -17,5 +17,3 @@ layers: # description of all data layers
     references:
       a-root/s.rf: '-'
       m-node/id: '-'
-      m-node/src.rf: '-'
-      w-node/id: '-'
