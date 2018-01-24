@@ -4,7 +4,7 @@
   version="1.1">
   <revision>1.0.0</revision>
   <description>test schema</description>
-  <reference name="mdata" readas="pml"/>
+  <reference name="mm" readas="pml"/>
 
   <import schema="mschema.xml" type="m-node.type" minimal_revision="1.0.0"/>
 
@@ -16,7 +16,7 @@
     </structure>
   </derive>
 
-  <root name="a" type="a-adata.type"/>
+  <root name="aa" type="a-adata.type"/>
 
   <type name="a-adata.type">
     <structure>

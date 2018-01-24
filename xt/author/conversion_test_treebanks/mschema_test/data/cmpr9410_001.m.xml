@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<m xmlns="http://ufal.mff.cuni.cz/pdt/pml/">
+<mm xmlns="http://ufal.mff.cuni.cz/pdt/pml/">
   <head>
     <schema href="mschema.xml"/>
   </head>
-  <meta>
-    <lang>cs</lang>
-    <annotation_info id="manual">
-      <desc>Manual annotation</desc>
-    </annotation_info>
-  </meta>
   <s id="m-cmpr9410-001-p2s1">
     <m id="m-cmpr9410-001-p2s1w1"/>
     <m id="m-cmpr9410-001-p2s1w2"/>
@@ -74,4 +68,4 @@
     <m id="m-cmpr9410-001-p4s2w25"/>
     <m id="m-cmpr9410-001-p4s2w26"/>
   </s>
-</m>
+</mm>

@@ -5,28 +5,13 @@
   <revision>1.0.0</revision>
   <description>test schema</description>
   
-  <root name="m" type="m-mdata.type"/>
+  <root name="mm" type="m-mdata.type"/>
 
   <type name="m-mdata.type">
-    <sequence role="#TREES" content_pattern="meta?, s+">
-      <element name="meta" type="m-meta.type"/>
+    <sequence role="#TREES" content_pattern="s+">
       <element name="s" type="m-s.type"/>
     </sequence>
   </type>
-
-  <type name="m-meta.type">
-    <structure>
-      <member name="lang"><cdata format="any"/></member>
-      <member name="annotation_info">
-        <structure name="m-annotation-info">
-          <member as_attribute="1" name="id" role="#ID" required="1"><cdata format="ID"/></member>
-          <member name="version_info"><cdata format="any"/></member>
-          <member name="desc"><cdata format="any"/></member>
-        </structure>
-      </member>
-    </structure>
-  </type>
-
 
   <type name="m-s.type">
     <container role="#NODE">
