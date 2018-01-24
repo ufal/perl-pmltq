@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<adata xmlns="http://ufal.mff.cuni.cz/pdt/pml/">
+<a xmlns="http://ufal.mff.cuni.cz/pdt/pml/">
   <head>
     <schema href="aschema.xml"/>
     <references>
@@ -234,4 +234,4 @@
       <sentence>Až na jednu jedinou, tu hlavní, která proklamativně zakotvuje existenci Česko - Slovenské celní unie, a která má výpovědní lhůtu jeden rok.</sentence>
     </LM>
   </trees>
-</adata>
+</a>

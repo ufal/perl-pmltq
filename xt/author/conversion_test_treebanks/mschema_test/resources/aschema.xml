@@ -16,7 +16,7 @@
     </structure>
   </derive>
 
-  <root name="adata" type="a-adata.type"/>
+  <root name="a" type="a-adata.type"/>
 
   <type name="a-adata.type">
     <structure>

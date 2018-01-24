@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mdata xmlns="http://ufal.mff.cuni.cz/pdt/pml/">
+<m xmlns="http://ufal.mff.cuni.cz/pdt/pml/">
   <head>
     <schema href="mschema.xml"/>
   </head>
@@ -74,4 +74,4 @@
     <m id="m-cmpr9410-001-p4s2w25"/>
     <m id="m-cmpr9410-001-p4s2w26"/>
   </s>
-</mdata>
+</m>

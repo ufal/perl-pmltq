@@ -12,7 +12,7 @@ db:
 sys_db: postgres
 
 layers: # description of all data layers
-  - name: adata
+  - name: a
     data: *.a.xml
     references:
       a-root/s.rf: '-'
