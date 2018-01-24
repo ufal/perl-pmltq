@@ -42,9 +42,6 @@
     <structure role="#NODE" name="a-root">
       <member name="id" role="#ID" as_attribute="1" required="1"><cdata format="ID"/></member>
       <member name="s.rf"><cdata format="PMLREF"/></member>
-      <member name="afun"><constant>AuxS</constant></member>
-      <member name="ord" role="#ORDER" required="1"><cdata format="nonNegativeInteger"/></member>
-      <member name="clause_number"><cdata format="nonNegativeInteger"/></member>
       <member name="children" role="#CHILDNODES">
         <list type="a-node.type" ordered="1"/>
       </member>
@@ -61,49 +58,14 @@
       <member name="m.rf" role="#KNIT" type="m-node.type">
         <cdata format="PMLREF"/>
       </member>
-      <member name="afun" type="a-afun.type" required="1"/>
       <member name="is_member" type="bool.type"/>
       <member name="is_parenthesis_root" type="bool.type"/>
-      <member name="ord" role="#ORDER" required="1"><cdata format="nonNegativeInteger"/></member>
-      <member name="clause_number"><cdata format="nonNegativeInteger"/></member>
       <member name="children" role="#CHILDNODES">
         <list type="a-node.type" ordered="1"/>
       </member>
     </structure>
   </type>
   
-  <type name="a-afun.type">
-    <choice>
-      <value>Pred</value>
-      <value>Pnom</value>
-      <value>AuxV</value>
-      <value>Sb</value>
-      <value>Obj</value>
-      <value>Atr</value>
-      <value>Adv</value>
-      <value>AtrAdv</value>
-      <value>AdvAtr</value>
-      <value>Coord</value>
-      <value>AtrObj</value>
-      <value>ObjAtr</value>
-      <value>AtrAtr</value>
-      <value>AuxT</value>
-      <value>AuxR</value>
-      <value>AuxP</value>
-      <value>Apos</value>
-      <value>ExD</value>
-      <value>AuxC</value>
-      <value>Atv</value>
-      <value>AtvV</value>
-      <value>AuxO</value>
-      <value>AuxZ</value>
-      <value>AuxY</value>
-      <value>AuxG</value>
-      <value>AuxK</value>
-      <value>AuxX</value>
-    </choice>
-  </type>
-
   <type name="bool.type">
     <choice>
       <value>0</value>
