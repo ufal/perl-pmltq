@@ -5,7 +5,7 @@
   <revision>1.0.0</revision>
   <description>test schema</description>
   
-  <root name="mdata" type="m-mdata.type"/>
+  <root name="mm" type="m-mdata.type"/>
 
   <type name="m-mdata.type">
     <sequence role="#TREES" content_pattern="meta?, s+">
