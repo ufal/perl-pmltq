@@ -3,12 +3,6 @@
   <head>
     <schema href="mschema.xml"/>
   </head>
-  <meta>
-    <lang>cs</lang>
-    <annotation_info id="manual">
-      <desc>Manual annotation</desc>
-    </annotation_info>
-  </meta>
   <s id="m-cmpr9410-001-p2s1">
     <m id="m-cmpr9410-001-p2s1w1"/>
     <m id="m-cmpr9410-001-p2s1w2"/>
