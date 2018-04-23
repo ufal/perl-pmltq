@@ -46,6 +46,7 @@ before_install:
   #- cd build_dir
 
 install:
+  - cpan-install Sys::SigAction
   - "cpan-install $(dzil listdeps --missing --versions | grep -v '^inc::' | sed -e's/ = 0$//' -e's/ = /~/')"
   - "cpan-install $(dzil listdeps --develop --missing --versions | grep -v '^inc::' | sed -e's/ = 0$//' -e's/ = /~/')"
   - cpan-install --deps
