@@ -18,7 +18,7 @@
           <a href="#server">Server</a> |
           <a href="#biblio">Bibliography</a> |
           <a href="#biblio">Authors</a> |
-          <a href="#license">License</a> |
+          <a href="#license">License</a>
       </div>
       <div id="content">
         <p>The PML-TQ is a powerful open-source search tool for all kinds
@@ -37,12 +37,6 @@
           <h2>Getting Started</h2>
           <div>
             <dl>
-              <dt>Search your local files:</dt>
-              <dd><p>Use the client-side PML-TQ search engine,
-              which is part of the <b>pmltq</b>
-              extension to the tree editor <a href="http://ufal.mff.cuni.cz/~pajas/tred" target="_blank">TrEd</a>
-              (see <a href="#clients">section about client interfaces</a> below).
-              </p></dd>
               <dt>Search various treebanks using our server:</dt>
               <dd><p><a href="https://ufal.mff.cuni.cz" target="_blank">ÚFAL</a> is hosting a PML-TQ search service for <a
               href="http://ufal.mff.cuni.cz/pdt2.0/" target="_blank">PDT 2.0</a>, <a
@@ -60,6 +54,12 @@
               server is accessible from several clients, including
               modern web browsers and the tree editor TrEd (see <a
               href="#clients">clients</a>).  </p></dd>
+              <dt>Search your local files:</dt>
+              <dd><p>Use the client-side PML-TQ search engine,
+              which is part of the <b>pmltq</b>
+              extension to the tree editor <a href="http://ufal.mff.cuni.cz/~pajas/tred" target="_blank">TrEd</a>
+              (see <a href="#clients">section about client interfaces</a> below).
+              </p></dd>
               <dt>Search any treebank on your own PML-TQ server:</dt>
               <dd><p>Download and install the <a href="#server">PML-TQ server</a> (Linux, UNIX, Mac OS X)
               on your computer/server.
@@ -71,7 +71,7 @@
         <div id="user-documentation" class="web-section">
           <h2>User Documentation</h2>
           <ul>
-            <li><a href="doc/pmltq_tutorial_web_client.html">Tutorial to the PML-TQ query language and web interface</a></li>
+            <li><a href="doc/pmltq_tutorial_web_client.html">Tutorial to the PML-TQ query language and the web interface</a></li>
             <li><a href="doc/pmltq_doc.html">PML-TQ manual and query language reference</a> (detailed but incomplete; it contains also a tutorial to the PML-TQ query language for the TrEd client)</li>
             <!--li><a href="#additional">Additional Resources</a> (list of various other tutorials and introductions to the PML-TQ</li-->
           </ul>
@@ -140,7 +140,7 @@
         <div id="server" class="web-section">
           <h2>Server</h2>
           <p>
-            This distribution contains a fast and efficient implementation
+            The distribution (see the download section below) contains a fast and efficient implementation
             of the PML-TQ powered by an SQL database with a
             client-server architecture
             (client -> REST API -> PML-TQ server -> SQL database backend).
