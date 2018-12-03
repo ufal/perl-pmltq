@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mm xmlns="http://ufal.mff.cuni.cz/pdt/pml/">
+  <head>
+    <schema href="mschema.xml"/>
+  </head>
+  <s id="m-cmpr9410-001-p2s1">
+    <m id="m-cmpr9410-001-p2s1w1"/>
+    <m id="m-cmpr9410-001-p2s1w2"/>
+    <m id="m-cmpr9410-001-p2s1w3"/>
+    <m id="m-cmpr9410-001-p2s1w4"/>
+  </s>
+  <s id="m-cmpr9410-001-p3s1">
+    <m id="m-cmpr9410-001-p3s1w1"/>
+    <m id="m-cmpr9410-001-p3s1w2"/>
+    <m id="m-cmpr9410-001-p3s1w3"/>
+    <m id="m-cmpr9410-001-p3s1w4"/>
+    <m id="m-cmpr9410-001-p3s1w5"/>
+    <m id="m-cmpr9410-001-p3s1w6"/>
+    <m id="m-cmpr9410-001-p3s1w7"/>
+    <m id="m-cmpr9410-001-p3s1w8"/>
+  </s>
+  <s id="m-cmpr9410-001-p4s1">
+    <m id="m-cmpr9410-001-p4s1w1"/>
+    <m id="m-cmpr9410-001-p4s1w2"/>
+    <m id="m-cmpr9410-001-p4s1w3"/>
+    <m id="m-cmpr9410-001-p4s1w4"/>
+    <m id="m-cmpr9410-001-p4s1w5"/>
+    <m id="m-cmpr9410-001-p4s1w6"/>
+    <m id="m-cmpr9410-001-p4s1w7"/>
+    <m id="m-cmpr9410-001-p4s1w8"/>
+    <m id="m-cmpr9410-001-p4s1w9"/>
+    <m id="m-cmpr9410-001-p4s1w10"/>
+    <m id="m-cmpr9410-001-p4s1w11"/>
+    <m id="m-cmpr9410-001-p4s1w12"/>
+    <m id="m-cmpr9410-001-p4s1w13"/>
+    <m id="m-cmpr9410-001-p4s1w14"/>
+    <m id="m-cmpr9410-001-p4s1w15"/>
+    <m id="m-cmpr9410-001-p4s1w16"/>
+    <m id="m-cmpr9410-001-p4s1w17"/>
+    <m id="m-cmpr9410-001-p4s1w18"/>
+    <m id="m-cmpr9410-001-p4s1w19"/>
+  </s>
+  <s id="m-cmpr9410-001-p4s2">
+    <m id="m-cmpr9410-001-p4s2w1"/>
+    <m id="m-cmpr9410-001-p4s2w2"/>
+    <m id="m-cmpr9410-001-p4s2w3"/>
+    <m id="m-cmpr9410-001-p4s2w4"/>
+    <m id="m-cmpr9410-001-p4s2w5"/>
+    <m id="m-cmpr9410-001-p4s2w6"/>
+    <m id="m-cmpr9410-001-p4s2w7"/>
+    <m id="m-cmpr9410-001-p4s2w8"/>
+    <m id="m-cmpr9410-001-p4s2w9"/>
+    <m id="m-cmpr9410-001-p4s2w10"/>
+    <m id="m-cmpr9410-001-p4s2w11"/>
+    <m id="m-cmpr9410-001-p4s2w12"/>
+    <m id="m-cmpr9410-001-p4s2w13"/>
+    <m id="m-cmpr9410-001-p4s2w14"/>
+    <m id="m-cmpr9410-001-p4s2w15"/>
+    <m id="m-cmpr9410-001-p4s2w16"/>
+    <m id="m-cmpr9410-001-p4s2w17"/>
+    <m id="m-cmpr9410-001-p4s2w18"/>
+    <m id="m-cmpr9410-001-p4s2w19"/>
+    <m id="m-cmpr9410-001-p4s2w20"/>
+    <m id="m-cmpr9410-001-p4s2w21"/>
+    <m id="m-cmpr9410-001-p4s2w22"/>
+    <m id="m-cmpr9410-001-p4s2w23"/>
+    <m id="m-cmpr9410-001-p4s2w24"/>
+    <m id="m-cmpr9410-001-p4s2w25"/>
+    <m id="m-cmpr9410-001-p4s2w26"/>
+  </s>
+</mm>

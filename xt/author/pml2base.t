@@ -72,6 +72,59 @@ for my $treebank ( treebanks() ) {
 
 chdir $cwd;
 
+TODO: {
+  local $TODO = 'm layer with original schema';
+  subtest mschama_convert => sub {
+    my $treebank_dir =  abs_path(File::Spec->catdir(  dirname(__FILE__),'conversion_test_treebanks', 'mschema_test' ));
+    my @oldResourcePaths = Treex::PML::ResourcePaths();
+    Treex::PML::SetResourcePaths(File::Spec->catdir( $treebank_dir, 'resources' )); # replace resource path in subtest
+    my $dump_dir       = File::Temp->newdir( CLEANUP => 0 );
+    my $config = PMLTQ::Commands::_load_config( File::Spec->catdir( $treebank_dir , 'pmltq.yml' ) );
+    chdir $treebank_dir;
+
+    lives_ok { PMLTQ::Commands->run( 'convert', "--output_dir=$dump_dir" ) } 'conversion ok';
+
+    my %files = map { $_ => 1 } read_dir $dump_dir;
+    my @tree_columns = qw/r lvl chld chord root_idx/;
+    my $regexmatch = join("",map {"(?=.*?\"#$_\",)"} @tree_columns);
+    my $regexsubt = "(".join("|",map {"$_"} @tree_columns).")";
+    for my $filename (sort grep {m/.ctl$/} keys %files) {
+      open my $fh, '<', File::Spec->catfile( $dump_dir,$filename);
+      my $sql_cmd = <$fh>;
+      close $fh;
+      if($sql_cmd =~ m/.*$regexmatch.*/){
+        my $linepattern = $sql_cmd;
+        $linepattern =~ s/^.*?\(//;
+        $linepattern =~ s/\) FROM.*?$//;
+        $linepattern =~ s/\"#($regexsubt)\"/(?<$1>\\\\N|[^\\t]*?)/g;
+        $linepattern =~ s/"[^,"]*?"/[^\\t]*?/g;
+        $linepattern =~ s/,/\\t/g;
+
+        my $datafilename = $filename;
+        $datafilename =~ s/\.ctl/\.dump/;
+        open $fh, '<', File::Spec->catfile( $dump_dir,$datafilename);
+        my $linecnt=1;
+        my $errmessage;
+        DUMP:while(my $line = <$fh>){
+          if($line =~ m/^$linepattern$/){
+            for my $tc (@tree_columns){
+              if($+{$tc} eq '\N'){
+                $errmessage = "column $tc should not be null value at line $linecnt of $datafilename.\n\t$sql_cmd\t$line";
+                last DUMP;
+              }
+            }
+          }
+          $linecnt++;
+        }
+        close $fh;
+        ok(!$errmessage,$errmessage // "No null value in tree columns in $datafilename")
+      }
+    }
+    Treex::PML::SetResourcePaths(@oldResourcePaths);
+  };
+}
+
+
 done_testing();
 
 

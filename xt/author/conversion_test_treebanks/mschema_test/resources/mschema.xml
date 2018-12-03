@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pml_schema
+  xmlns="http://ufal.mff.cuni.cz/pdt/pml/schema/"
+  version="1.1">
+  <revision>1.0.0</revision>
+  <description>test schema</description>
+  
+  <root name="mm" type="m-mdata.type"/>
+
+  <type name="m-mdata.type">
+    <sequence role="#TREES" content_pattern="s+">
+      <element name="s" type="m-s.type"/>
+    </sequence>
+  </type>
+
+  <type name="m-s.type">
+    <container role="#NODE">
+      <attribute name="id" role="#ID" required="1"><cdata format="ID"/></attribute>
+      <sequence role="#CHILDNODES">
+        <element name="m" type="m-node.type"/>
+      </sequence>
+    </container>
+  </type>
+
+  <type name="m-node.type">
+    <structure name="m-node" role="#NODE">
+      <member as_attribute="1" name="id" role="#ID" required="1"><cdata format="ID"/></member>
+    </structure>
+  </type>
+</pml_schema>

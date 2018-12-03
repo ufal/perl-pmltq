@@ -1,0 +1,21 @@
+---
+data_dir: "data"
+resources: "resources" # main directory with PML schemas
+
+db:
+  name: mschema_test
+  host: localhost
+  port: 15432
+  user: postgres
+  password:
+
+sys_db: postgres
+
+layers: # description of all data layers
+  - name: a
+    data: *.a.xml
+    references:
+      a-root/s.rf: '-'
+      m-node/id: '-'
+
+

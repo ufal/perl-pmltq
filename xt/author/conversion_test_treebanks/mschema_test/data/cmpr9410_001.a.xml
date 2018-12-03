@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aa xmlns="http://ufal.mff.cuni.cz/pdt/pml/">
+  <head>
+    <schema href="aschema.xml"/>
+    <references>
+      <reffile href="cmpr9410_001.m.xml" id="m" name="mm"/>
+    </references>
+  </head>
+  <meta>
+    <annotation_info>
+      <desc>Manual annotation</desc>
+    </annotation_info>
+  </meta>
+  <trees>
+    <LM id="a-cmpr9410-001-p2s1">
+      <s.rf>m#m-cmpr9410-001-p2s1</s.rf>
+      <children id="a-cmpr9410-001-p2s1w2">
+        <m.rf>m#m-cmpr9410-001-p2s1w2</m.rf>
+        <children>
+          <LM id="a-cmpr9410-001-p2s1w1">
+            <m.rf>m#m-cmpr9410-001-p2s1w1</m.rf>
+          </LM>
+          <LM id="a-cmpr9410-001-p2s1w3">
+            <m.rf>m#m-cmpr9410-001-p2s1w3</m.rf>
+            <children id="a-cmpr9410-001-p2s1w4">
+              <m.rf>m#m-cmpr9410-001-p2s1w4</m.rf>
+            </children>
+          </LM>
+        </children>
+      </children>
+      <sentence>Celní unie v ohrožení</sentence>
+    </LM>
+    <LM id="a-cmpr9410-001-p3s1">
+      <s.rf>m#m-cmpr9410-001-p3s1</s.rf>
+      <children id="a-cmpr9410-001-p3s1w3">
+        <m.rf>m#m-cmpr9410-001-p3s1w3</m.rf>
+        <children>
+          <LM id="a-cmpr9410-001-p3s1w1">
+            <m.rf>m#m-cmpr9410-001-p3s1w1</m.rf>
+          </LM>
+          <LM id="a-cmpr9410-001-p3s1w2">
+            <m.rf>m#m-cmpr9410-001-p3s1w2</m.rf>
+          </LM>
+          <LM id="a-cmpr9410-001-p3s1w4">
+            <m.rf>m#m-cmpr9410-001-p3s1w4</m.rf>
+            <children id="a-cmpr9410-001-p3s1w5">
+              <m.rf>m#m-cmpr9410-001-p3s1w5</m.rf>
+            </children>
+          </LM>
+          <LM id="a-cmpr9410-001-p3s1w6">
+            <m.rf>m#m-cmpr9410-001-p3s1w6</m.rf>
+            <children id="a-cmpr9410-001-p3s1w8">
+              <m.rf>m#m-cmpr9410-001-p3s1w8</m.rf>
+              <children id="a-cmpr9410-001-p3s1w7">
+                <m.rf>m#m-cmpr9410-001-p3s1w7</m.rf>
+              </children>
+            </children>
+          </LM>
+        </children>
+      </children>
+      <sentence>Nová striktní omezení vlády SR proti českým exportérům</sentence>
+    </LM>
+    <LM id="a-cmpr9410-001-p4s1">
+      <s.rf>m#m-cmpr9410-001-p4s1</s.rf>
+      <children>
+        <LM id="a-cmpr9410-001-p4s1w13">
+          <m.rf>m#m-cmpr9410-001-p4s1w13</m.rf>
+          <children>
+            <LM id="a-cmpr9410-001-p4s1w1">
+              <m.rf>m#m-cmpr9410-001-p4s1w1</m.rf>
+              <children id="a-cmpr9410-001-p4s1w4">
+                <m.rf>m#m-cmpr9410-001-p4s1w4</m.rf>
+                <children>
+                  <LM id="a-cmpr9410-001-p4s1w3">
+                    <m.rf>m#m-cmpr9410-001-p4s1w3</m.rf>
+                    <children id="a-cmpr9410-001-p4s1w2">
+                      <m.rf>m#m-cmpr9410-001-p4s1w2</m.rf>
+                    </children>
+                  </LM>
+                  <LM id="a-cmpr9410-001-p4s1w5">
+                    <m.rf>m#m-cmpr9410-001-p4s1w5</m.rf>
+                    <children id="a-cmpr9410-001-p4s1w6">
+                      <m.rf>m#m-cmpr9410-001-p4s1w6</m.rf>
+                      <children id="a-cmpr9410-001-p4s1w7">
+                        <m.rf>m#m-cmpr9410-001-p4s1w7</m.rf>
+                        <children id="a-cmpr9410-001-p4s1w8">
+                          <m.rf>m#m-cmpr9410-001-p4s1w8</m.rf>
+                          <children id="a-cmpr9410-001-p4s1w10">
+                            <m.rf>m#m-cmpr9410-001-p4s1w10</m.rf>
+                            <children>
+                              <LM id="a-cmpr9410-001-p4s1w9">
+                                <m.rf>m#m-cmpr9410-001-p4s1w9</m.rf>
+                              </LM>
+                              <LM id="a-cmpr9410-001-p4s1w12">
+                                <m.rf>m#m-cmpr9410-001-p4s1w12</m.rf>
+                                <children id="a-cmpr9410-001-p4s1w11">
+                                  <m.rf>m#m-cmpr9410-001-p4s1w11</m.rf>
+                                </children>
+                              </LM>
+                            </children>
+                          </children>
+                        </children>
+                      </children>
+                    </children>
+                  </LM>
+                </children>
+              </children>
+            </LM>
+            <LM id="a-cmpr9410-001-p4s1w14">
+              <m.rf>m#m-cmpr9410-001-p4s1w14</m.rf>
+            </LM>
+            <LM id="a-cmpr9410-001-p4s1w15">
+              <m.rf>m#m-cmpr9410-001-p4s1w15</m.rf>
+            </LM>
+            <LM id="a-cmpr9410-001-p4s1w16">
+              <m.rf>m#m-cmpr9410-001-p4s1w16</m.rf>
+            </LM>
+          </children>
+        </LM>
+        <LM id="a-cmpr9410-001-p4s1w17">
+          <m.rf>m#m-cmpr9410-001-p4s1w17</m.rf>
+        </LM>
+        <LM id="a-cmpr9410-001-p4s1w18">
+          <m.rf>m#m-cmpr9410-001-p4s1w18</m.rf>
+        </LM>
+        <LM id="a-cmpr9410-001-p4s1w19">
+          <m.rf>m#m-cmpr9410-001-p4s1w19</m.rf>
+        </LM>
+      </children>
+      <sentence>Z téměř tří desítek smluv upravujících vztahy mezi oběma subjekty celního soustátí jsou okamžitě vypověditelné všechny...</sentence>
+    </LM>
+    <LM id="a-cmpr9410-001-p4s2">
+      <s.rf>m#m-cmpr9410-001-p4s2</s.rf>
+      <children>
+        <LM id="a-cmpr9410-001-p4s2w2">
+          <m.rf>m#m-cmpr9410-001-p4s2w2</m.rf>
+          <children id="a-cmpr9410-001-p4s2w5">
+            <m.rf>m#m-cmpr9410-001-p4s2w5</m.rf>
+            <children>
+              <LM id="a-cmpr9410-001-p4s2w1">
+                <m.rf>m#m-cmpr9410-001-p4s2w1</m.rf>
+              </LM>
+              <LM id="a-cmpr9410-001-p4s2w3">
+                <m.rf>m#m-cmpr9410-001-p4s2w3</m.rf>
+                <is_member>1</is_member>
+                <children id="a-cmpr9410-001-p4s2w4">
+                  <m.rf>m#m-cmpr9410-001-p4s2w4</m.rf>
+                </children>
+              </LM>
+              <LM id="a-cmpr9410-001-p4s2w6">
+                <m.rf>m#m-cmpr9410-001-p4s2w6</m.rf>
+                <is_member>1</is_member>
+                <children id="a-cmpr9410-001-p4s2w7">
+                  <m.rf>m#m-cmpr9410-001-p4s2w7</m.rf>
+                </children>
+              </LM>
+              <LM id="a-cmpr9410-001-p4s2w19">
+                <m.rf>m#m-cmpr9410-001-p4s2w19</m.rf>
+                <children>
+                  <LM id="a-cmpr9410-001-p4s2w8">
+                    <m.rf>m#m-cmpr9410-001-p4s2w8</m.rf>
+                  </LM>
+                  <LM id="a-cmpr9410-001-p4s2w11">
+                    <m.rf>m#m-cmpr9410-001-p4s2w11</m.rf>
+                    <is_member>1</is_member>
+                    <children>
+                      <LM id="a-cmpr9410-001-p4s2w9">
+                        <m.rf>m#m-cmpr9410-001-p4s2w9</m.rf>
+                      </LM>
+                      <LM id="a-cmpr9410-001-p4s2w10">
+                        <m.rf>m#m-cmpr9410-001-p4s2w10</m.rf>
+                      </LM>
+                      <LM id="a-cmpr9410-001-p4s2w12">
+                        <m.rf>m#m-cmpr9410-001-p4s2w12</m.rf>
+                        <children id="a-cmpr9410-001-p4s2w17">
+                          <m.rf>m#m-cmpr9410-001-p4s2w17</m.rf>
+                          <children>
+                            <LM id="a-cmpr9410-001-p4s2w14">
+                              <m.rf>m#m-cmpr9410-001-p4s2w14</m.rf>
+                              <children>
+                                <LM id="a-cmpr9410-001-p4s2w13">
+                                  <m.rf>m#m-cmpr9410-001-p4s2w13</m.rf>
+                                  <is_member>1</is_member>
+                                </LM>
+                                <LM id="a-cmpr9410-001-p4s2w15">
+                                  <m.rf>m#m-cmpr9410-001-p4s2w15</m.rf>
+                                  <is_member>1</is_member>
+                                </LM>
+                              </children>
+                            </LM>
+                            <LM id="a-cmpr9410-001-p4s2w16">
+                              <m.rf>m#m-cmpr9410-001-p4s2w16</m.rf>
+                            </LM>
+                          </children>
+                        </children>
+                      </LM>
+                    </children>
+                  </LM>
+                  <LM id="a-cmpr9410-001-p4s2w18">
+                    <m.rf>m#m-cmpr9410-001-p4s2w18</m.rf>
+                  </LM>
+                  <LM id="a-cmpr9410-001-p4s2w21">
+                    <m.rf>m#m-cmpr9410-001-p4s2w21</m.rf>
+                    <is_member>1</is_member>
+                    <children>
+                      <LM id="a-cmpr9410-001-p4s2w20">
+                        <m.rf>m#m-cmpr9410-001-p4s2w20</m.rf>
+                      </LM>
+                      <LM id="a-cmpr9410-001-p4s2w23">
+                        <m.rf>m#m-cmpr9410-001-p4s2w23</m.rf>
+                        <children>
+                          <LM id="a-cmpr9410-001-p4s2w22">
+                            <m.rf>m#m-cmpr9410-001-p4s2w22</m.rf>
+                          </LM>
+                          <LM id="a-cmpr9410-001-p4s2w25">
+                            <m.rf>m#m-cmpr9410-001-p4s2w25</m.rf>
+                            <children id="a-cmpr9410-001-p4s2w24">
+                              <m.rf>m#m-cmpr9410-001-p4s2w24</m.rf>
+                            </children>
+                          </LM>
+                        </children>
+                      </LM>
+                    </children>
+                  </LM>
+                </children>
+              </LM>
+            </children>
+          </children>
+        </LM>
+        <LM id="a-cmpr9410-001-p4s2w26">
+          <m.rf>m#m-cmpr9410-001-p4s2w26</m.rf>
+        </LM>
+      </children>
+      <sentence>Až na jednu jedinou, tu hlavní, která proklamativně zakotvuje existenci Česko - Slovenské celní unie, a která má výpovědní lhůtu jeden rok.</sentence>
+    </LM>
+  </trees>
+</aa>
+
