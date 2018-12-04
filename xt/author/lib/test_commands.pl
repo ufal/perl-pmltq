@@ -97,6 +97,8 @@ sub verify {
   like( $h, qr/Database $config->{db}->{name} exists/, 'database exists' );
   like( $h, qr/Database contains [1-9][0-9]*/,         'database contains tables' );
   like( $h, qr/contains [1-9][0-9]* rows/,             'database contains nonempty tables' );
+  like( $h, qr/UTF8/,             'database is in UTF8 encoding' );
+
 }
 
 1;

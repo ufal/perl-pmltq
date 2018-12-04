@@ -24,6 +24,10 @@ sub run {
     $sth->execute;
     print "Table $table contains " . $sth->rows . " rows\n";
   }
+  my $sth = $dbh->prepare("SELECT pg_encoding_to_char(encoding) FROM pg_database WHERE datname = '$db_name'");
+  $sth->execute;
+  print STDERR "Encoding: " . $sth->fetch->[0] . "\n";
+
   $dbh->disconnect;
 }
 
