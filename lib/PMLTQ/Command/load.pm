@@ -21,7 +21,16 @@ Maybe you need to run 'pmltq convert' first.
 MSG
   }
 
-  my $dbh = $self->db;
+  my $dbh;
+  eval { $dbh = $self->db };
+  if ( $@ ) {
+    die <<"MSG";
+$@
+Maybe you need to run 'pmltq initdb' first.
+
+MSG
+  }
+
   for my $layer ( @{ $config->{layers} } ) {
     my $listfile = File::Spec->catfile( $output_dir, "$layer->{name}__init.list" );
     open my $fh, '<', $listfile or die "Can't open $listfile: $!";

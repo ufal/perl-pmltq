@@ -17,6 +17,7 @@ use LWP::UserAgent;
 use File::Temp;
 use Encode;
 use Pod::Usage 'pod2usage';
+use JSON;
 
 my $extension_dir;
 my %opts;
@@ -53,6 +54,9 @@ sub run {
   'filters|F=s',
   'no-filters',
 
+  'old-api',
+  'output-json',
+
   'netgraph-query|G=s',
 
   'print-servers|P',
@@ -63,6 +67,7 @@ sub run {
 
   'limit|L=i',
   'timeout|t=i',
+  'history|H',
 
   'quiet|q',
   'help|h=s@',
@@ -86,7 +91,6 @@ sub run {
     $opts{'pmltq-extension-dir'} ||
     File::Spec->catfile($ENV{HOME},'.tred.d','extensions', 'pmltq');
   Treex::PML::AddResourcePath(File::Spec->catfile($extension_dir,'resources'));
-
   if ($opts{ntred}) {
     ntred_search();
   } elsif ($opts{jtred}) {
@@ -94,12 +98,13 @@ sub run {
   } elsif ($opts{btred}) {
     btred_search(@args);
   } else {
-    pmltq_http_search();
+    $self->pmltq_http_search();
   }
 }
 
 my %auth;
 sub pmltq_http_search {
+  my $self = shift;
   my @args = @_;
   my $query;
   if ($opts{query} and !@args) {
@@ -151,13 +156,13 @@ sub pmltq_http_search {
 
   my $id = $opts{'server'};
   $id ||= 'default' unless $opts{'print-servers'};
-  my ($conf,$type) = $id ? get_server_conf($configs,$id) : ();
+  my ($conf,$type) = $id ? get_server_conf($configs,$id, $opts{'old-api'}) : ();
   %auth = (
     username => $opts{username},
     password => $opts{password},
    );
   if ($opts{'auth-id'}) {
-    my ($auth) = get_server_conf($configs,$opts{'auth-id'});
+    my ($auth) = get_server_conf($configs,$opts{'auth-id'}, $opts{'old-api'});
     if ($auth) {
       $auth{$_} ||= $auth->{$_} for qw(username password);
     } else {
@@ -165,7 +170,7 @@ sub pmltq_http_search {
     }
   }
   if ($conf) {
-    $auth{$_} ||= $conf->{$_} for qw(username password);
+    $auth{$_} ||= $conf->{$_} for qw(username password baseurl);
   }
 
 
@@ -175,10 +180,11 @@ sub pmltq_http_search {
   die "Cannot query available services on a $type server";
       }
       my $result='';
-      http_search($conf->{url},$query,{ other=>1,
+      $self->http_search($conf->{url},$query,{ other=>1,
           callback => sub { $result.=$_[0] },
           debug=>$opts{debug},
           %auth,
+          'baseurl' => $conf->{baseurl}
                });
       my @services = split /\n/,$result;
       for my $srv (@services) {
@@ -220,11 +226,18 @@ sub pmltq_http_search {
 
 
   if ($type eq 'http') {
-    http_search($conf->{url},$query,{ 'node-types'=>$opts{'node-types'},
+    #if($opts{'old-api'}){
+    $self->http_search($conf->{url},$query,{ 'node-types'=>$opts{'node-types'},
               'relations'=>$opts{'relations'},
               debug=>$opts{debug},
-              %auth
+              %auth,
+              'old-api'=>$opts{'old-api'},
+              'output-json'=>$opts{'output-json'},
+              'baseurl' => $conf->{baseurl}
              });
+    #} else { ## NEW API
+    #  print STDERR "TODO NEW API\n";
+    #}
   } else {
     require PMLTQ::SQLEvaluator;
     my $evaluator = PMLTQ::SQLEvaluator->new(undef,{connect => $conf, debug=>$opts{debug},
@@ -243,42 +256,62 @@ sub pmltq_http_search {
 }
 
 sub get_server_conf {
-  my ($configs,$id)=@_;
+  my ($configs,$id, $oldapi)=@_;
   my ($conf,$type);
-  if ($id =~ /^http:/) {
+  if ($id =~ /^https?:/) {
     $type = 'http';
     $conf = {url => $id};
+    unless($oldapi) {
+      $conf->{baseurl} = $id;
+      $conf->{baseurl} =~ s@api/treebanks.*?$@@;
+    }
   } else {
     my $conf_el = first { $_->value->{id} eq $id }  SeqV($configs);
     die "Didn't find server configuration named '$id'!\nUse $0 --print-servers and then $0 --server <config-id|URL>\n"
       unless $conf_el;
     $conf = $conf_el->value;
+    unless($oldapi) {
+      $conf->{baseurl} = $conf->{url};
+      $conf->{url} = URI::WithBase->new('/',$conf->{url});
+      $conf->{url}->path_segments('api', 'treebanks', $conf->{treebank});
+      $conf->{url} = $conf->{url}->abs->as_string;
+    }
     $type = $conf_el->name;
   }
   return ($conf,$type);
 }
 
 sub http_search {
-  my ($url,$query,$opts)=@_;
+  my ($self,$url,$query,$opts)=@_;
   $opts||={};
   my $tmp = File::Temp->new( TEMPLATE => 'pmltq_XXXXX',
            TMPDIR => 1,
            UNLINK => 1,
            SUFFIX => '.txt' );
-  my $ua = LWP::UserAgent->new;
-  $ua->credentials(URI->new($url)->host_port,'PMLTQ',
-       $auth{username}, $auth{password})
-    if $opts->{username};
-  $ua->agent("PMLTQ/1.0 ");
-  $url.='/' unless $url=~m{^https?://.+/};
+  my $ua;
+  if($opts->{'old-api'}) {
+    $ua = LWP::UserAgent->new;
+    $ua->credentials(URI->new($url)->host_port,'PMLTQ',
+         $auth{username}, $auth{password})
+      if $opts->{username};
+  } else {
+    $ua = $self->ua;
+    $ua->agent("PMLTQ/1.0 ");
+    $self->login($ua,\%auth) if $opts->{username};
+  }
+  $url.='/' unless $url=~m{^https?://.+/$};
+  my $METHOD = \&POST;
   if ($opts->{'node-types'}) {
-    $url = qq{${url}nodetypes};
+    $url = $opts->{'old-api'} ? qq{${url}nodetypes} : qq{${url}node-types};
+    $METHOD = \&GET unless $opts->{'old-api'};
     $query = '';
   } elsif ($opts->{'relations'}) {
     $url = qq{${url}relations};
+    $METHOD = \&GET unless $opts->{'old-api'};
     $query = '';
   } elsif ($opts->{'other'}) {
     $url = qq{${url}other};
+     die "Unknown option --other in new api\n" unless $opts->{'old-api'};
     $query = '';
   } else {
     $url = qq{${url}query};
@@ -286,18 +319,35 @@ sub http_search {
   $ua->timeout($opts{timeout}+2) if $opts{timeout};
   my $q = $query; Encode::_utf8_off($q);
   binmode STDOUT;
-  my $sub = $opts->{callback} || sub { print $_[0] };
-  my $res = $ua->request(POST($url, [
-      query => $q,
-      format => 'text',
-      limit => $opts{limit},
-      row_limit => $opts{limit},
-      timeout => $opts{timeout},
-     ]),$sub ,1024*8 );
+  my $sub = $opts->{callback} || sub { print $opts{'output-json'} ? ($_[0]) : (map {join("\t",@$_)."\n"} @{JSON::from_json($_[0])->{results}}) };
+  my $res = $ua->request($METHOD->($url, 
+    $opts->{'old-api'} ?
+      ([
+        query => $q,
+        format => 'text',
+        limit => $opts{limit},
+        row_limit => $opts{limit},
+        timeout => $opts{timeout},
+       ])
+       :
+       (
+        Content_Type => 'application/json;charset=UTF-8',
+        User_Agent => 'PML-TQ CLI',
+        Content => JSON->new->utf8->encode({
+          query => $q,
+          limit => $opts{limit},
+          # row_limit => $opts{limit}, #TODO: currently not working
+          timeout => $opts{timeout},
+          nohistory => !!$opts{history}
+        })
+       )
+     ),$sub ,1024*8 );
   unless ($res->is_success) {
     die $res->status_line."\n".$res->content."\n";
   }
 }
+
+
 
 sub search {
   my ($evaluator,$query)=@_;
@@ -599,7 +649,7 @@ instances distributed over an SGE cluster).
 =item B<--server|-s> URL_or_ID
 
 If used with SQL-based engine, this option can be used to specify a
-URL (http://hostname:port) to a pmltq http server, or an ID of a
+URL (http://hostname/APIpath/treebanks/treebankID) to a pmltq http server, or an ID of a
 pre-configured SQL or HTTP server (use B<--print-servers> to get a
 list).
 
@@ -663,6 +713,10 @@ Password for a HTTP or SQL PML-TQ service.
 
 Only applicable to SQL-based engine.
 Specify maximum number of results (i.e. rows printed by pmltq).
+
+=item B<--history|-H>
+
+Sets whether should be query logged to users query history on server.
 
 =item B<--timeout|-t> seconds
 
