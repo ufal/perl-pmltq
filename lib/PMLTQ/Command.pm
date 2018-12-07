@@ -4,6 +4,8 @@ package PMLTQ::Command;
 
 use PMLTQ::Base -base;
 
+use utf8;
+
 use DBI;
 use File::Slurp;
 use Pod::Usage 'pod2usage';
@@ -13,6 +15,7 @@ use LWP::UserAgent;
 use HTTP::Cookies;
 use URI::WithBase;
 use URI::Encode qw(uri_encode);
+use Encode;
 
 has config => sub { die 'Command has no configuration'; };
 
@@ -49,7 +52,6 @@ sub help {
 
 sub _db_connect {
   my ( $database, $host, $port, $user, $password ) = @_;
-
   my $dbh = DBI->connect( 'DBI:Pg:dbname=' . $database . ';host=' . $host . ';port=' . $port,
     $user, $password, { RaiseError => 1, PrintError => 1 } )
     or die "Unable to connect to database!\n$DBI::errstr\n";
@@ -95,6 +97,7 @@ sub run_sql_from_file {
       open my $fh, '<', "$dump_file" or die "Can't open $dump_file: $!";
       while ( my $data = <$fh> ) {    # Do not load whole file, but process it line by line
         next unless $data;
+        $data= Encode::decode("UTF-8", $data, Encode::FB_CROAK);
         $dbh->pg_putcopydata("$data");
       }
       $dbh->pg_putcopyend();
@@ -337,7 +340,7 @@ sub user2admin_format { # converts getted treebank json to treebank configuratio
   return {
     id => $treebank->{name},
     tags => [map  {$_->{name}} @{$treebank->{tags}}],
-    language => $treebank->{languages}->[0]->{code}, 
+    language => $treebank->{languages}->[0]->{code},
     map {$_ => $treebank->{$_}} qw/title isFree isAllLogged isFeatured isPublic homepage description documentation dataSources manuals/
   }
 }
