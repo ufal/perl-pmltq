@@ -4,6 +4,7 @@ Revision history for {{$dist->name}}
  [API CHANGES]
 
  [BUG FIXES]
+ - fix utf8 data loading
 
  [DOCUMENTATION]
 
