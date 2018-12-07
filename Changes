@@ -4,12 +4,22 @@ Revision history for {{$dist->name}}
  [API CHANGES]
 
  [BUG FIXES]
- - fix utf8 data loading
 
  [DOCUMENTATION]
 
  [ENHANCEMENTS]
+
+1.5.0
+ - Released: 2018-12-07 09:21:28 UTC
+
+ [BUG FIXES]
+ - fix utf8 data loading
+
+ [ENHANCEMENTS]
  - Added history logging option to pmltq cli
+
+ [STATISTICS]
+ - code churn: 21 files changed, 907 insertions(+), 72 deletions(-)
 
 1.4.0
  - Released: 2017-06-26 09:15:20 UTC
