@@ -2,6 +2,7 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
  [API CHANGES]
+ - move commands to independent cpan module PMLTQ::Commands
 
  [BUG FIXES]
 
