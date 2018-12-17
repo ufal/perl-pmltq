@@ -17,7 +17,11 @@ framework allowing users to define their own PML-TQ relations.
 
 =cut
 
-use PMLTQ::Base -strict;
+#use PMLTQ::Base -strict;
+use strict;
+use warnings;
+use utf8;
+use feature ":5.10";
 
 use Exporter 'import';
 use File::Basename 'fileparse';
