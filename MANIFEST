@@ -220,7 +220,6 @@ lib/PMLTQ/_Parser.pm
 perlcritic.rc
 share/resources/pmltq_cgi_conf_schema.xml
 share/resources/tree_query_schema.xml
-share/sql/init.sql
 share/static/css/query.css
 share/static/icons/favicon.ico
 share/static/icons/loading.gif
