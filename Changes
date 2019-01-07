@@ -1,13 +1,4 @@
-Revision history for {{$dist->name}}
-
-{{$NEXT}}
- [API CHANGES]
-
- [BUG FIXES]
-
- [DOCUMENTATION]
-
- [ENHANCEMENTS]
+Revision history for PMLTQ
 
 2.0.0
  - Released: 2019-01-07 16:20:36 UTC
