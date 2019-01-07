@@ -2,13 +2,21 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
  [API CHANGES]
- - move commands to independent cpan module PMLTQ::Commands
 
  [BUG FIXES]
 
  [DOCUMENTATION]
 
  [ENHANCEMENTS]
+
+2.0.0
+ - Released: 2019-01-07 16:20:36 UTC
+
+ [API CHANGES]
+ - move commands to independent cpan module PMLTQ::Commands
+
+ [STATISTICS]
+ - code churn: 1 file changed, 1 insertion(+), 1 deletion(-)
 
 1.5.0
  - Released: 2018-12-07 09:21:28 UTC
