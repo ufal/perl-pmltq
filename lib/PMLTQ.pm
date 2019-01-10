@@ -13,8 +13,8 @@ package PMLTQ;
 
 =head1 DESCRIPTION
 
-This is an implementation of a PML-TQ search engine (CGI module) and a
-command-line client. A graphical client for PML-TQ is part of the tree editor
+This module concists of libraries for manipulating and querying with PMLTQ. An implementation of a PML-TQ search engine (CGI module) and a
+command-line client has been moved to different modules. A graphical client for PML-TQ is part of the tree editor
 TrEd (http://ufal.mff.cuni.cz/tred).
 
 =cut
