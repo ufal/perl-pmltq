@@ -165,7 +165,6 @@ doc/www/web_client.png
 doc/www/web_client_small.png
 lib/PMLTQ.pm
 lib/PMLTQ/BtredEvaluator.pm
-lib/PMLTQ/CGI.pm
 lib/PMLTQ/Common.pm
 lib/PMLTQ/Grammar.pm
 lib/PMLTQ/Loader.pm
