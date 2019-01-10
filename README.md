@@ -4,7 +4,7 @@ PMLTQ - Query engine and query language for trees in PML format
 
 # VERSION
 
-version 1.5.0
+version 2.0.1
 
 <div>
     <a href="https://travis-ci.org/ufal/perl-pmltq"><img src="https://travis-ci.org/ufal/perl-pmltq.svg?branch=master" alt="Build Status"></a>
@@ -14,8 +14,8 @@ version 1.5.0
 
 # DESCRIPTION
 
-This is an implementation of a PML-TQ search engine (CGI module) and a
-command-line client. A graphical client for PML-TQ is part of the tree editor
+This module concists of libraries for manipulating and querying with PMLTQ. An implementation of a PML-TQ search engine (CGI module) and a
+command-line client has been moved to different modules. A graphical client for PML-TQ is part of the tree editor
 TrEd (http://ufal.mff.cuni.cz/tred).
 
 # AUTHORS
