@@ -235,6 +235,7 @@ t/pod.t
 xt/author/lib/PML.pm
 xt/author/lib/TredMacro.pm
 xt/author/lib/bootstrap.pl
+xt/author/pml2base.t
 xt/author/queries/pdt_test/_a-node-under-t-root.tq
 xt/author/queries/pdt_test/_filter-complex-multiple.tq
 xt/author/queries/pdt_test/_filter-complex-quote-set.tq
