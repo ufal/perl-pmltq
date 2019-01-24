@@ -11,7 +11,6 @@ Classic effective parent implementation is skipping nodes with afuns that match 
 use strict;
 use warnings;
 use base qw(PMLTQ::Relation::SimpleListIterator);
-use PMLTQ::PML2BASE;
 use PMLTQ::Relation {
   name              => 'eparentC',
   table_name        => 'adata__#eparents_c',
@@ -24,6 +23,17 @@ use PMLTQ::Relation {
 };
 use PMLTQ::Relation::Treex;
 
+BEGIN {
+  {
+    local $@; # protect existing $@
+    eval {
+      require PMLTQ::PML2BASE::Relation::Treex::AEParentCIterator;
+      PMLTQ::PML2BASE::Relation::Treex::AEParentCIterator->import();
+    };
+    print STDERR "PMLTQ::PML2BASE::Treex::AEParentCIterator is not installed\n" if $@;
+  }
+}
+
 sub get_node_list {
   my ( $self, $node ) = @_;
   my $fsfile = $self->start_file;
@@ -32,18 +42,7 @@ sub get_node_list {
 
 sub dump_relation {
   my ($tree, $hash, $fh ) = @_;
-
-  my $name = $tree->type->get_schema->get_root_name;
-  die 'Trying dump relation eparent for incompatible schema' unless $name =~ /^treex_document/;
-
-  my $struct_name = $tree->type->get_structure_name || '';
-  return unless $struct_name eq 'a-root';
-
-  for my $node ( $tree->descendants ) {
-    for my $p ( PMLTQ::Relation::Treex::AGetEParentsC($node) ) {
-      $fh->print( PMLTQ::PML2BASE::mkdump( $hash->{$node}{'#idx'}, $hash->{$p}{'#idx'} ) );
-    }
-  }
+  PMLTQ::PML2BASE::Relation::Treex::AEParentCIterator::dump_relation($tree, $hash, $fh);
 }
 
 1;

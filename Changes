@@ -2,6 +2,7 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
  [API CHANGES]
+- move PML2BASE to independent cpan module PMLTQ::PML2BASE
 
  [BUG FIXES]
 
