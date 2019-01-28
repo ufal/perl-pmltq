@@ -5,7 +5,6 @@ package PMLTQ::Relation::PDT::TEParentIterator;
 use strict;
 use warnings;
 use base qw(PMLTQ::Relation::SimpleListIterator);
-use PMLTQ::PML2BASE;
 use PMLTQ::Relation {
   name              => 'eparent',
   table_name        => 'tdata__#eparents',
