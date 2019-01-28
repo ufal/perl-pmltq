@@ -26,7 +26,7 @@ BEGIN {
       require PMLTQ::PML2BASE::Relation::PDT::AEParentIterator;
       PMLTQ::PML2BASE::Relation::PDT::AEParentIterator->import();
     };
-    print STDERR "PMLTQ::PML2BASE::PDT::AEParentIterator is not installed\n" if $@;
+    print STDERR "PMLTQ::PML2BASE::Relation::PDT::AEParentIterator is not installed\n" if $@;
   }
 }
 

@@ -24,7 +24,7 @@ BEGIN {
       require PMLTQ::PML2BASE::Relation::PDT::ALexOrAuxRFIterator;
       PMLTQ::PML2BASE::Relation::PDT::ALexOrAuxRFIterator->import();
     };
-    print STDERR "PMLTQ::PML2BASE::PDT::ALexOrAuxRFIterator is not installed\n" if $@;
+    print STDERR "PMLTQ::PML2BASE::Relation::PDT::ALexOrAuxRFIterator is not installed\n" if $@;
   }
 }
 

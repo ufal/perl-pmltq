@@ -30,7 +30,7 @@ BEGIN {
       require PMLTQ::PML2BASE::Relation::Treex::AEParentCIterator;
       PMLTQ::PML2BASE::Relation::Treex::AEParentCIterator->import();
     };
-    print STDERR "PMLTQ::PML2BASE::Treex::AEParentCIterator is not installed\n" if $@;
+    print STDERR "PMLTQ::PML2BASE::Relation::Treex::AEParentCIterator is not installed\n" if $@;
   }
 }
 

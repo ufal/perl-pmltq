@@ -24,7 +24,8 @@ BEGIN {
       require PMLTQ::PML2BASE::Relation::Treex::AEParentIterator;
       PMLTQ::PML2BASE::Relation::Treex::AEParentIterator->import();
     };
-    print STDERR "PMLTQ::PML2BASE::Treex::AEParentIterator is not installed\n" if $@;
+    print STDERR "PMLTQ::PML2BASE::Relation::Treex::TEParentIterator is not installed\n" if $@;
+    print STDERR "PMLTQ::PML2BASE::Relation::Treex::AEParentIterator is not installed\n" if $@;
   }
 }
 
