@@ -61,6 +61,7 @@ script:
 
 after_success:
   - coverage-report
+  - cover -report coveralls
 
 cache:
   directories:
