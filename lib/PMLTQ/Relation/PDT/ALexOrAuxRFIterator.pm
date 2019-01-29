@@ -17,6 +17,17 @@ use PMLTQ::Relation {
   test_code        => q(grep($_ eq $end->{id}, PMLTQ::Relation::PDT::TGetANodeIDs($start)) ? 1 : 0),
 };
 
+BEGIN {
+  {
+    local $@; # protect existing $@
+    eval {
+      require PMLTQ::PML2BASE::Relation::PDT::ALexOrAuxRFIterator;
+      PMLTQ::PML2BASE::Relation::PDT::ALexOrAuxRFIterator->import();
+    };
+    print STDERR "PMLTQ::PML2BASE::Relation::PDT::ALexOrAuxRFIterator is not installed\n" if $@;
+  }
+}
+
 
 sub get_node_list {
   my ($self, $node) = @_;
@@ -28,16 +39,7 @@ sub get_node_list {
 sub init_sql {
   my ($table_name, $schema, $desc, $fh) = @_;
 
-  $fh->{'#POST_SQL'}->print(<<"EOF");
-INSERT INTO "${table_name}"
-  SELECT t."#idx" AS "#idx", a."lex" AS "#value"
-    FROM "t-node" t JOIN "t-a" a ON a."#idx"=t."a"
-  UNION
-  SELECT t."#idx" AS "#idx", aux."#value" AS "#value"
-    FROM "t-node" t JOIN "t-a" a ON a."#idx"=t."a" JOIN "t-a/aux.rf" aux ON aux."#idx"=a."aux.rf"
-  UNION
-  SELECT r."#idx" AS "#idx", r."atree" FROM "t-root" r;
-EOF
+  PMLTQ::PML2BASE::Relation::PDT::ALexOrAuxRFIterator::init_sql($table_name, $schema, $desc, $fh);
 }
 
 1;

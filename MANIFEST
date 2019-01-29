@@ -169,7 +169,6 @@ lib/PMLTQ/Common.pm
 lib/PMLTQ/Grammar.pm
 lib/PMLTQ/Loader.pm
 lib/PMLTQ/NG2PMLTQ.pm
-lib/PMLTQ/PML2BASE.pm
 lib/PMLTQ/ParserError.pm
 lib/PMLTQ/Planner.pm
 lib/PMLTQ/Relation.pm
@@ -235,7 +234,6 @@ t/pod.t
 xt/author/lib/PML.pm
 xt/author/lib/TredMacro.pm
 xt/author/lib/bootstrap.pl
-xt/author/pml2base.t
 xt/author/queries/pdt_test/_a-node-under-t-root.tq
 xt/author/queries/pdt_test/_filter-complex-multiple.tq
 xt/author/queries/pdt_test/_filter-complex-quote-set.tq
