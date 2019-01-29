@@ -4,11 +4,16 @@ Revision history for {{$dist->name}}
  [API CHANGES]
 
  [BUG FIXES]
- - move PML2BASE to independent cpan module PMLTQ::PML2BASE
 
  [DOCUMENTATION]
 
  [ENHANCEMENTS]
+
+3.0.1
+ - Released: 2019-01-29 06:23:15 UTC
+
+ [BUG FIXES]
+ - move PML2BASE to independent cpan module PMLTQ::PML2BASE
 
 3.0.0
  - Released: 2019-01-28 15:50:11 UTC
