@@ -42,8 +42,8 @@ before_install:
   - perl -V
   - cpan-install ExtUtils::MakeMaker~6.31 Dist::Zilla
   - "cpan-install $(dzil authordeps --missing --versions | grep -v '^inc::' | sed -e's/ = 0$//' -e's/ = /~/')"
-  #- dzil build --in="$(pwd)/build_dir"
-  #- cd build_dir
+  - dzil build --in="$(pwd)/build_dir"
+  - cd build_dir
 
 install:
   - cpan-install Sys::SigAction
@@ -56,12 +56,11 @@ before_script:
   - coverage-setup
 
 script:
-  # - prove -j$(test-jobs) $(test-files)   # parallel testing
-  - dzil test -j$(test-jobs)
+  - prove -I lib -j$(test-jobs) $(test-files)   # parallel testing
+  # - dzil test -j$(test-jobs)
 
 after_success:
   - coverage-report
-  - cover -report coveralls
 
 cache:
   directories:
