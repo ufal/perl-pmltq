@@ -256,7 +256,7 @@ sub get_relation_target_type {
     return $type if $type;
   }
   if (!$category or $category eq 'implementation') {
-    return PMLTQ::Relation->target_type($node_type, $relation);
+    return PMLTQ::Relation->target_type($self->get_schema_name_for($node_type),$node_type, $relation);
   }
   return;
 }

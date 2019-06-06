@@ -293,7 +293,7 @@ sub GetRelativeQueryNodeType {
   my $name = $rel ? $rel->name : 'child';
   #  $name .= ':'.$rel->value->{label} if $name eq 'user-defined';
   my $reltype = ($name eq 'user-defined' ?
-		 $type_mapper->get_relation_target_type($type,$rel->value->{label},0,$rel->value->{category})
+		 $type_mapper->get_relation_target_type($type,$rel->value->{label},$rel->value->{category})
 		 : ($type{$type.':'.$name} || $type{':'.$name})) || return;
   my @decls;
   my ($schema,$schema_name);
