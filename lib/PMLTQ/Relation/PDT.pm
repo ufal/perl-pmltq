@@ -1,5 +1,6 @@
 package PMLTQ::Relation::PDT;
-
+our $AUTHORITY = 'cpan:MATY';
+$PMLTQ::Relation::PDT::VERSION = '3.0.2';
 # ABSTRACT: PDT user defined relations
 
 use warnings;
@@ -24,29 +25,11 @@ require PMLTQ::Relation::PDT::TEParentIterator;
 
 ######## A Layer
 
-=over 5
-
-=item DiveAuxCP($node)
-
-You can use this function as a C<through> argument to GetEParents and
-GetEChildren. It skips all the prepositions and conjunctions when
-looking for nodes which is what you usually want.
-
-=cut
 
 sub ADiveAuxCP ($){
   $_[0]->{afun}=~/^Aux[CP]/ ? 1 : 0;
 }#DiveAuxCP
 
-=item AGetEParents($node,$through)
-
-Return linguistic parent of a given node as appears in an analytic
-tree. The argument C<$through> should supply a function accepting one
-node as an argument and returning true if the node should be skipped
-on the way to parent or 0 otherwise. The most common C<DiveAuxCP> is
-provided in this package.
-
-=cut
 
 sub A_ExpandCoordGetEParents { # node through
   my ($node,$through)=@_;
@@ -93,17 +76,6 @@ sub AGetEParents { # node through
   A_ExpandCoordGetEParents($node,$through);
 } # AGetEParents
 
-=item AGetEChildren($node,$dive)
-
-Return a list of nodes linguistically dependant on a given
-node. C<$dive> is a function which is called to test whether a given
-node should be used as a terminal node (in which case it should return
-false) or whether it should be skipped and its children processed
-instead (in which case it should return true). Most usual treatment is
-provided in C<DiveAuxCP>. If C<$dive> is skipped, a function returning 0
-for all arguments is used.
-
-=cut
 
 sub A_FilterEChildren{ # node dive suff from
   my ($node,$dive,$suff,$from)=@_;
@@ -153,14 +125,6 @@ sub AGetEChildren{ # node dive
 
 ######## T Layer
 
-=item ExpandCoord($node,$keep?)
-
-If the given node is coordination or aposition (according to its TGTS
-functor - attribute C<functor>) expand it to a list of coordinated
-nodes. Otherwise return the node itself. If the argument C<keep> is
-true, include the coordination/aposition node in the list as well.
-
-=cut
 
 sub ExpandCoord {
   my ($node,$keep)=@_;
@@ -174,12 +138,6 @@ sub ExpandCoord {
   }
 } #ExpandCoord
 
-=item IsCoord($node?)
-
-Check if the given node is a coordination according to its TGTS
-functor (attribute C<functor>)
-
-=cut
 
 sub IsCoord {
   my $node=$_[0];# || $this;
@@ -188,11 +146,6 @@ sub IsCoord {
   return $node->{functor} =~ /ADVS|APPS|CONFR|CONJ|CONTRA|CSQ|DISJ|GRAD|OPER|REAS/;
 }
 
-=item TGetEParents($node)
-
-Return linguistic parents of a given node as appear in a TG tree.
-
-=cut
 
 sub TGetEParents {
   my $node = $_[0];# || $this;
@@ -209,13 +162,6 @@ sub TGetEParents {
   return (ExpandCoord($node));
 } # TGetEParents
 
-=item GetEChildren($node?)
-
-Return a list of nodes linguistically dependant on a given node.
-
-=back
-
-=cut
 
 sub T_FilterEChildren { # node suff from
   my ($node,$suff,$from)=@_;
@@ -281,3 +227,95 @@ sub ThisAddressNTRED {
 
 1;
 
+__END__
+
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+PMLTQ::Relation::PDT - PDT user defined relations
+
+=head1 VERSION
+
+version 3.0.2
+
+=over 5
+
+=item DiveAuxCP($node)
+
+You can use this function as a C<through> argument to GetEParents and
+GetEChildren. It skips all the prepositions and conjunctions when
+looking for nodes which is what you usually want.
+
+=item AGetEParents($node,$through)
+
+Return linguistic parent of a given node as appears in an analytic
+tree. The argument C<$through> should supply a function accepting one
+node as an argument and returning true if the node should be skipped
+on the way to parent or 0 otherwise. The most common C<DiveAuxCP> is
+provided in this package.
+
+=item AGetEChildren($node,$dive)
+
+Return a list of nodes linguistically dependant on a given
+node. C<$dive> is a function which is called to test whether a given
+node should be used as a terminal node (in which case it should return
+false) or whether it should be skipped and its children processed
+instead (in which case it should return true). Most usual treatment is
+provided in C<DiveAuxCP>. If C<$dive> is skipped, a function returning 0
+for all arguments is used.
+
+=item ExpandCoord($node,$keep?)
+
+If the given node is coordination or aposition (according to its TGTS
+functor - attribute C<functor>) expand it to a list of coordinated
+nodes. Otherwise return the node itself. If the argument C<keep> is
+true, include the coordination/aposition node in the list as well.
+
+=item IsCoord($node?)
+
+Check if the given node is a coordination according to its TGTS
+functor (attribute C<functor>)
+
+=item TGetEParents($node)
+
+Return linguistic parents of a given node as appear in a TG tree.
+
+=item GetEChildren($node?)
+
+Return a list of nodes linguistically dependant on a given node.
+
+=back
+
+=head1 AUTHORS
+
+=over 4
+
+=item *
+
+Petr Pajas <pajas@ufal.mff.cuni.cz>
+
+=item *
+
+Jan Štěpánek <stepanek@ufal.mff.cuni.cz>
+
+=item *
+
+Michal Sedlák <sedlak@ufal.mff.cuni.cz>
+
+=item *
+
+Matyáš Kopp <matyas.kopp@gmail.com>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2015 by Institute of Formal and Applied Linguistics (http://ufal.mff.cuni.cz).
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
