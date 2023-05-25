@@ -1665,6 +1665,7 @@ a-node $a:= [ ]
       </informaltable>
 
       <para>Node relationships</para>
+      <para>Please note that relations <literal>order-follows</literal> and <literal>order-precedes</literal> are implemented differently in the local search and in the server-based search. The description below aplies to the local search implementation; for the server-based search, the relations behave the opposite way.</para>
 
       <informaltable>
         <tgroup cols="2">
@@ -1872,7 +1873,7 @@ a-node $a:= [ ]
 
             <row>
               <entry><literal><replaceable>TYPE</replaceable> $a := [
-              order-follows{1,1} <replaceable>TYPE</replaceable> $b:= [ ]
+              order-precedes{1,1} <replaceable>TYPE</replaceable> $b:= [ ]
               ]</literal></entry>
 
               <entry><para><literal>$b</literal> belongs to the same tree as
